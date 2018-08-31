@@ -13,7 +13,7 @@ module.exports = {
     baseUrl: '/',
 
     // 将构建好的文件输出到哪里
-    outputDir: 'dist',
+    outputDir: 'six',
 
     // 是否在保存的时候使用 `eslint-loader` 进行检查。
     // 有效的值：`ture` | `false` | `"error"`

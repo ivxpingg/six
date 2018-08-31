@@ -4,7 +4,7 @@
  * */
 
 import axios from 'axios';
-import utils from '@/lib/utils';
+import utils from './utils';
 import Config from '@/config';
 
 const ajaxUrl = window.location.origin + Config[Config.env].ajaxUrl;

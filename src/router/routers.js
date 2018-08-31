@@ -1,0 +1,341 @@
+import Main from '@/views/Main/main.vue';
+const Login = [
+    {
+        path: '/user',
+        name: 'user',
+        meta: {
+            title: 'Login - 登录'
+        },
+        component: () => import('@/views/Login/login.vue')
+    }
+];
+
+
+// 综合展示系统
+const ShowSystem = [
+    {
+        path: '/showSystem',
+        name: 'showSystem',
+        meta: {
+            title: '综合展示'
+        },
+        component: () => import('@/views/Login/login.vue')
+    }
+];
+
+// 首页
+const Home = [
+    {
+        path: '/',
+        //name: 'home',
+        redirect: '/home',
+        component: Main,
+        meta: {
+            hideInMenu: true,
+            notCache: true
+        },
+        children: [{
+            path: '/home',
+            name: 'home',
+            component: () => import('@/views/Home/home.vue'),
+            meta: {
+                hideInMenu: true,
+                title: '首页',
+                notCache: true
+            }
+        }]
+    }
+];
+
+// 基础信息管理
+const BaseManage = [
+    {
+        path: '/BaseManage',
+        name: 'BaseManage',
+        component: Main,
+        meta: {
+            title: '基础信息管理'
+        },
+        children: [
+            {
+                path: 'organizetionManage',
+                name: 'organizetionManage',
+                meta: {
+                    title: '组织结构管理'
+                }
+            },
+            {
+                path: 'roleManage',
+                name: 'roleManage',
+                meta: {
+                    title: '角色管理'
+                }
+            },
+            {
+                path: 'eSignatureManage',
+                name: 'eSignatureManage',
+                meta: {
+                    title: '电子签名管理'
+                }
+            },
+            {
+                path: 'auditProcessManage',
+                name: 'auditProcessManage',
+                meta: {
+                    title: '审核流程管理'
+                }
+            }
+        ]
+    }
+];
+
+// 机构与人员管理
+const OrgAndPersonManage = [
+    {
+        path: '/OrgAndPersonManage',
+        name: 'OrgAndPersonManage',
+        component: Main,
+        meta: {
+            title: '机构与人员管理'
+        },
+        children: [
+            {
+                path: 'workUnitManage',
+                name: 'workUnitManage',
+                meta: {
+                    title: '从业单位管理'
+                }
+            },
+            {
+                path: 'workPersonManage',
+                name: 'workPersonManage',
+                meta: {
+                    title: '从业人员管理'
+                }
+            },
+            {
+                path: 'supervisorsManage',
+                name: 'supervisorsManage',
+                meta: {
+                    title: '监督单位人员管理'
+                }
+            }
+        ]
+    }
+];
+
+// 质量监督管理
+const QualitySupervisionManage = [
+    {
+        path: '/QualitySupervisionManage',
+        name: 'QualitySupervisionManage',
+        component: Main,
+        meta: {
+            title: '质量监督管理'
+        },
+        children: [
+            {
+                path: 'qualitySupervision_register',
+                name: 'qualitySupervision_register',
+                meta: {
+                    title: '质量监督登记'
+                }
+            },
+            {
+                path: 'qualitySupervision_accept',
+                name: 'qualitySupervision_accept',
+                meta: {
+                    title: '质量监督受理'
+                }
+            },
+            {
+                path: 'qualitySupervision_tell',
+                name: 'qualitySupervision_tell',
+                meta: {
+                    title: '质量监督交底'
+                }
+            },
+            {
+                path: 'qualitySupervision_check',
+                name: 'qualitySupervision_check',
+                meta: {
+                    title: '质量监督检查'
+                }
+            },
+            {
+                path: 'qualitySupervision_account',
+                name: 'qualitySupervision_account',
+                meta: {
+                    title: '质量监督台账'
+                }
+            },
+            {
+                path: 'qualitySupervision_complaint',
+                name: 'qualitySupervision_complaint',
+                meta: {
+                    title: '质量监督投述管理'
+                }
+            },
+            {
+                path: 'qualityProjectCreate',
+                name: 'qualityProjectCreate',
+                meta: {
+                    title: '品质工程创建'
+                }
+            }
+        ]
+    }
+];
+
+// 安全监督管理
+const SafetySupervisionManage = [
+    {
+        path: '/SafetySupervisionManage',
+        name: 'SafetySupervisionManage',
+        component: Main,
+        meta: {
+            title: '安全监督管理'
+        },
+        children: [
+            {
+                path: 'safetySupervision_notification',
+                name: 'safetySupervision_notification',
+                meta: {
+                    title: '安全通知'
+                }
+            },
+            {
+                path: 'safetySupervision_check',
+                name: 'safetySupervision_check',
+                meta: {
+                    title: '安全督查检查'
+                }
+            },
+            {
+                path: 'safetySupervision_account',
+                name: 'safetySupervision_account',
+                meta: {
+                    title: '安全督查台账'
+                }
+            },
+            {
+                path: 'safetySupervision_examine',
+                name: 'safetySupervision_examine',
+                meta: {
+                    title: '平安工地考核'
+                }
+            }
+        ]
+    }
+];
+
+// 信用评价管理
+const CreditRatingManage = [
+    {
+        path: '/CreditRatingManage',
+        name: 'CreditRatingManage',
+        component: Main,
+        meta: {
+            title: '信用评价管理'
+        },
+        children: [
+            {
+                path: 'creditRating_record',
+                name: 'creditRating_record',
+                meta: {
+                    title: '信用评价记录'
+                }
+            },
+            {
+                path: 'creditRating_account',
+                name: 'creditRating_account',
+                meta: {
+                    title: '信用评价管理台账'
+                }
+            }
+        ]
+    }
+];
+
+// 质量检测管理
+const QAManage = [
+    {
+        path: '/QAManage',
+        name: 'QAManage',
+        component: Main,
+        meta: {
+            title: '质量检测管理'
+        },
+        children: [
+            {
+                path: 'QA_report',
+                name: 'QA_report',
+                meta: {
+                    title: '质量检测报表'
+                }
+            },
+            {
+                path: 'QA_analyze',
+                name: 'QA_analyze',
+                meta: {
+                    title: '质量安全检测数据分析'
+                }
+            }
+        ]
+    }
+];
+
+// 备案及交竣工管理
+const RecordAndCompletedManage = [
+    {
+        path: '/RecordAndCompletedManage',
+        name: 'RecordAndCompletedManage',
+        component: Main,
+        meta: {
+            title: '备案及交竣工管理'
+        },
+        children: [
+            {
+                path: 'projectRecords',
+                name: 'projectRecords',
+                meta: {
+                    title: '工程备案'
+                }
+            },
+            {
+                path: 'project_verification',
+                name: 'project_verification',
+                meta: {
+                    title: '交工检测核验'
+                }
+            },
+            {
+                path: 'projectCompleteQuality_authenticate',
+                name: 'projectCompleteQuality_authenticate',
+                meta: {
+                    title: '竣工质量鉴定'
+                }
+            },
+            {
+                path: 'projectFileManage',
+                name: 'projectFileManage',
+                meta: {
+                    title: '工程档案管理'
+                }
+            }
+        ]
+    }
+];
+
+export default [
+    ...Login,
+    ...Home,
+    ...ShowSystem,
+    ...BaseManage,
+    ...OrgAndPersonManage,
+    ...QualitySupervisionManage,
+    ...SafetySupervisionManage,
+    ...CreditRatingManage,
+    ...QAManage,
+    ...RecordAndCompletedManage
+]

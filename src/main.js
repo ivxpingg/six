@@ -3,8 +3,12 @@ import App from './App.vue';
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import router from './router';
-import store from './store';
+import store from './store/store';
 import Ajax from '@/lib/axios';
+import '@/style/app.scss';
+import 'animate.css';
+
+process.env.NODE_ENV === 'development' ? require('@/mock') : '';
 
 Vue.config.productionTip = false;
 Vue.use(iView);
