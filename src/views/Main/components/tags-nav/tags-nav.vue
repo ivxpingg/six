@@ -101,7 +101,7 @@
                 this.$emit('input', item)
             },
             showTitleInside (item) {
-                return item.meta.title;
+                return item.meta.title || '';
             }
         }
     }

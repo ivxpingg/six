@@ -33,7 +33,7 @@ module.exports = {
     // configureWebpack: () => {},
     configureWebpack: config => {
         // 兼容到IE9， 不是绝对的
-        config.entry.app = ['babel-polyfill', './src/main.js'];
+        // config.entry.app = ['babel-polyfill', './src/main.js'];
         if (process.env.NODE_ENV === 'production') {
             // 为生产环境修改配置...
 

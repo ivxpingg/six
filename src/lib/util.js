@@ -85,12 +85,13 @@ const getMenuByRoute = (route, menuList) => {
             return menuList[i];
         }
         else if (hasChild(menuList[i])) {
-            return getMenuByRoute(route, menuList[i].children);
-        }
-        else {
-            return {};
+            let res = getMenuByRoute(route, menuList[i].children);
+            if (res) {
+                return res;
+            }
         }
     }
+    return null;
 };
 /**
  * @param {*} list 现有标签导航列表
@@ -113,12 +114,14 @@ export const getNewTagList = (list, newRoute, menuList) => {
  * @param {String} name 当前关闭的标签的name
  */
 export const getNextName = (list, name) => {
-    let res = ''
+    let res = '';
     if (list.length === 2) {
         res = 'home'
     } else {
         if (list.findIndex(item => item.name === name) === list.length - 1) res = list[list.length - 2].name
         else res = list[list.findIndex(item => item.name === name) + 1].name
     }
-    return res
+    return res;
+
+
 };

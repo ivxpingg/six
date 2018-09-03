@@ -5,6 +5,7 @@ import 'iview/dist/styles/iview.css';
 import router from './router';
 import store from './store/store';
 import Ajax from '@/lib/axios';
+import '@/style/fonts/iconfont.css';
 import '@/style/app.scss';
 import 'animate.css';
 

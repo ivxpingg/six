@@ -2,7 +2,8 @@
     <div class="custom-bread-crumb-container">
         <Breadcrumb :style="{fontSize: `${fontSize}px`}">
             <BreadcrumbItem v-for="item in list" :to="item.to" :key="`bread-crumb-${item.name}`">
-                <Icon :type="item.icon || ''" style="margin-right: 4px;"></Icon>
+                <!--<Icon :type="item.icon || ''" style="margin-right: 4px;"></Icon>-->
+                <vCommonIcon :type="item.icon || ''" style="margin-right: 4px;"></vCommonIcon>
                 {{ showTitle(item) }}
             </BreadcrumbItem>
         </Breadcrumb>
@@ -10,8 +11,10 @@
 </template>
 
 <script>
+    import vCommonIcon from '@/components/commonIcon/commonIcon';
     export default {
         name: 'custom-bread-crumb',
+        components: {vCommonIcon},
         props: {
             list: {
                 type: Array,
@@ -31,7 +34,7 @@
                 return item.meta.title;
             },
             isCustomIcon (iconName) {
-                return iconName.indexOf('_') === 0
+                return iconName.indexOf('_') === 0;
             },
             getCustomIconName (iconName) {
                 return iconName.slice(1)

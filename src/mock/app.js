@@ -61,21 +61,21 @@ const menuList = [
         },
         children: [
             {
-                icon: '',
+                icon: '_unit',
                 name: 'workUnitManage',
                 meta: {
                     title: '从业单位管理'
                 }
             },
             {
-                icon: '',
+                icon: '_person-manage',
                 name: 'workPersonManage',
                 meta: {
                     title: '从业人员管理'
                 }
             },
             {
-                icon: '',
+                icon: '_supervise-person-manage',
                 name: 'supervisorsManage',
                 meta: {
                     title: '监督单位人员管理'

@@ -17,7 +17,8 @@
                     <menu-item v-else
                                :name="getNameOrHref(item, true)"
                                :key="`menu-${item.children[0].name}`">
-                        <Icon :type="item.icon || ''" />
+                        <!--<Icon :type="item.icon || ''" />-->
+                        <vCommonIcon :type="item.icon || ''"/>
                         <span>{{ showTitle(item.children[0]) }}</span>
                     </menu-item>
                 </template>
@@ -37,6 +38,31 @@
                 </template>
             </template>
         </Menu>
+
+        <div class="menu-collapsed" v-show="collapsed" :list="menuList">
+            <template v-for="item in menuList">
+                <vCollapsedMenu v-if="item.children && item.children.length > 1"
+                                @on-click="handleSelect"
+                                hide-title
+                                :root-icon-size="rootIconSize"
+                                :icon-size="iconSize"
+                                :theme="theme"
+                                :parent-item="item"
+                                :key="`drop-menu-${item.name}`"></vCollapsedMenu>
+                <Tooltip v-else
+                         :content="(item.meta && item.meta.title) || (item.children && item.children[0] && item.children[0].meta.title)"
+                         placement="right"
+                         :key="`drop-menu-${item.name}`">
+                    <a @click="handleSelect(getNameOrHref(item, true))"
+                       class="drop-menu-a"
+                       :style="{textAlign: 'center'}">
+                        <!--<Icon :type="item.icon || ''" :style="{fontSize: rootIconSize + 'px', color: textColor}" />-->
+                        <vCommonIcon :size="rootIconSize" :color="textColor" :type="item.icon || (item.children && item.children[0].icon)"/>
+                    </a>
+                </Tooltip>
+            </template>
+        </div>
+
     </div>
 </template>
 
@@ -44,10 +70,15 @@
     import mixin from './mixin';
     import vSideMenuItem from './side-menu-item';
     import vCollapsedMenu from './collapsed-menu';
+    import vCommonIcon from '@/components/commonIcon/commonIcon';
     export default {
         name: 'side-menu',
         mixins: [mixin],
-        components: {vSideMenuItem, vCollapsedMenu},
+        components: {
+            vSideMenuItem,
+            vCollapsedMenu,
+            vCommonIcon
+        },
         props: {
             menuList: {
                 type: Array,
@@ -85,6 +116,11 @@
                 openedNames: []
             };
         },
+        computed: {
+            textColor () {
+                return this.theme === 'dark' ? '#fff' : '#495060'
+            }
+        },
         methods: {
             handleSelect (name) {
                 this.$emit('on-select', name)
@@ -93,7 +129,52 @@
     }
 </script>
 
-<style lang="scss" scoped>
-    .side-menu-container {
+<style lang="scss" >
+    .side-menu-container{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        .menu-collapsed{
+            padding-top: 10px;
+
+            .ivu-dropdown{
+                width: 100%;
+                .ivu-dropdown-rel a{
+                    width: 100%;
+                }
+            }
+            .ivu-tooltip{
+                width: 100%;
+                .ivu-tooltip-rel{
+                    width: 100%;
+                }
+                .ivu-tooltip-popper .ivu-tooltip-content{
+                    .ivu-tooltip-arrow{
+                        border-right-color: #fff;
+                    }
+                    .ivu-tooltip-inner{
+                        background: #fff;
+                        color: #495060;
+                    }
+                }
+            }
+            .menu-title{
+                margin-left: 6px;
+            }
+            .ivu-select-dropdown{
+                width: 160px;
+                margin-left: 4px;
+            }
+        }
+        a.drop-menu-a{
+            display: inline-block;
+            padding: 6px 15px;
+            width: 100%;
+            text-align: center;
+            color: #495060;
+        }
     }
 </style>
