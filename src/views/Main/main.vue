@@ -1,22 +1,22 @@
 <template>
     <Layout class="mhome"  style="height: 100%">
-        <Sider class="sider"
+        <Sider class="left-sider"
                v-model="collapsed"
                hide-trigger
                collapsible
                :width="256"
                :collapsed-width="64">
-            <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
-            <div class="logo-con">
-                <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
-                <img v-show="collapsed" :src="minLogo" key="min-logo" />
-            </div>
 
             <vSideMenu accordion
                        :active-name="$route.name"
                        :collapsed="collapsed"
                        :menu-list="menuList"
                        @on-select="turnToPage">
+                <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
+                <div class="logo-con">
+                    <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
+                    <img v-show="collapsed" :src="minLogo" key="min-logo" />
+                </div>
 
             </vSideMenu>
         </Sider>
@@ -35,7 +35,7 @@
                         <vTagsNav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag"/>
                     </div>
                 </Layout>
-                <Content>
+                <Content class="content-wrapper">
                     <keep-alive>
                         <router-view/>
                     </keep-alive>
@@ -85,13 +85,22 @@
             ...mapActions([
                 'getMenuList'
             ]),
-            turnToPage (name) {
+            turnToPage (route) {
+                let { name, params, query } = {}
+                if (typeof route === 'string') name = route;
+                else {
+                    name = route.name
+                    params = route.params
+                    query = route.query
+                }
                 if (name.indexOf('isTurnByHref_') > -1) {
-                    window.open(name.split('_')[1]);
-                    return;
+                    window.open(name.split('_')[1])
+                    return
                 }
                 this.$router.push({
-                    name: name
+                    name,
+                    params,
+                    query
                 })
             },
             handleCollapsedChange (state) {
@@ -119,7 +128,7 @@
                  * @description 初始化设置面包屑导航和标签导航
                  */
                 this.setTagNavList();
-                // this.addTag(this.$store.state.app.homeRoute);
+                this.addTag(this.$store.state.app.homeRoute);
                 this.setBreadCrumb(this.$route.matched);
             });
 
@@ -139,10 +148,6 @@
                 margin: 0 auto;
             }
         }
-
-        .sider {
-            // background: #001529;
-        }
         .header-con {
             padding: 0 20px;
             background-color: #FFF;
@@ -154,6 +159,40 @@
             background:#F0F0F0;
             overflow: hidden;
         }
+
+        .content-wrapper{
+            padding: 18px;
+            height: calc(100% - 80px);
+            overflow: auto;
+        }
+
+            .left-sider{
+            .ivu-layout-sider-children{
+                overflow-y: scroll;
+                margin-right: -18px;
+            }
+        }
     }
 
+</style>
+
+<style lang="scss">
+    .left-sider {
+        background: #001529;
+    }
+
+    .ivu-menu-dark {
+        background: #001529;
+    }
+
+    .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item:hover, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title:hover {
+        color: #fff;
+        background: none;
+    }
+    .ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened .ivu-menu-submenu-title {
+        background: none;
+    }
+    .ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened {
+        background: #000c17;
+    }
 </style>

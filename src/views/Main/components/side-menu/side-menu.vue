@@ -71,6 +71,7 @@
     import vSideMenuItem from './side-menu-item';
     import vCollapsedMenu from './collapsed-menu';
     import vCommonIcon from '@/components/commonIcon/commonIcon';
+    import { getUnion } from '@/lib/tools'
     export default {
         name: 'side-menu',
         mixins: [mixin],
@@ -124,7 +125,31 @@
         methods: {
             handleSelect (name) {
                 this.$emit('on-select', name)
+            },
+            getOpenedNamesByActiveName (name) {
+                return this.$route.matched.map(item => item.name).filter(item => item !== name)
+            },
+            updateOpenName (name) {
+                if (name === 'home') this.openedNames = []
+                else this.openedNames = this.getOpenedNamesByActiveName(name)
             }
+        },
+        watch: {
+            activeName (name) {
+                if (this.accordion) this.openedNames = this.getOpenedNamesByActiveName(name)
+                else this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name))
+            },
+            openNames (newNames) {
+                this.openedNames = newNames
+            },
+            openedNames () {
+                this.$nextTick(() => {
+                    this.$refs.menu.updateOpened()
+                })
+            }
+        },
+        mounted () {
+            this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name))
         }
     }
 </script>

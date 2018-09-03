@@ -6,7 +6,7 @@ const menuList = [
         meta: {
             title: '首页'
         },
-        href: 'home'
+        href: ''
     },
     {
         icon: 'ios-map',
@@ -150,7 +150,7 @@ const menuList = [
         children: [
             {
                 icon: '',
-                name: 'qualitySupervision_register',
+                name: 'safetySupervision_notification',
                 meta: {
                     title: '安全通知'
                 }

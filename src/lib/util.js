@@ -1,7 +1,7 @@
 // 项目类工具
 import Cookies from 'js-cookie';
 import config from '@/config';
-import { forEach } from './tools';
+import { objEqual } from './tools';
 
 export const TOKEN_KEY = 'token';
 export const setToken = (token) => {
@@ -100,14 +100,27 @@ const getMenuByRoute = (route, menuList) => {
  * @description 如果该newRoute已经存在则不再添加
  */
 export const getNewTagList = (list, newRoute, menuList) => {
-    const { name, path, meta } = getMenuByRoute(newRoute, menuList);
+    const { name, path, meta, icon } = getMenuByRoute(newRoute, menuList);
     let newList = [...list]
     if (newList.findIndex(item => item.name === name) >= 0) return newList;
     else {
-        newList.push({ name, path, meta });
+        newList.push({ name, path, meta, icon });
     }
     return newList
 };
+
+/**
+ * @description 根据name/params/query判断两个路由对象是否相等
+ * @param {*} route1 路由对象
+ * @param {*} route2 路由对象
+ */
+export const routeEqual = (route1, route2) => {
+    const params1 = route1.params || {}
+    const params2 = route2.params || {}
+    const query1 = route1.query || {}
+    const query2 = route2.query || {}
+    return (route1.name === route2.name) && objEqual(params1, params2) && objEqual(query1, query2)
+}
 
 /**
  * @param {Array} list 标签列表

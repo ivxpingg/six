@@ -54,6 +54,7 @@ const BaseManage = [
         name: 'BaseManage',
         component: Main,
         meta: {
+            icon: 'ios-paper',
             title: '基础信息管理'
         },
         children: [
@@ -61,13 +62,16 @@ const BaseManage = [
                 path: 'organizetionManage',
                 name: 'organizetionManage',
                 meta: {
+                    icon: 'md-git-network',
                     title: '组织结构管理'
-                }
+                },
+                component: () => import('@/views/BaseManage/organizetionManage/organizetionManage.vue')
             },
             {
                 path: 'roleManage',
                 name: 'roleManage',
                 meta: {
+                    icon: 'ios-people',
                     title: '角色管理'
                 }
             },
@@ -75,6 +79,7 @@ const BaseManage = [
                 path: 'eSignatureManage',
                 name: 'eSignatureManage',
                 meta: {
+                    icon: 'ios-image',
                     title: '电子签名管理'
                 }
             },
@@ -82,6 +87,7 @@ const BaseManage = [
                 path: 'auditProcessManage',
                 name: 'auditProcessManage',
                 meta: {
+                    icon: 'ios-infinite',
                     title: '审核流程管理'
                 }
             }
@@ -96,6 +102,7 @@ const OrgAndPersonManage = [
         name: 'OrgAndPersonManage',
         component: Main,
         meta: {
+            icon: 'ios-people',
             title: '机构与人员管理'
         },
         children: [
@@ -103,6 +110,7 @@ const OrgAndPersonManage = [
                 path: 'workUnitManage',
                 name: 'workUnitManage',
                 meta: {
+                    icon: '_unit',
                     title: '从业单位管理'
                 }
             },
@@ -110,6 +118,7 @@ const OrgAndPersonManage = [
                 path: 'workPersonManage',
                 name: 'workPersonManage',
                 meta: {
+                    icon: '_person-manage',
                     title: '从业人员管理'
                 }
             },
@@ -117,6 +126,7 @@ const OrgAndPersonManage = [
                 path: 'supervisorsManage',
                 name: 'supervisorsManage',
                 meta: {
+                    icon: '_supervise-person-manage',
                     title: '监督单位人员管理'
                 }
             }
@@ -131,6 +141,7 @@ const QualitySupervisionManage = [
         name: 'QualitySupervisionManage',
         component: Main,
         meta: {
+            icon: 'ios-ribbon',
             title: '质量监督管理'
         },
         children: [
@@ -194,6 +205,7 @@ const SafetySupervisionManage = [
         name: 'SafetySupervisionManage',
         component: Main,
         meta: {
+            icon: 'ios-book',
             title: '安全监督管理'
         },
         children: [
@@ -236,6 +248,7 @@ const CreditRatingManage = [
         name: 'CreditRatingManage',
         component: Main,
         meta: {
+            icon: 'ios-medal',
             title: '信用评价管理'
         },
         children: [
@@ -264,6 +277,7 @@ const QAManage = [
         name: 'QAManage',
         component: Main,
         meta: {
+            icon: 'ios-construct',
             title: '质量检测管理'
         },
         children: [
@@ -292,6 +306,7 @@ const RecordAndCompletedManage = [
         name: 'RecordAndCompletedManage',
         component: Main,
         meta: {
+            icon: 'ios-clipboard',
             title: '备案及交竣工管理'
         },
         children: [
