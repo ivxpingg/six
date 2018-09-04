@@ -9,6 +9,9 @@
                 style="margin-left: 30px;"
                 :list="breadCrumbList">
         </vCustomBreadCrumb>
+        <div class="custom-content-con">
+            <slot></slot>
+        </div>
     </div>
 </template>
 
@@ -25,7 +28,6 @@
         },
         computed: {
             breadCrumbList () {
-
                 return this.$store.state.app.breadCrumbList;
             }
         },
@@ -44,5 +46,17 @@
 
 <style lang="scss" scoped>
     .header-bar-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        .custom-content-con{
+            float: right;
+            height: auto;
+            padding-right: 20px;
+            line-height: 64px;
+            & > *{
+                float: right;
+            }
+        }
     }
 </style>

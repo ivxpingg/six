@@ -28,7 +28,8 @@ module.exports = {
     // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/webpack.md
     chainWebpack: (config) => {
         config.resolve.alias
-            .set('@', resolve('src'));
+            .set('@', resolve('src'))
+            .set('_c', resolve('src/components'));
     },
     // configureWebpack: () => {},
     configureWebpack: config => {

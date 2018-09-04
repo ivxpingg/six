@@ -1,7 +1,12 @@
 <template>
-    <div class="organizetionManage-container">
-        组织结构管理
-    </div>
+    <Card class="organizetionManage-container">
+        <div class="left-panel">
+            ddfe
+        </div>
+        <div class="right-panel">
+
+        </div>
+    </Card>
 </template>
 <script>
     export default {
@@ -13,6 +18,14 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
     .organizetionManage-container {
+        display: flex;
+        background-color: #FFF;
 
+        .left-panel {
+            width: 250px;
+        }
+        .right-panel {
+            flex: 1;
+        }
     }
 </style>

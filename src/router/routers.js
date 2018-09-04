@@ -378,7 +378,8 @@ const SystemManage = [
                 meta: {
                     icon: '_data-dict',
                     title: '数据字典'
-                }
+                },
+                component: () => import('@/views/SystemManage/dataDict/dataDict.vue')
             }
         ]
     }

@@ -25,7 +25,10 @@
         <Layout>
             <Header class="header-con">
                 <vHeaderBar :collapsed="collapsed"
-                            @on-coll-change="handleCollapsedChange"></vHeaderBar>
+                            @on-coll-change="handleCollapsedChange">
+                    <vUser :user-avator="userAvator"></vUser>
+                    <vFullscreen  v-model="isFullscreen" style="margin-right: 10px;"></vFullscreen>
+                </vHeaderBar>
                 <!--<Icon @on-coll-change="handleCollapsedChange"-->
                       <!--:style="{margin: '0 20px'}"-->
                       <!--type="md-menu"-->
@@ -36,12 +39,12 @@
                     <div class="tag-nav-wrapper">
                         <vTagsNav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag"/>
                     </div>
+                    <Content class="content-wrapper">
+                        <keep-alive>
+                            <router-view/>
+                        </keep-alive>
+                    </Content>
                 </Layout>
-                <Content class="content-wrapper">
-                    <keep-alive>
-                        <router-view/>
-                    </keep-alive>
-                </Content>
             </Content>
             <!--<Footer></Footer>-->
         </Layout>
@@ -54,6 +57,8 @@
     import maxLogo from '@/assets/images/logo.jpg';
     import vHeaderBar from './components/header-bar/header-bar';
     import vTagsNav from './components/tags-nav/tags-nav';
+    import vUser from './components/user/user';
+    import vFullscreen from './components/fullscreen/fullscreen';
     import { mapMutations, mapActions } from 'vuex'
     import { getNewTagList, getNextRoute, routeEqual } from '@/lib/util'
     export default {
@@ -61,13 +66,17 @@
         components: {
             vSideMenu,
             vHeaderBar,
-            vTagsNav
+            vTagsNav,
+            vUser,
+            vFullscreen
         },
         data() {
             return {
                 collapsed: false,
                 minLogo,
-                maxLogo
+                maxLogo,
+                isFullscreen: false,
+                userAvator: '/user.jpg'
             };
         },
         computed: {
@@ -170,7 +179,6 @@
             padding: 0;
             height:40px;
             background:#F0F0F0;
-            overflow: hidden;
         }
 
         .content-wrapper{
