@@ -53,7 +53,7 @@
                          :content="(item.meta && item.meta.title) || (item.children && item.children[0] && item.children[0].meta.title)"
                          placement="right"
                          :key="`drop-menu-${item.name}`">
-                    <a @click="handleSelect(getNameOrHref(item, true))"
+                    <a @click="handleSelect(getNameOrHref(item, false))"
                        class="drop-menu-a"
                        :style="{textAlign: 'center'}">
                         <!--<Icon :type="item.icon || ''" :style="{fontSize: rootIconSize + 'px', color: textColor}" />-->
@@ -144,12 +144,19 @@
             },
             openedNames () {
                 this.$nextTick(() => {
-                    this.$refs.menu.updateOpened()
+                    this.$refs.menu.updateOpened();
+                    this.$refs.menu.updateActiveName();
                 })
+            },
+            menuList: {
+                immediate: true,
+                handler() {
+                    this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name));
+                }
             }
         },
         mounted () {
-            this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name))
+            // this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name))
         }
     }
 </script>

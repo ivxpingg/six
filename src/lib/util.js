@@ -110,6 +110,22 @@ export const getNewTagList = (list, newRoute, menuList) => {
 };
 
 /**
+ * @param {Array} list 标签列表
+ * @param {String} name 当前关闭的标签的name
+ */
+export const getNextRoute = (list, route) => {
+    let res = {}
+    if (list.length === 2) {
+        res = getHomeRoute(list)
+    } else {
+        const index = list.findIndex(item => routeEqual(item, route))
+        if (index === list.length - 1) res = list[list.length - 2]
+        else res = list[index + 1]
+    }
+    return res
+}
+
+/**
  * @description 根据name/params/query判断两个路由对象是否相等
  * @param {*} route1 路由对象
  * @param {*} route2 路由对象

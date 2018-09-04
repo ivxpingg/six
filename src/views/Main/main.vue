@@ -7,11 +7,13 @@
                :width="256"
                :collapsed-width="64">
 
-            <vSideMenu accordion
-                       :active-name="$route.name"
-                       :collapsed="collapsed"
-                       :menu-list="menuList"
-                       @on-select="turnToPage">
+            <vSideMenu
+                    ref="sideMenu"
+                    accordion
+                    :active-name="$route.name"
+                    :collapsed="collapsed"
+                    :menu-list="menuList"
+                    @on-select="turnToPage">
                 <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
                 <div class="logo-con">
                     <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
@@ -53,7 +55,7 @@
     import vHeaderBar from './components/header-bar/header-bar';
     import vTagsNav from './components/tags-nav/tags-nav';
     import { mapMutations, mapActions } from 'vuex'
-    import { getNewTagList, getNextName } from '@/lib/util'
+    import { getNewTagList, getNextRoute, routeEqual } from '@/lib/util'
     export default {
         name: 'mhome',
         components: {
@@ -106,11 +108,22 @@
             handleCollapsedChange (state) {
                 this.collapsed = state
             },
-            handleCloseTag (res, type, name) {
-                const nextName = getNextName(this.tagNavList, name)
+            handleCloseTag (res, type, route) {
+                let openName = ''
+                if (type === 'all') {
+                    this.turnToPage('home')
+                    openName = 'home'
+                } else if (routeEqual(this.$route, route)) {
+                    if (type === 'others') {
+                        openName = route.name
+                    } else {
+                        const nextRoute = getNextRoute(this.tagNavList, route)
+                        this.$router.push(nextRoute)
+                        openName = nextRoute.name
+                    }
+                }
                 this.setTagNavList(res)
-                if (type === 'all') this.turnToPage('home');
-                else if (this.$route.name === name) this.$router.push({ name: nextName })
+                this.$refs.sideMenu.updateOpenName(openName)
             },
             handleClick (item) {
                 this.turnToPage(item.name)

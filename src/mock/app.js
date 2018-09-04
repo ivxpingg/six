@@ -5,8 +5,7 @@ const menuList = [
         name: 'home',
         meta: {
             title: '首页'
-        },
-        href: ''
+        }
     },
     {
         icon: 'ios-map',
@@ -91,49 +90,49 @@ const menuList = [
         },
         children: [
             {
-                icon: '',
+                icon: '_qualitySupervision_register',
                 name: 'qualitySupervision_register',
                 meta: {
                     title: '质量监督登记'
                 }
             },
             {
-                icon: '',
+                icon: '_qualitySupervision_accept',
                 name: 'qualitySupervision_accept',
                 meta: {
                     title: '质量监督受理'
                 }
             },
             {
-                icon: '',
+                icon: '_qualitySupervision_tell',
                 name: 'qualitySupervision_tell',
                 meta: {
                     title: '质量监督交底'
                 }
             },
             {
-                icon: '',
+                icon: '_qualitySupervision_check',
                 name: 'qualitySupervision_check',
                 meta: {
                     title: '质量监督检查'
                 }
             },
             {
-                icon: '',
+                icon: '_account',
                 name: 'qualitySupervision_account',
                 meta: {
                     title: '质量监督台账'
                 }
             },
             {
-                icon: '',
+                icon: '_qualitySupervision_complaint',
                 name: 'qualitySupervision_complaint',
                 meta: {
                     title: '质量监督投述管理'
                 }
             },
             {
-                icon: '',
+                icon: '_qualityProjectCreate',
                 name: 'qualityProjectCreate',
                 meta: {
                     title: '品质工程创建'
@@ -149,28 +148,28 @@ const menuList = [
         },
         children: [
             {
-                icon: '',
+                icon: '_safetySupervision_notification',
                 name: 'safetySupervision_notification',
                 meta: {
                     title: '安全通知'
                 }
             },
             {
-                icon: '',
+                icon: '_safetySupervision_check',
                 name: 'safetySupervision_check',
                 meta: {
                     title: '安全督查检查'
                 }
             },
             {
-                icon: '',
+                icon: '_account',
                 name: 'safetySupervision_account',
                 meta: {
                     title: '安全督查台账'
                 }
             },
             {
-                icon: '',
+                icon: '_safetySupervision_examine',
                 name: 'safetySupervision_examine',
                 meta: {
                     title: '平安工地考核'
@@ -186,14 +185,14 @@ const menuList = [
         },
         children: [
             {
-                icon: '',
+                icon: '_creditRating_record',
                 name: 'creditRating_record',
                 meta: {
                     title: '信用评价记录'
                 }
             },
             {
-                icon: '',
+                icon: '_account',
                 name: 'creditRating_account',
                 meta: {
                     title: '信用评价管理台账'
@@ -209,14 +208,14 @@ const menuList = [
         },
         children: [
             {
-                icon: '',
+                icon: '_QA_report',
                 name: 'QA_report',
                 meta: {
                     title: '质量检测报表'
                 }
             },
             {
-                icon: '',
+                icon: '_QA_analyze',
                 name: 'QA_analyze',
                 meta: {
                     title: '质量安全检测数据分析'
@@ -232,31 +231,47 @@ const menuList = [
         },
         children: [
             {
-                icon: '',
+                icon: '_projectRecords',
                 name: 'projectRecords',
                 meta: {
                     title: '工程备案'
                 }
             },
             {
-                icon: '',
+                icon: '_project_verification',
                 name: 'project_verification',
                 meta: {
                     title: '交工检测核验'
                 }
             },
             {
-                icon: '',
+                icon: '_projectCompleteQuality_authenticate',
                 name: 'projectCompleteQuality_authenticate',
                 meta: {
                     title: '竣工质量鉴定'
                 }
             },
             {
-                icon: '',
+                icon: '_projectFileManage',
                 name: 'projectFileManage',
                 meta: {
                     title: '工程档案管理'
+                }
+            }
+        ]
+    },
+    {
+        icon: 'ios-settings',
+        name: 'SystemManage',
+        meta: {
+            title: '系统管理'
+        },
+        children: [
+            {
+                icon: '_data-dict',
+                name: 'dataDict',
+                meta: {
+                    title: '数据字典'
                 }
             }
         ]

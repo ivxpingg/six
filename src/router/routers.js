@@ -149,6 +149,7 @@ const QualitySupervisionManage = [
                 path: 'qualitySupervision_register',
                 name: 'qualitySupervision_register',
                 meta: {
+                    icon: '_qualitySupervision_register',
                     title: '质量监督登记'
                 }
             },
@@ -156,6 +157,7 @@ const QualitySupervisionManage = [
                 path: 'qualitySupervision_accept',
                 name: 'qualitySupervision_accept',
                 meta: {
+                    icon: '_qualitySupervision_accept',
                     title: '质量监督受理'
                 }
             },
@@ -163,6 +165,7 @@ const QualitySupervisionManage = [
                 path: 'qualitySupervision_tell',
                 name: 'qualitySupervision_tell',
                 meta: {
+                    icon: '_qualitySupervision_tell',
                     title: '质量监督交底'
                 }
             },
@@ -170,6 +173,7 @@ const QualitySupervisionManage = [
                 path: 'qualitySupervision_check',
                 name: 'qualitySupervision_check',
                 meta: {
+                    icon: '_qualitySupervision_check',
                     title: '质量监督检查'
                 }
             },
@@ -177,6 +181,7 @@ const QualitySupervisionManage = [
                 path: 'qualitySupervision_account',
                 name: 'qualitySupervision_account',
                 meta: {
+                    icon: '_account',
                     title: '质量监督台账'
                 }
             },
@@ -184,6 +189,7 @@ const QualitySupervisionManage = [
                 path: 'qualitySupervision_complaint',
                 name: 'qualitySupervision_complaint',
                 meta: {
+                    icon: '_qualitySupervision_complaint',
                     title: '质量监督投述管理'
                 }
             },
@@ -191,6 +197,7 @@ const QualitySupervisionManage = [
                 path: 'qualityProjectCreate',
                 name: 'qualityProjectCreate',
                 meta: {
+                    icon: '_qualityProjectCreate',
                     title: '品质工程创建'
                 }
             }
@@ -213,6 +220,7 @@ const SafetySupervisionManage = [
                 path: 'safetySupervision_notification',
                 name: 'safetySupervision_notification',
                 meta: {
+                    icon: '_safetySupervision_notification',
                     title: '安全通知'
                 }
             },
@@ -220,6 +228,7 @@ const SafetySupervisionManage = [
                 path: 'safetySupervision_check',
                 name: 'safetySupervision_check',
                 meta: {
+                    icon: '_safetySupervision_check',
                     title: '安全督查检查'
                 }
             },
@@ -227,6 +236,7 @@ const SafetySupervisionManage = [
                 path: 'safetySupervision_account',
                 name: 'safetySupervision_account',
                 meta: {
+                    icon: '_account',
                     title: '安全督查台账'
                 }
             },
@@ -234,6 +244,7 @@ const SafetySupervisionManage = [
                 path: 'safetySupervision_examine',
                 name: 'safetySupervision_examine',
                 meta: {
+                    icon: '_safetySupervision_examine',
                     title: '平安工地考核'
                 }
             }
@@ -256,6 +267,7 @@ const CreditRatingManage = [
                 path: 'creditRating_record',
                 name: 'creditRating_record',
                 meta: {
+                    icon: '_creditRating_record',
                     title: '信用评价记录'
                 }
             },
@@ -263,6 +275,7 @@ const CreditRatingManage = [
                 path: 'creditRating_account',
                 name: 'creditRating_account',
                 meta: {
+                    icon: '_account',
                     title: '信用评价管理台账'
                 }
             }
@@ -285,6 +298,7 @@ const QAManage = [
                 path: 'QA_report',
                 name: 'QA_report',
                 meta: {
+                    icon: '_QA_report',
                     title: '质量检测报表'
                 }
             },
@@ -292,6 +306,7 @@ const QAManage = [
                 path: 'QA_analyze',
                 name: 'QA_analyze',
                 meta: {
+                    icon: '_QA_analyze',
                     title: '质量安全检测数据分析'
                 }
             }
@@ -314,6 +329,7 @@ const RecordAndCompletedManage = [
                 path: 'projectRecords',
                 name: 'projectRecords',
                 meta: {
+                    icon: '_projectRecords',
                     title: '工程备案'
                 }
             },
@@ -321,6 +337,7 @@ const RecordAndCompletedManage = [
                 path: 'project_verification',
                 name: 'project_verification',
                 meta: {
+                    icon: '_project_verification',
                     title: '交工检测核验'
                 }
             },
@@ -328,6 +345,7 @@ const RecordAndCompletedManage = [
                 path: 'projectCompleteQuality_authenticate',
                 name: 'projectCompleteQuality_authenticate',
                 meta: {
+                    icon: '_projectCompleteQuality_authenticate',
                     title: '竣工质量鉴定'
                 }
             },
@@ -335,12 +353,36 @@ const RecordAndCompletedManage = [
                 path: 'projectFileManage',
                 name: 'projectFileManage',
                 meta: {
+                    icon: '_projectFileManage',
                     title: '工程档案管理'
                 }
             }
         ]
     }
 ];
+
+// 系统管理
+const SystemManage = [
+    {
+        path: '/SystemManage',
+        name: 'SystemManage',
+        component: Main,
+        meta: {
+            icon: 'ios-settings',
+            title: '系统管理'
+        },
+        children: [
+            {
+                path: 'dataDict',
+                name: 'dataDict',
+                meta: {
+                    icon: '_data-dict',
+                    title: '数据字典'
+                }
+            }
+        ]
+    }
+]
 
 export default [
     ...Login,
@@ -352,5 +394,6 @@ export default [
     ...SafetySupervisionManage,
     ...CreditRatingManage,
     ...QAManage,
-    ...RecordAndCompletedManage
+    ...RecordAndCompletedManage,
+    ...SystemManage
 ]
