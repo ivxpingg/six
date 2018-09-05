@@ -3,13 +3,13 @@
         <vCountPanel :inforCardData="inforCardData"></vCountPanel>
         <div class="gutter-line"></div>
         <Row class="row-box" :gutter="20">
-            <Col span="8"><vUserInfoPanel></vUserInfoPanel></Col>
-            <Col span="16"><vSupervisionCount></vSupervisionCount></Col>
-            <Col span="8"><vNoticePanel></vNoticePanel></Col>
-            <Col span="8"><vInfoCollectionPanel></vInfoCollectionPanel></Col>
-            <Col span="8"><vProjectPanel></vProjectPanel></Col>
-            <Col span="16"><vFilesManage></vFilesManage></Col>
-            <Col span="8"><vLogPanel></vLogPanel></Col>
+            <i-col span="8"><vUserInfoPanel></vUserInfoPanel></i-col>
+            <i-col span="16"><vSupervisionCount></vSupervisionCount></i-col>
+            <i-col span="8"><vNoticePanel></vNoticePanel></i-col>
+            <i-col span="8"><vInfoCollectionPanel></vInfoCollectionPanel></i-col>
+            <i-col span="8"><vProjectPanel></vProjectPanel></i-col>
+            <i-col span="16"><vFilesManage></vFilesManage></i-col>
+            <i-col span="8"><vLogPanel></vLogPanel></i-col>
         </Row>
     </div>
 </template>
