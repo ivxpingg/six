@@ -12,8 +12,7 @@ const menuList = [
         name: 'showSystem',
         meta: {
             title: '综合展示系统'
-        },
-        href: 'https://www.baidu.com/'
+        }
     },
     {
         icon: 'ios-paper',

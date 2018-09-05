@@ -19,7 +19,7 @@ const ShowSystem = [
         meta: {
             title: '综合展示'
         },
-        component: () => import('@/views/Login/login.vue')
+        component: () => import('@/views/ShowSystem/showSystem.vue')
     }
 ];
 
