@@ -1,3 +1,4 @@
+import Merge from 'merge';
 // 通用类工具
 
 export const forEach = (arr, fn) => {
@@ -22,7 +23,7 @@ export const objEqual = (obj1, obj2) => {
     else if (keysArr1.length === 0 && keysArr2.length === 0) return true
     /* eslint-disable-next-line */
     else return !keysArr1.some(key => obj1[key] != obj2[key])
-}
+};
 
 
 /**
@@ -32,4 +33,19 @@ export const objEqual = (obj1, obj2) => {
  */
 export const getUnion = (arr1, arr2) => {
     return Array.from(new Set([...arr1, ...arr2]))
-}
+};
+
+/**
+ * Merge two or more objects recursively
+ * @param bool? clone
+ * @param mixed,... arguments
+ * @return object
+ */
+export const merge = Merge.recursive;
+
+/**
+ * Clone the input removing any reference
+ * @param mixed input
+ * @return mixed
+ */
+export const clone = Merge.clone;

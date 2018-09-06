@@ -57,8 +57,10 @@
         }
 
         .row-box {
-            .ivu-col {
+            & > .ivu-col {
                 margin-bottom: 20px;
+                height: 371px;
+                overflow: hidden;
             }
 
             .ivu-card-body {
