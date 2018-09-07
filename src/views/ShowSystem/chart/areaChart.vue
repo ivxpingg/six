@@ -14,6 +14,11 @@
                 chart: null
             };
         },
+        watch: {
+            '$store.state.app.htmlClientWidth'() {
+                this.chart.resize();
+            }
+        },
         mounted() {
             this.initChart();
         },

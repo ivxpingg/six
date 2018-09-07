@@ -22,7 +22,7 @@
 
             </vSideMenu>
         </Sider>
-        <Layout>
+        <Layout id="mian_layout" ref="mian_layout">
             <Header class="header-con">
                 <vHeaderBar :collapsed="collapsed"
                             @on-coll-change="handleCollapsedChange">
@@ -53,8 +53,8 @@
 
 <script>
     import vSideMenu from './components/side-menu/side-menu';
-    import minLogo from '@/assets/images/logo-min.jpg';
-    import maxLogo from '@/assets/images/logo.jpg';
+    import minLogo from '@/assets/images/logo.png';
+    import maxLogo from '@/assets/images/logo-max.png';
     import vHeaderBar from './components/header-bar/header-bar';
     import vTagsNav from './components/tags-nav/tags-nav';
     import vUser from './components/user/user';
@@ -91,7 +91,8 @@
             ...mapMutations([
                 'setBreadCrumb',
                 'setTagNavList',
-                'addTag'
+                'addTag',
+                'setMianLayoutWidth'
             ]),
             ...mapActions([
                 'getMenuList'
@@ -115,7 +116,9 @@
                 })
             },
             handleCollapsedChange (state) {
-                this.collapsed = state
+                this.collapsed = state;
+
+                this.setMianLayoutWidth(this.$refs.mian_layout.$el.clientWidth);
             },
             handleCloseTag (res, type, route) {
                 let openName = ''
@@ -162,7 +165,7 @@
     .mhome {
         .logo-con{
             height: 64px;
-            padding: 10px;
+            padding: 10px 5px;
             img{
                 height: 44px;
                 width: auto;

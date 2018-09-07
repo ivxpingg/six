@@ -6,7 +6,11 @@ export default {
         menuList: [],
         breadCrumbList: [],
         tagNavList: [],
-        homeRoute: getHomeRoute(routers)
+        homeRoute: getHomeRoute(routers),
+        // 自适应
+        htmlClientWidth: 0,
+        mianLayoutWidth: 0
+
     },
     getters: { },
     mutations: {
@@ -30,6 +34,16 @@ export default {
                 if (type === 'push') state.tagNavList.push(item);
                 else state.tagNavList.unshift(item);
                 setTagNavListInLocalstorage([...state.tagNavList]);
+            }
+        },
+        setMianLayoutWidth(state, width) {
+            state.mianLayoutWidth = width;
+        },
+        onresize(state) {
+            state.htmlClientWidth = document.documentElement.clientWidth;
+            let dom = document.querySelector('#mian_layout');
+            if (dom) {
+                state.mianLayoutWidth = dom.clientWidth;
             }
         }
     },

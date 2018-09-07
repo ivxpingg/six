@@ -5,8 +5,9 @@ import routes from './routers';
 
 Vue.use(Router);
 const router = new Router({
+    base: '/',
     routes,
-    mode: 'history'
+    // mode: 'history'
 });
 // const LOGIN_PAGE_NAME = 'user';
 

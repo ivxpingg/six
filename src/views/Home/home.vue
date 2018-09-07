@@ -41,7 +41,7 @@
                     { title: '从业单位(家)', icon: '_unit', count: 803, color: '#2d8cf0' },
                     { title: '从业人员(人)', icon: 'md-person', count: 13432, color: '#19be6b' },
                     { title: '在建项目(个)', icon: 'md-cube', count: 142, color: '#ff9900' },
-                    { title: '交竣工项目(个)', icon: '_projectCompleteQuality_authenticate', count: 657, color: '#ed3f14' },
+                    { title: '交竣工项目(个)', icon: '_projectCompleteQuality_authenticate2', count: 657, color: '#ed3f14' },
                     { title: '建设里程(km)', icon: 'md-flag', count: 112, color: '#E46CBB' },
                     { title: '监督工作(人次)', icon: '_safetySupervision_check', count: 14, color: '#9A66E4' }
                 ]

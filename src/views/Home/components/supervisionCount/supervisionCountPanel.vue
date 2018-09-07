@@ -20,6 +20,13 @@
                 options: {}
             }
         },
+        watch: {
+            '$store.state.app.mianLayoutWidth' () {
+                 setTimeout(() => {
+                     this.echarts.resize();
+                 },200);
+            }
+        },
         mounted() {
             setTimeout(() => {
                 this.initEcharts();

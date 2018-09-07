@@ -124,8 +124,17 @@
                 tableWidth: 0
             }
         },
+        watch: {
+            '$store.state.app.mianLayoutWidth' () {
+                setTimeout(() => {
+                    this.tableWidth = this.$refs.rightConent.clientWidth;
+                },200);
+            }
+        },
         mounted() {
-            this.tableWidth = this.$refs.rightConent.clientWidth;
+            setTimeout(() => {
+                this.tableWidth = this.$refs.rightConent.clientWidth;
+            },200);
         },
         methods: {
             onClickFile(type) {
@@ -159,8 +168,8 @@
 
         .right-content {
             flex: 1;
-            width: 100%;
             margin-left: 10px;
+            overflow: hidden;
         }
     }
 </style>

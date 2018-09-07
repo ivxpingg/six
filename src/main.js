@@ -9,7 +9,8 @@ import '@/style/fonts/iconfont.css';
 import '@/style/app.scss';
 import 'animate.css';
 
-process.env.NODE_ENV === 'development' ? require('@/mock') : '';
+require('@/mock');
+// process.env.NODE_ENV === 'development' ? require('@/mock') : '';
 
 Vue.config.productionTip = false;
 Vue.use(iView);

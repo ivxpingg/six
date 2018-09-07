@@ -127,7 +127,7 @@ const menuList = [
                 icon: '_qualitySupervision_complaint',
                 name: 'qualitySupervision_complaint',
                 meta: {
-                    title: '质量监督投述管理'
+                    title: '质量安全投诉管理'
                 }
             },
             {
@@ -196,6 +196,13 @@ const menuList = [
                 meta: {
                     title: '信用评价管理台账'
                 }
+            },
+            {
+                icon: '_majorProject_check',
+                name: 'majorProject_check',
+                meta: {
+                    title: '重点项目考勤管理'
+                }
             }
         ]
     },
@@ -244,7 +251,7 @@ const menuList = [
                 }
             },
             {
-                icon: '_projectCompleteQuality_authenticate',
+                icon: '_projectCompleteQuality_authenticate2',
                 name: 'projectCompleteQuality_authenticate',
                 meta: {
                     title: '竣工质量鉴定'

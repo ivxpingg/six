@@ -5,23 +5,26 @@
             <vMap class="v-map"> </vMap>
 
             <div class="card-box left-panel">
-                <Card class="chart-card lines-chart-card">
-                    <p slot="title">监督工作统计</p>
+                <Card class="chart-card lines-chart-card" icon="md-arrow-dropright">
+                    <p slot="title">
+                        <Icon type="md-arrow-dropright" />
+                        监督工作统计
+                    </p>
                     <vLineCharts class="line-chart"></vLineCharts>
                 </Card>
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title">监督工作统计</p>
+                    <p slot="title"><Icon type="md-arrow-dropright" />监督工作统计</p>
                     <vDoughnutChart class="line-chart"></vDoughnutChart>
                 </Card>
             </div>
 
             <div class="card-box right-panel">
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title">监督工作统计</p>
+                    <p slot="title"><Icon type="md-arrow-dropright" />监督工作统计</p>
                     <vBarCharts class="line-chart"></vBarCharts>
                 </Card>
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title">监督工作统计</p>
+                    <p slot="title"><Icon type="md-arrow-dropright" />监督工作统计</p>
                     <vRadarChart class="line-chart"></vRadarChart>
                 </Card>
             </div>
@@ -29,13 +32,13 @@
             <div class="card-box bottom-panel">
                 <div class="bt-left">
                     <Card class="chart-card line-chart-card">
-                        <p slot="title">用户活跃度统计</p>
+                        <p slot="title"><Icon type="md-arrow-dropright" />用户活跃度统计</p>
                         <vAreaChart class="line-chart"></vAreaChart>
                     </Card>
                 </div>
                 <div class="bt-right">
                     <Card class="chart-card line-chart-card">
-                        <p slot="title">用户活跃度统计</p>
+                        <p slot="title"><Icon type="md-arrow-dropright" />用户活跃度统计</p>
                         <vPieChart class="line-chart"></vPieChart>
                     </Card>
                 </div>
@@ -65,7 +68,9 @@
             vAreaChart
         },
         data() {
-            return {}
+            return {
+
+            }
         }
     }
 </script>
@@ -80,46 +85,23 @@
         .showSystem-container-innner {
             position: relative;
             height: 100%;
-            min-height: 850px;
+            min-height: 810px;
 
             >.title {
                 position: absolute;
                 top: 0;
-                left: 50%;
-                margin-left: -130px;
-                width: 260px;
-                height: $height;
+                left: 0;
+                right: 0;
+                height: 45px;
                 color: #FFF;
-                font-size: 26px;
-                line-height: $height;
+                font-size: 22px;
+                letter-spacing: 12px;
+                line-height: 45px;
                 text-align: center;
-                background-color: rgba(255,255,255,0.2);
+                background: url("./images/top-bg.png") no-repeat center top;
+                background-size: auto 100%;
                 z-index: 2;
 
-                &:before {
-                    position: absolute;
-                    display: block;
-                    top: 0;
-                    left: -$height * 2;
-                    content: " ";
-                    width: 0;
-                    height: 0;
-                    border-width: $height / 2 $height;
-                    border-style: solid;
-                    border-color: rgba(255,255,255,0.2) rgba(255,255,255,0.2) transparent transparent;
-                }
-                &:after {
-                    position: absolute;
-                    display: block;
-                    top: 0;
-                    right: -$height * 2;
-                    content: " ";
-                    width: 0;
-                    height: 0;
-                    border-width: $height / 2 $height;
-                    border-style: solid;
-                    border-color: rgba(255,255,255,0.2) transparent transparent rgba(255,255,255,0.2);
-                }
             }
         }
 
@@ -161,15 +143,20 @@
         }
 
         .chart-card {
-            background-color: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.4);
+            background-color: rgba(45,140,240,0.1);
+            border: 1px solid rgba(255,255,255,0);
 
             .ivu-card-head {
                 padding: 6px;
-                background-color: rgba(255,255,255,0.1);
-                border-bottom: 1px solid rgba(255,255,255,0.4);
+                background-color: rgba(45,140,240,0.1);
+                border-bottom: 1px solid rgba(255,255,255,0);
                 p {
-                    color: #FFCC33;
+                    color: #fff;
+                    font-size: 12px;
+                    .ivu-icon {
+                        color: rgb(45,140,240);
+                        font-size: 20px;
+                    }
                 }
             }
 

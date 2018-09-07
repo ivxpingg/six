@@ -1,15 +1,14 @@
 import Main from '@/views/Main/main.vue';
 const Login = [
     {
-        path: '/user',
-        name: 'user',
+        path: '/login',
+        name: 'login',
         meta: {
-            title: 'Login - 登录'
+            title: '登录'
         },
         component: () => import('@/views/Login/login.vue')
     }
 ];
-
 
 // 综合展示系统
 const ShowSystem = [
@@ -190,7 +189,7 @@ const QualitySupervisionManage = [
                 name: 'qualitySupervision_complaint',
                 meta: {
                     icon: '_qualitySupervision_complaint',
-                    title: '质量监督投述管理'
+                    title: '质量安全投诉管理'
                 }
             },
             {
@@ -278,6 +277,14 @@ const CreditRatingManage = [
                     icon: '_account',
                     title: '信用评价管理台账'
                 }
+            },
+            {
+                path: 'majorProject_check',
+                name: 'majorProject_check',
+                meta: {
+                    icon: '_majorProject_check',
+                    title: '重点项目考勤管理'
+                }
             }
         ]
     }
@@ -345,7 +352,7 @@ const RecordAndCompletedManage = [
                 path: 'projectCompleteQuality_authenticate',
                 name: 'projectCompleteQuality_authenticate',
                 meta: {
-                    icon: '_projectCompleteQuality_authenticate',
+                    icon: '_projectCompleteQuality_authenticate2',
                     title: '竣工质量鉴定'
                 }
             },
