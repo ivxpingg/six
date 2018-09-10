@@ -40,33 +40,22 @@
 </template>
 <script>
     import vThumb from './thumb/thumb';
-    import imgUrl from '@/assets/images/user.jpg';
-    import imgUrl1 from '@/assets/images/logo.jpg';
-    import imgUrl3 from '@/assets/images/logo2.png';
-    import imgUrl2 from '@/assets/images/logo-min.jpg';
+    import imgUrl1 from '@/assets/testImg/1.png';
+    import imgUrl2 from '@/assets/testImg/2.png';
+    import imgUrl3 from '@/assets/testImg/3.png';
+    import imgUrl11 from '@/assets/testImg/11.png';
+    import imgUrl22 from '@/assets/testImg/22.png';
+    import imgUrl33 from '@/assets/testImg/33.png';
     import vFolder from './folder/folder';
 
     const list = [
-        { src: imgUrl, title: '图片标题'},
-        { src: imgUrl3, title: '图片标题'},
         { src: imgUrl1, title: '图片标题'},
         { src: imgUrl2, title: '图片标题'},
-        { src: imgUrl1, title: '图片标题'},
-        { src: imgUrl, title: '图片标题'},
         { src: imgUrl3, title: '图片标题'},
-        { src: imgUrl1, title: '图片标题'},
         { src: imgUrl2, title: '图片标题'},
-        { src: imgUrl1, title: '图片标题'},
-        { src: imgUrl, title: '图片标题'},
-        { src: imgUrl3, title: '图片标题'},
-        { src: imgUrl1, title: '图片标题'},
-        { src: imgUrl2, title: '图片标题'},
-        { src: imgUrl1, title: '图片标题'},
-        { src: imgUrl, title: '图片标题'},
-        { src: imgUrl3, title: '图片标题'},
-        { src: imgUrl1, title: '图片标题'},
-        { src: imgUrl2, title: '图片标题'},
-        { src: imgUrl1, title: '图片标题'}
+        { src: imgUrl11, title: '图片标题'},
+        { src: imgUrl22, title: '图片标题'},
+        { src: imgUrl33, title: '图片标题'},
     ];
     export default {
         name: 'infoCollectionPanel',

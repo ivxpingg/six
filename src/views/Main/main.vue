@@ -163,10 +163,10 @@
 
 <style lang="scss" scoped>
     .mhome {
-        .logo-con{
+        .logo-con {
             height: 64px;
             padding: 10px 5px;
-            img{
+            img {
                 height: 44px;
                 width: auto;
                 display: block;
@@ -178,20 +178,21 @@
             background-color: #FFF;
         }
 
-        .tag-nav-wrapper{
+        .tag-nav-wrapper {
             padding: 0;
-            height:40px;
-            background:#F0F0F0;
+            height: 40px;
+            background: #F0F0F0;
         }
 
-        .content-wrapper{
+        .content-wrapper {
             padding: 18px;
             height: calc(100% - 80px);
             overflow: auto;
         }
 
-            .left-sider{
-            .ivu-layout-sider-children{
+        .left-sider {
+            overflow: hidden;
+            .ivu-layout-sider-children {
                 overflow-y: scroll;
                 margin-right: -18px;
             }

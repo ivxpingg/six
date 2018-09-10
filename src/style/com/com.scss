@@ -1,0 +1,21 @@
+/**
+* 表格
+* 每个表格分页的
+ */
+.ivx-table-box {
+  padding: 10px 0;
+
+  .ivu-page {
+    padding-top: 20px;
+    text-align: center;
+  }
+
+  .ivx-table-cell-handle {
+      .ivu-btn {
+        margin-right: 10px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+  }
+}

@@ -108,6 +108,7 @@ const OrgAndPersonManage = [
             {
                 path: 'workUnitManage',
                 name: 'workUnitManage',
+                component: () => import('@/views/OrgAndPersonManage/workUnitManage/workUnitManage.vue'),
                 meta: {
                     icon: '_unit',
                     title: '从业单位管理'

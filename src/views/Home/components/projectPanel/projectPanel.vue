@@ -9,7 +9,7 @@
                 <TabPane name="highway" label="公路">
                     <Table :columns="tableColumns" :data="tableData_highway" :height="234"></Table>
                 </TabPane>
-                <TabPane name="waterway" label="水路">
+                <TabPane name="waterway" label="水运">
                     <Table :columns="tableColumns" :data="tableData_highway" :height="234"></Table>
                 </TabPane>
             </Tabs>
