@@ -2,18 +2,20 @@
     <div class="baidu-map">
         <div class="map" id="baidu_map"></div>
 
-        <Modal class="modal-list-info"
-               v-model="modalInfo"
-               :width= "260"
-               title="项目情况" >
-            <Form>
-                <FormItem label="项目名称:">某某路改建工程</FormItem>
-                <FormItem label="建设里程:">12km</FormItem>
-                <FormItem label="建设地点:">六安市</FormItem>
-                <FormItem label="开工时间:">2018-09-06</FormItem>
-            </Form>
-            <div slot="footer"></div>
-        </Modal>
+        <div @mouseleave="onmouseleave"
+             class="modal-list-info ivu-card ivu-card-bordered"
+             v-show="cardInfo"
+              :style="{top: `${cardTop}px`, left: `${cardLeft}px`}">
+            <div class="ivu-card-head"><p><span>项目情况</span></p></div>
+            <div class="ivu-card-body">
+                <Form >
+                    <FormItem label="项目名称:">某某路改建工程</FormItem>
+                    <FormItem label="建设里程:">12km</FormItem>
+                    <FormItem label="建设地点:">六安市</FormItem>
+                    <FormItem label="开工时间:">2018-09-06</FormItem>
+                </Form>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -27,7 +29,9 @@
                     [116.440175,31.753489],
                     [116.477544,31.594179]
                 ],
-                modalInfo: false
+                cardInfo: false,
+                cardLeft: 0,
+                cardTop: 0
             }
         },
         mounted() {
@@ -47,9 +51,14 @@
             },
             setPointEvent(marker) {
                 let that = this;
-                marker.addEventListener('click', function () {
-                    that.modalInfo = true;
+                marker.addEventListener('mouseover', function (e) {
+                    that.cardTop = e.clientY-5;
+                    that.cardLeft = e.clientX-5;
+                    that.cardInfo = true;
                 });
+            },
+            onmouseleave() {
+                this.cardInfo = false;
             }
         }
     }
@@ -69,6 +78,13 @@
     }
 
     .modal-list-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width: 250px;
+        background-color: #FFF;
+        z-index: 10;
+        overflow: hidden;
         .ivu-form-item {
             margin-bottom: 0;
         }

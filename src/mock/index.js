@@ -18,4 +18,18 @@ Mock.mock(/\/getMenuList/, app.getMenuList);
 import baseManage from './baseManage/organizetionManage';
 Mock.mock(/\/getRoleGroup/, baseManage.getRoleGroup);     // 获取角色列表
 
+
+/**
+ * 机构与人员管理
+ */
+// 从业单位管理
+import {getUnitList} from './orgAndPersonManage/workUnitManage';
+Mock.mock(/\/getUnitList/, getUnitList);
+
+// 从业人员管理
+import workPersonManage from './orgAndPersonManage/workPersonManage';
+
+// 从业单位管理
+import supervisorsManage from './orgAndPersonManage/supervisorsManage';
+
 export default Mock;

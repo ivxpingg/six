@@ -71,6 +71,11 @@
             return {
 
             }
+        },
+        methods: {
+            ddd () {
+                alert();
+            }
         }
     }
 </script>

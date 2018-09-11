@@ -5,11 +5,13 @@ export default {
      */
     cookieExpires: 1,
     development: {
+        origin: window.location.origin,
         ajaxUrl: '',
         staticUrl: '',
         cookiePath: '/'
     },
     production: {
+        origin: window.location.origin,
         ajaxUrl: '',
         staticUrl: '',
         cookiePath: '/'

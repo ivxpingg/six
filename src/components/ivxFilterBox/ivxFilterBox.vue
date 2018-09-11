@@ -22,7 +22,13 @@
     .ivxFilterBox-container {
         padding: 10px 0;
         border-bottom: 1px solid #e8eaec;
+        overflow: hidden;
+
+        &:first-child {
+            padding-top: 0;
+        }
         .ivu-btn {
+            float: left;
             margin-right: 10px;
         }
     }
@@ -31,11 +37,22 @@
 <style lang="scss">
     .ivxFilterBox-container {
         // Form表单样式
-        .ivu-form {
+        > .ivu-form {
             margin-bottom: -10px;
             .ivu-form-item {
                 margin-bottom: 10px;
             }
         }
+
+        > .ivu-upload {
+            display: inline-block;
+            float: left;
+            margin-right: 10px;
+            .ivu-upload-list {
+                margin-top: 0;
+            }
+        }
+
+
     }
 </style>

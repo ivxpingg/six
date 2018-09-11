@@ -8,9 +8,9 @@
         <Page prev-text="上一页"
               next-text="下一页"
               show-total
-              :current="searchParams.pageIndex"
-              :page-size="searchParams.pageSize"
-              :total="searchParams.totalCount"></Page>
+              :current="searchParams.current"
+              :page-size="searchParams.size"
+              :total="searchParams.total"></Page>
     </div>
 
 </template>
@@ -21,9 +21,9 @@
         data() {
             return {
                 searchParams: {
-                    pageIndex: 1,      // 当前第几页
-                    pageSize: 10,      // 每页几行
-                    totalCount: 0,     // 总行数
+                    current: 1,      // 当前第几页
+                    size: 10,      // 每页几行
+                    total: 0,     // 总行数
                     beginDate: '',     // 开始时间
                     endDate: '',       // 结束时间
                     searchKey: ''      // 模糊查询参数
