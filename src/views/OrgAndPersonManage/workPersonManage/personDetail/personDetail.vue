@@ -1,5 +1,5 @@
 <template>
-    <div class="unitDetail-container">
+    <div class="personDetail-container">
         <div class="left-panel">
             <Menu theme="light"
                   :width="`160px`"
@@ -11,7 +11,7 @@
                 </MenuItem>
                 <MenuItem name="2">
                     <Icon type="md-chatbubbles" />
-                    人员情况
+                    供职单位
                 </MenuItem>
                 <MenuItem name="3">
                     <Icon type="md-heart" />
@@ -24,29 +24,29 @@
             </Menu>
         </div>
         <div class="right-panel">
-            <vUnitBaseInfo v-show="activeName === '1'" :unitId="unitId"></vUnitBaseInfo>
-            <vUnitPersons v-show="activeName === '2'" :unitId="unitId"></vUnitPersons>
-            <vUnitEvaluate v-show="activeName === '3'" :unitId="unitId" ></vUnitEvaluate>
-            <vUnitAccessory v-show="activeName === '4'" :unitId="unitId"></vUnitAccessory>
+            <vUserBaseInfo v-show="activeName === '1'" :userId="userId"></vUserBaseInfo>
+            <vUserUnit v-show="activeName === '2'" :userId="userId"></vUserUnit>
+            <vUserEvaluate v-show="activeName === '3'" :userId="userId" ></vUserEvaluate>
+            <vUserAccessory v-show="activeName === '4'" :userId="userId"></vUserAccessory>
         </div>
     </div>
 </template>
 
 <script>
-    import vUnitBaseInfo from './module/unitBaseInfo';
-    import vUnitPersons from './module/unitPersons';
-    import vUnitEvaluate from './module/unitEvaluate';
-    import vUnitAccessory from './module/unitAccessory';
+    import vUserBaseInfo from './module/userBaseInfo';
+    import vUserUnit from './module/userUnit';
+    import vUserEvaluate from './module/userEvaluate';
+    import vUserAccessory from './module/userAccessory';
     export default {
-        name: 'unitDetail',  // 单位详情
+        name: 'personDetail',
         components: {
-            vUnitBaseInfo,
-            vUnitPersons,
-            vUnitEvaluate,
-            vUnitAccessory
+            vUserBaseInfo,
+            vUserUnit,
+            vUserEvaluate,
+            vUserAccessory
         },
         props: {
-            unitId: {
+            userId: {
                 type: String,
                 required: true
             }
@@ -65,7 +65,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .unitDetail-container {
+    .personDetail-container {
         display: flex;
 
         .left-panel {

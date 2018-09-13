@@ -63,7 +63,7 @@
         },
         computed: {
             currentRouteObj () {
-                const { name, params, query } = this.value
+                const { name, params, query } = this.value;
                 return { name, params, query }
             }
         },
@@ -155,13 +155,15 @@
             },
             getTagElementByName (name) {
                 this.$nextTick(() => {
-                    this.refsTag = this.$refs.tagsPageOpened
-                    this.refsTag.forEach((item, index) => {
-                        if (name === item.name) {
-                            let tag = this.refsTag[index].$el
-                            this.moveToView(tag)
-                        }
-                    })
+                    this.refsTag = this.$refs.tagsPageOpened;
+                    if (this.refsTag) {
+                        this.refsTag.forEach((item, index) => {
+                            if (name === item.name) {
+                                let tag = this.refsTag[index].$el
+                                this.moveToView(tag)
+                            }
+                        })
+                    }
                 })
             },
             contextMenu (item, e) {

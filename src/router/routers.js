@@ -117,6 +117,7 @@ const OrgAndPersonManage = [
             {
                 path: 'workPersonManage',
                 name: 'workPersonManage',
+                component: () => import('@/views/OrgAndPersonManage/workPersonManage/workPersonManage.vue'),
                 meta: {
                     icon: '_person-manage',
                     title: '从业人员管理'
@@ -125,6 +126,7 @@ const OrgAndPersonManage = [
             {
                 path: 'supervisorsManage',
                 name: 'supervisorsManage',
+                component: () => import('@/views/OrgAndPersonManage/supervisorsManage/supervisorsManage.vue'),
                 meta: {
                     icon: '_supervise-person-manage',
                     title: '监督单位人员管理'

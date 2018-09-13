@@ -1,12 +1,12 @@
 <template>
     <div class="unitPersons-container">
         <vIvxFilterBox>
-            <Button type="primary">新增人员</Button>
-            <Button type="primary">人员变更</Button>
+            <Button type="primary" @click="open_modal_addPerson">新增人员</Button>
+            <!--<Button type="primary">人员变更</Button>-->
         </vIvxFilterBox>
         <div class="ivx-table-box">
             <Table border
-                   height="540"
+                   height="405"
                    :columns="tableColumns"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
@@ -17,36 +17,54 @@
                   :total="searchParams.total"
                   :on-change="onPageChange"></Page>
         </div>
+
+        <Modal v-model="modal_addPerson"
+               className="modal-unitPersons-add"
+               title="从业人员"
+               :width="1200"
+               footer-hide>
+            <vEmployeeSelect v-if="modal_addPerson"
+                             :unitId="unitId"
+                             @handleSelect="addPersons"></vEmployeeSelect>
+        </Modal>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
+    import vEmployeeSelect from '../../../../Common/employeeSelect/employeeSelect';
     export default {
         name: 'unitPersons',  // 单位人员
-        components: {vIvxFilterBox},
+        components: {vIvxFilterBox, vEmployeeSelect},
+        props: {
+            unitId: {
+                type: String,
+                required: true
+            }
+        },
         data() {
             return {
                 searchParams: {
                     current: 1,      // 当前第几页
-                    size: 10,      // 每页几行
+                    size: 7,      // 每页几行
                     total: 0,     // 总行数
                     beginDate: '',     // 开始时间
                     endDate: '',       // 结束时间
-                    searchKey: ''      // 模糊查询参数
+                    unitId: ''
                 },
                 tableColumns: [
-                    { title: '序号', width: 60, type: 'index', },
-                    { title: '单位名称', width: 180, align: 'center', key: 'unitName' },
-                    { title: '机构代码', width: 180, align: 'center', key: 'orgCode' },
-                    { title: '资质类别', width: 180, align: 'center', key: 'qualificationTypeLabel' },
-                    { title: '资质许可等级', width: 180, align: 'center', key: 'qualification' },
-                    { title: '单位类型', width: 180, align: 'center', key: 'unitTypeLabel' },
-                    { title: '负责人', width: 180, align: 'center', key: 'leader' },
-                    { title: '联系方式', width: 180, align: 'center', key: 'telephone' },
-                    { title: '电子邮件', width: 180, align: 'center', key: 'email' },
-                    { title: '公司地址', width: 180, align: 'center', key: 'companyAddress' },
-                    { title: '备案', width: 180, align: 'center', key: 'unitName' },
+                    { title: '序号', width: 60, align: 'center', type: 'index', },
+                    { title: '姓名', width: 120, align: 'center', key: 'name' },
+                    { title: 'UID', width: 80, align: 'center', key: 'uId' },
+                    { title: '性别', width: 70, align: 'center', key: 'sexStr' },
+                    { title: '年龄', width: 70, align: 'center', key: 'age' },
+                    { title: '民族', width: 100, align: 'center', key: 'nationStr' },
+                    { title: '职称级别', width: 120, align: 'center', key: 'titleLevel' },
+                    { title: '技术职称', width: 120, align: 'center', key: 'titleName' },
+                    { title: '学历', width: 120, align: 'center', key: 'education' },
+                    { title: '联系电话', width: 120, align: 'center', key: 'phone' },
+                    { title: '身份证号码', width: 160, align: 'center', key: 'IdNumber' },
+                    { title: '岗位', width: 160, align: 'center', key: 'job' },
                     {
                         title: '操作',
                         width: 120,
@@ -56,11 +74,16 @@
                             let list = [
                                 h('Button', {
                                     props: {
-                                        type: 'info',
+                                        type: 'error',
                                         size: 'small',
-                                        icon: 'ios-eye-outline'
+                                        icon: 'ios-trash-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.removePerson(params.row);
+                                        }
                                     }
-                                }, '查看')
+                                }, '移除')
                             ];
 
                             return h('div',{
@@ -69,20 +92,27 @@
                         }
                     }
                 ],
-                tableData: [
-                    { index: '我是测试的数据', unitName: '厦门卫星定位应用股份有限公司' },
-                    {  index: '我是测试的数据' },
-                    { index: '我是测试的数据' },
-                    { index: '我是测试的数据' },
-                    {  index: '我是测试的数据' },
-                    { index: '我是测试的数据' },
-                    {  index: '我是测试的数据' },
-                    { index: '我是测试的数据' },
-                    { index: '我是测试的数据' },
-                    {  index: '我是测试的数据' }
+                tableData: [],
 
-                ],
+                // 添加从业人员
+                modal_addPerson: false
             };
+        },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            unitId: {
+                handler(val) {
+                    if (val) {
+                        this.getData();
+                    }
+                }
+            }
+        },
+        mounted() {
+            this.searchParams.unitId = this.unitId;
+            this.getData();
         },
         methods: {
             /**
@@ -92,11 +122,85 @@
             onPageChange(current) {
                 this.searchParams.current = current;
             },
+            // 获取表格数据
+            getData() {
+                this.$http({
+                    method: 'post',
+                    url: '/getUnitPersonById',
+                    data: JSON.stringify(this.searchParams)
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.tableData = res.data.records;
+                        this.searchParams.total = res.data.total;
+                    }
+                })
+            },
+
+            open_modal_addPerson() {
+                this.modal_addPerson = true;
+            },
+
+            /**
+             * 添加人员
+             * @param list
+             */
+            addPersons(list) {
+
+                this.$http({
+                    method: 'get',
+                    url: '/unitAddPersons',
+                    params: {
+                        unitId: this.unitId,
+                        userIds: list.join(',')
+                    }
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.$Message.success({
+                            content: '添加人员成功！'
+                        });
+
+                        this.modal_addPerson = false;
+                    }
+                });
+
+            },
+
+            // 移除人员
+            removePerson(row) {
+                this.$Modal.confirm({
+                    title: '移除人员',
+                    content: `确定要移除<${row.name}>?`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '',
+                            params: {
+                                userId: row.userId,
+                                unitId: this.unitId
+                            }
+                        }).then(res => {
+                            if(res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '移除成功！'
+                                });
+                            }
+                        })
+                    }
+                })
+            }
         }
     }
 </script>
 
 <style lang="scss" scoped>
     .unitPersons-container {
+    }
+</style>
+<style lang="scss">
+    .modal-unitPersons-add {
+        z-index: 1001;
+        .ivu-modal-body {
+            padding: 0;
+        }
     }
 </style>

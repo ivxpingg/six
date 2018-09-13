@@ -1,23 +1,57 @@
-const dictList = [
-    {
-        id: '',
-        parentId: '',
-        value: '',
-        label: '',
-        type: ''
-    }
-];
+import {getParams} from '../../lib/util';
+
+const dictList = {
+    D001: [
+        {
+            id: '0',
+            parentId: '',
+            value: '001',
+            label: '监督单位',
+            type: 'D001',
+            description: '单位类型'
+        },
+        {
+            id: '0',
+            parentId: '',
+            value: '002',
+            label: '建设单位',
+            type: 'D001',
+            description: '单位类型'
+        },
+        {
+            id: '0',
+            parentId: '',
+            value: '003',
+            label: '监理单位',
+            type: 'D001',
+            description: '单位类型'
+        },
+        {
+            id: '0',
+            parentId: '',
+            value: '004',
+            label: '施工单位',
+            type: 'D001',
+            description: '单位类型'
+        },
+        {
+            id: '0',
+            parentId: '',
+            value: '005',
+            label: '设计单位',
+            type: 'D001',
+            description: '单位类型'
+        }
+    ]
+};
 
 
-const getDictList = (req) => {
+export const getDictList = (req) => {
+    let params = getParams(req.url);
     return {
-        status: 1,
-        result: dictList,
+        code: 'SUCCESS',
+        data: dictList[params.type],
         msg: ''
     }
 };
-
-export default {
-    getDictList
-}
 

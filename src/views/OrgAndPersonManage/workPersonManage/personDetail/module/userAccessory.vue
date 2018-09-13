@@ -1,5 +1,5 @@
 <template>
-    <div class="unitAccessory-container">
+    <div class="vUnitAccessory-container">
         <Row :gutter="10">
             <template v-for="(item, idx) in list">
                 <i-col span="4" :key="`thumb-${idx}`">
@@ -13,10 +13,10 @@
 <script>
     import vThumb from '../../../../Common/thumb/thumb';
     export default {
-        name: 'unitAccessory',  // 附件信息
+        name: 'vUnitAccessory',
         components: {vThumb},
         props: {
-            unitId: {
+            userId: {
                 type: String,
                 required: true
             }
@@ -27,7 +27,7 @@
             };
         },
         watch: {
-            unitId: {
+            userId: {
                 immediate: true,
                 handler(val) {
                     if (val) {
@@ -43,7 +43,7 @@
                     method: 'get',
                     url: '/getUnitAccessory',
                     params: {
-                        unitId: this.unitId
+                        userId: this.userId
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
@@ -56,6 +56,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .unitAccessory-container {
+    .vUnitAccessory-container {
     }
 </style>

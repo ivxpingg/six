@@ -39,7 +39,7 @@
     </Card>
 </template>
 <script>
-    import vThumb from './thumb/thumb';
+    import vThumb from '../../../Common/thumb/thumb';
     import imgUrl1 from '@/assets/testImg/1.png';
     import imgUrl2 from '@/assets/testImg/2.png';
     import imgUrl3 from '@/assets/testImg/3.png';

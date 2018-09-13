@@ -1,5 +1,5 @@
 <template>
-    <div class="unitBaseInfo-container">
+    <div class="addUnit-container">
         <Form ref="form"
               class="unit-form"
               inline
@@ -89,41 +89,32 @@
 
 <script>
     export default {
-        name: 'unitBaseInfo',  // 单位基本信息
-        props: {
-            unitId: {
-                type: String,
-                required: true
-            }
-        },
+        name: 'addUnit',
         data() {
             return {
                 formData: {
-                    unitId: 'D001',
-                    unitName: '厦门卫星定位应用股份有限公司',  // 单位名称
-                    orgCode: 'AZ2300125',                   // 机构代码
-                    registerAddress: '注册地址',
-                    unitType: '1',
-                    unitTypeLabel: '单位类型：施工单位',
-                    leader: '负责人深明命',
-                    telephone: '18203215240',
-                    email: '123@qq.com',
-                    companyAddress: '公司地址厦门市软件园二期',
-                    website: '网站地址',
-                    qualificationType: '001',
-                    qualificationTypeLabel: '公路(资质类别)',
-                    parentUnitName: '母体机构单位名称',
-                    parentUnitLeader: '母体机构负责人',
-                    parentUnitTelephone: '母体负责人联系方式',
-                    primaryTechnology: 10,              //'工程技术初级职称人数',
-                    mediumTechnology: 20,               //'工程技术中级职称人数',
-                    highTechnology: 30,                 //'工程技术高级职称人数',
-                    totalTechnology: 60,                // 技术总人数
-                    primaryManage: 111,                 //经济管理初级职称人数
-                    mediumManage: 222,                  //经济管理中级职称人数
-                    highManage: 333,                    //经济管理高级职称人数
-                    totalManage: 666,                   //'经济管理总人数'
-                    countTime: '2018-10-10',            // 统计时间
+                    unitName: '',  // 单位名称
+                    orgCode: '',                   // 机构代码
+                    registerAddress: '',
+                    unitType: '',
+                    leader: '',
+                    telephone: '',
+                    email: '',
+                    companyAddress: '',
+                    website: '',
+                    qualificationType: '',
+                    parentUnitName: '',
+                    parentUnitLeader: '',
+                    parentUnitTelephone: '',
+                    primaryTechnology: 0,              //'工程技术初级职称人数',
+                    mediumTechnology: 0,               //'工程技术中级职称人数',
+                    highTechnology: 0,                 //'工程技术高级职称人数',
+                    totalTechnology: 0,                // 技术总人数
+                    primaryManage: 0,                 //经济管理初级职称人数
+                    mediumManage: 0,                  //经济管理中级职称人数
+                    highManage: 0,                    //经济管理高级职称人数
+                    totalManage: 0,                   //'经济管理总人数'
+                    countTime: '',                    // 统计时间
                     qualification: ''                 // 许可证等级
                 },
                 rules: {
@@ -137,45 +128,21 @@
                 }
             };
         },
-        watch: {
-            unitId: {
-                immediate: true,
-                handler(val) {
-                    if (val) {
-                        this.getUntiBaseInfo();
-                    }
-                }
-            }
-        },
-        mounted() {},
         methods: {
-            // 获取详细信息
-            getUntiBaseInfo() {
-                this.$http({
-                    method: 'get',
-                    url: '/getUnitById',
-                    params: {
-                        unitId: this.unitId
-                    }
-                }).then(res => {
-                   if (res.code === 'SUCCESS') {
-                       Object.assign(this.formData, res.data);
-                   }
-                });
-            },
-            // 保存单位基础信息
+            // 添加单位基础信息
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/updateUnitInfo',
+                            url: '/addUnitInfo',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
                                     content: '更新成功！'
                                 });
+                                this.$emit('modal_addUser_callback');
                             }
                         })
                     } else {
@@ -188,7 +155,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .unitBaseInfo-container {
+    .addUnit-container {
         padding-bottom: 61px;
         .unit-form {
             .ivu-form-item {
