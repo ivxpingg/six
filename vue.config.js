@@ -85,14 +85,14 @@ module.exports = {
     devServer: {
         open: true, //process.platform === 'darwin',
         host: '0.0.0.0',
-        port: 8080,
+        port: 8666,
         https: false,
         hotOnly: false,
         // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/cli-service.md#configuring-proxy配置代理
         proxy:{   // string | Object
 
-            '/oceanobservation': {
-                target: 'http://xmsoc.com:20500',
+            '/dict': {
+                target: 'http://192.168.0.180:8080',
 
                 ws: true,
                 changeOrigin: true

@@ -1,5 +1,5 @@
 <template>
-    <div class="supervisorsManage-container">
+    <Card class="supervisorsManage-container">
         <vIvxFilterBox dashed>
             <Button type="primary"
                     icon="md-add"
@@ -29,15 +29,32 @@
                   :total="searchParams.total"
                   :on-change="onPageChange"></Page>
         </div>
-    </div>
+
+        <Modal v-model="modal_addSupervisor"
+               title="新增监督单位人员"
+               :width="1200"
+               footer-hide>
+            <vAddSupervisor @modal_addSupervisor_callback="modal_addSupervisor_callback"></vAddSupervisor>
+        </Modal>
+
+        <Modal v-model="modal_supervisorDetail"
+               title="监督单位人员详情"
+               :width="1200"
+               footer-hide>
+            <vSupervisorDetail :userId="userId"></vSupervisorDetail>
+        </Modal>
+
+    </Card>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
+    import vAddSupervisor from './addSupervisor/addSupervisor';
+    import vSupervisorDetail from './supervisorDetail/supervisorDetail';
     export default {
         // 监督单位人员
         name: 'supervisorsManage',
-        components: {vIvxFilterBox},
+        components: {vIvxFilterBox, vAddSupervisor, vSupervisorDetail},
         data() {
             return {
                 searchParams: {
@@ -48,17 +65,31 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '姓名', width: 180, align: 'center', key: 'name' },
-                    { title: 'UID', width: 180, align: 'center', key: 'uId' },
-                    { title: '科室', width: 180, align: 'center', key: 'department' },
-                    { title: '职务', width: 180, align: 'center', key: 'job' },
-                    { title: '级别', width: 180, align: 'center', key: 'titleLevel' },
-                    { title: '所属单位', width: 180, align: 'center', key: 'unitName' },
-                    { title: '办公固话', width: 180, align: 'center', key: 'telephone' },
-
-
-                    { title: '联系方式', width: 180, align: 'center', key: 'telephone' },
-                    { title: '电子邮件', width: 180, align: 'center', key: 'email' },
+                    { title: '姓名', width: 120, align: 'center', key: 'name' },
+                    { title: 'UID', width: 100, align: 'center', key: 'uId' },
+                    { title: '科室', width: 120, align: 'center', key: 'department' },
+                    { title: '职务', width: 120, align: 'center', key: 'job' },
+                    { title: '级别', width: 120, align: 'center', key: 'titleLevel' },
+                    { title: '所属单位', width: 120, align: 'center', key: 'unitName' },
+                    { title: '办公固话', width: 120, align: 'center', key: 'telephone' },
+                    { title: '移动小号', width: 120, align: 'center', key: 'mobileShortNum' },
+                    { title: '手机', width: 120, align: 'center', key: 'phone' },
+                    { title: '任职时间', width: 120, align: 'center', key: 'tenureTime' },
+                    { title: '性别', width: 80, align: 'center', key: 'sexStr' },
+                    { title: '民族', width: 120, align: 'center', key: 'nationLabel' },
+                    { title: '祖籍', width: 120, align: 'center', key: 'nativePlace' },
+                    { title: '年龄', width: 80, align: 'center', key: 'age' },
+                    { title: '出生年月', width: 120, align: 'center', key: 'birthday' },
+                    { title: '工作年月', width: 120, align: 'center', key: 'workDate' },
+                    { title: '入党年月', width: 120, align: 'center', key: 'joinPartyDate' },
+                    { title: '学历', width: 120, align: 'center', key: 'education' },
+                    { title: '毕业院校', width: 120, align: 'center', key: 'graduateSchool' },
+                    { title: '专业', width: 120, align: 'center', key: 'profession' },
+                    { title: '身份类别', width: 120, align: 'center', key: 'identityTypeLabel' },
+                    { title: '执法证类型', width: 120, align: 'center', key: 'lawTypeLabel' },
+                    { title: '执法证号码', width: 120, align: 'center', key: 'lawNumber' },
+                    { title: '领导分工及科室人员', width: 180, align: 'center', key: 'divideWork' },
+                    { title: '编制状态', width: 100, align: 'center', key: 'belongStateLabel' },
 
                     {
                         title: '操作',
@@ -76,7 +107,7 @@
                                     on: {
                                         click: () => {
                                             this.userId = params.row.userId;
-                                            // this.modal_unitDetail = true;
+                                            this.modal_supervisorDetail = true;
                                         }
                                     }
                                 }, '查看')
@@ -90,6 +121,13 @@
                 ],
                 tableData: [],
                 tableLoading: false,
+
+                // 新增监督人员
+                modal_addSupervisor: false,
+
+                // 监督人员详情
+                modal_supervisorDetail: false,
+                userId: ''
             };
         },
         watch: {
@@ -113,10 +151,10 @@
             },
 
             modal_addSupervisor_open() {
-                this.modal_addUnit = true;
+                this.modal_addSupervisor = true;
             },
             modal_addSupervisor_callback() {
-                this.modal_addUnit = false;
+                this.modal_addSupervisor = false;
                 this.getData();
             },
             // 获取表格数据

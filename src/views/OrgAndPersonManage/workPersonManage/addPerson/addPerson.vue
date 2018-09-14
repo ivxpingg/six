@@ -192,8 +192,7 @@
         padding-bottom: 61px;
         .user-form {
             .ivu-form-item {
-                .ivu-input-wrapper,
-                .ivu-select{
+                .ivu-form-item-content > div{
                     width: 260px;
                 }
             }
