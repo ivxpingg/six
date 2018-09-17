@@ -2,7 +2,16 @@
     <Card class="dataDict-container">
         <div class="dataDict-container-inner">
             <div class="left-panel">
-                <vIvxFilterBox></vIvxFilterBox>
+                <vIvxFilterBox>
+                    <Form>
+                        <FormItem>
+                            <Input placeholder="检索" style="width: auto">
+                                <Icon type="ios-search" slot="suffix" />
+                            </Input>
+                        </FormItem>
+                    </Form>
+                </vIvxFilterBox>
+
             </div>
             <div class="right-panel">
                 <vIvxFilterBox>
@@ -45,11 +54,12 @@
     .dataDict-container{
         .dataDict-container-inner {
             display: flex;
-            min-height: 600px;
+            height: 700px;
             .left-panel {
-                width: 250px;
+                width: 300px;
                 height: 100%;
-                border-right: 1px solid #dcdee2;
+                min-height: 600px;
+                /*border-right: 1px solid #dcdee2;*/
             }
             .right-panel {
                 flex: 1;

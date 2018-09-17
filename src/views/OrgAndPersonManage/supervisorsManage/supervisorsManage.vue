@@ -120,7 +120,7 @@
                     }
                 ],
                 tableData: [],
-                tableLoading: false,
+                tableLoading: true,
 
                 // 新增监督人员
                 modal_addSupervisor: false,

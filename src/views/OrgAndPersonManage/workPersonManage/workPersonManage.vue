@@ -140,7 +140,7 @@
                     }
                 ],
                 tableData: [],
-                tableLoading: false,
+                tableLoading: true,
                 uploadParams: {
                     actionUrl: Config[Config.env].origin + Config[Config.env].ajaxUrl + '',
                     showUploadList: false,  // 显示已上传列表
@@ -240,7 +240,7 @@
                         this.searchParams.total = res.data.total;
                     }
                 }).catch(() => {
-                    this.tableLoading = true;
+                    this.tableLoading = false;
                 })
             }
         }

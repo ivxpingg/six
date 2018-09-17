@@ -69,6 +69,7 @@ const BaseManage = [
             {
                 path: 'roleManage',
                 name: 'roleManage',
+                component: () => import('@/views/BaseManage/roleManage/roleManage.vue'),
                 meta: {
                     icon: 'ios-people',
                     title: '角色管理'
@@ -77,6 +78,7 @@ const BaseManage = [
             {
                 path: 'eSignatureManage',
                 name: 'eSignatureManage',
+                component: () => import('@/views/BaseManage/eSignatureManage/eSignatureManage.vue'),
                 meta: {
                     icon: 'ios-image',
                     title: '电子签名管理'
@@ -85,6 +87,7 @@ const BaseManage = [
             {
                 path: 'auditProcessManage',
                 name: 'auditProcessManage',
+                component: () => import('@/views/BaseManage/auditProcessManage/auditProcessManage.vue'),
                 meta: {
                     icon: 'ios-infinite',
                     title: '审核流程管理'

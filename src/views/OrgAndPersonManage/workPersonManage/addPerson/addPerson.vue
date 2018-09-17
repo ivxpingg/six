@@ -155,7 +155,7 @@
             fileUploadError(error, file, fileList) {
                 this.$Loading.error();
                 this.$Notice.error({
-                    title: '超过文件大小限制',
+                    title: '文件上传失败',
                     desc: `${error.message}`
                 });
             },
@@ -189,7 +189,7 @@
 
 <style lang="scss" scoped>
     .addPerson-container {
-        padding-bottom: 61px;
+        margin-bottom: 61px;
         .user-form {
             .ivu-form-item {
                 .ivu-form-item-content > div{
@@ -203,7 +203,6 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #FFF;
         }
     }
 </style>

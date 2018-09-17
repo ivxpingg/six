@@ -92,7 +92,7 @@ module.exports = {
         proxy:{   // string | Object
 
             '/dict': {
-                target: 'http://192.168.0.180:8080',
+                target: 'http://192.168.0.168:8080',
 
                 ws: true,
                 changeOrigin: true
