@@ -6,13 +6,13 @@ export default {
     cookieExpires: 1,
     development: {
         origin: window.location.origin,
-        ajaxUrl: '',
+        ajaxUrl: '/pqs',
         staticUrl: '',
         cookiePath: '/'
     },
     production: {
         origin: window.location.origin,
-        ajaxUrl: '',
+        ajaxUrl: '/pqs',
         staticUrl: '',
         cookiePath: '/'
     }

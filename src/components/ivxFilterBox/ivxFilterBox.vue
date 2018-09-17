@@ -1,6 +1,8 @@
 <template>
     <div class="ivxFilterBox-container"
-         :style="{ borderBottomStyle: dashed ? 'dashed': 'solid'}">
+         :style="{
+         borderBottomStyle: dashed ? 'dashed': 'solid',
+         borderWidth: border ? '1px': '0'}">
         <slot></slot>
     </div>
 </template>
@@ -13,6 +15,10 @@
             dashed: {
                 type: Boolean,
                 default: false
+            },
+            border: {
+                type: Boolean,
+                default: true
             }
         }
     }
