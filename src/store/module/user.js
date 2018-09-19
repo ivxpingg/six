@@ -1,4 +1,4 @@
-import { setToken, getToken } from '@/libs/util';
+import { setToken, getToken } from '@/lib/util';
 import axios from '@/lib/axios';
 export default {
     state: {
@@ -24,18 +24,21 @@ export default {
     },
     actions: {
         // 登录
-        handleLogin ({ commit }, {userName, password}) {
-            userName = userName.trim();
+        handleLogin ({ commit }, {loginName, password}) {
+            loginName = loginName.trim();
             return new Promise((resolve, reject) => {
                 axios({
-                    method: 'get',
-                    url: '/mocklogin',
-                    params: {
-                        userName,
+                    method: 'post',
+                    url: '/ajaxLogin',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    data: {
+                        loginName,
                         password
                     }
                 }).then((res) => {
-                    commit('setToken', res.result.token);
+                    commit('setToken', res.data.token);
                     resolve(res);
                 }).catch(err => {
                     reject(err)

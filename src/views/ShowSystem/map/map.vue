@@ -6,7 +6,7 @@
              class="modal-list-info ivu-card ivu-card-bordered"
              v-show="cardInfo"
               :style="{top: `${cardTop}px`, left: `${cardLeft}px`}">
-            <div class="ivu-card-head"><p><span>项目情况</span></p></div>
+            <!--<div class="ivu-card-head"><p><span>项目情况</span></p></div>-->
             <div class="ivu-card-body">
                 <Form >
                     <FormItem label="项目名称:">某某路改建工程</FormItem>
@@ -14,6 +14,7 @@
                     <FormItem label="建设地点:">六安市</FormItem>
                     <FormItem label="开工时间:">2018-09-06</FormItem>
                 </Form>
+                <div class="ivu-poptip-arrow"></div>
             </div>
         </div>
     </div>
@@ -52,8 +53,8 @@
             setPointEvent(marker) {
                 let that = this;
                 marker.addEventListener('mouseover', function (e) {
-                    that.cardTop = e.clientY-5;
-                    that.cardLeft = e.clientX-5;
+                    that.cardTop = e.clientY-170;
+                    that.cardLeft = e.clientX-125;
                     that.cardInfo = true;
                 });
             },
@@ -84,13 +85,22 @@
         min-width: 250px;
         background-color: #FFF;
         z-index: 10;
-        overflow: hidden;
         .ivu-form-item {
             margin-bottom: 0;
         }
 
         .ivu-modal-footer {
             display: none;
+        }
+    }
+
+    .modal-list-info {
+        .ivu-poptip-arrow {
+            left: 50%;
+            margin-left: -7px;
+            bottom: -7px;
+            border-width: 7px 7px 0;
+            border-top-color: rgba(255,255,255,1);
         }
     }
 </style>

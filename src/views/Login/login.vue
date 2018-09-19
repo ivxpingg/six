@@ -30,7 +30,7 @@
         </Content>
         <Footer class="footer">
             <p>管理单位：六安市交通质监局</p>
-            <p>技术支持：厦门卫星定位应用股份有限公司</p>
+            <p>技术支持：北大千方科技有限公司</p>
         </Footer>
     </Layout>
 </template>
@@ -52,6 +52,7 @@
         methods: {
             ...mapActions([
                 'handleLogin',
+                'getUserInfo'
             ]),
             initSwiper() {
                 let mySwiper = new Swiper ('.swiper-container', {
@@ -65,18 +66,19 @@
                     }
                 })
             },
-            handleSubmit({ userName, password }) {
-                this.$router.push({
-                    name: 'home'
+            handleSubmit({ loginName, password }) {
+                // this.$router.push({
+                //     name: 'home'
+                // });
+
+                this.handleLogin({ loginName, password }).then(res => {
+                    this.$router.push({
+                        name: 'home'
+                    });
+                    // this.getUserInfo().then(res => {
+                    //
+                    // })
                 });
-                // this.handleLogin({ userName, password }).then(res => {
-                //
-                //     this.getUserInfo().then(res => {
-                //         this.$router.push({
-                //             name: 'home'
-                //         })
-                //     })
-                // })
             }
         }
     }

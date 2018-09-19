@@ -9,7 +9,8 @@ export default {
         homeRoute: getHomeRoute(routers),
         // 自适应
         htmlClientWidth: 0,
-        mianLayoutWidth: 0
+        mianLayoutWidth: 0,
+        mianLayoutHeight: 0
 
     },
     getters: { },
@@ -44,6 +45,7 @@ export default {
             let dom = document.querySelector('#mian_layout');
             if (dom) {
                 state.mianLayoutWidth = dom.clientWidth;
+                state.mianLayoutHeight = dom.clientHeight;
             }
         }
     },

@@ -1,5 +1,6 @@
 <template>
-    <div class="userBaseInfo-container">
+    <div class="编辑表单-container">
+
         <Form ref="form"
               class="user-form"
               inline
@@ -77,54 +78,39 @@
             </FormItem>
         </Form>
 
-        <div class="ivu-modal-footer" v-if="editable">
+        <div class="ivu-modal-footer">
             <Button type="primary"
                     size="large"
                     @click="save">保存</Button>
         </div>
+
     </div>
 </template>
 
 <script>
-    import Config from '../../../../../config';
     export default {
-        name: 'userBaseInfo',
-        props: {
-            userId: {
-                type: String,
-                required: true
-            },
-            editable: {
-                type: String,
-                required: false
-            }
-        },
+        name: '编辑表单',
         data() {
             return {
                 formData: {
-                    userId: '001',
                     name: '',
-                    uId: 'uid',
+                    uId: '',
                     sex: '0',
-                    sexStr: '女',
-                    age: 26,
+                    age: 0,
                     nation: '0',
                     nationStr: '汉族',
                     titleLevel: '职称级别',
                     titleName: '',
-                    certificate: '资格证书',
-                    certificateNo: '资格证书编号',
-                    education: '学历',
-                    graduateSchool: '毕业院校',
-                    profession: '计算机与技术',
+                    certificate: '',
+                    certificateNo: '',
+                    education: '',
+                    graduateSchool: '',
+                    profession: '',
                     graduateDate: '2018-01-01',
-                    phone: '15332112141',
-                    email: '123@qq.com',
-                    IdNumber: '362521236521233632',
-                    unitName: '厦门卫星定位',
-                    unitType: '0',
-                    unitTypeLabel: '建设单位',
-                    job: '岗位',
+                    phone: '',
+                    email: '',
+                    IdNumber: '',
+                    job: '',
                     fileIds: ''
                 },
                 rules: {
@@ -139,80 +125,23 @@
                     phone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
                     email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
                     IdNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
-                },
-
-                uploadParams: {
-                    actionUrl: Config[Config.env].origin + Config[Config.env].ajaxUrl + '',
-                    showUploadList: false,  // 显示已上传列表
-                    multiple: false,        // 是否支持多选
-                    data: {},               // 上传附带参数
-                    //name: '',               // 上传的文件字段名, 默认file
-                    accept: '.png,.jpg,.gif,.jpeg',             // 接收上传的文件类型
-                    maxSize: 4096,                // 文件大小限制，单位 kb
                 }
             };
         },
-        watch: {
-            userId: {
-                immediate: true,
-                handler(val) {
-                    if (val) {
-                        this.getUserInfo();
-                    }
-                }
-            }
-        },
         methods: {
-            onChange_graduateDate(time) {
-                this.formData.graduateDate = time;
-            },
-
-            // 图片上传
-            fileBeforeUpload() {
-                this.$Loading.start();
-            },
-            exceededSize(file, fileList) {
-                this.$Notice.warning({
-                    title: '超过文件大小限制',
-                    desc: `文件   ${file.name} 太大, 不能超过 ${this.maxSize / 1024}M.`
-                });
-            },
-            fileUploadError(error, file, fileList) {
-                this.$Loading.error();
-                this.$Notice.error({
-                    title: '超过文件大小限制',
-                    desc: `${error.message}`
-                });
-            },
-            fileUploadSuccess(response, file, fileList) {
-                this.$Loading.finish();
-            },
-
-            getUserInfo() {
-                this.$http({
-                    method: 'get',
-                    url: '/getUserById',
-                    params: {
-                        userId: this.userId
-                    }
-                }).then(res => {
-                    if (res.code === 'SUCCESS') {
-                        Object.assign(this.formData, res.data);
-                    }
-                });
-            },
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/updateUnitInfo',
+                            url: '/addUserInfo',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
                                     content: '更新成功！'
                                 });
+                                this.$emit('modal_addUser_callback');
                             }
                         })
                     } else {
@@ -225,24 +154,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .userBaseInfo-container {
-        padding-bottom: 61px;
-        .user-form {
-            .ivu-form-item {
-                .ivu-input-wrapper,
-                .ivu-select,
-                .ivu-date-picker{
-                    width: 260px;
-                }
-            }
-        }
-
-        .ivu-modal-footer {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #FFF;
-        }
+    .编辑表单-container {
     }
 </style>

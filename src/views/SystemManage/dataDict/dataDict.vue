@@ -5,13 +5,13 @@
                 <vIvxFilterBox>
                     <Form inline>
                         <FormItem>
-                            <Input placeholder="检索" style="width: 125px;">
-                            <Icon type="ios-search" slot="suffix" />
+                            <Input v-model="filterValue" placeholder="检索" style="width: 125px;">
+                                <Icon type="ios-search" slot="suffix" />
                             </Input>
                         </FormItem>
                         <FormItem>
                             <Select v-model="filterType" style="width: 120px" transfer>
-                                <Option value="">全部</Option>
+                                <Option value="all">全部</Option>
                                 <Option v-for="item in dictTypeList" :value="item.type" :key="item.type">{{item.description}}</Option>
                             </Select>
                         </FormItem>
@@ -19,7 +19,7 @@
                 </vIvxFilterBox>
 
                 <ul class="ul-dict-list ivu-transfer-list-content" ref="dict_list">
-                    <template v-for="(item, idx) in dictList">
+                    <template v-for="(item, idx) in dictList_dom">
                         <li class="ivu-transfer-list-content-item"
                             :class="{'active': currentItem.id === item.id}"
                             @click="onClick_dict(item)"
@@ -35,15 +35,17 @@
                     <Button type="primary" @click="modal_addDict_click">添加字典</Button>
                     <Button type="primary" :disabled="currentItem.id === ''" @click="delDict_click">删除字典</Button>
                 </vIvxFilterBox>
+                <vEditDict v-show="currentItem.id !== ''" :did="currentItem.id"
+                           @editDict_callback="editDict_callback"
+                           style="padding-top: 10px; width: 300px"></vEditDict>
             </Card>
-
         </div>
 
         <Modal v-model="modal_addDict"
-               title="添加从业人员"
+               title="添加字典"
                draggable
                ok-text="保存"
-               :on-ok="addDict_click"
+               @on-ok="addDict_click"
                :width="400">
             <Form ref="formAdd"
                   :model="format_dict"
@@ -72,13 +74,21 @@
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
+    import vEditDict from './editDict/editDict';
     export default {
         name: 'dataDict',
-        components: {vIvxFilterBox},
+        components: {vIvxFilterBox, vEditDict},
         data() {
             return {
+                searchParams: {
+                    current: 1,        // 当前第几页
+                    size: 100000,          // 每页几行
+                    total: 0,          // 总行数
+                    searchKey: ''      // 模糊查询参数
+                },
                 dictList: [],
-                filterType: '',
+                filterValue: '',
+                filterType: 'all',
                 currentItem: {
                     id: '',
                     type: '',         // 类型
@@ -120,9 +130,20 @@
                     }
                 });
                 return dictType;
+            },
+            dictList_dom() {
+                let list = [];
+                this.dictList.forEach((val) => {
+                    if (val.label.indexOf(this.filterValue.trim()) > -1 && (this.filterType === 'all' || val.type === this.filterType.trim())) {
+                        list.push(val);
+                    }
+                });
+
+                return list;
             }
         },
         watch: {
+
         },
         mounted() {
             this.getDictList();
@@ -131,12 +152,11 @@
             getDictList() {
                 this.$http({
                     method: 'post',
-                    url: '/dict/list'
+                    url: '/dict/list',
+                    data: JSON.stringify(this.searchParams)
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
-                        console.dir(res.data);
-                        this.dictList = res.data.page.records;
-                        this.dictType = res.data.typeList;
+                        this.dictList = res.data.page.records || [];
                     }
                 })
             },
@@ -148,6 +168,9 @@
             modal_addDict_click() {
                 this.modal_addDict = true;
             },
+            editDict_callback() {
+                this.getDictList();
+            },
             addDict_click() {
                 this.$refs.formAdd.validate((valid) => {
                     if (valid) {
@@ -158,9 +181,9 @@
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
-                                    content: '更新成功！'
+                                    content: '添加成功！'
                                 });
-                                this.$emit('modal_addUser_callback');
+                                this.getDictList();
                             }
                         })
                     }
@@ -173,15 +196,15 @@
                     content: `确定要删除<${this.currentItem.label}>?`,
                     onOk: () => {
                         this.$http({
-                            method: 'del',
-                            url: '/dict/add',
+                            method: 'get',
+                            url: '/dict/delete',
                             params: {
                                 id: this.currentItem.id
                             }
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
-                                    content: '更新成功！'
+                                    content: '删除成功！'
                                 });
                                 this.getDictList();
                             }
@@ -198,11 +221,11 @@
     .dataDict-container {
         position: relative;
         display: flex;
-        min-height: 600px;
+        min-height: 700px;
         .left-panel {
             width: 300px;
             height: 100%;
-            min-height: 600px;
+            min-height: 700px;
             border-right: 1px solid #dcdee2;
         }
         .right-panel {
@@ -216,7 +239,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            min-height: 540px;
+            min-height: 640px;
             overflow-y: auto;
             .ivu-transfer-list-content-item {
                 margin-bottom: 4px;

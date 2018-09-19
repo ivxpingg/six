@@ -1,5 +1,5 @@
 <template>
-    <Dropdown @on-click="handleClick" transer placement="right-start">
+    <Dropdown @on-click="handleClick" transfer placement="right-start">
         <a class="drop-menu-a" type="text" :style="{textAlign: !hideTitle ? 'left' : ''}">
             <vCommonIcon :size="rootIconSize" :color="textColor" :type="parentItem.icon"/>
             <span class="menu-title" v-if="!hideTitle">{{ showTitle(parentItem) }}</span>
