@@ -11,7 +11,8 @@
                     </FormItem>
                     <FormItem label="所属单位类型:" :label-width="90">
                         <Select v-model="searchParams.unitType" style="width: 220px;">
-                            <Option value="111">建设单位</Option>
+                            <Option value="all">全部</Option>
+                            <Option v-for="item in dict_unitType" :value="item.value" :key="`unitType_${item.id}`">{{item.label}}</Option>
                         </Select>
                     </FormItem>
                     <FormItem :label-width="20">
@@ -67,12 +68,10 @@
                     current: 1,      // 当前第几页
                     size: 7,      // 每页几行
                     total: 0,     // 总行数
-                    // beginDate: '',     // 开始时间
-                    // endDate: '',       // 结束时间
                     unitId: '',
                     name: '',
                     uId: '',
-                    unitType: ''
+                    unitType: 'all'
                 },
                 tableColumns: [
                     { title: '选择', width: 60, align: 'center', type: 'selection'},
@@ -91,7 +90,10 @@
                 tableData: [],
 
                 selectValue: [],
-                loading: false
+                loading: false,
+
+                // 字典
+                dict_unitType: []
             };
         },
         watch: {
@@ -117,6 +119,7 @@
         mounted() {
             this.selectValue = [];
             this.getData();
+            this.getDict_unitType();
         },
         methods: {
             /**
@@ -128,14 +131,33 @@
             },
             // 获取表格数据
             getData() {
+                let data = Object.assign({}, this.searchParams);
+
+                if (data.unitType === 'all') {
+                    data.unitType = '';
+                }
                 this.$http({
                     method: 'post',
                     url: '/getUnitPersonById',
-                    data: JSON.stringify(this.searchParams)
+                    data: JSON.stringify(data)
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.tableData = res.data.records;
                         this.searchParams.total = res.data.total;
+                    }
+                })
+            },
+
+            getDict_unitType() {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByType',
+                    params: {
+                        type: 'unitType'
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.dict_unitType = res.data;
                     }
                 })
             },
@@ -180,12 +202,13 @@
 <style lang="scss" >
     .employeeSelect-container {
         .modal-body {
-            padding: 16px;
             height: 690px;
             overflow-y: auto;
             overflow-x: hidden;
         }
-
+        .ivu-modal-footer {
+            padding-bottom: 0;
+        }
     }
 </style>
 

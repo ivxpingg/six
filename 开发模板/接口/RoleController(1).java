@@ -8,6 +8,8 @@ import com.ikey.springbootmodule.entity.RoleMenu;
 import com.ikey.springbootmodule.exception.GlobalException;
 import com.ikey.springbootmodule.service.RoleMenuService;
 import com.ikey.springbootmodule.service.RoleService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,7 @@ public class RoleController {
     @Autowired
     private RoleMenuService roleMenuService;
 
+    //@RequiresPermissions("sys:role:list")
     @GetMapping("list")
     public String list(){
         //获得角色分组信息
@@ -46,7 +49,7 @@ public class RoleController {
             map.put(roleGroup.getParentId(), parent);
         }
         List<Role> retList = MakeRole(map, "0");
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,retList);
+        return JsonUtil.getSuccJson(retList);
     }
 
     private List<Role> MakeRole(Map<String, List<Role>> map, String roleId) {
@@ -68,11 +71,15 @@ public class RoleController {
      */
     @PostMapping("/add")
     public String add(@RequestBody Role role){
+        boolean b = checkRoleNo(role.getRoleNo());
+        if(b){
+            throw new GlobalException(ExceptionType.E0003,"角色编号已存在");
+        }
         boolean result = roleService.insert(role);
         if (!result){
             throw new GlobalException(ExceptionType.E0002);
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,role);
+        return JsonUtil.getSuccJson(role);
     }
 
     /**
@@ -82,11 +89,18 @@ public class RoleController {
      */
     @PostMapping("/update")
     public String update(@RequestBody Role role){
-        boolean result = role.updateById();
+        Role oldRole = roleService.selectById(role.getRoleId());
+        if(!role.getRoleNo().equals(oldRole.getRoleNo())){
+            boolean b = checkRoleNo(role.getRoleNo());
+            if(b){
+                throw new GlobalException(ExceptionType.E0003,"角色编号已存在");
+            }
+        }
+        boolean result = roleService.updateById(role);
         if (!result){
             throw new GlobalException(ExceptionType.E0003);
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,role);
+        return JsonUtil.getSuccJson(role);
     }
 
     /**
@@ -97,7 +111,24 @@ public class RoleController {
     @GetMapping("/query")
     public String query(@RequestParam(required = true)String roleId){
         Role role = roleService.selectById(roleId);
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,role);
+        return JsonUtil.getSuccJson(role);
+    }
+
+    /**
+     * 删除角色
+     * @param roleId
+     * @return
+     */
+    @GetMapping("delete")
+    public String delete(@RequestParam(required=true) String roleId) {
+        boolean result = roleService.deleteById(roleId);
+        if(!result){
+            throw new GlobalException(ExceptionType.E0004);
+        }
+        EntityWrapper ew = new EntityWrapper();
+        ew.eq("ROLE_ID",roleId);
+        roleMenuService.delete(ew);
+        return JsonUtil.getSuccJson(null);
     }
 
 
@@ -111,10 +142,27 @@ public class RoleController {
         EntityWrapper ew = new EntityWrapper();
         ew.eq("ROLE_ID",roleId);
         List<RoleMenu> roleMenuList = roleMenuService.selectList(ew);
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,roleMenuList);
+        return JsonUtil.getSuccJson(roleMenuList);
     }
 
 
+    /**
+     * 修改角色菜单
+     * @param roleMenus
+     * @return
+     */
+    @PostMapping("/addRoleMenu")
+    public String addRoleMenu(@RequestBody List<RoleMenu> roleMenus){
+        if(!roleMenus.isEmpty()){
+            String roleId = roleMenus.get(0).getRoleId();
+            EntityWrapper ew = new EntityWrapper();
+            ew.eq("ROLE_ID",roleId);
+            roleMenuService.delete(ew);
+            roleMenuService.insertBatch(roleMenus);
+            return JsonUtil.getSuccJson(null);
+        }
+        return JsonUtil.getErrJson(ExceptionType.E0003);
+    }
 
 
 
@@ -124,14 +172,31 @@ public class RoleController {
      * @return
      */
     @GetMapping("/checkRoleNo")
-    public String checkRoleNo(@RequestParam(name = "roleNo")String roleNo){
+    public String checkRoleNo(@RequestParam(name = "roleId",required = false)String roleId,
+                              @RequestParam(name = "roleNo")String roleNo){
+        //如果修改相同可以进行修改
+        if(StringUtils.isNotBlank(roleId)){
+            Role role = roleService.selectById(roleId);
+            if(roleNo.equals(role.getRoleNo())){
+                return JsonUtil.getSuccJson(true);
+            }
+        }
+        return JsonUtil.getSuccJson(checkRoleNo(roleNo));
+    }
+
+    /**
+     * 校验角色编号是否存在
+     * @param roleNo
+     * @return
+     */
+    private boolean checkRoleNo(String roleNo){
         EntityWrapper ew = new EntityWrapper();
         ew.eq("ROLE_NO",roleNo);
         List<Role> roleList = roleService.selectList(ew);
         if(roleList!=null && !roleList.isEmpty()){
-            return JsonUtil.getSuccJson(ExceptionType.SUCCESS,true);
+            return true;
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,false);
+        return false;
     }
 
 }

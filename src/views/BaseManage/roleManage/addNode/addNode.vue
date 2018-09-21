@@ -1,34 +1,31 @@
 <template>
-    <div class="roleInfo-container">
+    <div class="addNode-container">
         <Form ref="form"
-              class="role-form"
+              class="user-form"
+              inline
               :model="formData"
               :rules="rules"
-              :label-width="80">
+              :label-width="120">
             <FormItem label="编号:" prop="roleNo">
                 <Input v-model="formData.roleNo"/>
             </FormItem>
-            <FormItem label="名称:" prop="name">
+            <FormItem label="节点名称:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
             <FormItem label="节点类型:">
                 <Select :value="formData.nodeType" readonly disabled>
                     <Option v-for="item in dict_nodeType" :value="item.value" :key="item.id">{{item.label}}</Option>
                 </Select>
-                <!--<Input value="formData" readonly disabled />-->
             </FormItem>
             <FormItem label="顺序:" prop="sort">
                 <Input v-model="formData.sort" number/>
             </FormItem>
             <FormItem label="备注:">
-                <Input type="textarea" />
+                <Input v-model="formData.remark" type="textarea" />
             </FormItem>
         </Form>
 
         <div class="ivu-modal-footer">
-            <!--<Button type="primary"-->
-                    <!--size="large"-->
-                    <!--@click="openEdit">编辑</Button>-->
             <Button type="primary"
                     size="large"
                     @click="save">保存</Button>
@@ -38,40 +35,45 @@
 
 <script>
     export default {
-        name: 'roleInfo',
+        name: 'addNode',
         props: {
-            roleId: {
+            parentId: {
+                type: String
+            },
+            nodeType: {
                 type: String,
-                default: ''
+                default: 'group'
             }
         },
         watch: {
-            roleId: {
+            parentId: {
                 immediate: true,
                 handler(val) {
-                    if (val !== '') {
-                        this.getData();
-                    }
+                    this.formData.parentId = val;
+                }
+            },
+            nodeType: {
+                immediate: true,
+                handler(val) {
+                    this.formData.nodeType = (val === '')? 'group' : val;
                 }
             }
         },
         data() {
             return {
                 formData: {
-                    roleId: '',
                     parentId: '',
                     roleNo: '',
                     name: '',
-                    remark: '',
                     nodeType: '',
-                    sort: 0
+                    sort: 0,
+                    remark: ''
                 },
                 rules: {
                     roleNo: [{ required: true, message: '编号不能为空！', trigger: 'blur' }],
-                    name: [{ required: true, message: '名称不能为空！', trigger: 'blur' }],
+                    name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
                     sort: [{ required: true, type: 'number', message: '顺序不能为空！', trigger: 'blur' }]
                 },
-
                 dict_nodeType: []
             };
         },
@@ -79,9 +81,6 @@
             this.getDict();
         },
         methods: {
-            openEdit() {
-
-            },
             getDict() {
                 this.$http({
                     method: 'get',
@@ -95,26 +94,12 @@
                     }
                 })
             },
-            getData() {
-                this.$http({
-                    method: 'get',
-                    url: '/role/query',
-                    params: {
-                        roleId: this.roleId
-                    }
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this.formData = Object.assign(this.formData, res.data);
-                    }
-                })
-            },
             checkRoleNo() {
                 return new Promise(((resolve, reject) => {
                     this.$http({
                         method: 'get',
                         url: '/role/checkRoleNo',
                         params: {
-                            id: this.formData.roleId,
                             roleNo: this.formData.roleNo
                         }
                     }).then(res => {
@@ -133,38 +118,33 @@
                         if (valid) {
                             this.$http({
                                 method: 'post',
-                                url: '/role/update',
+                                url: '/role/add',
                                 data: JSON.stringify(this.formData)
                             }).then(res => {
                                 if(res.code === 'SUCCESS') {
                                     this.$Message.success({
                                         content: '更新成功！'
                                     });
-                                    this.$emit('updateNodeCallback');
+                                    this.$emit('modal_addNodeCallback');
                                 }
                             })
                         } else {
 
                         }
                     })
+                }).catch(() => {
+                    this.$Message.error({
+                        content: `编号<${this.formData.roleNo}>已经存在, 请重新输入。`
+                    });
                 });
+
+
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .roleInfo-container {
-        position: relative;
-        padding-bottom: 61px;
-        .role-form{
-
-        }
-        .ivu-modal-footer {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -16px;
-        }
+    .addNode-container {
     }
 </style>

@@ -13,7 +13,9 @@ require('@/mock');
 // process.env.NODE_ENV === 'development' ? require('@/mock') : '';
 
 Vue.config.productionTip = false;
-Vue.use(iView);
+Vue.use(iView, {
+    transfer: true
+});
 Vue.prototype.$http = Ajax;
 
 new Vue({

@@ -6,6 +6,8 @@
 import axios from 'axios';
 import utils from './utils';
 import Config from '@/config';
+import iview from 'iview';
+import router from '../../router';
 
 const ajaxUrl = Config[Config.env].origin + Config[Config.env].ajaxUrl;
 
@@ -63,6 +65,8 @@ Ajax.interceptors.request.use(function (config) {
     if (config.method === 'post' && utils.isUndefined(config.headers['Content-Type'])) {
         config.headers['Content-Type'] = 'application/json;charset=utf-8';
     }
+
+    iview.LoadingBar.start();
     return config;
 }, function (error) {
     return Promise.reject(error);
@@ -70,6 +74,20 @@ Ajax.interceptors.request.use(function (config) {
 //ajax响应后拦截器
 Ajax.interceptors.response.use(function (response) {
     // if (response.data.errCode === 'A0002'){ }
+
+    // let router = new VueRouter();
+
+    switch (response.data.code) {
+        case 'SUCCESS':
+            iview.LoadingBar.finish();
+            break;
+        case 'E0008':
+            router.push('/login');
+            break;
+        default:
+            iview.LoadingBar.error();
+            break;
+    }
     return response.data;
 }, function (error) {
     return Promise.reject(error);

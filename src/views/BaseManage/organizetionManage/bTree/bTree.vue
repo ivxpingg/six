@@ -11,7 +11,6 @@
         </vIvxFilterBox>
         <div class="tree-box">
             <Tree :data="groupTreeData"
-                  :load-data="loadData"
                   @on-select-change="onSelectChange"></Tree>
         </div>
     </div>
@@ -22,6 +21,12 @@
     export default {
         name: 'bTree',
         components: {vIvxFilterBox},
+        props: {
+            roleId: {
+                type: String,
+                default: ''
+            }
+        },
         data() {
             return {
                 menuList: [],
@@ -44,7 +49,7 @@
             getData() {
                 this.$http({
                     method: 'get',
-                    url: '/roleGroup/list'
+                    url: '/role/list'
                 }).then(res => {
                     if (res.code === 'SUCCESS'){
                         this.menuList = res.data;
@@ -56,38 +61,75 @@
                 children.forEach((val) => {
                     let item = {};
                     Object.assign(item, val);
-                    item.title = item.roleGroupName;
-                    item.expand = false;
-                    item.loading = false;
+                    item.title = item.name;
+                    item.expand = true;
                     item.children = [];
+                    item.selected = false;
+                    item.render = this.render;
                     attr.push(item);
                     if (val.children) {
-
                         item.children = this.transformTreeData(val.children);
                     }
                 });
                 return attr;
             },
 
-            loadData(item, callback) {
-                this.$http({
-                    method: 'get',
-                    url: '/role/list',
-                    params: {
-                        roleGroupId: item.roleGroupId
-                    }
-                }).then(res => {
-                    if (res.code === 'SUCCESS'){
-                        this.transform_loadData(res.data, callback);
-                    }
-                });
-            },
-            transform_loadData(data, callback) {
-                data.forEach((val) => {
-                   val.title = val.name;
-                });
+            render(h, { root, node, data }) {
+                let attr = [];
+                let cls = 'ivu-tree-title';
 
-                callback(data);
+                if (data.nodeType === 'role') {
+                    attr.push(h('Icon', {
+                        props: {
+                            type: 'md-person'
+                        },
+                        style: {
+                            marginRight: '5px'
+                        }
+                    }));
+                }
+                else {
+                    // attr.push(h('Icon', {
+                    //     props: {
+                    //         type: 'md-git-merge'
+                    //     },
+                    //     style: {
+                    //         marginRight: '5px'
+                    //     }
+                    // }));
+                }
+                attr.push(h('span', data.title));
+
+                if (data.roleId === this.roleId) {
+                    data.selected = true;
+                    cls += ' ivu-tree-title-selected';
+                }
+                return h('span', {
+                    class: {
+                        'ivu-tree-title': true,
+                        'ivu-tree-title-selected': data.selected
+                    },
+                    style: {
+                        cursor: 'pointer'
+                    },
+                    on: {
+                        click: () => {
+                            root.forEach((val) => {
+                                if (val.node.roleId !== data.roleId) {
+                                    val.node.selected = false;
+                                }
+                            });
+
+                            data.selected = !data.selected;
+                            if (data.selected) {
+                                this.onSelectChange([data]);
+                            }
+                            else {
+                                this.onSelectChange([]);
+                            }
+                        }
+                    }
+                }, attr);
             },
 
             onSelectChange(item) {
@@ -99,7 +141,7 @@
 
 <style lang="scss" scoped>
     .bTree-container {
-        width: 268px;
+        /*width: 268px;*/
         padding: 16px;
     }
 </style>

@@ -93,10 +93,15 @@ module.exports = {
 
             '/pqs': {
                 target: 'http://110.86.21.246:8880',
-
                 ws: true,
                 changeOrigin: true
             }
+
+            // '/': {
+            //     target: 'http://192.168.0.172:8080',
+            //     ws: true,
+            //     changeOrigin: true
+            // }
         },
         before: app => {}
     },

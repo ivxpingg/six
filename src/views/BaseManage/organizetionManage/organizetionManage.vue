@@ -39,7 +39,14 @@
                title="人员选择"
                :width="1200"
                footer-hide>
+            <vEmployeeSelect></vEmployeeSelect>
+        </Modal>
 
+        <Modal v-model="modal_eSignatrueSelect"
+               title="电子签名选择"
+               :width="1200"
+               footer-hide>
+            <vESignnatureSelect>  </vESignnatureSelect>
         </Modal>
     </div>
 </template>
@@ -48,11 +55,29 @@
     import vBTree from './bTree/bTree';
     import vPersonDetail from '../../OrgAndPersonManage/workPersonManage/personDetail/personDetail';
     import vSupervisorDetail from '../../OrgAndPersonManage/supervisorsManage/supervisorDetail/supervisorDetail';
+    import vEmployeeSelect from '../../Common/employeeSelect/employeeSelect';
+    import vESignnatureSelect from '../../Common/eSignatureSelect/eSignatureSelect';
     export default {
         name: 'organizetionManage',   // 组织结构
-        components: {vIvxFilterBox, vBTree, vPersonDetail, vSupervisorDetail},
+        components: {
+            vIvxFilterBox,
+            vBTree,
+            vPersonDetail,
+            vSupervisorDetail,
+            vEmployeeSelect,
+            vESignnatureSelect },
         data() {
             return {
+                selectType: '',   // 当前选中节点类型 'group': 分组; 'role' : 角色
+                nodeItem: { // 当前选中节点 角色分组节点数据
+                    roleId: '',
+                    parentId: '',
+                    roleNo: '',
+                    name: '',
+                    remark: '',
+                    nodeType: '',
+                    sort: 0,
+                },
                 searchParams: {
                     current: 1,      // 当前第几页
                     size: 10,      // 每页几行
@@ -68,12 +93,12 @@
                     { title: '单位', width: 160, align: 'center', key: 'unitName' },
                     { title: '职务', width: 160, align: 'center', key: 'job' },
                     { title: '联系电话', width: 120, align: 'center', key: 'phone' },
-                    { title: '电子签名授权状态', width: 180, align: 'center', key: 'signatureStatusLabel' },
+                    { title: '电子签名授权状态', width: 160, align: 'center', key: 'signatureStatusLabel' },
                     { title: '被授权的电子签名名称', width: 180, align: 'center', key: 'signatureName' },
                     {
                         title: '操作',
-                        width: 120,
-                        align: 'center',
+                        width: 310,
+                        // align: 'center',
                         render: (h, params) => {
                             let list = [
                                 h('Button', {
@@ -89,7 +114,31 @@
                                             this.modal_userDetail = true;
                                         }
                                     }
-                                }, '查看')
+                                }, '查看'),
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-image'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.modal_eSignatrueSelect = true;
+                                        }
+                                    }
+                                }, '授权电子签名'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small',
+                                        icon: 'ios-trash-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.removeUser(params.row);
+                                        }
+                                    }
+                                }, '移除人员')
                             ];
 
                             return h('div',{
@@ -128,8 +177,14 @@
                 userId: '',
 
                 // 添加人员
-                modal_addUser: false
+                modal_addUser: false,
+
+                // 授权电子签名
+                modal_eSignatrueSelect: false
             }
+        },
+        mounted() {
+
         },
         methods: {
             /**
@@ -161,7 +216,42 @@
                 })
             },
 
-            onSelectChange(item) {}
+            // 选择角色
+            onSelectChange(item) {
+                if (item.length === 0) {
+                    this.selectType = '';
+                }
+                else {
+                    this.selectType = item[0].nodeType;
+                    this.nodeItem = Object.assign(this.nodeItem, item[0]);
+                }
+            },
+
+            // 移除人员
+            removeUser(row) {
+                this.$Modal.confirm({
+                   title: '移除人员',
+                   content: `确定要移除<${row.name}人员？>`,
+                    onOk:() => {
+                        this.$http({
+                            method: 'get',
+                            url: '/',
+                            params: {
+                                userId: row.userId
+                            }
+                        }).then((res) => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                   content: '移除成功！'
+                                });
+                                this.getData();
+                            }
+                        })
+                    }
+                });
+
+            },
+            // 授权电子签名
         }
     }
 </script>

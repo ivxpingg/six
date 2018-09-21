@@ -191,7 +191,7 @@
         }
 
         .left-sider {
-            overflow: hidden;
+            overflow: auto;
             .ivu-layout-sider-children {
                 overflow-y: scroll;
                 margin-right: -18px;
