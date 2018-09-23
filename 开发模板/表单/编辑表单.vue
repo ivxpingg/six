@@ -84,6 +84,14 @@
                     @click="save">保存</Button>
         </div>
 
+
+        <Modal v-model="modal_addSignature"
+               title="上传电子签名"
+               :width="360"
+               footer-hide>
+            <!--<vUploadSignature @addSignaturCallback="modal_addSignaturCallback"></vUploadSignature>-->
+        </Modal>
+
     </div>
 </template>
 
