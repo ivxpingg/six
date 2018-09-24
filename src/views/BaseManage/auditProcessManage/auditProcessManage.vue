@@ -203,6 +203,7 @@
             modal_editPanel_callback() {
                 this.getData();
             },
+            modal_editPanelProcess_callback() {},
             // 删除审核方案
             delPlan(row) {
                 this.$Modal.confirm({

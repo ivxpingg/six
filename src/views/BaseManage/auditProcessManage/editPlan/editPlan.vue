@@ -53,7 +53,7 @@
                 }
             }
         },
-        method: {
+        methods: {
             getData() {
                 this.$http({
                     method: 'get',

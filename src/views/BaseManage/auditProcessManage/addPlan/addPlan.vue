@@ -35,7 +35,7 @@
                 }
             }
         },
-        method: {
+        methods: {
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {

@@ -22,19 +22,32 @@
         </div>
 
         <Modal v-model="modal_addStep"
+               class="modal-addStep"
+               :z-index="1000"
                title="新增步骤"
-               :width="700"
+               :width="740"
                footer-hide>
-            <vAddStep @modal_addStep_callback="modal_addStep_callback"></vAddStep>
+            <vAddStep :auditProcessId="auditProcessId" @modal_addStep_callback="modal_addStep_callback"></vAddStep>
+        </Modal>
+
+        <Modal v-model="modal_editStep"
+               class="modal-editStep"
+               title="编辑步骤"
+               :width="740"
+               footer-hide>
+            <vEditStep :auditProcessId="auditProcessId"
+                       :processStepId="processStepId"
+                       @modal_editStep_callback="modal_editStep_callback"></vEditStep>
         </Modal>
     </div>
 </template>
 <script>
     import vIvxFilterBox from '../../../../components/ivxFilterBox/ivxFilterBox';
     import vAddStep from './addStep/addStep.vue';
+    import vEditStep from './editStep/editStep.vue';
     export default {
         name: 'editPlanProcess',
-        components: {vIvxFilterBox},
+        components: {vIvxFilterBox, vAddStep, vEditStep},
         props: {
             auditProcessId: {
                 type: String,
@@ -44,6 +57,12 @@
         },
         data() {
             return {
+                searchParams: {
+                    current: 1,        // 当前第几页
+                    size: 10,          // 每页几行
+                    total: 0,          // 总行数
+                    searchKey: ''      // 模糊查询参数
+                },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '步骤名称', width: 100, align: 'center', key: 'name' },
@@ -68,8 +87,8 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.auditProcessId = params.row.auditProcessId;
-                                            this.modal_editPlan = true;
+                                            this.processStepId = params.row.processStepId;
+                                            this.modal_editStep = true;
                                         }
                                     }
                                 }, '编辑'),
@@ -81,7 +100,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.delPlan(params.row);
+                                            this.delStep(params.row);
                                         }
                                     }
                                 }, '删除'),
@@ -93,7 +112,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.delPlan(params.row);
+                                            this.stepUp(params.row);
                                         }
                                     }
                                 }, '上移'),
@@ -105,7 +124,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.delPlan(params.row);
+                                            this.stepDown(params.row);
                                         }
                                     }
                                 }, '下移'),
@@ -160,7 +179,9 @@
                 tableLoading: false,
 
                 // 新增步骤
-                modal_addStep: false
+                modal_addStep: false,
+                modal_editStep: false,
+                processStepId: ''
             }
         },
         methods: {
@@ -169,6 +190,57 @@
             },
             modal_addStep_callback() {
                 this.modal_addStep = false;
+            },
+            modal_editStep_callback() {
+                this.modal_editStep = false;
+            },
+
+            getData() {
+                this.tableLoading = true;
+                this.$http({
+                    method: 'post',
+                    url: '/',
+                    data: JSON.stringify(this.searchParams)
+                }).then((res) => {
+                    this.tableLoading = false;
+                    if (res.code === 'SUCCESS') {
+                        this.tableData = res.data.page.records;
+                        this.searchParams.total = res.data.page.total;
+                    }
+                }).catch(() => {
+                    this.tableLoading = false;
+                })
+            },
+
+            delStep(row) {
+                this.$Modal.confirm({
+                    title: '删除',
+                    content: `确定要删除<${row.name}>步骤`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/',
+                            params: {
+                                processStepId: row.processStepId
+                            }
+                        }).then((res) => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '删除成功！'
+                                });
+                                this.getData();
+                            }
+                        })
+                    }
+                });
+            },
+            // 上移
+            stepUp(row) {
+
+            },
+            // 下移
+            stepDown(row) {
+
             }
         }
     }
@@ -189,6 +261,13 @@
             padding: 16px;
             overflow-y: auto;
             overflow-x: hidden;
+        }
+    }
+</style>
+<style lang="scss">
+    .modal-addStep {
+        .ivu-modal-mask {
+
         }
     }
 </style>

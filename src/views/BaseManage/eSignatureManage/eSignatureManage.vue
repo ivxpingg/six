@@ -156,9 +156,9 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'get',
-                    url: '/getUserList',
-                    params: this.searchParams
+                    method: 'post',
+                    url: '/',
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {

@@ -1,5 +1,5 @@
 <template>
-    <div class="addStep-container">
+    <div class="editStep-container">
         <Form ref="form"
               inline
               class="addPlan-form"
@@ -59,15 +59,20 @@
         <div class="ivu-modal-footer">
             <Button type="primary"
                     size="large"
-                    @click="save">新增</Button>
+                    @click="save">保存</Button>
         </div>
     </div>
 </template>
 <script>
     export default {
-        name: 'addStep',
+        name: 'editStep',
         props: {
             auditProcessId: {
+                type: String,
+                required: true,
+                default: ''
+            },
+            processStepId: {
                 type: String,
                 required: true,
                 default: ''
@@ -104,7 +109,6 @@
                 dict_overdueHandle: [],
                 // 通知方式
                 dict_noticeType: []
-
             }
         },
         watch: {
@@ -113,6 +117,14 @@
                 handler(val) {
                     if (val !== '') {
                         this.formData.auditProcessId = val;
+                    }
+                }
+            },
+            processStepId: {
+                immediate: true,
+                handler(val) {
+                    if (val !== '') {
+                        this.formData.processStepId = val;
                     }
                 }
             }
@@ -212,7 +224,7 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-    .addStep-container {
+    .editStep-container {
         margin-bottom: 61px;
         .addPlan-form {
             .ivu-form-item {
