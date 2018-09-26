@@ -56,14 +56,14 @@
         methods: {
             getData() {
                 this.$http({
-                    method: 'get',
-                    url: '/',
+                    method: 'post',
+                    url: '/auditProcess/query',
                     params:{
-                        auditProcessId: auditProcessId
+                        auditProcessId: this.auditProcessId
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.format = Object.assign(this.format, res.data);
+                        this.formData = Object.assign(this.formData, res.data);
                     }
                 })
             },
@@ -72,7 +72,7 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/auditProcess/update',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
@@ -92,5 +92,12 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
     .editPlan-container {
+        padding-bottom: 61px;
+        .ivu-modal-footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
     }
 </style>

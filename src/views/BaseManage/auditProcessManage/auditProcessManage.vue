@@ -54,6 +54,7 @@
     import vAddPlan from './addPlan/addPlan.vue';
     import vEditPlan from './editPlan/editPlan.vue';
     import vEditPlanProcess from './editPlanProcess/editPlanProcess.vue';
+    import MOMENT from 'moment';
     export default {
         name: 'auditProcessManage',
         components: {
@@ -76,10 +77,13 @@
                     { title: '流程步骤数', width: 100, align: 'center', key: 'steps' },
                     { title: '过期时间', width: 90, align: 'center',
                         render: (h, params) => {
-                            return h('div', `${params.row.steps}天`)
+                            return h('div', `${params.row.timeLimit}天`)
                         } },
                     { title: '编辑人', width: 120, align: 'center', key: 'operator' },
-                    { title: '编辑时间', width: 150, align: 'left', key: 'operateTime' },
+                    { title: '编辑时间', width: 150, align: 'center', key: 'operateTime',
+                        render: (h, params) => {
+                            return h('div', `${MOMENT(params.row.operateTime).format('YYYY-MM-DD HH:mm:ss')}`)
+                        }},
                     { title: '备注', width: 180, align: 'center', key: 'remark' },
                     {
                         title: '操作',
@@ -108,6 +112,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.auditProcessId = params.row.auditProcessId;
                                             this.modal_editPlanProcess = true;
                                         }
                                     }
@@ -133,24 +138,15 @@
                     }
                 ],
                 tableData: [
-                    {
-                        auditProcessId: '001',
-                        name: '质量监督受理流程',
-                        steps: 4,
-                        timeLimit: 3,
-                        remark: '',
-                        operator: '管理员',
-                        operateTime: '2018-09-10 00:00:25'
-                    },
-                    {
-                        auditProcessId: '002',
-                        name: '交工检测核验流程',
-                        steps: 4,
-                        timeLimit: 3,
-                        remark: '',
-                        operator: '管理员',
-                        operateTime: '2018-09-10 00:00:25'
-                    }
+                    // {
+                    //     auditProcessId: "1",
+                    //     name: "质量监督受理流程",
+                    //     operateTime: 1537473902000,
+                    //     operator: "管理员",
+                    //     remark: "测试使用",
+                    //     steps: 4,
+                    //     timeLimit: 10
+                    // }
                 ],
                 tableLoading: true,
 
@@ -180,8 +176,8 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'get',
-                    url: '/getUserList',
+                    method: 'post',
+                    url: '/auditProcess/list',
                     params: this.searchParams
                 }).then((res) => {
                     this.tableLoading = false;
@@ -198,9 +194,11 @@
                 this.modal_addPlan = true;
             },
             modal_addPanel_callback() {
+                this.modal_addPlan = false;
                 this.getData();
             },
             modal_editPanel_callback() {
+                this.modal_editPlan = false;
                 this.getData();
             },
             modal_editPanelProcess_callback() {},
@@ -212,7 +210,7 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/auditProcess/delete',
                             params: {
                                 auditProcessId: row.auditProcessId
                             }

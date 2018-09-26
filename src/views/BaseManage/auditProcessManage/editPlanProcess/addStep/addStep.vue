@@ -79,14 +79,14 @@
                     auditProcessId: '',
                     processStepId: '',
                     name: '',
-                    stepType: '',
+                    stepType: 'read',
                     auditRole: '',
                     auditUser: '',
                     auditUserName: '',
-                    passRule: '',
+                    passRule: 'one_pass',
                     timeLimit: 0,
-                    overdueHandle:'',
-                    noticeType: ''
+                    overdueHandle:'automatically_rejected',
+                    noticeType: 'system_messages'
                 },
                 rules: {
                     name: [{ required: true, message: '步骤名称不能为空！', trigger: 'blur' }],
@@ -118,18 +118,18 @@
             }
         },
         mounted() {
-//            this.getDict_stepType();
-//            this.getDict_passRule();
-//            this.getDict_overdueHandle();
-//            this.getDict_noticeType();
+           this.getDict_stepType();
+           this.getDict_passRule();
+           this.getDict_overdueHandle();
+           this.getDict_noticeType();
         },
         methods: {
             getDict_stepType() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'stepType'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
@@ -140,9 +140,9 @@
             getDict_passRule() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'passRule'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
@@ -153,9 +153,9 @@
             getDict_overdueHandle() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'overdueHandle'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
@@ -166,9 +166,9 @@
             getDict_noticeType() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'noticeType'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {

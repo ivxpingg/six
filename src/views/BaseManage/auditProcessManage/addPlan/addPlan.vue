@@ -41,7 +41,7 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/auditProcess/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

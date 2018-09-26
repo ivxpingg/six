@@ -130,18 +130,18 @@
             }
         },
         mounted() {
-//            this.getDict_stepType();
-//            this.getDict_passRule();
-//            this.getDict_overdueHandle();
-//            this.getDict_noticeType();
+           this.getDict_stepType();
+           this.getDict_passRule();
+           this.getDict_overdueHandle();
+           this.getDict_noticeType();
         },
         methods: {
             getDict_stepType() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'stepType'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
@@ -152,9 +152,9 @@
             getDict_passRule() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'passRule'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
@@ -165,9 +165,9 @@
             getDict_overdueHandle() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'overdueHandle'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
@@ -178,9 +178,9 @@
             getDict_noticeType() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/dict/getListByType',
                     params: {
-                        type: ''
+                        type: 'noticeType'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {

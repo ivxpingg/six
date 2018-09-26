@@ -55,6 +55,17 @@
                 default: ''
             }
         },
+        watch: {
+            auditProcessId: {
+                immediate: true,
+                handler(val) {
+                    if (val !== '') {
+
+                        this.getData();
+                    }
+                }
+            }
+        },
         data() {
             return {
                 searchParams: {
@@ -148,32 +159,20 @@
                         passRule: '一票通过'
                     },
                     {
-                        processStepId: '002',
-                        name: '报送监督单位人员',
-                        stepType: '送阅步骤',
-                        timeLimit: 3,
-                        overdueHandle: '自动退回',
-                        auditRoleStr: '科室负责人',
-                        auditUserName: '林科员、李科员',
-                        passRule: '一票通过'
-                    },{
-                        processStepId: '003',
-                        name: '报送监督单位人员',
-                        stepType: '送阅步骤',
-                        timeLimit: 3,
-                        overdueHandle: '自动退回',
-                        auditRoleStr: '科室负责人',
-                        auditUserName: '林科员、李科员',
-                        passRule: '一票通过'
-                    },{
-                        processStepId: '004',
-                        name: '报送监督单位人员',
-                        stepType: '送阅步骤',
-                        timeLimit: 3,
-                        overdueHandle: '自动退回',
-                        auditRoleStr: '科室负责人',
-                        auditUserName: '林科员、李科员',
-                        passRule: '一票通过'
+                        auditProcessId: "1",
+                        auditRole: "11",
+                        auditUser: "1",
+                        auditUserName: "1",
+                        insTime: 1537686229000,
+                        lastTime: 1537686208000,
+                        name: "11",
+                        noticeType: "1",
+                        overdueHandle: "1",
+                        passRule: "1",
+                        processStepId: "1",
+                        step: 1,
+                        stepType: "1",
+                        timeLimit: 1
                     }
                 ],
                 tableLoading: false,
@@ -199,7 +198,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/processStep/list',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
@@ -219,7 +218,7 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/processStep/delete',
                             params: {
                                 processStepId: row.processStepId
                             }
