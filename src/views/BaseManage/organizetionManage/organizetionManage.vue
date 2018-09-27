@@ -27,7 +27,7 @@
         </div>
 
         <Modal v-model="modal_userDetail"
-               className="modal-userDetail"
+               className="modal-userDetail modal-body-padding0"
                :title="userType === '0' ? '从业人员详情' : '监督人员详情'"
                :width="1200"
                footer-hide>
@@ -39,14 +39,14 @@
                title="人员选择"
                :width="1200"
                footer-hide>
-            <vEmployeeSelect></vEmployeeSelect>
+            <vEmployeeSelect class="six-modal-body-inner"></vEmployeeSelect>
         </Modal>
 
         <Modal v-model="modal_eSignatrueSelect"
                title="电子签名选择"
                :width="1200"
                footer-hide>
-            <vESignnatureSelect>  </vESignnatureSelect>
+            <vESignnatureSelect  class="six-modal-body-inner">  </vESignnatureSelect>
         </Modal>
     </div>
 </template>
@@ -149,7 +149,7 @@
                             ];
 
                             return h('div',{
-                                class: 'ivx-table-cell-handle'
+                                'class': 'ivx-table-cell-handle'
                             },list);
                         }
                     }
@@ -291,9 +291,5 @@
 </style>
 
 <style lang="scss">
-    .modal-userDetail {
-        .ivu-modal-body {
-            padding: 0;
-        }
-    }
+
 </style>

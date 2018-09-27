@@ -152,9 +152,5 @@
 <style lang="scss" scoped>
     .eSignatureSelect-container {
 
-
-        .ivu-modal-footer {
-            padding-bottom: 0;
-        }
     }
 </style>

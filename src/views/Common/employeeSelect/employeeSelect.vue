@@ -201,22 +201,12 @@
 
 <style lang="scss" >
     .employeeSelect-container {
-        padding: 16px;
+
         .modal-body {
             height: 690px;
             overflow-y: auto;
             overflow-x: hidden;
         }
-        .ivu-modal-footer {
-            padding-bottom: 0;
-        }
-    }
-</style>
 
-<style lang="scss">
-    .modal-unitDetail {
-        .ivu-modal-body {
-            padding: 0;
-        }
     }
 </style>

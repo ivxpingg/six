@@ -200,7 +200,7 @@
     .modal-unitPersons-add {
         z-index: 1001;
         .ivu-modal-body {
-            padding: 0;
+            /*padding: 0;*/
         }
     }
 </style>
