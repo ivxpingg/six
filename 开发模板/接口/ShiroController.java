@@ -42,7 +42,7 @@ public class ShiroController {
         try {
             subject.login(token);
             jsonObject.put("token", subject.getSession().getId());
-            result = JsonUtil.getSuccJson(ExceptionType.SUCCESS,jsonObject);
+            result = JsonUtil.getSuccJson(jsonObject);
         } catch (IncorrectCredentialsException e) {
             result = JsonUtil.getErrJson(ExceptionType.E0005);
         } catch (LockedAccountException e) {
@@ -55,15 +55,4 @@ public class ShiroController {
         return result;
     }
 
-
-    /**
-     * 未登录，shiro应重定向到登录界面，
-     * 此处返回未登录状态信息由前端控制跳转页面
-     * @return
-     */
-    @RequestMapping(value = "/unauth")
-    @ResponseBody
-    public Object unauth() {
-        return JsonUtil.getErrJson(ExceptionType.E0008);
-    }
 }

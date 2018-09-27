@@ -48,8 +48,23 @@ public class DictController {
         }
         Page<Dict> pageObj = dictService.selectPage(page, ew);
         map.put("page", pageObj);
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,map);
+        return JsonUtil.getSuccJson(map);
     }
+
+
+    /**
+     * 根据类型获取
+     * @param type
+     * @return
+     */
+    @GetMapping(value = "getListByType")
+    public String getListByType(@RequestParam(name="type")String type){
+        EntityWrapper ew=new EntityWrapper();
+        ew.eq("type",type);
+        List<Dict> dicts = dictService.selectList(ew);
+        return JsonUtil.getSuccJson(dicts);
+    }
+
 
     /**
      * 查询
@@ -58,7 +73,7 @@ public class DictController {
      */
     @GetMapping("query")
     public String get(@RequestParam(required=true) String id) {
-       return JsonUtil.getSuccJson(ExceptionType.SUCCESS,dictService.selectById(id));
+       return JsonUtil.getSuccJson(dictService.selectById(id));
     }
 
     /**
@@ -74,7 +89,7 @@ public class DictController {
         if(!result){
             throw new GlobalException(ExceptionType.E0002);
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,dict);
+        return JsonUtil.getSuccJson(dict);
     }
 
     /**
@@ -89,10 +104,15 @@ public class DictController {
         if(!result){
             throw new GlobalException(ExceptionType.E0003);
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,dict);
+        return JsonUtil.getSuccJson(dict);
     }
 
 
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
     //@RequiresPermissions("sys:dict:edit")
     @RequestMapping(value = "delete")
     public String delete(@RequestParam(required=true) String id) {
@@ -100,8 +120,7 @@ public class DictController {
         if(!result){
             throw new GlobalException(ExceptionType.E0004);
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,null);
+        return JsonUtil.getSuccJson(null);
     }
-
 
 }

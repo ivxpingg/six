@@ -168,4 +168,48 @@ export const getParams = url => {
         paramObj[keyValue[0]] = keyValue[1]
     })
     return paramObj
-}
+};
+
+export const transformMenu = menuList => {
+    let attr = [];
+    menuList.forEach((val) => {
+        let obj = {
+            icon: val.icon,
+            name: val.url,
+            meta: {
+                title: val.menuName
+            }
+        };
+
+        if (val.isShow === '0') {
+            obj.meta.hideInMenu = true;
+        }
+
+        if (val.url.indexOf('http://') > -1) {
+            obj.meta.href = val.url;
+        }
+
+        if (hasChild(val) && val.children[0].url) {
+            obj.children = transformMenu(val.children);
+        }
+        attr.push(obj);
+    });
+
+    return attr;
+};
+
+export const setMenuAuth = (menuList, authList) => {
+    menuList.forEach((val) => {
+        if (hasChild(val) && val.children[0].url) {
+            setMenuAuth(val.children, authList);
+        }
+        else if (hasChild(val) && val.url.indexOf('http://') === -1) {
+            // authList[val.url] = [];
+            val.children.forEach(v => {
+                if (v.permission) {
+                    authList[val.url].push(v.permission.split(':').reverse()[0]);
+                }
+            });
+        }
+    });
+};

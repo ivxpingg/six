@@ -1,22 +1,68 @@
-import { getBreadCrumbList, setTagNavListInLocalstorage, getTagNavListFromLocalstorage, getHomeRoute } from '@/lib/util';
+import {
+    getBreadCrumbList,
+    setTagNavListInLocalstorage,
+    getTagNavListFromLocalstorage,
+    getHomeRoute,
+    transformMenu,
+    setMenuAuth} from '@/lib/util';
 import routers from '@/router/routers'
 import axios from '@/lib/axios';
+
 export default {
     state: {
         menuList: [],
         breadCrumbList: [],
         tagNavList: [],
         homeRoute: getHomeRoute(routers),
+        //
+        auth: {
+            home: [],
+            organizetionManage: [],
+            roleManage: [],
+            eSignatureManage: [],
+            auditProcessManage: [],
+            workUnitManage: [],
+            workPersonManage: [],
+            supervisorsManage:[],
+            qualitySupervision_register: [],
+            qualitySupervision_accept: [],
+            qualitySupervision_tell: [],
+            qualitySupervision_check: [],
+            qualitySupervision_account: [],
+            qualitySupervision_complaint: [],
+            qualityProjectCreate: [],
+            safetySupervision_notification: [],
+            safetySupervision_check: [],
+            safetySupervision_account: [],
+            safetySupervision_examine: [],
+            creditRating_record: [],
+            creditRating_account: [],
+            majorProject_check: [],
+            QA_report: [],
+            QA_analyze: [],
+            projectRecords: [],
+            project_verification: [],
+            projectCompleteQuality_authenticate: [],
+            projectFileManage: [],
+            dataDict: []
+        },
         // 自适应
         htmlClientWidth: 0,
         mianLayoutWidth: 0,
         mianLayoutHeight: 0
 
     },
-    getters: { },
+    getters: {
+        getMenuAuth: (state) => {
+            return (name) => {
+                return state.auth[name];
+            }
+        }
+    },
     mutations: {
         setMenuList (state, mList) {
-            state.menuList = mList;
+            setMenuAuth(mList, state.auth);
+            state.menuList = transformMenu(mList);
         },
         setBreadCrumb (state, routeMetched) {
             state.breadCrumbList = getBreadCrumbList(routeMetched, state.homeRoute);
@@ -47,6 +93,10 @@ export default {
                 state.mianLayoutWidth = dom.clientWidth;
                 state.mianLayoutHeight = dom.clientHeight;
             }
+        },
+
+        setAuth(state, obj) {
+            state.auth = obj;
         }
     },
     actions: {
@@ -54,12 +104,15 @@ export default {
             return new Promise(((resolve, reject) => {
                 axios({
                     method: 'get',
-                    url: '/getMenuList'
+                    // url: '/getMenuList'
+                    url: '/menu/userMenus'
                 }).then(res => {
-                    if (res.status === 1) {
-                        commit('setMenuList', res.result);
+                    // commit('setMenuList', res.result);
+                    // resolve(res.result);
+                    if (res.code === 'SUCCESS') {
+                        commit('setMenuList', res.data);
                     }
-                    resolve(res.result);
+                    resolve(res.data);
                 }).catch(err => {
                     reject(err);
                 })

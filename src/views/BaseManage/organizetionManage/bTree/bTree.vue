@@ -3,7 +3,7 @@
         <vIvxFilterBox>
             <Form>
                 <FormItem>
-                    <Input placeholder="检索组织结构">
+                    <Input placeholder="检索组织结构" >
                         <Icon type="ios-search" slot="suffix" />
                     </Input>
                 </FormItem>

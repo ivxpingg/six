@@ -18,7 +18,7 @@
                 </Select>
             </FormItem>
             <FormItem label="步骤审核角色:" prop="auditRole">
-                <Input v-model="formData.auditRole" @on-focus="auditRole_onFocus" />
+                <Input v-model="formData.auditRoleLabel" readonly @on-focus="auditRole_onFocus" />
             </FormItem>
             <FormItem label="配置用户:" prop="auditUser">
                 <Input v-model="formData.auditUser"
@@ -61,11 +61,20 @@
                     size="large"
                     @click="save">保存</Button>
         </div>
+
+        <Modal v-model="modal_roleSelect"
+               title="角色选择"
+               :width="350"
+               footer-hide>
+            <vRoleSelect  @onSelectRole="onSelectRole"></vRoleSelect>
+        </Modal>
     </div>
 </template>
 <script>
+    import vRoleSelect from '../../../../Common/roleSelect/roleSelect';
     export default {
         name: 'editStep',
+        components: {vRoleSelect},
         props: {
             auditProcessId: {
                 type: String,
@@ -86,6 +95,7 @@
                     name: '',
                     stepType: '',
                     auditRole: '',
+                    auditRoleLabel: '',
                     auditUser: '',
                     auditUserName: '',
                     passRule: '',
@@ -108,7 +118,10 @@
                 // 逾期处理方式
                 dict_overdueHandle: [],
                 // 通知方式
-                dict_noticeType: []
+                dict_noticeType: [],
+
+                // 角色选择
+                modal_roleSelect: false
             }
         },
         watch: {
@@ -190,7 +203,21 @@
             },
             // 选择角色
             auditRole_onFocus() {
+                this.modal_roleSelect = true;
+            },
+            onSelectRole(item) {
 
+                if (item.length === 0) {
+                    this.formData.auditRole = '';
+                    this.formData.auditRoleLabel = '';
+                }
+                else {
+                    if (item[0].nodeType === 'role') {
+                        this.formData.auditRole = item[0].roleId;
+                        this.formData.auditRoleLabel = item[0].name;
+                    }
+                }
+                this.modal_roleSelect = false;
             },
             // 选择用户
             auditUser_onFocus() {

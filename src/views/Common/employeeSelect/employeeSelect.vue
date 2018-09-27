@@ -201,6 +201,7 @@
 
 <style lang="scss" >
     .employeeSelect-container {
+        padding: 16px;
         .modal-body {
             height: 690px;
             overflow-y: auto;

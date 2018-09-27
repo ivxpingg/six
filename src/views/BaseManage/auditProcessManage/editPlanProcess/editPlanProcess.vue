@@ -2,7 +2,7 @@
     <div class="editPlanProcess-container">
         <div class="left-panel">
             <Steps direction="vertical">
-                <Step v-for="item in tableData" :content="item.name" :key="`step_${item.processStepId}`" status="process"></Step>
+                <Step v-for="item in tableData" :content="item.name"  status="process"></Step>
             </Steps>
         </div>
         <div class="right-panel">
@@ -123,7 +123,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.stepUp(params.row);
+                                            this.stepUp(params);
                                         }
                                     }
                                 }, '上移'),
@@ -135,7 +135,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.stepDown(params.row);
+                                            this.stepDown(params);
                                         }
                                     }
                                 }, '下移'),
@@ -234,12 +234,36 @@
                 });
             },
             // 上移
-            stepUp(row) {
+            stepUp(params) {
+                if (params.index !== 0) {
+                    let processStepIds = `${this.tableData[params.index].processStepId},${this.tableData[params.index - 1].processStepId}`;
+                    this.stepMove(processStepIds, '上移');
+                }
 
             },
             // 下移
-            stepDown(row) {
-
+            stepDown(params) {
+                if (params.index !== this.tableData.length) {
+                    let processStepIds = `${this.tableData[params.index].processStepId},${this.tableData[params.index + 1].processStepId}`;
+                    this.stepMove(processStepIds, '下移');
+                }
+            },
+            // 上移下移
+            stepMove(processStepIds, tip) {
+                this.$http({
+                    method: 'get',
+                    url: '/processStep/move',
+                    params: {
+                        processStepIds: processStepIds
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.$Message.success({
+                            content: `${tip}成功！`
+                        });
+                        this.getData();
+                    }
+                })
             }
         }
     }

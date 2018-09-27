@@ -1,7 +1,6 @@
 <template>
     <div class="roleManage-container ivu-card ivu-card-bordered ivu-card-dis-hover">
-
-        <div class="left-panel">
+        <div class="left-panel" v-show="auth.length > 0">
             <vBTree ref="btree" @onSelectChange="onSelectChange"></vBTree>
         </div>
         <div class="right-panel">
@@ -60,6 +59,7 @@
     import vRoleInfo from './roleInfo/roleInfo';
     import vMenuTree from '../../Common/menuTree/menuTree';
     import vAddNode from './addNode/addNode';
+    import { mapMutations } from 'vuex'
     export default {
         name: 'roleManage',
         components: {
@@ -100,7 +100,7 @@
                 // 添加节点
                 modal_addNode: false,
                 addNodeType: 'group',
-
+                auth: this.$store.state.app.auth[this.$route.name]
             };
         },
         watch: {
@@ -110,7 +110,13 @@
                 }
             }
         },
+        mounted() {
+            console.dir(this.auth);
+        },
         methods: {
+            ...mapMutations([
+                'setAuth'
+            ]),
             // 角色树选择
             onSelectChange(item) {
                 if (item.length === 0) {

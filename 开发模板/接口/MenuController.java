@@ -1,11 +1,13 @@
 package com.ikey.springbootmodule.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.ikey.springbootcommon.shiro.ShiroUser;
 import com.ikey.springbootcommon.util.ExceptionType;
 import com.ikey.springbootcommon.util.JsonUtil;
 import com.ikey.springbootmodule.entity.Menu;
 import com.ikey.springbootmodule.exception.GlobalException;
 import com.ikey.springbootmodule.service.MenuService;
+import com.ikey.springbootmodule.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +38,22 @@ public class MenuController extends BaseController{
         ew.eq("IS_SHOW",1);
         ew.orderBy("sort",true);
         List<Menu> menus = menuService.selectList(ew);
+        return JsonUtil.getSuccJson(parentChildrenMenu(menus));
+    }
+
+    /**
+     * 获取用户菜单
+     * @return
+     */
+    @GetMapping(value = "userMenus")
+    public String userMenus(){
+        ShiroUser shiroUser = UserUtil.getShiroUser();
+        List<Menu> menus = menuService.userMenus(shiroUser.getUserId());
+        return JsonUtil.getSuccJson(parentChildrenMenu(menus));
+    }
+
+
+    private List<Menu> parentChildrenMenu(List<Menu> menus){
         Map<String, List<Menu>> map = new HashMap();
         for (Menu menu : menus) {
             List<Menu> parentMenu = map.get(menu.getParentId());
@@ -46,8 +64,9 @@ public class MenuController extends BaseController{
             map.put(menu.getParentId(), parentMenu);
         }
         List<Menu> retList = MakeMenu(map, "0");
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,retList);
+        return retList;
     }
+
 
     private List<Menu> MakeMenu(Map<String, List<Menu>> map, String menuId) {
         List<Menu> menus = new ArrayList();
@@ -73,7 +92,7 @@ public class MenuController extends BaseController{
         if (!result){
             throw new GlobalException(ExceptionType.E0002);
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,menu);
+        return JsonUtil.getSuccJson(menu);
     }
 
     /**
@@ -87,7 +106,7 @@ public class MenuController extends BaseController{
         if (!result){
             throw new GlobalException(ExceptionType.E0003);
         }
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,menu);
+        return JsonUtil.getSuccJson(menu);
     }
 
     /**
@@ -98,8 +117,10 @@ public class MenuController extends BaseController{
     @GetMapping("/query")
     public String query(@RequestParam(required = true)String menuId){
         Menu menu = menuService.selectById(menuId);
-        return JsonUtil.getSuccJson(ExceptionType.SUCCESS,menu);
+        return JsonUtil.getSuccJson(menu);
     }
+
+
 
 
 }

@@ -14,6 +14,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     // let router = new Router();
+
     if (to.name === 'roleManage') {
 
     }
