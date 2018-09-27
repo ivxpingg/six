@@ -211,5 +211,8 @@ export const setMenuAuth = (menuList, authList) => {
                 }
             });
         }
+        else if (!hasChild(val) && authList[val.url]) {
+            authList[val.url].push('all');
+        }
     });
 };

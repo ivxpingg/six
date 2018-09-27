@@ -6,7 +6,7 @@
         <div class="right-panel">
             <Card :bordered="false" dis-hover>
                 <vIvxFilterBox>
-                    <Button type="primary" @click="onClick_addUser">添加人员</Button>
+                    <Button type="primary" @click="onClick_addUser" :class="{'six-auth-hide': !auth_add}">添加人员</Button>
                 </vIvxFilterBox>
 
                 <div class="ivx-table-box">
@@ -68,6 +68,7 @@
             vESignnatureSelect },
         data() {
             return {
+                auth: this.$store.state.app.auth[this.$route.name],
                 selectType: '',   // 当前选中节点类型 'group': 分组; 'role' : 角色
                 nodeItem: { // 当前选中节点 角色分组节点数据
                     roleId: '',
@@ -116,6 +117,9 @@
                                     }
                                 }, '查看'),
                                 h('Button', {
+                                    'class': {
+                                        'six-auth-hide': !this.auth_add
+                                    },
                                     props: {
                                         type: 'primary',
                                         size: 'small',
@@ -128,6 +132,9 @@
                                     }
                                 }, '授权电子签名'),
                                 h('Button', {
+                                    'class': {
+                                        'six-auth-hide': !this.auth_del
+                                    },
                                     props: {
                                         type: 'error',
                                         size: 'small',
@@ -183,8 +190,19 @@
                 modal_eSignatrueSelect: false
             }
         },
+        computed: {
+            auth_add() {
+                return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('add') > -1);
+            },
+            auth_update() {
+                return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('update') > -1);
+            },
+            auth_del() {
+                return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('del') > -1);
+            },
+        },
         mounted() {
-
+            console.dir(this.auth_add);
         },
         methods: {
             /**
