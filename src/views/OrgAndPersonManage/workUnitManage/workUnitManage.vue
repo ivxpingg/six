@@ -1,6 +1,5 @@
 <template>
     <Card class="workUnitManage-container">
-
         <vIvxFilterBox dashed>
             <Upload :action="uploadParams.actionUrl"
                     :showUploadList="uploadParams.showUploadList"

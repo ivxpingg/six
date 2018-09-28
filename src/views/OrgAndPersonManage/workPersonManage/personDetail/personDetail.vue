@@ -69,9 +69,7 @@
         display: flex;
 
         .left-panel {
-            .ivu-menu {
-                height: 100%;
-            }
+
         }
         .right-panel {
             flex: 1;

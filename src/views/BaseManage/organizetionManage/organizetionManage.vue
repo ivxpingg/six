@@ -57,6 +57,7 @@
     import vSupervisorDetail from '../../OrgAndPersonManage/supervisorsManage/supervisorDetail/supervisorDetail';
     import vEmployeeSelect from '../../Common/employeeSelect/employeeSelect';
     import vESignnatureSelect from '../../Common/eSignatureSelect/eSignatureSelect';
+    import authMixin from '../../../lib/authMixin';
     export default {
         name: 'organizetionManage',   // 组织结构
         components: {
@@ -66,9 +67,9 @@
             vSupervisorDetail,
             vEmployeeSelect,
             vESignnatureSelect },
+        mixins: [authMixin],
         data() {
             return {
-                auth: this.$store.state.app.auth[this.$route.name],
                 selectType: '',   // 当前选中节点类型 'group': 分组; 'role' : 角色
                 nodeItem: { // 当前选中节点 角色分组节点数据
                     roleId: '',
@@ -190,20 +191,7 @@
                 modal_eSignatrueSelect: false
             }
         },
-        computed: {
-            auth_add() {
-                return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('add') > -1);
-            },
-            auth_update() {
-                return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('update') > -1);
-            },
-            auth_del() {
-                return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('del') > -1);
-            },
-        },
-        mounted() {
-            console.dir(this.auth_add);
-        },
+        mounted() { },
         methods: {
             /**
              * 分页控件-切换页面

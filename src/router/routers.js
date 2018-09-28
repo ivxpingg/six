@@ -153,6 +153,7 @@ const QualitySupervisionManage = [
             {
                 path: 'qualitySupervision_register',
                 name: 'qualitySupervision_register',
+                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_register/qualitySupervision_register.vue'),
                 meta: {
                     icon: '_qualitySupervision_register',
                     title: '质量监督登记'
@@ -161,6 +162,7 @@ const QualitySupervisionManage = [
             {
                 path: 'qualitySupervision_accept',
                 name: 'qualitySupervision_accept',
+                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_accept/qualitySupervision_accept.vue'),
                 meta: {
                     icon: '_qualitySupervision_accept',
                     title: '质量监督受理'
@@ -169,6 +171,7 @@ const QualitySupervisionManage = [
             {
                 path: 'qualitySupervision_tell',
                 name: 'qualitySupervision_tell',
+                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_tell/qualitySupervision_tell.vue'),
                 meta: {
                     icon: '_qualitySupervision_tell',
                     title: '质量监督交底'
@@ -177,6 +180,7 @@ const QualitySupervisionManage = [
             {
                 path: 'qualitySupervision_check',
                 name: 'qualitySupervision_check',
+                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_check/qualitySupervision_check.vue'),
                 meta: {
                     icon: '_qualitySupervision_check',
                     title: '质量监督检查'
@@ -185,6 +189,7 @@ const QualitySupervisionManage = [
             {
                 path: 'qualitySupervision_account',
                 name: 'qualitySupervision_account',
+                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_account/qualitySupervision_account.vue'),
                 meta: {
                     icon: '_account',
                     title: '质量监督台账'
@@ -193,6 +198,7 @@ const QualitySupervisionManage = [
             {
                 path: 'qualitySupervision_complaint',
                 name: 'qualitySupervision_complaint',
+                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_complaint/qualitySupervision_complaint.vue'),
                 meta: {
                     icon: '_qualitySupervision_complaint',
                     title: '质量安全投诉管理'
@@ -201,6 +207,7 @@ const QualitySupervisionManage = [
             {
                 path: 'qualityProjectCreate',
                 name: 'qualityProjectCreate',
+                component: () => import('@/views/QualitySupervisionManage/qualityProjectCreate/qualityProjectCreate.vue'),
                 meta: {
                     icon: '_qualityProjectCreate',
                     title: '品质工程创建'
