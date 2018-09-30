@@ -9,11 +9,11 @@
                     <Icon type="md-document" />
                     项目基本信息
                 </MenuItem>
-                <MenuItem name="2">
+                <MenuItem name="2" v-show="projectId !== ''">
                     <Icon type="md-chatbubbles" />
                     材料明细一览表
                 </MenuItem>
-                <MenuItem name="3">
+                <MenuItem name="3" v-show="projectId !== ''">
                     <Icon type="md-heart" />
                     参建单位与人员情况
                 </MenuItem>
@@ -21,9 +21,18 @@
         </template>
 
         <template slot="right">
-            <vProjectBaseInfo  v-show="activeName === '1'"
+            <vProjectBaseInfo  v-if="activeName === '1'"
                                :projectId="projectId"
                                class="six-modal-body-inner"></vProjectBaseInfo>
+
+            <vFileDetailLists v-if="activeName === '2' && projectId !== ''"
+                              :projectId="projectId"
+                              class="six-modal-body-inner"></vFileDetailLists>
+
+            <vUnitAndPerson v-if="activeName === '3' && projectId !== ''"
+                            :projectId="projectId"
+                            class="six-modal-body-inner"></vUnitAndPerson>
+
         </template>
     </vModalBothSides>
 </template>
@@ -31,17 +40,22 @@
 <script>
     import vModalBothSides from '../../../../components/modal-body/modal-both-sides';
     import vProjectBaseInfo from './projectBaseInfo/projectBaseInfo';
+    import vFileDetailLists from '../../../Common/fileDetailLists/fileDetailLists';
+    import vUnitAndPerson from './unitAndPerson/unitAndPerson';
     export default {
         name: 'addProject',
-        components: {vModalBothSides, vProjectBaseInfo},
+        components: {vModalBothSides, vProjectBaseInfo, vFileDetailLists, vUnitAndPerson},
         deactivated () {
             this.$destroy(true);
         },
         data() {
             return {
                 activeName: '1',
-                projectId: '',
+                projectId: '1',
+                tableData: []
             };
+        },
+        mounted() {
         },
         methods: {
             onSelect(name) {

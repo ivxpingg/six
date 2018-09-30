@@ -145,18 +145,26 @@
                     amount: 1.251,       // 投资额(万元)
                     constructAmount: 1256.1,  // 施工合同金额(万元)
                     supervisorAmount: 14686.25, // 监理合同金额(万元)
-                    designSpeed: '',           // 设计时速(km/h)
+                    designSpeed: 20,           // 设计时速(km/h)
                     planBeginTime: '2018-10-01',      // 计划开工时间
                     planEndTime: '2019-05-05',        // 计划交工时间
                     constructUnit: '0125',       // 施工单位
                     supervisorUnit: '01',      // 监理单位
                     contacts: '陈总经理',            // 联系人
                     contactPhone: '13959260199',       // 联系电话/联系方式
-
                 },
                 rules: {
                     name: [{ required: true, message: '项目名称不能为空！', trigger: 'blur' }],
                     part: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
+                    address: [{ required: true, message: '地址不能为空！', trigger: 'blur' }],
+                    mileage: [{ required: true, type: 'number', message: '项目里程不能为空！', trigger: 'blur' }],
+                    amount: [{ required: true, type: 'number', message: '投资额不能为空！', trigger: 'blur' }],
+                    constructAmount: [{ required: true, type: 'number', message: '施工合同金额不能为空！', trigger: 'blur' }],
+                    supervisorAmount: [{ required: true, type: 'number', message: '监理合同金额不能为空！', trigger: 'blur' }],
+                    designSpeed: [{ required: true, type: 'number', message: '设计时速不能为空！', trigger: 'blur' }],
+                    planBeginTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
+                    planEndTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
+
                 },
 
                 // 字典
@@ -177,10 +185,24 @@
                 }
             }
         },
-        mounted() {},
+        mounted() {
+            this.getDict();
+        },
         methods: {
             getDict() {
-
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByTypes',
+                    params: {
+                        types: 'projectType,level,projectProperty'
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.dict_projectType = res.data['projectType'];
+                        this.dict_level = res.data['level'];
+                        this.dict_projectProperty = res.data['projectProperty'];
+                    }
+                });
             },
             onChange_planBeginTime(time) {
                 this.formData.planBeginTime = time;

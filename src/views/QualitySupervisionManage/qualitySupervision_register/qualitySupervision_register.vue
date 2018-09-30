@@ -50,8 +50,10 @@
                :width="1200"
                @on-visible-change="onVisibleChange_add"
                footer-hide>
-            <vAdd v-if="modal_add" @modalAddCallback="modalAddCallback">
-            </vAdd>
+            <div style="height: 650px;">
+                <vAdd v-if="modal_add" @modalAddCallback="modalAddCallback">
+                </vAdd>
+            </div>
         </Modal>
     </div>
 </template>

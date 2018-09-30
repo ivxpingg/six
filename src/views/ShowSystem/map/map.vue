@@ -27,8 +27,8 @@
             return {
                 map: null,
                 points: [
-                    [116.440175,31.753489],
-                    [116.477544,31.594179]
+                    [116.440175, 31.753489],
+                    [116.477544, 31.594179]
                 ],
                 cardInfo: false,
                 cardLeft: 0,
@@ -39,7 +39,7 @@
             initBMap('baidu_map').then((m) => {
                 this.map = m;
                 this.setPoint();
-            })
+            });
         },
         methods: {
             setPoint() {
@@ -53,8 +53,8 @@
             setPointEvent(marker) {
                 let that = this;
                 marker.addEventListener('mouseover', function (e) {
-                    that.cardTop = e.clientY-170;
-                    that.cardLeft = e.clientX-125;
+                    that.cardTop = e.clientY - 170;
+                    that.cardLeft = e.clientX - 125;
                     that.cardInfo = true;
                 });
             },
