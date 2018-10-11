@@ -69,7 +69,9 @@
                     current: 1,        // 当前第几页
                     size: 10,          // 每页几行
                     total: 0,          // 总行数
-                    searchKey: ''      // 模糊查询参数
+                    condition: {
+                        searchKey: ''  // 模糊查询参数
+                    }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },

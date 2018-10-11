@@ -57,7 +57,7 @@
     import vSupervisorDetail from '../../OrgAndPersonManage/supervisorsManage/supervisorDetail/supervisorDetail';
     import vEmployeeSelect from '../../Common/employeeSelect/employeeSelect';
     import vESignnatureSelect from '../../Common/eSignatureSelect/eSignatureSelect';
-    import authMixin from '../../../lib/authMixin';
+    import authMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'organizetionManage',   // 组织结构
         components: {

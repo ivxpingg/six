@@ -1,10 +1,15 @@
 <template>
     <div class="qualitySupervision_register-container">
         <vIvxFilterBox dashed>
-            <Button type="primary"
+            <Button v-if="auth_add"
+                    type="primary"
                     icon="md-add"
                     @click="modal_add_open">登记项目</Button>
 
+            <Button v-if="auth_audit"
+                    type="primary"
+                    icon="ios-notifications"
+                    @click="modal_noticeModification_open">整改通知</Button>
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>
@@ -43,7 +48,7 @@
                   :total="searchParams.total"
                   :on-change="onPageChange"></Page>
         </div>
-
+        <!--质量监督登记-->
         <Modal v-model="modal_add"
                class-name="modal-body-padding0"
                title="质量监督登记"
@@ -51,31 +56,79 @@
                @on-visible-change="onVisibleChange_add"
                footer-hide>
             <div style="height: 650px;">
-                <vAdd v-if="modal_add" @modalAddCallback="modalAddCallback">
-                </vAdd>
+                <vAdd v-if="modal_add"
+                      @modalAddCallback="modalAddCallback"></vAdd>
             </div>
         </Modal>
+        <!--质量监督登记-->
+        <Modal v-model="modal_edit"
+               class-name="modal-body-padding0"
+               title="质量监督登记"
+               :width="1200"
+               @on-visible-change="onVisibleChange_edit"
+               footer-hide>
+            <div style="height: 650px;">
+                <vEdit v-if="modal_edit"
+                       @modalAddCallback="modalAddCallback"
+                       :projectId="projectId"></vEdit>
+            </div>
+        </Modal>
+        <!--提交审核-->
+        <Modal v-model="modal_audit"
+               title="提交审核"
+               :width="450"
+               footer-hide>
+            <vProjectAudit :projectId="projectId" @modal_callback="modal_callback_audit"></vProjectAudit>
+        </Modal>
+        <!--材料完整性审核-->
+        <Modal v-model="modal_contentAudit"
+               class-name="modal-body-padding0"
+               title="材料完整性审核"
+               :width="1200"
+               footer-hide>
+            <vContentAudit :projectId="projectId"
+                           :processStepId="processStepId"
+                           :auditProcessId="auditProcessId"
+                           @modal_callback="modal_callback_contentAudit"></vContentAudit>
+        </Modal>
+
+        <!--整改通知-->
+        <Modal v-model="modal_noticeModification"
+               title="整改通知"
+               :width="1000"
+               footer-hide>
+            <vNoticeModification
+                    :projectId="projectId"
+                    :tableData="tableData"
+                    @modal_callback="modal_callback_noticeModification"></vNoticeModification>
+        </Modal>
+
+
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
-    import authMixin from '../../../lib/authMixin';
+    import authMixin from '../../../lib/mixin/authMixin';
     import vAdd from './add/add';
+    import vEdit from './edit/qualitySupervision_register_edit';
+    import vProjectAudit from './audit/project_audit';
+    import vContentAudit from './content-audit/content-audit';
+    import vNoticeModification from './noticeModification/noticeModification';
     export default {
-        name: 'qualitySupervision_register',
+        name: 'qualitySupervision_register',  // 质量监督登记
         mixins: [authMixin],
-        components: {vIvxFilterBox, vAdd},
+        components: {vIvxFilterBox, vAdd, vEdit, vProjectAudit, vContentAudit, vNoticeModification},
         data() {
             return {
                 searchParams: {
                     current: 1,      // 当前第几页
                     size: 10,      // 每页几行
                     total: 0,     // 总行数
-                    beginDate: '',     // 开始时间
-                    endDate: '',       // 结束时间
-                    searchKey: '',      // 模糊查询参数
-                    handleStatus: ''
+                    condition: {
+                        searchKey: '',      // 模糊查询参数
+                        handleStatus: ''
+                    }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
@@ -118,27 +171,65 @@
                     { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',
-                        width: 180,
+                        width: 330,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
-                            let list = [
-                                h('Button', {
+                            let list = [];
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small',
+                                    icon: 'ios-eye-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.projectId = params.row.projectId;
+                                        this.modal_edit = true;
+                                    }
+                                }
+                            }, '查看'));
+
+                            if (this.auth_add) {
+                                list.push(h('Button', {
                                     props: {
-                                        type: 'info',
+                                        type: 'primary',
                                         size: 'small',
-                                        icon: 'ios-eye-outline'
+                                        icon: 'md-checkmark-circle'
                                     },
                                     on: {
                                         click: () => {
-                                            this.unitId = params.row.unitId;
-                                            this.modal_unitDetail = true;
+                                            this.projectId = params.row.projectId;
+                                            this.modal_audit = true;
                                         }
                                     }
-                                }, '查看')
-                            ];
+                                }, '提交审核'));
+                            }
 
+                            // 受理材料待审核才能审核
+                            if (params.row.projectStatus === 'to_examine' && this.auth_add) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-document'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.projectId = params.row.projectId;
+                                            this.processStepId = params.row.processStepId || '';
+                                            this.auditProcessId = params.row.auditProcessId || '';
+                                            this.modal_contentAudit = true;
+                                        }
+                                    }
+                                }, '材料完整性审核'));
+                            }
+
+                            // 设置列宽度
                             return h('div',{
+                                style: {
+
+                                },
                                 class: 'ivx-table-cell-handle'
                             },list);
                         }
@@ -147,7 +238,7 @@
                 ],
                 tableData: [
                     {
-                        projectId: '',
+                        projectId: '12',
                         name: '霍邱县S310霍邱至众兴路一级公路改建工程',      // 项目名称
                         part: '毛岔河段',      // 标段
                         province: '',  // 省
@@ -176,7 +267,48 @@
                         supervisorUnitStr: '中铁三局',   //
                         contacts: '陈总经理',            // 联系人
                         contactPhone: '13959260199',       // 联系电话/联系方式
-                        projectStatus: 'prpjectStatus',      // 项目状态
+                        projectStatus: 'to_examine',      // 项目状态
+                        projectStatusLabel: '受理材料待核查',
+                        handleStatus: 'submitted',           // 办理状态
+                        handleStatusLabel: '待提交',
+                        acceptNotice: '未发送',       // 受理通知书
+                        changeStatus: 'issue',           // 整改状态
+                        changeStatusLabel: '已下发整改通知',
+                        acceptDate: '2018-10-01',         // 受理日期
+                        noAcceptDate: '2018-10-01',      // 不予受理日期
+                        noAcceptRemark: '备注'     // 不予受理备注
+                    },
+                    {
+                        projectId: '12',
+                        name: '霍邱县S310霍邱至众兴路一级公路改建工程',      // 项目名称
+                        part: '毛岔河段',      // 标段
+                        province: '',  // 省
+                        provinceStr: '河南省',
+                        city: '',      // 市
+                        cityStr: '六安市',
+                        county: '',    // 区
+                        countyStr: '',
+                        projectType: '',    // 项目类型
+                        projectTypeLabel: '公路',    // 项目类型
+                        buildUnit: '六安市公路管理局',      // 建设单位
+                        buildUnitStr: '六安市公路管理局',
+                        level: '',          // 技术等级
+                        levelLabel: '二级',
+                        mileage: 10.2,      // 项目里程(km)
+                        projectProperty: 'new', // 工程性质
+                        projectPropertyLabel: '新建',   // 工程性质
+                        amount: 1.251,       // 投资额(万元)
+                        constructAmount: 1256.1,  // 施工合同金额(万元)
+                        supervisorAmount: 14686.25, // 监理合同金额(万元)
+                        planBeginTime: '2018-10-01',      // 计划开工时间
+                        planEndTime: '2019-05-05',        // 计划交工时间
+                        constructUnit: '0125',       // 施工单位
+                        constructUnitStr: '中铁二局',
+                        supervisorUnit: '01',      // 监理单位
+                        supervisorUnitStr: '中铁三局',   //
+                        contacts: '陈总经理',            // 联系人
+                        contactPhone: '13959260199',       // 联系电话/联系方式
+                        projectStatus: 'to_examine',      // 项目状态
                         projectStatusLabel: '受理材料待核查',
                         handleStatus: 'submitted',           // 办理状态
                         handleStatusLabel: '待提交',
@@ -190,11 +322,21 @@
                 ],
                 tableLoading: false,
 
+                projectId: '',
+                processStepId: '',
+                auditProcessId: '',
                 // 办理状态
                 dict_handleStatus: [],
-
                 // 登记项目
-                modal_add: false
+                modal_add: false,
+                // 通知整改
+                modal_noticeModification: false,
+                // 编辑项目
+                modal_edit: false,
+                // 提交审核
+                modal_audit: false,
+                // 材料完整性审核
+                modal_contentAudit: false,
             };
         },
         watch: {
@@ -254,13 +396,31 @@
             modal_add_open() {
                 this.modal_add = true;
             },
+            modal_noticeModification_open() {
+                this.modal_noticeModification = true;
+            },
             // 项目登记弹出框回调
             modalAddCallback() {
                 this.getData();
             },
             // 项目登记弹出框 显示状态发生变化时触发
             onVisibleChange_add(value) {
-            }
+
+            },
+            // 项目登记弹出框 显示状态发生变化时触发
+            onVisibleChange_edit(value) {
+
+            },
+            // 提交审核
+            modal_callback_audit() {
+                this.getData();
+            },
+            // 材料完整性审核
+            modal_callback_contentAudit() {
+
+            },
+            // 通知整改
+            modal_callback_noticeModification() {}
         }
     }
 </script>

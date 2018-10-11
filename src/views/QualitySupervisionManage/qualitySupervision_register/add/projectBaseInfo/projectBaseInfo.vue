@@ -104,7 +104,7 @@
             </FormItem>
         </Form>
 
-        <div class="ivu-modal-footer">
+        <div class="ivu-modal-footer" v-if="!isView">
             <Button type="primary"
                     size="large"
                     @click="save">保存</Button>
@@ -180,7 +180,7 @@
                     this.formData.projectId = val;
 
                     if (val !== '') {
-
+                        this.getData_detail();
                     }
                 }
             }
@@ -211,7 +211,17 @@
                 this.formData.planEndTime = time;
             },
             getData_detail() {
-
+                this.$http({
+                    method: 'get',
+                    url: '/',
+                    params: {
+                        projectId: this.projectId
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.formData = Object.assign(this.formData, res.data);
+                    }
+                })
             },
             save() {
                 this.$refs.form.validate((valid) => {

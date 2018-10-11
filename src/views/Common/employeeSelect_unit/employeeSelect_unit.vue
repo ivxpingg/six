@@ -1,16 +1,10 @@
 <template>
-    <div class="employeeSelect-container">
+    <div class="employeeSelect_unit-container">
         <div class="modal-body">
             <vIvxFilterBox>
                 <Form inline>
                     <FormItem label="检索:" :label-width="65">
-                        <Input v-model="searchParams.condition.searchKey" placeholder="请输入姓名、UID" />
-                    </FormItem>
-                    <FormItem label="所属单位类型:" :label-width="90">
-                        <Select v-model="searchParams.condition.unitType" style="width: 220px;">
-                            <Option value="all">全部</Option>
-                            <Option v-for="item in dict_unitType" :value="item.value" :key="`unitType_${item.id}`">{{item.label}}</Option>
-                        </Select>
+                        <Input v-model="searchParams.searchKey" placeholder="请输入姓名、UID" />
                     </FormItem>
                     <FormItem :label-width="20">
                         <Button type="primary"
@@ -24,20 +18,11 @@
                        border
                        height="540"
                        :columns="tableColumns"
-                       :data="tableData"
-                       :highlight-row="!multiple"
-                       @on-current-change="onCurrentChange"
+                       :data="filterData"
                        @on-select="onSelect"
                        @on-select-cancel="onSelectCancel"
                        @on-select-all="onSelectAll"
                        @on-selection-change="onSelectionChange"></Table>
-                <Page prev-text="上一页"
-                      next-text="下一页"
-                      show-total
-                      :current="searchParams.current"
-                      :page-size="searchParams.size"
-                      :total="searchParams.total"
-                      :on-change="onPageChange"></Page>
             </div>
         </div>
 
@@ -53,32 +38,27 @@
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
     export default {
-        name: 'employeeSelect',
+        name: 'employeeSelect_unit',  // 根据单位选择的从业人员
         components: {vIvxFilterBox},
         props: {
             unitId: {
                 type: String,
-                default: ''
+                required: true
             },
-            multiple: {
-                type: Boolean,
-                default: true
+            selectedList: {
+                type: Array,
+                default() {
+                    return [];
+                }
             }
         },
         data() {
             return {
                 searchParams: {
-                    current: 1,      // 当前第几页
-                    size: 7,      // 每页几行
-                    total: 0,     // 总行数
-                    condition: {
-                        unitId: '',
-                        searchKey: '',
-                        unitType: 'all'
-                    }
+                    searchKey: '',
                 },
                 tableColumns: [
-                    { title: '选择', width: 60, align: 'center', type: this.multiple ? 'selection' : 'index'},
+                    { title: '选择', width: 60, align: 'center', type: 'selection'},
                     { title: '姓名', width: 120, align: 'center', key: 'name' },
                     { title: 'UID', width: 80, align: 'center', key: 'uId' },
                     { title: '性别', width: 70, align: 'center', key: 'sexStr' },
@@ -94,60 +74,43 @@
                 tableData: [],
 
                 selectValue: [],
-                selectItems: [],
-                loading: false,
-
-                // 字典
-                dict_unitType: []
+                loading: false
             };
         },
+        computed:{
+            filterData() {
+                return this.tableData.filter(val => this.selectedList.indexOf(val.unitId) === -1);
+            }
+        },
         watch: {
-            unitId: {
-                handler(val) {
-                    this.searchParams.condition.unitId = val;
-                },
-                immediate: true
-            },
-            'searchParams.condition.unitType'() {
+            unitId() {
                 this.getData();
             },
-            tableData(val) {
+            filterData(val) {
                 let that = this;
 
                 setTimeout(() => {
                     val.forEach((v, idx) => {
-                        if (that.selectValue.indexOf(v.userId) > -1) {
+                        if (that.selectValue.indexOf(v.unitId) > -1) {
                             that.$refs.table.objData[idx]._isChecked = true;
                         }
                     });
                 }, 200);
-            },
+            }
         },
-        computed: {},
         mounted() {
             this.selectValue = [];
             this.getData();
-            this.getDict_unitType();
         },
         methods: {
-            /**
-             * 分页控件-切换页面
-             * @param current
-             */
-            onPageChange(current) {
-                this.searchParams.current = current;
-            },
             // 获取表格数据
             getData() {
-                let data = Object.assign({}, this.searchParams);
-
-                if (data.condition.unitType === 'all') {
-                    data.condition.unitType = '';
-                }
                 this.$http({
                     method: 'post',
                     url: '/user/list',
-                    data: JSON.stringify(data)
+                    params: {
+                        unitId: this.unitId
+                    }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.tableData = res.data.records || [];
@@ -156,42 +119,21 @@
                 })
             },
 
-            getDict_unitType() {
-                this.$http({
-                    method: 'get',
-                    url: '/dict/getListByType',
-                    params: {
-                        type: 'unitType'
-                    }
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this.dict_unitType = res.data;
-                    }
-                })
-            },
-
             /**
              * 表格选择
              */
-            onCurrentChange(currentRow, oldCurrentRow) {
-                this.selectItems = currentRow;
-                this.selectValue = currentRow.userId;
-            },
             onSelect(selection, row) {
-                this.selectItems.push(row);
                 this.selectValue.push(row.userId);
             },
             onSelectCancel(selection, row) {
                 let idx = this.selectValue.indexOf(row.userId);
                 this.selectValue.splice(idx, 1);
-                this.selectItems.splice(idx, 1);
             },
             onSelectAll(selection) {
                 selection.forEach((val) => {
                     let idx = this.selectValue.indexOf(val.userId);
                     if (idx === -1) {
                         this.selectValue.push(val.userId);
-                        this.selectItems.push(val);
                     }
                 });
             },
@@ -201,27 +143,19 @@
                         let idx = this.selectValue.indexOf(val.userId);
                         if (idx !== -1) {
                             this.selectValue.splice(idx, 1);
-                            this.selectItems.splice(idx, 1);
                         }
                     });
                 }
             },
-
             addPerson() {
-                // this.loading = true;
-                this.$emit('handleSelect', this.selectValue, this.selectItems);
+                this.loading = true;
+                this.$emit('handleSelect', this.selectValue);
             }
         }
     }
 </script>
 
-<style lang="scss" >
-    .employeeSelect-container {
-
-        .modal-body {
-            height: 660px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
+<style lang="scss" scoped>
+    .employeeSelect_unit-container {
     }
 </style>

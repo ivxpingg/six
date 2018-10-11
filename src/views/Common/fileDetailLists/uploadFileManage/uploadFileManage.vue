@@ -1,6 +1,6 @@
 <template>
     <div class="uploadFileManage-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox v-if="!isView">
             <Upload :action="uploadParams.actionUrl"
                     :showUploadList="uploadParams.showUploadList"
                     :multiple="uploadParams.multiple"
@@ -33,6 +33,59 @@
     export default {
         name: 'uploadFileManage',
         components: {vIvxFilterBox},
+        props: {
+            isView: {
+                type: Boolean,
+                default: false
+            },
+        },
+        created() {
+            let columns = [
+                {
+                    title: '操作',
+                    width: this.isView ? 170:240,
+                    align: 'center',
+                    // fixed: 'right',
+                    render: (h, params) => {
+                        let list = [];
+                        list.push(
+                            h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small',
+                                    icon: 'ios-eye-outline'
+                                }
+                            }, '预览')
+                        );
+                        if (!this.isView) {
+                            list.push(
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small',
+                                        icon: 'ios-trash-outline'
+                                    }
+                                }, '删除')
+                            );
+                        }
+                        list.push(
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-cloud-download-outline'
+                                }
+                            }, '下载')
+                        );
+
+                        return h('div',{
+                            class: 'ivx-table-cell-handle'
+                        },list);
+                    }
+                }
+            ];
+            this.tableColumns = this.tableColumns.concat(columns);
+        },
         data() {
             return {
                 uploadParams: {
@@ -46,48 +99,48 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },
-                    { title: '文件名', width: 180, align: 'center', key: 'fileName' },
+                    { title: '文件名', align: 'center', key: 'fileName' },
                     { title: '文件格式', width: 100, align: 'center', key: 'fileFormat' },
                     { title: '上传时间', width: 180, align: 'center',
                         render:(h, params) => {
                             return h('div', MOMENT(params.row.insTime).format('YYYY-MM-DD HH:mm:ss'));
                         }
-                    },
-                    {
-                        title: '操作',
-                        width: 240,
-                        align: 'center',
-                        // fixed: 'right',
-                        render: (h, params) => {
-                            let list = [
-                                h('Button', {
-                                    props: {
-                                        type: 'info',
-                                        size: 'small',
-                                        icon: 'ios-eye-outline'
-                                    }
-                                }, '预览'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small',
-                                        icon: 'ios-trash-outline'
-                                    }
-                                }, '删除'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-cloud-download-outline'
-                                    }
-                                }, '下载')
-                            ];
-
-                            return h('div',{
-                                class: 'ivx-table-cell-handle'
-                            },list);
-                        }
                     }
+                    // {
+                    //     title: '操作',
+                    //     width: 240,
+                    //     align: 'center',
+                    //     // fixed: 'right',
+                    //     render: (h, params) => {
+                    //         let list = [
+                    //             h('Button', {
+                    //                 props: {
+                    //                     type: 'info',
+                    //                     size: 'small',
+                    //                     icon: 'ios-eye-outline'
+                    //                 }
+                    //             }, '预览'),
+                    //             h('Button', {
+                    //                 props: {
+                    //                     type: 'error',
+                    //                     size: 'small',
+                    //                     icon: 'ios-trash-outline'
+                    //                 }
+                    //             }, '删除'),
+                    //             h('Button', {
+                    //                 props: {
+                    //                     type: 'primary',
+                    //                     size: 'small',
+                    //                     icon: 'ios-cloud-download-outline'
+                    //                 }
+                    //             }, '下载')
+                    //         ];
+                    //
+                    //         return h('div',{
+                    //             class: 'ivx-table-cell-handle'
+                    //         },list);
+                    //     }
+                    // }
                 ],
                 tableData: [
                     {

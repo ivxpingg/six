@@ -1,5 +1,5 @@
 <template>
-    <vModalBothSides class="add-container" :height="650">
+    <vModalBothSides class="qualitySupervision_register_edit-container" :height="650">
         <template slot="left">
             <Menu theme="light"
                   :width="`200px`"
@@ -39,22 +39,22 @@
 
 <script>
     import vModalBothSides from '../../../../components/modal-body/modal-both-sides';
-    import vProjectBaseInfo from './projectBaseInfo/projectBaseInfo';
+    import vProjectBaseInfo from '../add/projectBaseInfo/projectBaseInfo';
     import vFileDetailLists from '../../../Common/fileDetailLists/fileDetailLists';
-    import vUnitAndPerson from './unitAndPerson/unitAndPerson';
+    import vUnitAndPerson from '../add/unitAndPerson/unitAndPerson';
     export default {
-        name: 'addProject',
+        name: 'qualitySupervision_register_edit',
         components: {vModalBothSides, vProjectBaseInfo, vFileDetailLists, vUnitAndPerson},
-        deactivated () {
-            this.$destroy(true);
+        props: {
+            projectId: {
+                type: String,
+                required: true
+            }
         },
         data() {
             return {
-                activeName: '1',
-                projectId: ''
+                activeName: '1'
             };
-        },
-        mounted() {
         },
         methods: {
             onSelect(name) {
@@ -65,9 +65,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .add-container {
-        .ivu-menu {
-            height: 100%;
-        }
+    .qualitySupervision_register_edit-container {
     }
 </style>

@@ -33,7 +33,7 @@
 <script>
     import vUploatFileManage from './uploadFileManage/uploadFileManage';
     export default {
-        name: 'fileDetailLists',
+        name: 'fileDetailLists',  // 材料明细一览表
         components: {vUploatFileManage},
         props: {
             isView: {
@@ -48,50 +48,53 @@
             }
         },
         created() {
-            if (!this.isView) {
-                let columns = [
-                    {
-                        title: '操作',
-                        width: 200,
-                        align: 'center',
-                        render:(h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    style: {
-                                        marginRight: '10px'
-                                    },
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-document-outline'
-                                    },
-                                    on: {
-                                        click: () => {
+            let columns = [
+                {
+                    title: '操作',
+                    width: this.isView ? 120 : 200,
+                    align: 'center',
+                    render: (h, params) => {
+                        let list = [];
 
-                                            this.modal_uploadFileManage = true;
-                                        }
+                        list.push(h('Button', {
+                            style: {
+                                marginRight: '10px'
+                            },
+                            props: {
+                                type: 'primary',
+                                size: 'small',
+                                icon: 'ios-document-outline'
+                            },
+                            on: {
+                                click: () => {
+
+                                    this.modal_uploadFileManage = true;
+                                }
+                            }
+                        }, '附件管理'));
+
+                        if (!this.isView) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-create-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.formData.projectFileId = params.row.projectFileId;
+                                        this.formData.remark = params.row.remark;
+                                        this.modal_remark = true;
                                     }
-                                }, '附件管理'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-create-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.formData.projectFileId = params.row.projectFileId;
-                                            this.formData.remark = params.row.remark;
-                                            this.modal_remark = true;
-                                        }
-                                    }
-                                }, '备注')
-                            ]);
+                                }
+                            }, '备注'));
                         }
+
+                        return h('div', list);
                     }
-                ];
-                this.tableColumns = this.tableColumns.concat(columns);
-            }
+                }
+            ];
+            this.tableColumns = this.tableColumns.concat(columns);
 
         },
         updated() {
