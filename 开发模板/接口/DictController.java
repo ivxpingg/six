@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,10 +43,10 @@ public class DictController {
         ew.setEntity(new Dict());
         if(page.getCondition() != null){
             ew.eq("type",page.getCondition().get("type").toString());
-            ew.eq("del_flag","0");
-            ew.orderBy("type",true);
-            ew.orderBy("sort",true);
         }
+        ew.eq("del_flag","0");
+        ew.orderBy("type",true);
+        ew.orderBy("sort",true);
         Page<Dict> pageObj = dictService.selectPage(page, ew);
         map.put("page", pageObj);
         return JsonUtil.getSuccJson(map);
@@ -63,6 +64,31 @@ public class DictController {
         ew.eq("type",type);
         List<Dict> dicts = dictService.selectList(ew);
         return JsonUtil.getSuccJson(dicts);
+    }
+
+    /**
+     * 根据类型获取（批量）
+     * @param types 逗号分隔
+     * @return
+     */
+    @GetMapping(value = "getListByTypes")
+    public String getListByTypes(@RequestParam(name="types")String types){
+        Map<String,List<Dict>> map = new HashMap<String,List<Dict>>();
+        EntityWrapper ew=new EntityWrapper();
+        ew.in("type",types.split(","));
+        ew.eq("del_flag","0");
+        List<Dict> dicts = dictService.selectList(ew);
+        for(Dict dict : dicts){
+            List<Dict> list = map.get(dict.getType());
+            if(list!=null && !list.isEmpty()){
+                list.add(dict);
+            }else {
+                list = new ArrayList<Dict>();
+                list.add(dict);
+            }
+            map.put(dict.getType(),list);
+        }
+        return JsonUtil.getSuccJson(map);
     }
 
 
