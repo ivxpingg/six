@@ -8,7 +8,8 @@ export default {
         origin: window.location.origin,
         ajaxUrl: '/pqs',
         staticUrl: '',
-        cookiePath: '/'
+        cookiePath: '/',
+        actionUrl: window.location.origin + '/pqs/file/upload'
     },
     production: {
         origin: window.location.origin,

@@ -131,61 +131,22 @@
             }
         },
         mounted() {
-           this.getDict_stepType();
-           this.getDict_passRule();
-           this.getDict_overdueHandle();
-           this.getDict_noticeType();
+           this.getDict();
         },
         methods: {
-            getDict_stepType() {
+            getDict() {
                 this.$http({
                     method: 'get',
-                    url: '/dict/getListByType',
+                    url: '/dict/getListByTypes',
                     params: {
-                        type: 'stepType'
+                        types: 'stepType,passRule,overdueHandle,noticeType'
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.dict_stepType = res.data;
-                    }
-                });
-            },
-            getDict_passRule() {
-                this.$http({
-                    method: 'get',
-                    url: '/dict/getListByType',
-                    params: {
-                        type: 'passRule'
-                    }
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this.dict_passRule = res.data;
-                    }
-                });
-            },
-            getDict_overdueHandle() {
-                this.$http({
-                    method: 'get',
-                    url: '/dict/getListByType',
-                    params: {
-                        type: 'overdueHandle'
-                    }
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this.dict_overdueHandle = res.data;
-                    }
-                });
-            },
-            getDict_noticeType() {
-                this.$http({
-                    method: 'get',
-                    url: '/dict/getListByType',
-                    params: {
-                        type: 'noticeType'
-                    }
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this.dict_noticeType = res.data;
+                        this.dict_stepType = res.data.stepType;
+                        this.dict_passRule = res.data.passRule;
+                        this.dict_overdueHandle = res.data.overdueHandle;
+                        this.dict_noticeType = res.data.noticeType;
                     }
                 });
             },
@@ -219,7 +180,7 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/processStep/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

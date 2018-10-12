@@ -26,8 +26,10 @@
             </FormItem>
             <FormItem label="单位类型:" prop="unitType">
                 <Select v-model="formData.unitType">
-                    <Option value="1">施工单位</Option>
-                    <Option value="2">建设单位</Option>
+                    <Option v-for="item in dict_unitType"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
                 </Select>
             </FormItem>
             <FormItem label="技术总人数:" prop="totalTechnology">
@@ -99,31 +101,31 @@
         data() {
             return {
                 formData: {
-                    unitId: 'D001',
-                    unitName: '厦门卫星定位应用股份有限公司',  // 单位名称
-                    orgCode: 'AZ2300125',                   // 机构代码
-                    registerAddress: '注册地址',
-                    unitType: '1',
-                    unitTypeLabel: '单位类型：施工单位',
-                    leader: '负责人深明命',
-                    telephone: '18203215240',
-                    email: '123@qq.com',
-                    companyAddress: '公司地址厦门市软件园二期',
-                    website: '网站地址',
-                    qualificationType: '001',
-                    qualificationTypeLabel: '公路(资质类别)',
-                    parentUnitName: '母体机构单位名称',
-                    parentUnitLeader: '母体机构负责人',
-                    parentUnitTelephone: '母体负责人联系方式',
-                    primaryTechnology: 10,              //'工程技术初级职称人数',
-                    mediumTechnology: 20,               //'工程技术中级职称人数',
-                    highTechnology: 30,                 //'工程技术高级职称人数',
-                    totalTechnology: 60,                // 技术总人数
-                    primaryManage: 111,                 //经济管理初级职称人数
-                    mediumManage: 222,                  //经济管理中级职称人数
-                    highManage: 333,                    //经济管理高级职称人数
-                    totalManage: 666,                   //'经济管理总人数'
-                    countTime: '2018-10-10',            // 统计时间
+                    unitId: '',
+                    unitName: '',  // 单位名称
+                    orgCode: '',                   // 机构代码
+                    registerAddress: '',
+                    unitType: '',
+                    unitTypeLabel: '',
+                    leader: '',
+                    telephone: '',
+                    email: '',
+                    companyAddress: '',
+                    website: '',
+                    qualificationType: '',
+                    qualificationTypeLabel: '',
+                    parentUnitName: '',
+                    parentUnitLeader: '',
+                    parentUnitTelephone: '',
+                    primaryTechnology: 0,              //'工程技术初级职称人数',
+                    mediumTechnology: 0,               //'工程技术中级职称人数',
+                    highTechnology: 0,                 //'工程技术高级职称人数',
+                    totalTechnology: 0,                // 技术总人数
+                    primaryManage: 0,                 //经济管理初级职称人数
+                    mediumManage: 0,                  //经济管理中级职称人数
+                    highManage: 0,                    //经济管理高级职称人数
+                    totalManage: 0,                   //'经济管理总人数'
+                    countTime: '',            // 统计时间
                     qualification: ''                 // 许可证等级
                 },
                 rules: {
@@ -134,7 +136,9 @@
                     email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
                     companyAddress: [{ required: true, message: '公司地址不能为空！', trigger: 'blur' }],
                     qualification: [{ required: true, message: '资质许可证等级不能为空！', trigger: 'blur' }]
-                }
+                },
+
+                dict_unitType: []
             };
         },
         watch: {
@@ -147,13 +151,29 @@
                 }
             }
         },
-        mounted() {},
+        mounted() {
+            this.getDict();
+        },
         methods: {
+             // 获取单位类别的数据字典
+            getDict() {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByType',
+                    params: {
+                        type: 'unitType'
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.dict_unitType = res.data;
+                    }
+                })
+            },
             // 获取详细信息
             getUntiBaseInfo() {
                 this.$http({
                     method: 'get',
-                    url: '/getUnitById',
+                    url: '/unit/query',
                     params: {
                         unitId: this.unitId
                     }

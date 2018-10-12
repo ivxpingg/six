@@ -36,7 +36,7 @@
         data() {
             return {
                 uploadParams: {
-                    actionUrl: Config[Config.env].origin + Config[Config.env].ajaxUrl + '',
+                    actionUrl: Config[Config.env].actionUrl + '/signature',
                     showUploadList: false,  // 显示已上传列表
                     multiple: false,        // 是否支持多选
                     data: {},               // 上传附带参数
@@ -73,6 +73,7 @@
             },
             fileUploadSuccess(response, file, fileList) {
                 this.$Loading.finish();
+                debugger
                 this.formData.fileId = response.data.fileId;
             },
             // 添加电子签名
@@ -81,12 +82,12 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/addUserInfo',
+                            url: '/signature/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
-                                    content: '更新成功！'
+                                    content: '添加成功！'
                                 });
                                 this.$emit('addSignaturCallback');
                             }

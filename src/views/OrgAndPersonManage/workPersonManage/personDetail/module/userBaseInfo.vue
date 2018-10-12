@@ -191,7 +191,7 @@
             getUserInfo() {
                 this.$http({
                     method: 'get',
-                    url: '/getUserById',
+                    url: '/user/detail',
                     params: {
                         userId: this.userId
                     }
@@ -206,7 +206,7 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/updateUnitInfo',
+                            url: '/user/update',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

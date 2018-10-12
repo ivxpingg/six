@@ -27,7 +27,8 @@
                title="新增步骤"
                :width="740"
                footer-hide>
-            <vAddStep :auditProcessId="auditProcessId" @modal_addStep_callback="modal_addStep_callback"></vAddStep>
+            <vAddStep :auditProcessId="auditProcessId"
+                      @modal_addStep_callback="modal_addStep_callback"></vAddStep>
         </Modal>
 
         <Modal v-model="modal_editStep"
@@ -60,7 +61,6 @@
                 immediate: true,
                 handler(val) {
                     if (val !== '') {
-
                         this.getData();
                     }
                 }
@@ -197,14 +197,15 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'post',
+                    method: 'get',
                     url: '/processStep/list',
-                    data: JSON.stringify(this.searchParams)
+                    params: {
+                        auditProcessId: this.auditProcessId
+                    }
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.page.records;
-                        this.searchParams.total = res.data.page.total;
+                        this.tableData = res.data;
                     }
                 }).catch(() => {
                     this.tableLoading = false;

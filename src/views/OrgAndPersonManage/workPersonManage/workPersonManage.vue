@@ -19,7 +19,7 @@
         <vIvxFilterBox dashed>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.searchKey"
+                    <Input v-model="searchParams.condition.name"
                            style="width: 220px;"
                            placeholder="姓名"/>
                 </FormItem>
@@ -29,7 +29,7 @@
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="筛选条件:" :label-width="65">
-                    <RadioGroup v-model="searchParams.unitType" type="button">
+                    <RadioGroup v-model="searchParams.condition.unitType" type="button">
                         <Radio label="">全部</Radio>
                         <Radio v-for="(item, idx) in dict_unitType"
                                :label="item.value" :key="'unitType_' + idx">{{item.label}}</Radio>
@@ -85,10 +85,10 @@
                     current: 1,      // 当前第几页
                     size: 10,      // 每页几行
                     total: 0,     // 总行数
-                    beginDate: '',     // 开始时间
-                    endDate: '',       // 结束时间
-                    searchKey: '',      // 模糊查询参数
-                    unitType: ''
+                    condition: {
+                        name: '',      // 模糊查询参数
+                        unitType: ''
+                    }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },
@@ -199,9 +199,9 @@
             getDict() {
                 this.$http({
                     method: 'get',
-                    url: '/getDictList',
+                    url: '/dict/getListByType',
                     params: {
-                        type: 'D001'
+                        type: 'unitType'
                     }
                 }).then(res => {
                     if(res.code) {
@@ -230,9 +230,9 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'get',
-                    url: '/getUserList',
-                    params: this.searchParams
+                    method: 'post',
+                    url: '/user/list',
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {

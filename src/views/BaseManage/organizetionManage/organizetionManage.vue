@@ -84,10 +84,12 @@
                     current: 1,      // 当前第几页
                     size: 10,      // 每页几行
                     total: 0,     // 总行数
-                    beginDate: '',     // 开始时间
-                    endDate: '',       // 结束时间
-                    searchKey: '',      // 模糊查询参数
-                    unitType: ''
+                    condition: {
+                        searchKey: '',      // 模糊查询参数
+                        unitType: '',
+                        roleId: ''
+                    }
+
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },
@@ -208,9 +210,9 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'get',
-                    url: '/getUserList',
-                    params: this.searchParams
+                    method: 'post',
+                    url: '/user/userListByRoleType',
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
@@ -230,6 +232,11 @@
                 else {
                     this.selectType = item[0].nodeType;
                     this.nodeItem = Object.assign(this.nodeItem, item[0]);
+
+                    if (this.selectType === 'role') {
+                        this.searchParams.condition.roleId = this.nodeItem.roleId;
+                        this.getData();
+                    }
                 }
             },
 

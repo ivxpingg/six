@@ -24,7 +24,6 @@
                :width="1200"
                footer-hide>
             <vEmployeeSelect v-if="modal_addPerson"
-                             :unitId="unitId"
                              @handleSelect="addPersons"></vEmployeeSelect>
         </Modal>
     </div>
@@ -48,9 +47,10 @@
                     current: 1,      // 当前第几页
                     size: 7,      // 每页几行
                     total: 0,     // 总行数
-                    beginDate: '',     // 开始时间
-                    endDate: '',       // 结束时间
-                    unitId: ''
+                    condition: {
+                        unitId: ''
+                    }
+
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
@@ -103,15 +103,16 @@
                 this.getData();
             },
             unitId: {
+                immediate: true,
                 handler(val) {
                     if (val) {
+                        this.searchParams.condition.unitId = this.unitId;
                         this.getData();
                     }
                 }
             }
         },
         mounted() {
-            this.searchParams.unitId = this.unitId;
             this.getData();
         },
         methods: {
@@ -126,7 +127,7 @@
             getData() {
                 this.$http({
                     method: 'post',
-                    url: '/getUnitPersonById',
+                    url: '/user/list',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
@@ -145,10 +146,9 @@
              * @param list
              */
             addPersons(list) {
-
                 this.$http({
                     method: 'get',
-                    url: '/unitAddPersons',
+                    url: '/user/list',
                     params: {
                         unitId: this.unitId,
                         userIds: list.join(',')
@@ -173,7 +173,7 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '',
+                            url: '/unit/deleteUser',
                             params: {
                                 userId: row.userId,
                                 unitId: this.unitId

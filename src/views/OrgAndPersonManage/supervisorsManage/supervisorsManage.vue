@@ -8,7 +8,7 @@
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.searchKey"
+                    <Input v-model="searchParams.condition.name"
                            style="width: 220px;"
                            placeholder="请输入检索内容"/>
                 </FormItem>
@@ -61,7 +61,9 @@
                     current: 1,        // 当前第几页
                     size: 10,          // 每页几行
                     total: 0,          // 总行数
-                    searchKey: ''      // 模糊查询参数
+                    condition: {
+                        name: ''      // 模糊查询参数
+                    }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },

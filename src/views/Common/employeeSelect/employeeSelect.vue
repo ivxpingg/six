@@ -6,12 +6,15 @@
                     <FormItem label="检索:" :label-width="65">
                         <Input v-model="searchParams.condition.searchKey" placeholder="请输入姓名、UID" />
                     </FormItem>
-                    <FormItem label="所属单位类型:" :label-width="90">
-                        <Select v-model="searchParams.condition.unitType" style="width: 220px;">
-                            <Option value="all">全部</Option>
-                            <Option v-for="item in dict_unitType" :value="item.value" :key="`unitType_${item.id}`">{{item.label}}</Option>
-                        </Select>
-                    </FormItem>
+                    <!--<FormItem label="所属单位类型:" :label-width="90">-->
+                        <!--<Select v-model="searchParams.condition.unitType"-->
+                                <!--placeholder="全部"-->
+                                <!--clearable-->
+                                <!--style="width: 220px;">-->
+                            <!--<Option v-for="item in dict_unitType" :value="item.value" :key="`unitType_${item.id}`">{{item.label}}</Option>-->
+                        <!--</Select>-->
+                    <!--</FormItem>-->
+
                     <FormItem :label-width="20">
                         <Button type="primary"
                                 @click="getData">检索</Button>
@@ -56,6 +59,11 @@
         name: 'employeeSelect',
         components: {vIvxFilterBox},
         props: {
+            // 数据源类型
+            userSourceEnum: {
+                type: String,
+                default: ''
+            },
             unitId: {
                 type: String,
                 default: ''
@@ -74,7 +82,7 @@
                     condition: {
                         unitId: '',
                         searchKey: '',
-                        unitType: 'all'
+                        unitType: ''
                     }
                 },
                 tableColumns: [

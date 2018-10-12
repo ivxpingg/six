@@ -50,8 +50,7 @@
                 searchParams: {
                     current: 1,        // 当前第几页
                     size: 10,          // 每页几行
-                    total: 0,          // 总行数
-                    searchKey: ''      // 模糊查询参数
+                    total: 0           // 总行数
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
@@ -101,24 +100,24 @@
                     }
                 ],
                 tableData: [
-                    {
-                        signatureId: '001',
-                        name: '电子签名',
-                        fileFormat: '.png',
-                        url: '/user.jpg',
-                        insTime: '2018-09-08 00:00:00',
-                        signatureStatusLabel: '已授权',
-                        userName: '陈亮'
-                    },
-                    {
-                        signatureId: '002',
-                        name: '电子签名',
-                        fileFormat: '.png',
-                        url: '/user.jpg',
-                        insTime: '2018-09-08 00:00:00',
-                        signatureStatusLabel: '已授权',
-                        userName: '陈亮'
-                    }
+                    // {
+                    //     signatureId: '001',
+                    //     name: '电子签名',
+                    //     fileFormat: '.png',
+                    //     url: '/user.jpg',
+                    //     insTime: '2018-09-08 00:00:00',
+                    //     signatureStatusLabel: '已授权',
+                    //     userName: '陈亮'
+                    // },
+                    // {
+                    //     signatureId: '002',
+                    //     name: '电子签名',
+                    //     fileFormat: '.png',
+                    //     url: '/user.jpg',
+                    //     insTime: '2018-09-08 00:00:00',
+                    //     signatureStatusLabel: '已授权',
+                    //     userName: '陈亮'
+                    // }
                 ],
                 tableLoading: true,
 
@@ -157,7 +156,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/signature/list',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
