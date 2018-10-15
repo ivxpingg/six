@@ -9,7 +9,7 @@
             <FormItem label="步骤名称:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
-            <FormItem label="步骤类型:">
+            <FormItem label="步骤类型:" prop="stepType">
                 <Select v-model="formData.stepType">
                     <Option v-for="item in dict_stepType"
                             :value="item.value"
@@ -17,15 +17,14 @@
                             :key="`dict_${item.id}`"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="步骤审核角色:" prop="auditRole">
-                <Input v-model="formData.auditRoleLabel" readonly @on-focus="auditRole_onFocus" />
-            </FormItem>
+            <!--<FormItem label="步骤审核角色:" prop="auditRole">-->
+                <!--<Input v-model="formData.auditRoleLabel" readonly @on-focus="auditRole_onFocus" />-->
+            <!--</FormItem>-->
             <FormItem label="配置用户:" prop="auditUser">
-                <Input v-model="formData.auditUser"
-                       :disabled="formData.auditRole === ''"
+                <Input v-model="formData.auditUserName"
                        @on-focus="auditUser_onFocus" />
             </FormItem>
-            <FormItem label="通过规则:">
+            <FormItem label="通过规则:" prop="passRule">
                 <Select v-model="formData.passRule">
                     <Option v-for="item in dict_passRule"
                             :value="item.value"
@@ -34,11 +33,9 @@
                 </Select>
             </FormItem>
             <FormItem label="通过期限:" prop="timeLimit">
-                <Input v-model="formData.timeLimit" number>
-                <span slot="append">天</span>
-                </Input>
+                <Input v-model="formData.timeLimit" number  placeholder="天" />
             </FormItem>
-            <FormItem label="逾期处理方式:">
+            <FormItem label="逾期处理方式:" prop="overdueHandle">
                 <Select v-model="formData.overdueHandle">
                     <Option v-for="item in dict_overdueHandle"
                             :value="item.value"
@@ -46,7 +43,7 @@
                             :key="`dict_${item.id}`"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="通知方式:">
+            <FormItem label="通知方式:" prop="noticeType">
                 <Select v-model="formData.noticeType">
                     <Option v-for="item in dict_noticeType"
                             :value="item.value"
@@ -68,13 +65,16 @@
                footer-hide>
             <vRoleSelect  @onSelectRole="onSelectRole"></vRoleSelect>
         </Modal>
+
+        <vModalEmployeeSelect ref="modal_userSelect" @modal-callback="modal_userSelect_callback" ></vModalEmployeeSelect>
     </div>
 </template>
 <script>
     import vRoleSelect from '../../../../Common/roleSelect/roleSelect';
+    import vModalEmployeeSelect from '../../../../Common/employeeSelect/modalEmployeeSelect';
     export default {
         name: 'editStep',
-        components: {vRoleSelect},
+        components: {vRoleSelect, vModalEmployeeSelect},
         props: {
             auditProcessId: {
                 type: String,
@@ -105,9 +105,13 @@
                 },
                 rules: {
                     name: [{ required: true, message: '步骤名称不能为空！', trigger: 'blur' }],
-                    auditRole: [{ required: true, message: '步骤审核角色不能为空！', trigger: 'blur' }],
+                    // auditRole: [{ required: true, message: '步骤审核角色不能为空！', trigger: 'blur' }],
+                    stepType: [{ required: true, message: '步骤类型不能为空！', trigger: 'blur' }],
                     auditUser: [{ required: true, message: '用户不能为空！', trigger: 'blur' }],
-                    timeLimit: [{ required: true, type: 'Number', message: '通过期限不能为空！', trigger: 'blur' }],
+                    timeLimit: [{ required: true, type:'number', message: '通过期限不能为空！', trigger: 'blur' }],
+                    passRule: [{ required: true, message: '通过规则不能为空！', trigger: 'blur' }],
+                    overdueHandle: [{ required: true, message: '逾期处理方式不能为空！', trigger: 'blur' }],
+                    noticeType: [{ required: true, message: '通知方式不能为空！', trigger: 'blur' }],
                 },
 
                 // 字典
@@ -121,7 +125,8 @@
                 dict_noticeType: [],
 
                 // 角色选择
-                modal_roleSelect: false
+                modal_roleSelect: false,
+                modal_userSelect: false
             }
         },
         watch: {
@@ -138,6 +143,7 @@
                 handler(val) {
                     if (val !== '') {
                         this.formData.processStepId = val;
+                        this.getData();
                     }
                 }
             }
@@ -181,11 +187,25 @@
             },
             // 选择用户
             auditUser_onFocus() {
-                if (this.formData.auditRole === '') {
-                    this.$Message.warning({
-                        content: '请先选择角色'
-                    })
-                }
+                this.$refs.modal_userSelect.modalValue = true;
+            },
+            modal_userSelect_callback(selectValue, selectItems) {
+                this.formData.auditUser = selectItems.userId;
+                this.formData.auditUserName = selectItems.name;
+                this.$refs.form.validate();
+            },
+            getData() {
+                this.$http({
+                    method: 'get',
+                    url: '/processStep/query',
+                    params: {
+                        processStepId: this.processStepId
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.formData = Object.assign(this.formData, res.data);
+                    }
+                })
             },
             save() {
                 this.$refs.form.validate((valid) => {

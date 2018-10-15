@@ -15,6 +15,10 @@
 
         <vLedgerType0 v-show="ledgerType === '0'"></vLedgerType0>
         <vLedgerType1 v-show="ledgerType === '1'"></vLedgerType1>
+        <vLedgerType2 v-show="ledgerType === '2'"></vLedgerType2>
+        <vLedgerType3 v-show="ledgerType === '3'"></vLedgerType3>
+        <vLedgerType4 v-show="ledgerType === '4'"></vLedgerType4>
+        <vLedgerType5 v-show="ledgerType === '5'"></vLedgerType5>
 
     </div>
 </template>
@@ -23,12 +27,20 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vLedgerType0 from './ledgerType/ledgerType_0';
     import vLedgerType1 from './ledgerType/ledgerType_1';
+    import vLedgerType2 from './ledgerType/ledgerType_2';
+    import vLedgerType3 from './ledgerType/ledgerType_3';
+    import vLedgerType4 from './ledgerType/ledgerType_4';
+    import vLedgerType5 from './ledgerType/ledgerType_5';
     export default {
         name: 'qualitySupervision_account',
         components: {
             vIvxFilterBox,
             vLedgerType0,
-            vLedgerType1
+            vLedgerType1,
+            vLedgerType2,
+            vLedgerType3,
+            vLedgerType4,
+            vLedgerType5
         },
         data() {
             return {

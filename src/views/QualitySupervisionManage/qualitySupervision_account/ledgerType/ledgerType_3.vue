@@ -36,7 +36,7 @@
     import vIvxFilterBox from '../../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     export default {
-        name: 'ledgerType_1',  // 质量安全抽查意见书登记台帐
+        name: 'ledgerType_1',  // 安全不良行为登记台帐
         components: {vIvxFilterBox},
         data() {
             return {

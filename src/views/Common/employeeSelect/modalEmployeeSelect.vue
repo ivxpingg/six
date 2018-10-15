@@ -4,7 +4,9 @@
                title="选择人员"
                :width="1200"
                footer-hide>
-            <vEmployeeSelect :multiple="multiple" @handleSelect="selectedPerson"></vEmployeeSelect>
+            <vEmployeeSelect :multiple="multiple"
+                             :userSourceType="userSourceType"
+                             @handleSelect="selectedPerson"></vEmployeeSelect>
         </Modal>
     </div>
 
@@ -17,6 +19,12 @@
         name: 'modalEmployeeSelect',
         mixins: [modalMixin],
         components: {vEmployeeSelect},
+        props: {
+            userSourceType: {
+                type: String,
+                default: 'all'
+            }
+        },
         data() {
             return {
                 multiple: false
@@ -24,10 +32,11 @@
         },
         methods: {
             selectedPerson(selectValue, selectItems) {
-                if (this.selectValue) {
+                if (selectValue) {
                     this.$emit('modal-callback', selectValue, selectItems);
                 }
-                this.onVisibleChange(false);
+                // this.onVisibleChange(false);
+                this.modalValue = false;
             }
         }
     }

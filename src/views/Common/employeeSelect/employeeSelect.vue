@@ -6,14 +6,14 @@
                     <FormItem label="检索:" :label-width="65">
                         <Input v-model="searchParams.condition.searchKey" placeholder="请输入姓名、UID" />
                     </FormItem>
-                    <!--<FormItem label="所属单位类型:" :label-width="90">-->
-                        <!--<Select v-model="searchParams.condition.unitType"-->
-                                <!--placeholder="全部"-->
-                                <!--clearable-->
-                                <!--style="width: 220px;">-->
-                            <!--<Option v-for="item in dict_unitType" :value="item.value" :key="`unitType_${item.id}`">{{item.label}}</Option>-->
-                        <!--</Select>-->
-                    <!--</FormItem>-->
+                    <FormItem label="所属单位类型:" :label-width="90">
+                        <Select v-model="searchParams.condition.unitType"
+                                placeholder="全部"
+                                clearable
+                                style="width: 220px;">
+                            <Option v-for="item in dict_unitType" :value="item.value" :key="`unitType_${item.id}`">{{item.label}}</Option>
+                        </Select>
+                    </FormItem>
 
                     <FormItem :label-width="20">
                         <Button type="primary"
@@ -60,9 +60,10 @@
         components: {vIvxFilterBox},
         props: {
             // 数据源类型
-            userSourceEnum: {
+            // noUnit、hasUnit、all
+            userSourceType: {
                 type: String,
-                default: ''
+                default: 'all'
             },
             unitId: {
                 type: String,
@@ -80,6 +81,7 @@
                     size: 7,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
+                        userSource: 'all',
                         unitId: '',
                         searchKey: '',
                         unitType: ''
@@ -130,6 +132,14 @@
                     });
                 }, 200);
             },
+            userSourceType: {
+                immediate: true,
+                handler(val) {
+                    this.searchParams.condition.userSource = val;
+                    this.searchParams.condition.unitId = this.unitId;
+                    this.getData();
+                }
+            }
         },
         computed: {},
         mounted() {
