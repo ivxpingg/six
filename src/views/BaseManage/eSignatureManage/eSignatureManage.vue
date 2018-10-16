@@ -18,7 +18,7 @@
                   :current="searchParams.current"
                   :page-size="searchParams.size"
                   :total="searchParams.total"
-                  :on-change="onPageChange"></Page>
+                  @on-change="onPageChange"></Page>
         </div>
 
 
@@ -131,7 +131,7 @@
         },
         computed: {
             imgUrl() {
-                return Config[Config.env].origin + this.url;
+                return Config[Config.env].filePath + this.url;
             }
         },
         mounted() {
@@ -161,7 +161,7 @@
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.page.records;
+                        this.tableData = res.data.records;
                         this.searchParams.total = res.data.page.total;
                     }
                 }).catch(() => {
@@ -176,7 +176,7 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/getUserList',
+                            url: '/signature/delete',
                             params: {
                                 signatureId: row.signatureId
                             }

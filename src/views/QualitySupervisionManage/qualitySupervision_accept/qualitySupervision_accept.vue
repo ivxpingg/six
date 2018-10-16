@@ -34,7 +34,7 @@
                   :current="searchParams.current"
                   :page-size="searchParams.size"
                   :total="searchParams.total"
-                  :on-change="onPageChange"></Page>
+                  @on-change="onPageChange"></Page>
         </div>
         <!--处理标签审核-->
         <Modal v-model="modal_handleAudit"

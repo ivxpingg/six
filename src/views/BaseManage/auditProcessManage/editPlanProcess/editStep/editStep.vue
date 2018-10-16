@@ -17,12 +17,16 @@
                             :key="`dict_${item.id}`"></Option>
                 </Select>
             </FormItem>
-            <!--<FormItem label="步骤审核角色:" prop="auditRole">-->
-                <!--<Input v-model="formData.auditRoleLabel" readonly @on-focus="auditRole_onFocus" />-->
-            <!--</FormItem>-->
-            <FormItem label="配置用户:" prop="auditUser">
-                <Input v-model="formData.auditUserName"
-                       @on-focus="auditUser_onFocus" />
+            <FormItem label="配置用户:" prop="userIds">
+                <Select ref="selectUser"
+                        @on-open-change="auditUser_onFocus"
+                        v-model="formData.userIds"
+                        multiple>
+                    <Option v-for="item in formData.userList"
+                            :key="item.userId"
+                            :value="item.userId"
+                            :label="item.name"></Option>
+                </Select>
             </FormItem>
             <FormItem label="通过规则:" prop="passRule">
                 <Select v-model="formData.passRule">
@@ -59,22 +63,18 @@
                     @click="save">保存</Button>
         </div>
 
-        <Modal v-model="modal_roleSelect"
-               title="角色选择"
-               :width="350"
-               footer-hide>
-            <vRoleSelect  @onSelectRole="onSelectRole"></vRoleSelect>
-        </Modal>
-
-        <vModalEmployeeSelect ref="modal_userSelect" @modal-callback="modal_userSelect_callback" ></vModalEmployeeSelect>
+        <vModalEmployeeSelect ref="modal_userSelect"
+                              multiple
+                              :selectedValue="formData.userIds"
+                              :zIndex="2000"
+                              @modal-callback="modal_userSelect_callback" ></vModalEmployeeSelect>
     </div>
 </template>
 <script>
-    import vRoleSelect from '../../../../Common/roleSelect/roleSelect';
     import vModalEmployeeSelect from '../../../../Common/employeeSelect/modalEmployeeSelect';
     export default {
         name: 'editStep',
-        components: {vRoleSelect, vModalEmployeeSelect},
+        components: {vModalEmployeeSelect},
         props: {
             auditProcessId: {
                 type: String,
@@ -96,8 +96,8 @@
                     stepType: '',
                     auditRole: '',
                     auditRoleLabel: '',
-                    auditUser: '',
-                    auditUserName: '',
+                    userIds: [],
+                    userList: [],
                     passRule: '',
                     timeLimit: 0,
                     overdueHandle:'',
@@ -107,7 +107,7 @@
                     name: [{ required: true, message: '步骤名称不能为空！', trigger: 'blur' }],
                     // auditRole: [{ required: true, message: '步骤审核角色不能为空！', trigger: 'blur' }],
                     stepType: [{ required: true, message: '步骤类型不能为空！', trigger: 'blur' }],
-                    auditUser: [{ required: true, message: '用户不能为空！', trigger: 'blur' }],
+                    userIds: [{ required: true, type: 'array', message: '用户不能为空！', trigger: 'blur' }],
                     timeLimit: [{ required: true, type:'number', message: '通过期限不能为空！', trigger: 'blur' }],
                     passRule: [{ required: true, message: '通过规则不能为空！', trigger: 'blur' }],
                     overdueHandle: [{ required: true, message: '逾期处理方式不能为空！', trigger: 'blur' }],
@@ -123,9 +123,6 @@
                 dict_overdueHandle: [],
                 // 通知方式
                 dict_noticeType: [],
-
-                // 角色选择
-                modal_roleSelect: false,
                 modal_userSelect: false
             }
         },
@@ -168,30 +165,19 @@
                     }
                 });
             },
-            // 选择角色
-            auditRole_onFocus() {
-                this.modal_roleSelect = true;
-            },
-            onSelectRole(item) {
-                if (item.length === 0) {
-                    this.formData.auditRole = '';
-                    this.formData.auditRoleLabel = '';
-                }
-                else {
-                    if (item[0].nodeType === 'role') {
-                        this.formData.auditRole = item[0].roleId;
-                        this.formData.auditRoleLabel = item[0].name;
-                    }
-                }
-                this.modal_roleSelect = false;
-            },
             // 选择用户
-            auditUser_onFocus() {
-                this.$refs.modal_userSelect.modalValue = true;
+            auditUser_onFocus(value) {
+                if (value) {
+                    this.$refs.modal_userSelect.modalValue = value;
+                    this.$refs.selectUser.visible = false;
+                }
             },
             modal_userSelect_callback(selectValue, selectItems) {
-                this.formData.auditUser = selectItems.userId;
-                this.formData.auditUserName = selectItems.name;
+                this.formData.userList = selectItems;
+                this.formData.userIds = [];
+                selectItems.forEach((val) => {
+                    this.formData.userIds.push(val.userId);
+                });
                 this.$refs.form.validate();
             },
             getData() {

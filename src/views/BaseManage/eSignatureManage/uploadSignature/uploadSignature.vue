@@ -8,7 +8,8 @@
                 <Input v-model="formData.name" placeholder="名称" />
             </FormItem>
             <FormItem label="电子签名上传:" prop="fileId">
-                <Upload :action="uploadParams.actionUrl"
+                <Upload ref="upload"
+                        :action="uploadParams.actionUrl"
                         :showUploadList="uploadParams.showUploadList"
                         :multiple="uploadParams.multiple"
                         :accept="uploadParams.accept"
@@ -37,7 +38,7 @@
             return {
                 uploadParams: {
                     actionUrl: Config[Config.env].actionUrl + '/signature',
-                    showUploadList: false,  // 显示已上传列表
+                    showUploadList: true,  // 显示已上传列表
                     multiple: false,        // 是否支持多选
                     data: {},               // 上传附带参数
                     //name: '',               // 上传的文件字段名, 默认file
@@ -73,7 +74,6 @@
             },
             fileUploadSuccess(response, file, fileList) {
                 this.$Loading.finish();
-                debugger
                 this.formData.fileId = response.data.fileId;
             },
             // 添加电子签名
@@ -90,6 +90,8 @@
                                     content: '添加成功！'
                                 });
                                 this.$emit('addSignaturCallback');
+
+                                this.$refs.upload.fileList = [];
                             }
                         })
                     } else {

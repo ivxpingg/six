@@ -3,7 +3,7 @@
         <div class="left-panel">
             <vBTree @onSelectChange="onSelectChange"></vBTree>
         </div>
-        <div class="right-panel">
+        <div class="right-panel" v-show="selectType === 'role'">
             <Card :bordered="false" dis-hover>
                 <vIvxFilterBox>
                     <Button type="primary" @click="onClick_addUser" :class="{'six-auth-hide': !auth_add}">添加人员</Button>
@@ -11,7 +11,6 @@
 
                 <div class="ivx-table-box">
                     <Table border
-                           height="540"
                            :loading="tableLoading"
                            :columns="tableColumns"
                            :data="tableData"></Table>
@@ -21,32 +20,36 @@
                           :current="searchParams.current"
                           :page-size="searchParams.size"
                           :total="searchParams.total"
-                          :on-change="onPageChange"></Page>
+                          @on-change="onPageChange"></Page>
                 </div>
             </Card>
         </div>
 
         <Modal v-model="modal_userDetail"
                className="modal-userDetail modal-body-padding0"
-               :title="userType === '0' ? '从业人员详情' : '监督人员详情'"
+               :title="userType === 'employee' ? '从业人员详情' : '监督人员详情'"
                :width="1200"
                footer-hide>
-            <vPersonDetail v-show="userType === '0'" :user-id="userId"></vPersonDetail>
-            <vSupervisorDetail v-show="userType === '1'" :user-id="userId"></vSupervisorDetail>
+            <vPersonDetail v-show="userType === 'employee'" :userId="userId"></vPersonDetail>
+            <vSupervisorDetail v-show="userType === 'supervisor'" :userId="userId"></vSupervisorDetail>
         </Modal>
 
-        <Modal v-model="modal_addUser"
-               title="人员选择"
-               :width="1200"
-               footer-hide>
-            <vEmployeeSelect class="six-modal-body-inner"></vEmployeeSelect>
-        </Modal>
+        <vModalEmployeeSelect
+                ref="modalEmployeeSelect"
+                :selectedValue="selectedValue"
+                filterSelected
+                multiple
+                @modal-callback="modal_addSelectedPerson_callback"></vModalEmployeeSelect>
+
+
 
         <Modal v-model="modal_eSignatrueSelect"
                title="电子签名选择"
-               :width="1200"
+               :width="800"
                footer-hide>
-            <vESignnatureSelect  class="six-modal-body-inner">  </vESignnatureSelect>
+            <vESignnatureSelect v-if="modal_eSignatrueSelect"
+                                @handleSelect="add_eSignature"
+                                class="six-modal-body-inner">  </vESignnatureSelect>
         </Modal>
     </div>
 </template>
@@ -58,6 +61,7 @@
     import vEmployeeSelect from '../../Common/employeeSelect/employeeSelect';
     import vESignnatureSelect from '../../Common/eSignatureSelect/eSignatureSelect';
     import authMixin from '../../../lib/mixin/authMixin';
+    import vModalEmployeeSelect from '../../Common/employeeSelect/modalEmployeeSelect';
     export default {
         name: 'organizetionManage',   // 组织结构
         components: {
@@ -66,7 +70,8 @@
             vPersonDetail,
             vSupervisorDetail,
             vEmployeeSelect,
-            vESignnatureSelect },
+            vESignnatureSelect,
+            vModalEmployeeSelect},
         mixins: [authMixin],
         data() {
             return {
@@ -93,12 +98,12 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },
-                    { title: '姓名', width: 120, align: 'center', key: 'name' },
-                    { title: '单位', width: 160, align: 'center', key: 'unitName' },
-                    { title: '职务', width: 160, align: 'center', key: 'job' },
+                    { title: '姓名', width: 100, align: 'center', key: 'userName' },
+                    { title: '单位', width: 100, align: 'center', key: 'unitName' },
+                    { title: '职务', width: 100, align: 'center', key: 'job' },
                     { title: '联系电话', width: 120, align: 'center', key: 'phone' },
-                    { title: '电子签名授权状态', width: 160, align: 'center', key: 'signatureStatusLabel' },
-                    { title: '被授权的电子签名名称', width: 180, align: 'center', key: 'signatureName' },
+                    // { title: '电子签名授权状态', width: 100, align: 'center', key: 'signatureStatusLabel' },
+                    { title: '被授权的电子签名名称', minWidth: 100, align: 'center', key: 'signatureName' },
                     {
                         title: '操作',
                         width: 310,
@@ -130,6 +135,7 @@
                                     },
                                     on: {
                                         click: () => {
+                                            this.userId = params.row.userId;
                                             this.modal_eSignatrueSelect = true;
                                         }
                                     }
@@ -157,28 +163,7 @@
                         }
                     }
                 ],
-                tableData: [
-                    {
-                        userId: '001',
-                        name: '陈亮',
-                        userType: '0',
-                        unitName: '市交通质监局',
-                        job: '负责人',
-                        phone: '13959625414',
-                        signatureStatusLabel: '已授权',
-                        signatureName: '陈亮电子签名'
-                    },
-                    {
-                        userId: '002',
-                        name: '陈亮',
-                        userType: '1',
-                        unitName: '市交通质监局',
-                        job: '负责人',
-                        phone: '13959625414',
-                        signatureStatusLabel: '已授权',
-                        signatureName: '陈亮电子签名'
-                    }
-                ],
+                tableData: [],
                 tableLoading: false,
 
                 // 查看人员详情， 分为从业人员详情和监督单位人员详情
@@ -186,11 +171,14 @@
                 userType: '',         //用户类型， 从业人员或者监督人员
                 userId: '',
 
-                // 添加人员
-                modal_addUser: false,
-
                 // 授权电子签名
                 modal_eSignatrueSelect: false
+            }
+        },
+        computed: {
+            // 已选人员userId [1,2,3]
+            selectedValue() {
+                return this.tableData.map(v => v.userId);
             }
         },
         mounted() { },
@@ -203,7 +191,29 @@
                 this.searchParams.current = current;
             },
             onClick_addUser() {
-                this.modal_addUser = true;
+                this.$refs.modalEmployeeSelect.modalValue = true;
+            },
+            modal_addSelectedPerson_callback(selectValue, selectItems) {
+                let datas = [];
+                selectItems.forEach(val => {
+                    datas.push({
+                        userId: val.userId,
+                        roleId: this.nodeItem.roleId
+                    })
+                });
+
+                this.$http({
+                    method: 'post',
+                    url: '/userRole/add',
+                    data: JSON.stringify(datas)
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.$Message.success({
+                            content: '添加成功！'
+                        });
+                        this.getData();
+                    }
+                });
             },
 
             // 获取表格数据
@@ -221,7 +231,7 @@
                     }
                 }).catch(() => {
                     this.tableLoading = false;
-                })
+                });
             },
 
             // 选择角色
@@ -247,11 +257,14 @@
                    content: `确定要移除<${row.name}人员？>`,
                     onOk:() => {
                         this.$http({
-                            method: 'get',
-                            url: '/',
-                            params: {
-                                userId: row.userId
-                            }
+                            method: 'post',
+                            url: '/userRole/delete',
+                            data: JSON.stringify([
+                                {
+                                    userId: row.userId,
+                                    roleId: this.nodeItem.roleId
+                                }
+                            ])
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success({
@@ -265,6 +278,23 @@
 
             },
             // 授权电子签名
+            add_eSignature(selectValue, selectItems) {
+                this.$http({
+                    method: 'post',
+                    url: '/signature/userSignature',
+                    data: JSON.stringify({
+                        signatureId: selectItems.signatureId,
+                        userId: this.userId
+                    })
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.$Message.success({
+                            content: '授权成功！'
+                        });
+                        this.modal_eSignatrueSelect = false;
+                    }
+                })
+            }
         }
     }
 </script>

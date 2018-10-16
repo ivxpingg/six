@@ -12,7 +12,8 @@
                     :on-success="fileUploadSuccess">
                 <Button type="primary" icon="ios-cloud-upload-outline">导入单位</Button>
             </Upload>
-            <Button type="primary"
+            <Button
+                    type="primary"
                     icon="md-add"
                     @click="modal_addUnit_open">添加单位</Button>
         </vIvxFilterBox>
@@ -41,7 +42,6 @@
 
         <div class="ivx-table-box">
             <Table border
-                   height="540"
                    :loading="tableLoading"
                    :columns="tableColumns"
                    :data="tableData"></Table>
@@ -51,7 +51,7 @@
                   :current="searchParams.current"
                   :page-size="searchParams.size"
                   :total="searchParams.total"
-                  :on-change="onPageChange"></Page>
+                  @on-change="onPageChange"></Page>
         </div>
 
         <Modal v-model="modal_unitDetail"

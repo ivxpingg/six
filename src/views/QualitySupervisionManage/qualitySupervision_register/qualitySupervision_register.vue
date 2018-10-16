@@ -46,7 +46,7 @@
                   :current="searchParams.current"
                   :page-size="searchParams.size"
                   :total="searchParams.total"
-                  :on-change="onPageChange"></Page>
+                  @on-change="onPageChange"></Page>
         </div>
         <!--质量监督登记-->
         <Modal v-model="modal_add"

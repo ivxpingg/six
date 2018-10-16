@@ -1,3 +1,5 @@
+const PROJECT_NAME = '/pqs';
+
 export default {
     env: process.env.NODE_ENV,
     /**
@@ -6,10 +8,11 @@ export default {
     cookieExpires: 1,
     development: {
         origin: window.location.origin,
-        ajaxUrl: '/pqs',
+        ajaxUrl: PROJECT_NAME,
         staticUrl: '',
         cookiePath: '/',
-        actionUrl: window.location.origin + '/pqs/file/upload'
+        actionUrl: window.location.origin + PROJECT_NAME + '/file/upload',  // 文件上传路径
+        filePath: window.location.origin + PROJECT_NAME + '/'               // 文件路径前缀
     },
     production: {
         origin: window.location.origin,

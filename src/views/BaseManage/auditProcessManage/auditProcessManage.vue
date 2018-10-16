@@ -18,7 +18,7 @@
                       :current="searchParams.current"
                       :page-size="searchParams.size"
                       :total="searchParams.total"
-                      :on-change="onPageChange"></Page>
+                      @on-change="onPageChange"></Page>
             </div>
         </div>
         <div class="right-panel">
@@ -184,7 +184,7 @@
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.page.records;
+                        this.tableData = res.data.records;
                         this.searchParams.total = res.data.page.total;
                     }
                 }).catch(() => {

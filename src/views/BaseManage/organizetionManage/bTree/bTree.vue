@@ -25,6 +25,11 @@
             roleId: {
                 type: String,
                 default: ''
+            },
+            // 树展开的层级
+            expandLevel: {
+                type: Number,
+                default: 1
             }
         },
         data() {
@@ -37,7 +42,7 @@
             menuList(val) {
                 let list = [];
                 if (val.length > 0) {
-                    list = this.transformTreeData(val);
+                    list = this.transformTreeData(val, 0);
                 }
                 this.groupTreeData = list;
             }
@@ -56,19 +61,19 @@
                     }
                 });
             },
-            transformTreeData(children) {
+            transformTreeData(children, level) {
                 let attr = [];
                 children.forEach((val) => {
                     let item = {};
                     Object.assign(item, val);
                     item.title = item.name;
-                    item.expand = true;
+                    item.expand = level <= this.expandLevel;
                     item.children = [];
                     item.selected = false;
                     item.render = this.render;
                     attr.push(item);
                     if (val.children) {
-                        item.children = this.transformTreeData(val.children);
+                        item.children = this.transformTreeData(val.children, level + 1);
                     }
                 });
                 return attr;

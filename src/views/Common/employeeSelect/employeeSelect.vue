@@ -4,7 +4,7 @@
             <vIvxFilterBox>
                 <Form inline>
                     <FormItem label="检索:" :label-width="65">
-                        <Input v-model="searchParams.condition.searchKey" placeholder="请输入姓名、UID" />
+                        <Input v-model="searchParams.condition.name" placeholder="请输入姓名、UID" />
                     </FormItem>
                     <FormItem label="所属单位类型:" :label-width="90">
                         <Select v-model="searchParams.condition.unitType"
@@ -25,22 +25,23 @@
             <div class="ivx-table-box">
                 <Table ref="table"
                        border
-                       height="540"
+                       :height="400"
                        :columns="tableColumns"
-                       :data="tableData"
+                       :data="filterSelected ? tableDataFilterSelected:tableData"
                        :highlight-row="!multiple"
                        @on-current-change="onCurrentChange"
                        @on-select="onSelect"
                        @on-select-cancel="onSelectCancel"
                        @on-select-all="onSelectAll"
                        @on-selection-change="onSelectionChange"></Table>
-                <Page prev-text="上一页"
+                <Page v-if="!filterSelected"
+                      prev-text="上一页"
                       next-text="下一页"
                       show-total
                       :current="searchParams.current"
                       :page-size="searchParams.size"
                       :total="searchParams.total"
-                      :on-change="onPageChange"></Page>
+                      @on-change="onPageChange"></Page>
             </div>
         </div>
 
@@ -72,18 +73,29 @@
             multiple: {
                 type: Boolean,
                 default: true
+            },
+            selectedValue: {
+                type: Array,
+                default() {
+                    return [];
+                }
+            },
+            // 过滤已选的值
+            filterSelected: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
                 searchParams: {
                     current: 1,      // 当前第几页
-                    size: 7,      // 每页几行
+                    size: this.filterSelected ? 10000:7,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
                         userSource: 'all',
                         unitId: '',
-                        searchKey: '',
+                        name: '',
                         unitType: ''
                     }
                 },
@@ -102,7 +114,7 @@
                     { title: '岗位', width: 160, align: 'center', key: 'job' }
                 ],
                 tableData: [],
-
+                tableDataFilterSelected: [],
                 selectValue: [],
                 selectItems: [],
                 loading: false,
@@ -112,38 +124,65 @@
             };
         },
         watch: {
+            selectedValue: {
+                immediate: true,
+                handler(val) {
+                    this.selectValue = val;
+                    this.selectItems = [];
+                    this.getData();
+                    // this.tableData.forEach((v, idx) => {
+                    //     this.$refs.table.objData[idx]._isChecked = this.selectValue.indexOf(v.userId) > -1;
+                    //     if (this.selectValue.indexOf(v.userId) > -1) {
+                    //         this.selectItems.push(v);
+                    //     }
+                    // });
+                }
+            },
             unitId: {
                 handler(val) {
                     this.searchParams.condition.unitId = val;
                 },
                 immediate: true
             },
-            'searchParams.condition.unitType'() {
-                this.getData();
+
+            'searchParams.current': {
+                handler() {
+                    this.getData();
+                }
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
             },
             tableData(val) {
-                let that = this;
-
-                setTimeout(() => {
-                    val.forEach((v, idx) => {
-                        if (that.selectValue.indexOf(v.userId) > -1) {
-                            that.$refs.table.objData[idx]._isChecked = true;
-                        }
-                    });
-                }, 200);
+                if (this.filterSelected) {
+                    this.tableDataFilterSelected = val.filter(v => this.selectedValue.indexOf(v.userId) === -1);
+                }
+                else {
+                    setTimeout(() => {
+                        val.forEach((v, idx) => {
+                            if (this.selectValue.indexOf(v.userId) > -1) {
+                                this.$refs.table.objData[idx]._isChecked = true;
+                                this.selectItems.push(v);
+                            }
+                        });
+                    }, 200);
+                }
             },
             userSourceType: {
                 immediate: true,
                 handler(val) {
                     this.searchParams.condition.userSource = val;
                     this.searchParams.condition.unitId = this.unitId;
-                    this.getData();
                 }
             }
         },
-        computed: {},
+        computed: {
+
+        },
         mounted() {
-            this.selectValue = [];
             this.getData();
             this.getDict_unitType();
         },
@@ -153,6 +192,7 @@
              * @param current
              */
             onPageChange(current) {
+
                 this.searchParams.current = current;
             },
             // 获取表格数据
@@ -214,8 +254,10 @@
                 });
             },
             onSelectionChange(selection) {
+                let data = this.filterSelected ? this.tableDataFilterSelected : this.tableData;
+
                 if (selection.length === 0) {
-                    this.tableData.forEach((val) => {
+                    data.forEach((val) => {
                         let idx = this.selectValue.indexOf(val.userId);
                         if (idx !== -1) {
                             this.selectValue.splice(idx, 1);
@@ -237,9 +279,9 @@
     .employeeSelect-container {
 
         .modal-body {
-            height: 660px;
-            overflow-y: auto;
-            overflow-x: hidden;
+            /*height: 660px;*/
+            /*overflow-y: auto;*/
+            /*overflow-x: hidden;*/
         }
     }
 </style>
