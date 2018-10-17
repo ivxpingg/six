@@ -1,4 +1,5 @@
 const PROJECT_NAME = '/pqs';
+// const PROJECT_NAME = '';
 
 export default {
     env: process.env.NODE_ENV,

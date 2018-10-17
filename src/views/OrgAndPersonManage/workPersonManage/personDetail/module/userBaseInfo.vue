@@ -11,27 +11,36 @@
             </FormItem>
             <FormItem label="性别:">
                 <Select v-model="formData.sex">
-                    <Option value="0">女</Option>
-                    <Option value="1">男</Option>
+                    <Option v-for="item in dict_sex"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="UID:" prop="uId">
-                <Input v-model="formData.uId"/>
+            <FormItem label="UID:" prop="userNo">
+                <Input v-model="formData.userNo"/>
             </FormItem>
             <FormItem label="年龄:" prop="age">
                 <Input v-model="formData.age" number/>
             </FormItem>
-            <FormItem label="民族:">
-                <Select v-model="formData.nation">
-                    <Option value="0">汉族</Option>
-                    <Option value="1">满族</Option>
-                </Select>
+            <FormItem label="民族:" prop="nation">
+                <Input v-model="formData.nation" placeholder="请输入民族，如：汉族"/>
             </FormItem>
             <FormItem label="技术职称:" prop="titleName">
-                <Input v-model="formData.titleName"/>
+                <Select v-model="formData.titleName">
+                    <Option v-for="item in dict_titleName"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="职称级别:" prop="titleLevel">
-                <Input v-model="formData.titleLevel"/>
+                <Select v-model="formData.titleLevel">
+                    <Option v-for="item in dict_titleLevel"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="毕业院校:" prop="graduateSchool">
                 <Input v-model="formData.graduateSchool"/>
@@ -59,10 +68,10 @@
             <FormItem label="证书编号:">
                 <Input v-model="formData.certificateNo"/>
             </FormItem>
-            <FormItem label="身份证号:" prop="IdNumber">
-                <Input v-model="formData.IdNumber"/>
+            <FormItem label="身份证号:" prop="idNumber">
+                <Input v-model="formData.idNumber"/>
             </FormItem>
-            <FormItem label="相关材料:">
+            <FormItem label="相关材料:" v-if="editable">
                 <Upload :action="uploadParams.actionUrl"
                         :showUploadList="uploadParams.showUploadList"
                         :multiple="uploadParams.multiple"
@@ -87,6 +96,7 @@
 
 <script>
     import Config from '../../../../../config';
+    import MOMENT from 'moment';
     export default {
         name: 'userBaseInfo',
         props: {
@@ -95,42 +105,43 @@
                 required: true
             },
             editable: {
-                type: String,
-                required: false
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
         data() {
             return {
                 formData: {
-                    userId: '001',
+                    userId: '',
                     name: '',
-                    uId: 'uid',
-                    sex: '0',
-                    sexStr: '女',
-                    age: 26,
-                    nation: '0',
-                    nationStr: '汉族',
-                    titleLevel: '职称级别',
+                    userNo: '',
+                    sex: '',
+                    age: null,
+                    nation: '',
+                    nationStr: '',
+                    titleLevel: '',
                     titleName: '',
-                    certificate: '资格证书',
-                    certificateNo: '资格证书编号',
-                    education: '学历',
-                    graduateSchool: '毕业院校',
-                    profession: '计算机与技术',
-                    graduateDate: '2018-01-01',
-                    phone: '15332112141',
-                    email: '123@qq.com',
-                    IdNumber: '362521236521233632',
-                    unitName: '厦门卫星定位',
-                    unitType: '0',
-                    unitTypeLabel: '建设单位',
-                    job: '岗位',
+                    certificate: '',
+                    certificateNo: '',
+                    education: '',
+                    graduateSchool: '',
+                    profession: '',
+                    graduateDate: '',
+                    phone: '',
+                    email: '',
+                    idNumber: '',
+                    unitName: '',
+                    unitType: '',
+                    unitTypeLabel: '',
+                    job: '',
                     fileIds: ''
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
-                    uId: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
+                    userNo: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
                     age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
+                    nation: [{ required: true,  message: '民族不能为空！', trigger: 'blur' }],
                     titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
                     titleLevel: [{ required: true, message: '职称级别不能为空！', trigger: 'blur' }],
                     graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
@@ -138,7 +149,7 @@
                     graduateDate: [{ required: true, message: '毕业时间不能为空！', trigger: 'blur' }],
                     phone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
                     email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
-                    IdNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
+                    idNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
                 },
 
                 uploadParams: {
@@ -149,7 +160,12 @@
                     //name: '',               // 上传的文件字段名, 默认file
                     accept: '.png,.jpg,.gif,.jpeg',             // 接收上传的文件类型
                     maxSize: 4096,                // 文件大小限制，单位 kb
-                }
+                },
+
+                dict_sex: [],         // 性别
+                dict_titleName: [],   // 技术职称
+                dict_titleLevel: [],  // 职称级别
+                dict_education: []    // 学历
             };
         },
         watch: {
@@ -162,7 +178,25 @@
                 }
             }
         },
+        mounted() {
+            this.getDicts(['sex','titleName','titleLevel', 'education']);
+        },
         methods: {
+            getDicts(list) {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByTypes',
+                    params: {
+                        types: list.join(',')
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        list.forEach((val, idx) => {
+                            this[`dict_${val}`] = res.data[val] || [];
+                        });
+                    }
+                })
+            },
             onChange_graduateDate(time) {
                 this.formData.graduateDate = time;
             },
@@ -185,6 +219,7 @@
                 });
             },
             fileUploadSuccess(response, file, fileList) {
+                // TODO 用户附件信息
                 this.$Loading.finish();
             },
 
@@ -197,7 +232,10 @@
                     }
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
-                        Object.assign(this.formData, res.data);
+
+                        Object.assign(this.formData, res.data, {
+                            graduateDate: res.data.graduateDate ? MOMENT(res.data.graduateDate).format('YYYY-MM-DD') : ''
+                        });
                     }
                 });
             },

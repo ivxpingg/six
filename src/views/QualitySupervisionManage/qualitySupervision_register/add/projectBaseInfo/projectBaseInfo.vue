@@ -6,8 +6,8 @@
               :model="formData"
               :rules="rules"
               :label-width="180">
-            <FormItem label="项目名称:" prop="name">
-                <Input v-model="formData.name"/>
+            <FormItem label="项目名称:" prop="projectName">
+                <Input v-model="formData.projectName"/>
             </FormItem>
             <FormItem label="标段:" prop="part">
                 <Input v-model="formData.part"/>
@@ -109,12 +109,19 @@
                     size="large"
                     @click="save">保存</Button>
         </div>
+
+        <!--<vModalEmployeeSelect ref="modal_userSelect"-->
+                              <!--multiple-->
+                              <!--:selectedValue="formData.userIds"-->
+                              <!--:zIndex="2000"-->
+                              <!--@modal-callback="modal_userSelect_callback" ></vModalEmployeeSelect>-->
     </div>
 </template>
 
 <script>
     export default {
         name: 'projectBaseInfo',
+        components: {},
         props: {
             isView: {
                 type: Boolean,
@@ -131,30 +138,30 @@
             return {
                 formData: {
                     projectId: '',
-                    name: '',      // 项目名称
+                    projectName: '',      // 项目名称
                     part: '',      // 标段
                     province: '',  // 省
                     city: '',      // 市
                     county: '',    // 区
                     address: '',
                     projectType: '',    // 项目类型
-                    buildUnit: '六安市公路管理局',      // 建设单位
+                    buildUnit: '',      // 建设单位
                     level: '',          // 技术等级
-                    mileage: 10.2,      // 项目里程(km)
-                    projectProperty: 'new', // 工程性质
-                    amount: 1.251,       // 投资额(万元)
-                    constructAmount: 1256.1,  // 施工合同金额(万元)
-                    supervisorAmount: 14686.25, // 监理合同金额(万元)
-                    designSpeed: 20,           // 设计时速(km/h)
-                    planBeginTime: '2018-10-01',      // 计划开工时间
-                    planEndTime: '2019-05-05',        // 计划交工时间
-                    constructUnit: '0125',       // 施工单位
-                    supervisorUnit: '01',      // 监理单位
-                    contacts: '陈总经理',            // 联系人
-                    contactPhone: '13959260199',       // 联系电话/联系方式
+                    mileage: null,      // 项目里程(km)
+                    projectProperty: '', // 工程性质
+                    amount: null,       // 投资额(万元)
+                    constructAmount: null,  // 施工合同金额(万元)
+                    supervisorAmount: null, // 监理合同金额(万元)
+                    designSpeed: null,           // 设计时速(km/h)
+                    planBeginTime: '',      // 计划开工时间
+                    planEndTime: '',        // 计划交工时间
+                    constructUnit: '',       // 施工单位
+                    supervisorUnit: '',      // 监理单位
+                    contacts: '',            // 联系人
+                    contactPhone: '',       // 联系电话/联系方式
                 },
                 rules: {
-                    name: [{ required: true, message: '项目名称不能为空！', trigger: 'blur' }],
+                    projectName: [{ required: true, message: '项目名称不能为空！', trigger: 'blur' }],
                     part: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
                     address: [{ required: true, message: '地址不能为空！', trigger: 'blur' }],
                     mileage: [{ required: true, type: 'number', message: '项目里程不能为空！', trigger: 'blur' }],

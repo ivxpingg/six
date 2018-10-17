@@ -37,7 +37,7 @@
                 </Select>
             </FormItem>
             <FormItem label="通过期限:" prop="timeLimit">
-                <Input v-model="formData.timeLimit" number  placeholder="天" />
+                <Input v-model="formData.timeLimit" number  placeholder="单位：天" />
             </FormItem>
             <FormItem label="逾期处理方式:" prop="overdueHandle">
                 <Select v-model="formData.overdueHandle">
@@ -94,7 +94,7 @@
                     userIds: [],
                     userList: [],
                     passRule: 'one_pass',
-                    timeLimit: 0,
+                    timeLimit: null,
                     overdueHandle:'automatically_rejected',
                     noticeType: 'system_messages'
                 },

@@ -75,6 +75,7 @@
     import Config from '../../../config';
     import vPersonDetail from './personDetail/personDetail';
     import vAddUser from './addPerson/addPerson';
+    import MOMENT from 'moment';
     export default {
         // 从业人员管理
         name: 'workPersonManage',
@@ -87,25 +88,30 @@
                     total: 0,     // 总行数
                     condition: {
                         name: '',      // 模糊查询参数
-                        unitType: ''
+                        unitType: '',
+                        userType: 'employee'
                     }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },
                     { title: '姓名', width: 120, align: 'center', key: 'name' },
-                    { title: 'UID', width: 80, align: 'center', key: 'uId' },
-                    { title: '性别', width: 70, align: 'center', key: 'sexStr' },
+                    { title: 'UID', width: 80, align: 'center', key: 'userNo' },
+                    { title: '性别', width: 70, align: 'center', key: 'sexLabel' },
                     { title: '年龄', width: 70, align: 'center', key: 'age' },
-                    { title: '民族', width: 100, align: 'center', key: 'nationStr' },
-                    { title: '职称级别', width: 120, align: 'center', key: 'titleLevel' },
-                    { title: '技术职称', width: 120, align: 'center', key: 'titleName' },
+                    { title: '民族', width: 100, align: 'center', key: 'nation' },
+                    { title: '职称级别', width: 120, align: 'center', key: 'titleLevelLabel' },
+                    { title: '技术职称', width: 120, align: 'center', key: 'titleNameLabel' },
                     { title: '资格证书', width: 120, align: 'center', key: 'certificate' },
                     { title: '资格证书编号', width: 120, align: 'center', key: 'certificateNo' },
-                    { title: '学历', width: 120, align: 'center', key: 'education' },
+                    { title: '学历', width: 120, align: 'center', key: 'educationLabel' },
                     { title: '毕业院校', width: 120, align: 'center', key: 'graduateSchool' },
-                    { title: '毕业时间', width: 120, align: 'center', key: 'graduateDate' },
+                    { title: '毕业时间', width: 120, align: 'center',
+                        render: (h, params) => {
+                            return h('div', MOMENT(params.row.graduateDate).format('YYYY-MM-DD'));
+                        }
+                    },
                     { title: '联系电话', width: 120, align: 'center', key: 'phone' },
-                    { title: '身份证号码', width: 160, align: 'center', key: 'IdNumber' },
+                    { title: '身份证号码', width: 160, align: 'center', key: 'idNumber' },
                     { title: '单位', width: 160, align: 'center', key: 'unitName' },
                     { title: '单位类型', width: 160, align: 'center', key: 'unitTypeLabel' },
                     { title: '职务', width: 160, align: 'center', key: 'job' },
@@ -163,7 +169,10 @@
             };
         },
         watch: {
-            searchParams: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
                 deep: true,
                 handler() {
                     this.getData();

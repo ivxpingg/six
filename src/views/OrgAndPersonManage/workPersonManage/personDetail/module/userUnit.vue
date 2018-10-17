@@ -5,13 +5,6 @@
                    height="490"
                    :columns="tableColumns"
                    :data="tableData"></Table>
-            <Page prev-text="上一页"
-                  next-text="下一页"
-                  show-total
-                  :current="searchParams.current"
-                  :page-size="searchParams.size"
-                  :total="searchParams.total"
-                  :on-change="onPageChange"></Page>
         </div>
     </div>
 </template>
@@ -64,14 +57,8 @@
             this.getData();
         },
         methods: {
-            /**
-             * 分页控件-切换页面
-             * @param current
-             */
-            onPageChange(current) {
-                this.searchParams.current = current;
-            },
             getData() {
+                // TODO
                 this.$http({
                     method: 'get',
                     url: '/getUserUnitInfo',

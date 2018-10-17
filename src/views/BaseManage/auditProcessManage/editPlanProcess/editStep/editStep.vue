@@ -37,7 +37,7 @@
                 </Select>
             </FormItem>
             <FormItem label="通过期限:" prop="timeLimit">
-                <Input v-model="formData.timeLimit" number  placeholder="天" />
+                <Input v-model="formData.timeLimit" number placeholder="单位：天" />
             </FormItem>
             <FormItem label="逾期处理方式:" prop="overdueHandle">
                 <Select v-model="formData.overdueHandle">
@@ -190,6 +190,12 @@
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
                         this.formData = Object.assign(this.formData, res.data);
+                        if (res.data.userList) {
+                            this.formData.userIds = this.formData.userList.map(v => {return v.userId});
+                        }
+                        else{
+                            this.formData.userIds = [];
+                        }
                     }
                 })
             },

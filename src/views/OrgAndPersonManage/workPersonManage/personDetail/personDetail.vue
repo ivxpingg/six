@@ -24,7 +24,7 @@
             </Menu>
         </div>
         <div class="right-panel">
-            <vUserBaseInfo v-show="activeName === '1'" :userId="userId"></vUserBaseInfo>
+            <vUserBaseInfo v-show="activeName === '1'" :userId="userId" editable></vUserBaseInfo>
             <vUserUnit v-show="activeName === '2'" :userId="userId"></vUserUnit>
             <vUserEvaluate v-show="activeName === '3'" :userId="userId" ></vUserEvaluate>
             <vUserAccessory v-show="activeName === '4'" :userId="userId"></vUserAccessory>

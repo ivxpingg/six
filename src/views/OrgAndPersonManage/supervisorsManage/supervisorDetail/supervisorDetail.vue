@@ -8,9 +8,6 @@
             <FormItem label="姓名:">
                 <Input v-model="formData.name"/>
             </FormItem>
-            <FormItem label="UID:">
-                <Input v-model="formData.uId"/>
-            </FormItem>
             <FormItem label="科室:">
                 <Input v-model="formData.department"/>
             </FormItem>
@@ -18,7 +15,12 @@
                 <Input v-model="formData.job"/>
             </FormItem>
             <FormItem label="职位级别:">
-                <Input v-model="formData.titleLevel"/>
+                <Select v-model="formData.titleLevel">
+                    <Option v-for="item in dict_titleLevel"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="办公固话:">
                 <Input v-model="formData.telephone"/>
@@ -30,28 +32,38 @@
                 <Input v-model="formData.phone"/>
             </FormItem>
             <FormItem label="性别:">
-                <Input v-model="formData.sexStr"/>
+                <Select v-model="formData.sex">
+                    <Option v-for="item in dict_sex"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="年龄:">
                 <Input v-model="formData.age" number/>
             </FormItem>
             <FormItem label="民族:">
-                <Input v-model="formData.nationLabel"/>
+                <Input v-model="formData.nation"/>
             </FormItem>
             <FormItem label="籍贯:">
                 <Input v-model="formData.nativePlace"/>
             </FormItem>
-            <FormItem label="身份证号码:">
-                <Input v-model="formData.IdNumber"/>
-            </FormItem>
+            <!--<FormItem label="身份证号码:">-->
+                <!--<Input v-model="formData.idNumber"/>-->
+            <!--</FormItem>-->
             <FormItem label="技术职称:">
-                <Input v-model="formData.titleName"/>
+                <Select v-model="formData.titleName">
+                    <Option v-for="item in dict_titleName"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="身份类别:">
-                <Input v-model="formData.identityTypeLabel"/>
+                <Input v-model="formData.identityType"/>
             </FormItem>
             <FormItem label="执法证类型:">
-                <Input v-model="formData.lawTypeLabel"/>
+                <Input v-model="formData.lawType"/>
             </FormItem>
             <FormItem label="执法号码:">
                 <Input v-model="formData.lawNumber"/>
@@ -69,7 +81,12 @@
                 <Input v-model="formData.joinPartyDate"/>
             </FormItem>
             <FormItem label="学历:">
-                <Input v-model="formData.education"/>
+                <Select v-model="formData.education">
+                    <Option v-for="item in dict_education"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="毕业院校:">
                 <Input v-model="formData.graduateSchool"/>
@@ -80,9 +97,9 @@
             <FormItem label="出生年月:">
                 <Input v-model="formData.birthday"/>
             </FormItem>
-            <FormItem label="编制状态:">
-                <Input v-model="formData.belongStateLabel"/>
-            </FormItem>
+            <!--<FormItem label="编制状态:">-->
+                <!--<Input v-model="formData.belongStateLabel"/>-->
+            <!--</FormItem>-->
             <FormItem label="备注:">
                 <Input v-model="formData.remark"/>
             </FormItem>
@@ -91,6 +108,7 @@
 </template>
 
 <script>
+    import MOMENT from 'moment';
     export default {
         name: 'supervisorDetail',
         props: {
@@ -103,7 +121,6 @@
             return {
                 formData: {
                     name: '',
-                    uId: '',
                     department: '',
                     job: '',
                     titleLevel: '',
@@ -117,7 +134,7 @@
                     nationLabel: '',
                     nativePlace: '',
                     age: 0,
-                    IdNumber: '',
+                    idNumber: '',
                     birthday: '',  //
                     workDate: '',    // 工作年月
                     joinPartyDate: '',
@@ -126,7 +143,6 @@
                     profession: '',
                     graduateDate: '',
                     identityType: '',
-                    identityTypeLabel: '',
                     titleName: '',
                     lawNumber: '',
                     lawType: '',
@@ -134,7 +150,12 @@
                     divideWork: '',
                     belongState: '',
                     remark: ''
-                }
+                },
+
+                dict_sex: [],         // 性别
+                dict_titleName: [],   // 技术职称
+                dict_titleLevel: [],  // 职称级别
+                dict_education: []    // 学历
             };
         },
         watch: {
@@ -147,17 +168,40 @@
                 }
             }
         },
+        mounted() {
+            this.getDicts(['sex','titleName','titleLevel', 'education']);
+        },
         methods: {
+            getDicts(list) {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByTypes',
+                    params: {
+                        types: list.join(',')
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        list.forEach((val) => {
+                            this[`dict_${val}`] = res.data[val] || [];
+                        });
+                    }
+                })
+            },
             getUserInfo() {
                 this.$http({
                     method: 'get',
-                    url: '/supervisorsManage/getSupervisorList',
+                    url: '/user/detail',
                     params: {
                         userId: this.userId
                     }
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
-                        Object.assign(this.formData, res.data.records[0]);
+                        Object.assign(this.formData, res.data, {
+                            birthday: res.data.birthday ?  MOMENT(res.data.birthday).format('YYYY-MM-DD') : '',
+                            workDate: res.data.workDate ?  MOMENT(res.data.workDate).format('YYYY-MM-DD') : '',
+                            joinPartyDate: res.data.joinPartyDate ?  MOMENT(res.data.joinPartyDate).format('YYYY-MM-DD') : '',
+                            graduateDate: res.data.graduateDate ?  MOMENT(res.data.graduateDate).format('YYYY-MM-DD') : '',
+                        });
                     }
                 });
             }

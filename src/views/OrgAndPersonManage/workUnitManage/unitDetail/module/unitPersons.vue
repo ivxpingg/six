@@ -15,26 +15,34 @@
                   :current="searchParams.current"
                   :page-size="searchParams.size"
                   :total="searchParams.total"
-                  :on-change="onPageChange"></Page>
+                  @on-change="onPageChange"></Page>
         </div>
 
-        <Modal v-model="modal_addPerson"
-               className="modal-unitPersons-add"
-               title="从业人员"
-               :width="1200"
-               footer-hide>
-            <vEmployeeSelect v-if="modal_addPerson"
-                             @handleSelect="addPersons"></vEmployeeSelect>
-        </Modal>
+        <!--<Modal v-model="modal_addPerson"-->
+               <!--className="modal-unitPersons-add"-->
+               <!--title="从业人员"-->
+               <!--:width="1200"-->
+               <!--footer-hide>-->
+            <!--<vEmployeeSelect v-if="modal_addPerson"-->
+                             <!--@handleSelect="addPersons"></vEmployeeSelect>-->
+        <!--</Modal>-->
+
+        <vModalEmployeeSelect
+                ref="modalEmployeeSelect"
+                :selectedValue="selectedValue"
+                userSourceType="noUnit"
+                filterSelected
+                multiple
+                @modal-callback="modal_addSelectedPerson_callback"></vModalEmployeeSelect>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
-    import vEmployeeSelect from '../../../../Common/employeeSelect/employeeSelect';
+    import vModalEmployeeSelect from '../../../../Common/employeeSelect/modalEmployeeSelect';
     export default {
         name: 'unitPersons',  // 单位人员
-        components: {vIvxFilterBox, vEmployeeSelect},
+        components: {vIvxFilterBox, vModalEmployeeSelect},
         props: {
             unitId: {
                 type: String,
@@ -48,6 +56,7 @@
                     size: 7,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
+                        userSource: 'hasUnit',
                         unitId: ''
                     }
 
@@ -112,6 +121,12 @@
                 }
             }
         },
+        computed: {
+            // 已选人员userId [1,2,3]
+            selectedValue() {
+                return this.tableData.map(v => v.userId);
+            }
+        },
         mounted() {
             this.getData();
         },
@@ -138,31 +153,35 @@
             },
 
             open_modal_addPerson() {
-                this.modal_addPerson = true;
+                this.$refs.modalEmployeeSelect.modalValue = true;
             },
 
             /**
              * 添加人员
-             * @param list
+             * @param selectValue
+             * @param selectItems
              */
-            addPersons(list) {
-                this.$http({
-                    method: 'get',
-                    url: '/user/list',
-                    params: {
-                        unitId: this.unitId,
-                        userIds: list.join(',')
-                    }
-                }).then(res => {
-                    if (res.code === 'SUCCESS') {
-                        this.$Message.success({
-                            content: '添加人员成功！'
-                        });
-
-                        this.modal_addPerson = false;
-                    }
+            modal_addSelectedPerson_callback(selectValue, selectItems) {
+                let datas = [];
+                selectItems.forEach(val => {
+                    datas.push({
+                        userId: val.userId,
+                        unitId: this.unitId
+                    })
                 });
 
+                this.$http({
+                    method: 'post',
+                    url: '/unit/addUser',
+                    data: JSON.stringify(datas)
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.$Message.success({
+                            content: '添加成功！'
+                        });
+                        this.getData();
+                    }
+                });
             },
 
             // 移除人员

@@ -15,7 +15,7 @@
         <vIvxFilterBox dashed>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.searchKey"
+                    <Input v-model="searchParams.condition.projectName"
                            style="width: 220px;"
                            placeholder="项目名称"/>
                 </FormItem>
@@ -25,7 +25,7 @@
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="筛选条件:" :label-width="65">
-                    <RadioGroup v-model="searchParams.handleStatus" type="button">
+                    <RadioGroup v-model="searchParams.condition.handleStatus" type="button">
                         <Radio label="">全部</Radio>
                         <Radio v-for="item in dict_handleStatus"
                                :label="item.value" :key="'handleStatus_' + item.id">{{item.label}}</Radio>
@@ -126,13 +126,13 @@
                     size: 10,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
-                        searchKey: '',      // 模糊查询参数
+                        projectName: '',      // 模糊查询参数
                         handleStatus: ''
                     }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '项目名称', width: 180, align: 'center', key: 'name' },
+                    { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
                     { title: '标段', width: 180, align: 'center', key: 'part' },
                     { title: '地区', width: 180, align: 'center',
                         render: (h, params) => {
@@ -340,7 +340,10 @@
             };
         },
         watch: {
-            searchParams: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
                 deep: true,
                 handler() {
                     this.getData();
@@ -348,7 +351,7 @@
             }
         },
         mounted() {
-            // this.getData();
+            this.getData();
             this.getDict_handleStatus();
         },
         methods: {
@@ -378,9 +381,9 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'get',
-                    url: '/',
-                    params: this.searchParams
+                    method: 'post',
+                    url: '/project/list',
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {

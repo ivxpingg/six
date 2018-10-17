@@ -197,15 +197,15 @@
             },
             // 获取表格数据
             getData() {
-                let data = Object.assign({}, this.searchParams);
-
-                if (data.condition.unitType === 'all') {
-                    data.condition.unitType = '';
-                }
+                // let data = Object.assign({}, this.searchParams);
+                //
+                // if (data.condition.unitType === 'all') {
+                //     data.condition.unitType = '';
+                // }
                 this.$http({
                     method: 'post',
                     url: '/user/list',
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.tableData = res.data.records || [];
