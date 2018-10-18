@@ -13,12 +13,16 @@
                    :data="tableData"></Table>
         </div>
 
-        <Modal v-model="modal_addUnit"
-               title="添加从业单位"
-               :width="1000"
-               footer-hide>
-            <vUnitSelect @handleSelect="handleSelect_addUnit"></vUnitSelect>
-        </Modal>
+        <!--<Modal v-model="modal_addUnit"-->
+               <!--title="添加从业单位"-->
+               <!--:width="1000"-->
+               <!--footer-hide>-->
+            <!--<vUnitSelect @handleSelect="handleSelect_addUnit"></vUnitSelect>-->
+        <!--</Modal>-->
+
+        <vModalUnitSelect ref="modal_unitSelect"
+                          :zIndex="2000"
+                          @modal-callback="modal_unitSelect_callback" ></vModalUnitSelect>
 
         <Modal v-model="modal_participant"
                title="单位参建人员"
@@ -27,16 +31,19 @@
             <vPersonParticipant isView projectUnitId="projectUnitId"></vPersonParticipant>
         </Modal>
 
+
+
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../../../components/ivxFilterBox/ivxFilterBox';
-    import vUnitSelect from '../../../../Common/unitSelect/unitSelect';
+    // import vUnitSelect from '../../../../Common/unitSelect/unitSelect';
     import vPersonParticipant from './personParticipant/personParticipant';
+    import vModalUnitSelect from '../../../../Common/unitSelect/modalUnitSelect';
     export default {
         name: 'addUnitAndPerson',  // 质量监督登记-参建单位与人员
-        components: {vIvxFilterBox, vUnitSelect, vPersonParticipant},
+        components: {vIvxFilterBox, vPersonParticipant, vModalUnitSelect},
         props: {
             isView: {
                 type: Boolean,
@@ -114,7 +121,7 @@
                     // { title: '备案', width: 180, align: 'center', key: 'unitName' }
                 ],
                 tableData: [],
-                tableLoading: true,
+                tableLoading: false,
 
                 // 添加单位
                 modal_addUnit: false,
@@ -128,31 +135,53 @@
             };
         },
         watch: {
-            projectId() {
-                this.getData();
+            projectId: {
+                immediate: true,
+                handler(val) {
+                    if (val !== '') {
+                        this.getData();
+                    }
+                }
             }
         },
         mounted() {
-            this.getData();
         },
         methods: {
             modal_addUnit_open() {
-                this.modal_addUnit = true;
+                // this.modal_addUnit = true;
+                this.$refs.modal_unitSelect.modalValue = true;
+            },
+            modal_unitSelect_callback(selectValue, selectItems) {
+
+                this.$http({
+                    method: 'post',
+                    url: '/project/addProjectUnit',
+                    data: JSON.stringify({
+                        projectId: this.projectId,
+                        unitId: selectItems.unitId
+                    })
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.$Message.success('添加参建成功!');
+                        this.getData();
+                    }
+                });
+
             },
             // 获取表格数据
             getData() {
+
                 this.tableLoading = true;
                 this.$http({
                     method: 'get',
-                    url: '/getUnitList',
+                    url: '/project/projectUnitList',
                     params: {
                         projectId: this.projectId
                     }
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
-                        this.searchParams.total = res.data.total;
+                        this.tableData = res.data;
                     }
                 }).catch(() => {
                     this.tableLoading = false;

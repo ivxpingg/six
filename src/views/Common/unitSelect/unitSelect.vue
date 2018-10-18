@@ -7,9 +7,12 @@
                         <Input v-model="searchParams.condition.searchKey" placeholder="请输入单位名称、机构代码" />
                     </FormItem>
                     <FormItem label="所属单位类型:" :label-width="90">
-                        <Select v-model="searchParams.condition.unitType" style="width: 220px;">
-                            <Option value="all">全部</Option>
-                            <Option v-for="item in dict_unitType" :value="item.value" :key="`unitType_${item.id}`">{{item.label}}</Option>
+                        <Select v-model="searchParams.condition.unitType" clearable
+                                placeholder="全选"
+                                style="width: 220px;">
+                            <Option v-for="item in dict_unitType"
+                                    :value="item.value"
+                                    :key="`unitType_${item.id}`">{{item.label}}</Option>
                         </Select>
                     </FormItem>
                     <FormItem :label-width="20">
@@ -22,7 +25,7 @@
             <div class="ivx-table-box">
                 <Table ref="table"
                        border
-                       height="540"
+                       height="420"
                        :columns="tableColumns"
                        :data="filterData"
                        :highlight-row="!multiple"
@@ -37,7 +40,7 @@
                       :current="searchParams.current"
                       :page-size="searchParams.size"
                       :total="searchParams.total"
-                      :on-change="onPageChange"></Page>
+                      @on-change="onPageChange"></Page>
             </div>
         </div>
 
@@ -56,6 +59,10 @@
         name: 'unitSelect',
         components: {vIvxFilterBox},
         props: {
+            unitType: {
+                type: String,
+                default: ''
+            },
             multiple: {
                 type: Boolean,
                 default: false
@@ -65,17 +72,27 @@
                 default() {
                     return [];
                 }
+            },
+            selectedValue: {
+                type: Array,
+                default() {
+                    return [];
+                }
+            },
+            filterSelected: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
                 searchParams: {
                     current: 1,      // 当前第几页
-                    size: 7,      // 每页几行
+                    size: 4,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
                         searchKey: '',
-                        unitType: 'all'
+                        unitType: ''
                     }
                 },
                 tableColumns: [
@@ -101,18 +118,24 @@
             };
         },
         watch: {
+            unitType: {
+                immediate: true,
+                handler(val) {
+                    this.searchParams.condition.unitType = val;
+                }
+            },
             selectedList() {
                 this.selectValue = [];
                 this.selectItems = [];
             },
-            unitId: {
-                handler(val) {
-                    this.searchParams.unitId = val;
-                },
-                immediate: true
-            },
-            'searchParams.condition.unitType'() {
+            'searchParams.current'() {
                 this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
             },
             filterData(val) {
                 let that = this;
@@ -132,9 +155,8 @@
             }
         },
         mounted() {
-            this.selectValue = [];
-            this.getData();
             this.getDict_unitType();
+            this.getData();
         },
         methods: {
             /**
@@ -146,15 +168,10 @@
             },
             // 获取表格数据
             getData() {
-                let data = Object.assign({}, this.searchParams);
-
-                if (data.condition.unitType === 'all') {
-                    data.condition.unitType = '';
-                }
                 this.$http({
                     method: 'post',
                     url: '/unit/list',
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.tableData = res.data.records || [];
@@ -223,7 +240,7 @@
 <style lang="scss">
     .unitSelect-container {
         .modal-body {
-            height: 660px;
+            /*height: 470px;*/
             overflow-y: auto;
             overflow-x: hidden;
         }

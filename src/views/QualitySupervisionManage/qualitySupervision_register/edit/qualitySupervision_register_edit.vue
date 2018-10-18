@@ -23,13 +23,14 @@
         <template slot="right">
             <vProjectBaseInfo  v-if="activeName === '1'"
                                :projectId="projectId"
+                               @modal_updateProject_callback="modal_updateProject_callback"
                                class="six-modal-body-inner"></vProjectBaseInfo>
 
-            <vFileDetailLists v-if="activeName === '2' && projectId !== ''"
+            <vFileDetailLists v-if="activeName === '2'"
                               :projectId="projectId"
                               class="six-modal-body-inner"></vFileDetailLists>
 
-            <vUnitAndPerson v-if="activeName === '3' && projectId !== ''"
+            <vUnitAndPerson v-if="activeName === '3'"
                             :projectId="projectId"
                             class="six-modal-body-inner"></vUnitAndPerson>
 
@@ -53,12 +54,15 @@
         },
         data() {
             return {
-                activeName: '1'
+                activeName: '3'
             };
         },
         methods: {
             onSelect(name) {
                 this.activeName = name;
+            },
+            modal_updateProject_callback() {
+                this.$emit('modal_callback');
             }
         }
     }

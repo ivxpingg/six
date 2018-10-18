@@ -5,12 +5,15 @@
               inline
               :model="formData"
               :rules="rules"
-              :label-width="180">
+              :label-width="140">
             <FormItem label="项目名称:" prop="projectName">
                 <Input v-model="formData.projectName"/>
             </FormItem>
             <FormItem label="标段:" prop="part">
                 <Input v-model="formData.part"/>
+            </FormItem>
+            <FormItem label="详细地址:" prop="address">
+                <Input v-model="formData.address"/>
             </FormItem>
             <FormItem label="地区:" prop="province">
                 <Select v-model="formData.province"
@@ -29,9 +32,7 @@
                     <Option value="2">思明区</Option>
                 </Select>
             </FormItem>
-            <FormItem label="详细地址:" prop="address">
-                <Input v-model="formData.address"/>
-            </FormItem>
+
             <FormItem label="项目类型:" prop="projectType">
                 <Select v-model="formData.projectType">
                     <Option v-for="item in dict_projectType"
@@ -41,17 +42,25 @@
                 </Select>
             </FormItem>
             <FormItem label="建设单位:" prop="buildUnit">
-                <Input v-model="formData.buildUnit" readonly />
+                <Input v-model="formData.buildUnitStr" readonly @on-focus="onFocus_unitSelect('construction_unit')" />
             </FormItem>
             <FormItem label="施工单位:" prop="constructUnit">
-                <Input v-model="formData.constructUnit" readonly />
+                <Input v-model="formData.constructUnitStr" readonly @on-focus="onFocus_unitSelect('work_unit')" />
             </FormItem>
             <FormItem label="监理单位:" prop="supervisorUnit">
-                <Input v-model="formData.supervisorUnit" readonly />
+                <Input v-model="formData.supervisorUnitStr" readonly @on-focus="onFocus_unitSelect('supervisor_unit')" />
             </FormItem>
-            <FormItem label="技术等级:" prop="level">
-                <Select v-model="formData.level">
-                    <Option v-for="item in dict_level"
+            <FormItem label="技术等级:" prop="technicalLevel">
+                <Select v-model="formData.technicalLevel">
+                    <Option v-for="item in dict_technicalLevel"
+                            :value="item.value"
+                            :key="item.id"
+                            :label="item.label"></Option>
+                </Select>
+            </FormItem>
+            <FormItem label="结构类型:" prop="structureType">
+                <Select v-model="formData.structureType">
+                    <Option v-for="item in dict_structureType"
                             :value="item.value"
                             :key="item.id"
                             :label="item.label"></Option>
@@ -66,19 +75,35 @@
                 </Select>
             </FormItem>
             <FormItem label="项目里程(km):" prop="mileage">
-                <Input v-model="formData.mileage" number/>
+                <Input v-model="formData.mileage" number>
+                <Icon type="md-flag" slot="prefix"/>
+                </Input>
             </FormItem>
             <FormItem label="设计时速(km/h):" prop="designSpeed">
-                <Input v-model="formData.designSpeed" number/>
+                <Input v-model="formData.designSpeed" number>
+                    <Icon type="md-speedometer" slot="prefix"/>
+                </Input>
+            </FormItem>
+            <FormItem label="路基宽度(米):" prop="subgradeWidth">
+                <Input v-model="formData.subgradeWidth" number>
+
+                </Input>
             </FormItem>
             <FormItem label="投资额(万元):" prop="amount">
-                <Input v-model="formData.amount" number/>
+                <Input v-model="formData.amount" number>
+                     <Icon type="logo-usd" slot="prefix"/>
+                </Input>
+
             </FormItem>
             <FormItem label="施工合同金额(万元):" prop="constructAmount">
-                <Input v-model="formData.constructAmount" number/>
+                <Input v-model="formData.constructAmount" number>
+                     <Icon type="logo-usd" slot="prefix"/>
+                </Input>
             </FormItem>
             <FormItem label="监理合同金额(万元):" prop="supervisorAmount">
-                <Input v-model="formData.supervisorAmount" number/>
+                <Input v-model="formData.supervisorAmount" number>
+                    <Icon type="logo-usd" slot="prefix"/>
+                </Input>
             </FormItem>
             <FormItem label="计划开工时间:" prop="planBeginTime">
                 <DatePicker
@@ -97,10 +122,14 @@
                         placeholder="选择时间"></DatePicker>
             </FormItem>
             <FormItem label="联系人:" prop="contacts">
-                <Input v-model="formData.contacts"/>
+                <Input v-model="formData.contacts" placeholder="请输入联系人姓名">
+                     <Icon type="md-call" slot="prefix"/>
+                </Input>
             </FormItem>
             <FormItem label="联系电话:" prop="contactPhone">
-                <Input v-model="formData.contactPhone"/>
+                <Input v-model="formData.contactPhone" placeholder="请输入联系电话">
+                    <Icon type="md-call" slot="prefix"/>
+                </Input>
             </FormItem>
         </Form>
 
@@ -110,18 +139,20 @@
                     @click="save">保存</Button>
         </div>
 
-        <!--<vModalEmployeeSelect ref="modal_userSelect"-->
-                              <!--multiple-->
-                              <!--:selectedValue="formData.userIds"-->
-                              <!--:zIndex="2000"-->
-                              <!--@modal-callback="modal_userSelect_callback" ></vModalEmployeeSelect>-->
+        <vModalUnitSelect ref="modal_unitSelect"
+                          :selectedValue="[]"
+                          :zIndex="2000"
+                          :unitType="unitType"
+                          @modal-callback="modal_unitSelect_callback" ></vModalUnitSelect>
     </div>
 </template>
 
 <script>
+    import vModalUnitSelect from '../../../../Common/unitSelect/modalUnitSelect';
+    import MOMENT from 'moment';
     export default {
         name: 'projectBaseInfo',
-        components: {},
+        components: {vModalUnitSelect},
         props: {
             isView: {
                 type: Boolean,
@@ -146,17 +177,22 @@
                     address: '',
                     projectType: '',    // 项目类型
                     buildUnit: '',      // 建设单位
-                    level: '',          // 技术等级
+                    buildUnitStr: '',
+                    technicalLevel: '',          // 技术等级
+                    structureType: '',        // 结构类型
                     mileage: null,      // 项目里程(km)
                     projectProperty: '', // 工程性质
                     amount: null,       // 投资额(万元)
                     constructAmount: null,  // 施工合同金额(万元)
                     supervisorAmount: null, // 监理合同金额(万元)
                     designSpeed: null,           // 设计时速(km/h)
+                    subgradeWidth: null,        // 路基宽度(米)
                     planBeginTime: '',      // 计划开工时间
                     planEndTime: '',        // 计划交工时间
                     constructUnit: '',       // 施工单位
+                    constructUnitStr: '',
                     supervisorUnit: '',      // 监理单位
+                    supervisorUnitStr: '',
                     contacts: '',            // 联系人
                     contactPhone: '',       // 联系电话/联系方式
                 },
@@ -169,23 +205,26 @@
                     constructAmount: [{ required: true, type: 'number', message: '施工合同金额不能为空！', trigger: 'blur' }],
                     supervisorAmount: [{ required: true, type: 'number', message: '监理合同金额不能为空！', trigger: 'blur' }],
                     designSpeed: [{ required: true, type: 'number', message: '设计时速不能为空！', trigger: 'blur' }],
+                    subgradeWidth: [{ required: true, type: 'number', message: '路基宽度不能为空！', trigger: 'blur' }],
                     planBeginTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
                     planEndTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
 
                 },
 
+                //
+                unitType: '',
+
                 // 字典
                 dict_projectType: [],
-                dict_level: [],
-                dict_projectProperty: []
+                dict_technicalLevel: [],
+                dict_projectProperty: [],
+                dict_structureType: []
             };
         },
         watch: {
             projectId: {
-                immediate: true,
                 handler(val) {
                     this.formData.projectId = val;
-
                     if (val !== '') {
                         this.getData_detail();
                     }
@@ -193,21 +232,21 @@
             }
         },
         mounted() {
-            this.getDict();
+            this.getDict(['projectType', 'technicalLevel', 'projectProperty', 'structureType']);
         },
         methods: {
-            getDict() {
+            getDict(list) {
                 this.$http({
                     method: 'get',
                     url: '/dict/getListByTypes',
                     params: {
-                        types: 'projectType,level,projectProperty'
+                        types: list.join(',')
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.dict_projectType = res.data['projectType'];
-                        this.dict_level = res.data['level'];
-                        this.dict_projectProperty = res.data['projectProperty'];
+                        list.forEach(v => {
+                            this[`dict_${v}`] = res.data[v] || [];
+                        });
                     }
                 });
             },
@@ -220,38 +259,80 @@
             getData_detail() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/project/query',
                     params: {
                         projectId: this.projectId
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.formData = Object.assign(this.formData, res.data);
+                        this.formData = Object.assign(this.formData, res.data, {
+                            planBeginTime: res.data.planBeginTime ? MOMENT(res.data.planBeginTime).format('YYYY-MM-DD') : '',
+                            planEndTime: res.data.planEndTime ? MOMENT(res.data.planEndTime).format('YYYY-MM-DD') : ''
+                        });
                     }
                 })
             },
+
+            // 单位选择
+            onFocus_unitSelect(type) {
+                this.unitType = type;
+                this.$refs.modal_unitSelect.modalValue = true;
+            },
+            modal_unitSelect_callback(selectValue, selectItems) {
+                switch (this.unitType) {
+                    case 'construction_unit':  // 建设单位
+                        this.formData.buildUnit = selectItems.unitId;
+                        this.formData.buildUnitStr = selectItems.unitName;
+                        break;
+                    case 'work_unit':  // 施工单位
+                        this.formData.constructUnit = selectItems.unitId;
+                        this.formData.constructUnitStr = selectItems.unitName;
+                        break;
+
+                    case 'supervisor_unit':   // 监理单位
+                        this.formData.supervisorUnit = selectItems.unitId;
+                        this.formData.supervisorUnitStr = selectItems.unitName;
+                        break;
+                }
+            },
+
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
-                        this.$http({
-                            method: 'post',
-                            url: '/',
-                            data: JSON.stringify(this.formData)
-                        }).then(res => {
-                            if(res.code === 'SUCCESS') {
-                                this.$Message.success({
-                                    content: '更新成功！'
-                                });
-                                this.$emit('modal_addUser_callback');
-                            }
-                        })
-                    } else {
+
+                        if(this.projectId === '') {
+                            this.$http({
+                                method: 'post',
+                                url: '/project/add',
+                                data: JSON.stringify(this.formData)
+                            }).then(res => {
+                                if(res.code === 'SUCCESS') {
+                                    this.$Message.success({
+                                        content: '添加成功！'
+                                    });
+                                    this.$emit('modal_addProject_callback');
+                                }
+                            })
+                        }
+
+                        else {
+                            this.$http({
+                                method: 'post',
+                                url: '/project/update',
+                                data: JSON.stringify(this.formData)
+                            }).then(res => {
+                                if(res.code === 'SUCCESS') {
+                                    this.$Message.success({
+                                        content: '保存成功！'
+                                    });
+                                    this.$emit('modal_updateProject_callback');
+                                }
+                            })
+                        }
 
                     }
                 })
             }
-
-
         }
     }
 </script>
@@ -261,7 +342,7 @@
         .form {
             .ivu-form-item {
                 .ivu-form-item-content > div{
-                    width: 260px;
+                    width: 180px;
                 }
             }
         }

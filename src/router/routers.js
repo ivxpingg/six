@@ -231,6 +231,7 @@ const SafetySupervisionManage = [
             {
                 path: 'safetySupervision_notification',
                 name: 'safetySupervision_notification',
+                component: () => import('@/views/SafetySupervisionManage/safetySupervision_notification/safetySupervision_notification.vue'),
                 meta: {
                     icon: '_safetySupervision_notification',
                     title: '安全通知'
@@ -239,6 +240,7 @@ const SafetySupervisionManage = [
             {
                 path: 'safetySupervision_check',
                 name: 'safetySupervision_check',
+                component: () => import('@/views/SafetySupervisionManage/safetySupervision_check/safetySupervision_check.vue'),
                 meta: {
                     icon: '_safetySupervision_check',
                     title: '安全督查检查'
@@ -247,6 +249,7 @@ const SafetySupervisionManage = [
             {
                 path: 'safetySupervision_account',
                 name: 'safetySupervision_account',
+                component: () => import('@/views/SafetySupervisionManage/safetySupervision_account/safetySupervision_account.vue'),
                 meta: {
                     icon: '_account',
                     title: '安全督查台账'
@@ -255,6 +258,7 @@ const SafetySupervisionManage = [
             {
                 path: 'safetySupervision_examine',
                 name: 'safetySupervision_examine',
+                // component: () => import('@/views/SafetySupervisionManage/safetySupervision_examine/safetySupervision_examine.vue'),
                 meta: {
                     icon: '_safetySupervision_examine',
                     title: '平安工地考核'
@@ -278,6 +282,7 @@ const CreditRatingManage = [
             {
                 path: 'creditRating_record',
                 name: 'creditRating_record',
+                component: () => import('@/views/CreditRatingManage/creditRating_record/creditRating_record.vue'),
                 meta: {
                     icon: '_creditRating_record',
                     title: '信用评价记录'
@@ -286,6 +291,7 @@ const CreditRatingManage = [
             {
                 path: 'creditRating_account',
                 name: 'creditRating_account',
+                component: () => import('@/views/CreditRatingManage/creditRating_account/creditRating_account.vue'),
                 meta: {
                     icon: '_account',
                     title: '信用评价管理台账'
@@ -294,6 +300,7 @@ const CreditRatingManage = [
             {
                 path: 'majorProject_check',
                 name: 'majorProject_check',
+                // component: () => import('@/views/CreditRatingManage/majorProject_check/majorProject_check.vue'),
                 meta: {
                     icon: '_majorProject_check',
                     title: '重点项目考勤管理'
@@ -317,6 +324,7 @@ const QAManage = [
             {
                 path: 'QA_report',
                 name: 'QA_report',
+                //component: () => import('@/views/QAManage/QA_report/QA_report.vue'),
                 meta: {
                     icon: '_QA_report',
                     title: '质量检测报表'
@@ -325,6 +333,7 @@ const QAManage = [
             {
                 path: 'QA_analyze',
                 name: 'QA_analyze',
+                //component: () => import('@/views/QAManage/QA_analyze/QA_analyze.vue'),
                 meta: {
                     icon: '_QA_analyze',
                     title: '质量安全检测数据分析'
@@ -348,6 +357,7 @@ const RecordAndCompletedManage = [
             {
                 path: 'projectRecords',
                 name: 'projectRecords',
+                component: () => import('@/views/RecordAndCompletedManage/projectRecords/projectRecords.vue'),
                 meta: {
                     icon: '_projectRecords',
                     title: '工程备案'
@@ -356,6 +366,7 @@ const RecordAndCompletedManage = [
             {
                 path: 'project_verification',
                 name: 'project_verification',
+                component: () => import('@/views/RecordAndCompletedManage/project_verification/project_verification.vue'),
                 meta: {
                     icon: '_project_verification',
                     title: '交工检测核验'
@@ -364,6 +375,7 @@ const RecordAndCompletedManage = [
             {
                 path: 'projectCompleteQuality_authenticate',
                 name: 'projectCompleteQuality_authenticate',
+                component: () => import('@/views/RecordAndCompletedManage/projectCompleteQuality_authenticate/projectCompleteQuality_authenticate.vue'),
                 meta: {
                     icon: '_projectCompleteQuality_authenticate2',
                     title: '竣工质量鉴定'
@@ -372,6 +384,7 @@ const RecordAndCompletedManage = [
             {
                 path: 'projectFileManage',
                 name: 'projectFileManage',
+                // component: () => import('@/views/RecordAndCompletedManage/projectFileManage/projectFileManage.vue'),
                 meta: {
                     icon: '_projectFileManage',
                     title: '工程档案管理'

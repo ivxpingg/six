@@ -4,12 +4,12 @@
         <Modal v-model="modalValue"
                title="单位选择"
                :width="1200"
-               :z-index="zIndex"
                footer-hide>
             <vUnitSelect :multiple="multiple"
-                             :selectedValue="selectedValue"
-                             :filterSelected="filterSelected"
-                             @handleSelect="selectedPerson"></vUnitSelect>
+                         :unitType="unitType"
+                         :selectedValue="selectedValue"
+                         :filterSelected="filterSelected"
+                         @handleSelect="selectedPerson"></vUnitSelect>
         </Modal>
 
     </div>
@@ -22,8 +22,39 @@
         name: 'modalUnitSelect',
         mixins: [modalMixin],
         components: {vUnitSelect},
+        props: {
+            unitType: {
+                type: String,
+                default: ''
+            },
+            multiple: {
+                type: Boolean,
+                default: false
+            },
+            selectedValue: {
+                type: Array,
+                default() {
+                    return [];
+                }
+            },
+            // 是否过滤已选的值
+            filterSelected: {
+                type: Boolean,
+                default: false
+            }
+        },
         data() {
-            return {};
+            return {
+
+            };
+        },
+        methods: {
+            selectedPerson(selectValue, selectItems) {
+                if (selectValue) {
+                    this.$emit('modal-callback', selectValue, selectItems);
+                }
+                this.modalValue = false;
+            }
         }
     }
 </script>
