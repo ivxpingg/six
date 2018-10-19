@@ -1,5 +1,5 @@
 <template>
-    <div class="ledgerType_1-container">
+    <div class="ledgerTyper_safe_0-container">
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
@@ -8,7 +8,7 @@
                            placeholder="项目名称"/>
                 </FormItem>
                 <FormItem label="选择时间:" :label-width="65">
-                    <DatePicker type="daterange"
+                    <DatePicker type="year"
                                 @on-change="onChage_daterange"
                                 placeholder="选择时间"
                                 style="width: 200px"></DatePicker>
@@ -36,7 +36,7 @@
     import vIvxFilterBox from '../../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     export default {
-        name: 'ledgerType_1',  // 质量安全抽查意见书登记台帐
+        name: 'ledgerTyper_safe_0',  // 安全告知单登记台账
         components: {vIvxFilterBox},
         data() {
             return {
@@ -50,7 +50,6 @@
                         endTime: ''
                     }
                 },
-
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '日期', width: 180, align: 'center', key: 'recordDate',
@@ -110,8 +109,8 @@
                 this.searchParams.current = current;
             },
             onChage_daterange(value) {
-                this.searchParams.condition.beginTime = value[0];
-                this.searchParams.condition.endTime = value[1];
+                this.searchParams.condition.beginTime = value;
+                this.searchParams.condition.endTime = value;
             },
             // 获取表格数据
             getData() {
@@ -135,7 +134,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .ledgerType_1-container {
-        padding-top:  10px;
+    .ledgerTyper_safe_0-container {
     }
 </style>

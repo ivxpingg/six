@@ -87,6 +87,17 @@
                 tableLoading: false,
             };
         },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler(val) {
+                    this.getData();
+                }
+            }
+        },
         mounted() {
             this.getData();
         },

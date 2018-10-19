@@ -80,6 +80,7 @@
                                 },
                                 on: {
                                     click: () => {
+                                        this.publicNotice(params.row);
                                     }
                                 }
                             }, '发布'));
@@ -92,6 +93,7 @@
                                 },
                                 on: {
                                     click: () => {
+                                        this.cancelNotice(params.row);
                                     }
                                 }
                             }, '作废'));
@@ -104,6 +106,7 @@
                                 },
                                 on: {
                                     click: () => {
+                                        this.delNotice(params.row);
                                     }
                                 }
                             }, '删除'));
@@ -118,19 +121,20 @@
                 ],
                 tableData: [
                     {
-                        fileName: '',  // 文件名称
-                        fileNo: '',    // 文件编号
+                        safeNoticeId: '001',
+                        fileName: '文件名',  // 文件名称
+                        fileNo: 'NO.12545',    // 文件编号
                         editUnit: '',  // 主编单位
-                        editUnitStr: '',
-                        beginTime: '',  // 施行时间
-                        intro: '',  // 简介
+                        editUnitStr: '合肥华德交通工程咨询有限公司',
+                        beginTime: '2018-01-01',  // 施行时间
+                        intro: '介绍',  // 简介
                         fileNum: null,  // 附件数量
-                        insTime: '',  // 创建时间
+                        insTime: '2018-01-01',  // 创建时间
                         operateUnit: '',  // 操作单位
-                        operateUnitStr: '',
-                        operator: '',  //  操作人
-                        publishTime: '',  // 发布时间
-                        cancelTime: ''  // 作废时间
+                        operateUnitStr: '合肥华德交通工程咨询有限公司',
+                        operator: 'admin',  //  操作人
+                        publishTime: '2018-01-01',  // 发布时间
+                        cancelTime: '2018-01-01'  // 作废时间
                     }
                 ],
                 tableLoading: false,
@@ -148,8 +152,8 @@
             }
         },
         mounted() {
-            this.getData();
-
+            // TODO 首次加载获取表格数据
+            // this.getData();
         },
         methods: {
             /**
@@ -180,6 +184,67 @@
             // 新增
             modal_add_open() {
                 this.$refs.add.modalValue = true;
+            },
+
+            // 发布
+            publicNotice(row) {
+                this.$Modal.confirm({
+                    title: '发布',
+                    content: `确认要发布<${row.fileName}>?`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/',
+                            params: {
+                                safeNoticeId: row.safeNoticeId
+                            }
+                        }).then((res) => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('发布成功!');
+                            }
+                        });
+                    }
+                })
+            },
+            // 作废
+            cancelNotice(row) {
+                this.$Modal.confirm({
+                    title: '作废',
+                    content: `确认要作废<${row.fileName}>?`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/',
+                            params: {
+                                safeNoticeId: row.safeNoticeId
+                            }
+                        }).then((res) => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('作废成功!');
+                            }
+                        });
+                    }
+                })
+            },
+            // 删除
+            delNotice(row) {
+                this.$Modal.confirm({
+                    title: '删除',
+                    content: `确认要删除<${row.fileName}>?`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/',
+                            params: {
+                                safeNoticeId: row.safeNoticeId
+                            }
+                        }).then((res) => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('删除成功!');
+                            }
+                        });
+                    }
+                })
             }
         }
     }

@@ -8,13 +8,13 @@
                   class="user-form"
                   :model="formData"
                   :rules="rules"
-                  :label-width="120">
-                <FormItem label="项目名称:">
+                  :label-width="80">
+                <FormItem label="项目名称:" prop="projectId">
                     <Select v-model="formData.projectId">
                         <Option v-for="item in projectList"
                                 :key="item.projectId"
                                 :value="item.projectId"
-                                :label="item.name"></Option>
+                                :label="item.projectName"></Option>
                     </Select>
                 </FormItem>
                 <FormItem label="督察时间:" prop="checkTime">
@@ -37,12 +37,23 @@
                     <Input v-model="formData.content" type="textarea" placeholder="请输入"/>
                 </FormItem>
                 <FormItem label="督查类型:">
-                    <Select v-model="formData.projectId">
-                        <Option v-for="item in projectList"
-                                :key="item.projectId"
-                                :value="item.projectId"
-                                :label="item.name"></Option>
+                    <Select v-model="formData.projectId" style="width: 200px;">
+                        <Option v-for="item in dict_supervisionType"
+                                :key="item.id"
+                                :value="item.value"
+                                :label="item.label"></Option>
                     </Select>
+                    <Upload style="display: inline-block; margin-left: 20px;" :action="uploadParams.actionUrl"
+                            :showUploadList="uploadParams.showUploadList"
+                            :multiple="uploadParams.multiple"
+                            :accept="uploadParams.accept"
+                            :maxSize="uploadParams.maxSize"
+                            :before-upload="fileBeforeUpload"
+                            :on-exceeded-size="exceededSize"
+                            :on-error="fileUploadError"
+                            :on-success="fileUploadSuccess">
+                        <Button type="primary" icon="ios-cloud-upload-outline">上传督查文件</Button>
+                    </Upload>
                 </FormItem>
                 <FormItem label="现场记录:">
                     <Upload :action="uploadParams.actionUrl"
@@ -54,7 +65,7 @@
                             :on-exceeded-size="exceededSize"
                             :on-error="fileUploadError"
                             :on-success="fileUploadSuccess">
-                        <Button type="primary" icon="ios-cloud-upload-outline">上传材料</Button> 支持扩展名：.png .jpg .gif .jpeg .pdf
+                        <Button type="primary" icon="ios-cloud-upload-outline">上传图片</Button> 支持扩展名：.png .jpg .gif .jpeg .pdf
                     </Upload>
                 </FormItem>
             </Form>
@@ -74,6 +85,12 @@
     export default {
         name: 'addSupervisionRecord',   // 添加监督记录
         mixins: [modalMixin, uploadMixin],
+        props: {
+            projectList: {
+                type: Array,
+                required: true
+            }
+        },
         data() {
             return {
                 formData: {
@@ -84,13 +101,13 @@
                     fileIds: ''
                 },
                 rules: {
+                    projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
                     content: [{ required: true, message: '督查内容不能为空！', trigger: 'blur' }],
                     checkTime: [{ required: true, message: '督察时间不能为空！', trigger: 'blur' }]
                 },
 
-                projectList: [],
-
                 dict_checkWay: [],  // 督查方式
+                dict_supervisionType: [] // 质量督查文件类别
 
             };
         },
@@ -100,19 +117,22 @@
             }
         },
         mounted() {
-            this.getDict('checkWay');
+            this.getDict(['checkWay', 'supervisionType']);
         },
         methods: {
-            getDict(type) {
+            getDict(list) {
                 this.$http({
                     method: 'get',
-                    url: '/dict/getListByType',
+                    url: '/dict/getListByTypes',
                     params: {
-                        type: type
+                        types: list.join(',')
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this[`dict_${type}`] = res.data;
+                        list.forEach(val => {
+                            this[`dict_${val}`] = res.data[val];
+                        });
+
                     }
                 })
             },

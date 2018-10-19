@@ -58,16 +58,8 @@
         },
         mounted() {
             this.getDict('ledgerType');
-            this.getData();
         },
         methods: {
-            /**
-             * 分页控件-切换页面
-             * @param current
-             */
-            onPageChange(current) {
-                this.searchParams.current = current;
-            },
             getDict(type) {
                 this.$http({
                     method: 'get',
@@ -80,28 +72,7 @@
                         this[`dict_${type}`] = res.data;
                     }
                 })
-            },
-            onChage_daterange(value) {
-                this.searchParams.condition.beginTime = value[0];
-                this.searchParams.condition.endTime = value[1];
-            },
-            // 获取表格数据
-            getData() {
-                this.$http({
-                    method: 'post',
-                    url: '/',
-                    data: JSON.stringify(this.searchParams)
-                }).then((res) => {
-                    this.tableLoading = false;
-                    if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
-                        this.searchParams.total = res.data.total;
-                    }
-                }).catch(() => {
-                    this.tableLoading = false;
-                })
             }
-
         }
     }
 </script>

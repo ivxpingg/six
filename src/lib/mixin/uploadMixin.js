@@ -3,7 +3,7 @@ export default {
     data() {
         return {
             uploadParams: {
-                actionUrl: Config[Config.env].origin + Config[Config.env].ajaxUrl + '',
+                actionUrl: Config[Config.env].actionUrl + '',
                 showUploadList: false,  // 显示已上传列表
                 multiple: false,        // 是否支持多选
                 data: {},               // 上传附带参数

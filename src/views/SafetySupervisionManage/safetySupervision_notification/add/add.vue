@@ -16,7 +16,9 @@
                     <Input v-model="formData.fileNo" placeholder="请输入文件编号"/>
                 </FormItem>
                 <FormItem label="主编单位:" prop="editUnit">
-                    <Input v-model="formData.editUnitStr"/>
+                    <Input v-model="formData.editUnitStr"
+                           readonly
+                           @on-focus="modal_unitSelect_open" />
                 </FormItem>
                 <FormItem label="施行日期:" prop="beginTime">
                     <DatePicker
@@ -54,15 +56,21 @@
                         @click="save">保存</Button>
             </div>
         </Modal>
+
+        <!--单位选择-->
+        <vModalUnitSelect ref="unitSelect"
+                          @modal-callback="modal_unitSelect_callback"></vModalUnitSelect>
     </div>
 </template>
 
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import uploadMixin from '../../../../lib/mixin/uploadMixin';
+    import vModalUnitSelect from '../../../Common/unitSelect/modalUnitSelect';
     export default {
         name: 'add_notification',  // 添加安全通知
         mixins: [modalMixin, uploadMixin],
+        components: {vModalUnitSelect},
         data() {
             return {
                 uploadParams: {
@@ -100,7 +108,19 @@
             },
 
             fileUploadSuccess(response, file, fileList) {
+                console.dir(response);
                 // this.$Loading.finish();
+            },
+
+            // 单位选择
+            modal_unitSelect_open() {
+                this.$refs.unitSelect.modalValue = true;
+            },
+            modal_unitSelect_callback(selectValue, selectItems) {
+                this.formData.editUnit = selectItems.unitId;
+                this.formData.editUnitStr = selectItems.unitName;
+                this.$refs.form.validateField('editUnit');
+                this.$refs.unitSelect.modalValue = false;
             },
 
             save() {

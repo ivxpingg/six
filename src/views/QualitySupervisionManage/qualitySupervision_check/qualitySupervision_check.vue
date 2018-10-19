@@ -18,7 +18,7 @@
                         <Option v-for="item in projectList"
                                 :key="item.projectId"
                                 :value="item.projectId"
-                                :label="item.name"></Option>
+                                :label="item.projectName"></Option>
                     </Select>
                 </FormItem>
             </Form>
@@ -40,6 +40,7 @@
         </div>
 
         <vAddSupervisionRecord :value="modal_addSupervisionRecord"
+                               :projectList="projectList"
                                @modal_callback="modal_addSupervisionRecord_callback"
                                @close="modal_addSupervisionRecord_close"></vAddSupervisionRecord>
     </div>
@@ -50,7 +51,7 @@
     import MOMENT from 'moment';
     import vAddSupervisionRecord from './add/addSupervisionRecord';
     export default {
-        name: 'qualitySupervision_check',
+        name: 'qualitySupervision_check',  // 质量监督检查
         components: {vIvxFilterBox, vAddSupervisionRecord},
         data() {
             return {
@@ -72,6 +73,13 @@
                     { title: '督察方式', width: 180, align: 'center', key: 'checkWayLabel' },
                     { title: '督查内容', width: 180, align: 'center', key: 'content' },
                     { title: '督查类型', width: 180, align: 'center', key: 'checkTypeLabel' },
+                    { title: '附件', width: 100, align: 'center', key: '' },
+                    { title: '下发单位', width: 100, align: 'center', key: '' },
+                    { title: '发出人或负责人', width: 130, align: 'center', key: '' },
+                    { title: '整改状态', width: 100, align: 'center', key: '' },
+                    { title: '通知查看时间', width: 120, align: 'center', key: '' },
+                    { title: '整改回复时间', width: 120, align: 'center', key: '' },
+                    { title: '回复内容', width: 120, align: 'center', key: '' },
                     {
                         title: '操作',
                         width: 240,
@@ -141,9 +149,29 @@
             };
         },
         mounted() {
-            this.getData();
+            this.getProjectList();
         },
         methods: {
+            // 获取项目列表
+            getProjectList() {
+                this.$http({
+                    method: 'post',
+                    url: '/project/list',
+                    data: JSON.stringify({
+                        current: 1,      // 当前第几页
+                        size: 1000,      // 每页几行
+                    })
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.projectList = res.data.records || [];
+                        if (this.projectList.length > 0) {
+                            this.searchParams.condition.projectId = res.data.records[0].projectId;
+                            this.getData();
+                        }
+                    }
+                })
+            },
+
             /**
              * 分页控件-切换页面
              * @param current
