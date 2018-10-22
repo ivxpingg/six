@@ -1,35 +1,35 @@
 <template>
     <div class="modalCreditCodeSelect-container">
         <Modal v-model="modalValue"
-               title="单位选择"
-               :width="1000">
+               title="扣分代码"
+               :width="1200">
             <vIvxFilterBox>
                 <Form inline>
                     <FormItem label="关键字:" :label-width="65">
                         <Input v-model="searchParams.condition.searchKey" placeholder="请输入关键字" />
                     </FormItem>
-                    <FormItem label="信用类型:" :label-width="90">
+                    <FormItem label="信用类型:" :label-width="70">
                         <Select v-model="searchParams.condition.creditType" clearable
                                 placeholder="全选"
-                                style="width: 220px;">
+                                style="width: 200px;">
                             <Option v-for="item in select_creditType"
                                     :value="item.value"
                                     :key="`unitType_${item.id}`">{{item.label}}</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="一级目录:" :label-width="90">
+                    <FormItem label="一级目录:" :label-width="70">
                         <Select v-model="searchParams.condition.firstDirectory" clearable
                                 placeholder="全选"
-                                style="width: 220px;">
+                                style="width: 200px;">
                             <Option v-for="item in select_firstDirectory"
                                     :value="item.value"
                                     :key="`unitType_${item.id}`">{{item.label}}</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="二级目录:" :label-width="90">
+                    <FormItem label="二级目录:" :label-width="70">
                         <Select v-model="searchParams.condition.secondDirectory" clearable
                                 placeholder="全选"
-                                style="width: 220px;">
+                                style="width: 200px;">
                             <Option v-for="item in select_secondDirectory"
                                     :value="item.value"
                                     :key="`unitType_${item.id}`">{{item.label}}</Option>
@@ -40,7 +40,8 @@
             <div class="ivx-table-box">
                 <Table ref="table"
                        border
-                       height="420"
+                       size="small"
+                       height="330"
                        :columns="tableColumns"
                        :data="filterData"
                        :highlight-row="!multiple"

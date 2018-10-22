@@ -7,6 +7,7 @@
                footer-hide>
             <vEmployeeSelect :multiple="multiple"
                              :userSourceType="userSourceType"
+                             :unitId="unitId"
                              :selectedValue="selectedValue"
                              :filterSelected="filterSelected"
                              @handleSelect="selectedPerson"></vEmployeeSelect>
@@ -23,9 +24,14 @@
         mixins: [modalMixin],
         components: {vEmployeeSelect},
         props: {
+            // all、hasUnit、noUnit
             userSourceType: {
                 type: String,
                 default: 'all'
+            },
+            unitId: {
+                type: String,
+                default: ''
             },
             multiple: {
                 type: Boolean,

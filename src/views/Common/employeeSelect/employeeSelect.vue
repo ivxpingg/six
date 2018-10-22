@@ -72,7 +72,7 @@
             },
             multiple: {
                 type: Boolean,
-                default: true
+                default: false
             },
             selectedValue: {
                 type: Array,

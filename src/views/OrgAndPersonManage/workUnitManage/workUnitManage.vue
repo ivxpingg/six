@@ -156,7 +156,10 @@
             };
         },
         watch: {
-            searchParams: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
                 deep: true,
                 handler() {
                     this.getData();
