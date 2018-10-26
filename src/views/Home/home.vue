@@ -1,7 +1,9 @@
 <template>
-    <div class="home-container">
+    <div class="home-container" ref="home">
         <vCountPanel :inforCardData="inforCardData"></vCountPanel>
-        <div class="gutter-line"></div>
+        <div class="gutter-line">
+            <Button type="success" @click="toPdf">topdf</Button>
+        </div>
         <Row class="row-box" :gutter="20">
             <i-col span="8"><vUserInfoPanel></vUserInfoPanel></i-col>
             <i-col span="16"><vSupervisionCount></vSupervisionCount></i-col>
@@ -23,6 +25,9 @@
     import vProjectPanel from './components/projectPanel/projectPanel.vue';
     import vFilesManage from './components/filesManage/filesManagePanel.vue';
     import vLogPanel from './components/logPanel/logPanel.vue';
+
+    import html2canvas from 'html2canvas';
+    import jspdf from 'jspdf/dist/jspdf.debug';
     export default {
         name: 'mhome',
         components: {
@@ -46,6 +51,53 @@
                     { title: '监督工作(人次)', icon: '_safetySupervision_check', count: 14, color: '#9A66E4' }
                 ]
             };
+        },
+        methods: {
+            toPdf() {
+
+                let that = this;
+                html2canvas(this.$refs.home).then(function(canvas) {
+
+                    let imgData = canvas.toDataURL('image/jpeg');
+                    let doc = new jspdf("p", "pt", [1291,1313]);
+                    doc.addImage(imgData, 'JPEG', 0, 0,1291,1313);
+                    // that.submit(doc.output());
+                    doc.save('content.pdf');
+                    // document.body.appendChild(canvas);
+                });
+                // html2canvas(this.$refs.home, {
+                //     onrendered: function(canvas) {
+                //
+                //         debugger
+                //
+                //         //通过html2canvas将html渲染成canvas，然后获取图片数据
+                //         let imgData = canvas.toDataURL('image/jpeg');
+                //
+                //         //初始化pdf，设置相应格式
+                //         let doc = new jspdf("p", "mm", "a4");
+                //
+                //         //这里设置的是a4纸张尺寸
+                //         doc.addImage(imgData, 'JPEG', 0, 0,210,297);
+                //
+                //         //输出保存命名为content的pdf
+                //         doc.save('content.pdf');
+                //     }
+                // });
+            },
+            submit(str) {
+                this.$http({
+                    method: 'post',
+                    url: '/projectAudit/test',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    data: {
+                        file: str
+                    }
+                }).then((res) => {
+                })
+
+            }
         }
     }
 </script>

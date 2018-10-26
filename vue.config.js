@@ -101,9 +101,9 @@ module.exports = {
             //     ws: true,
             //     changeOrigin: true
             // }
-
+            //
             // '/': {
-            //     target: 'http://192.168.0.100:8080',
+            //     target: 'http://192.168.0.199:8080',
             //     ws: true,
             //     changeOrigin: true
             // }

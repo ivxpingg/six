@@ -159,9 +159,9 @@
                 }
             },
             modal_userSelect_callback(selectValue, selectItems) {
-                this.formData.userList = selectItems;
+                this.formData.userList = this.formData.userList.concat(selectItems);
                 this.formData.userIds = [];
-                selectItems.forEach((val) => {
+                this.formData.userList.forEach((val) => {
                     this.formData.userIds.push(val.userId);
                 });
                 this.$refs.form.validate();

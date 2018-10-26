@@ -58,8 +58,8 @@
             return {
                 searchParams: {
                     current: 1,      // 当前第几页
-                    size: 10,      // 每页几行
-                    total: 0,     // 总行数
+                    size: 10,        // 每页几行
+                    total: 0,        // 总行数
                     condition: {
                         searchKey: '',      // 模糊查询参数
                         handleStatus: ''

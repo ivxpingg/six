@@ -74,6 +74,7 @@
                 type: Boolean,
                 default: false
             },
+            // 已选
             selectedValue: {
                 type: Array,
                 default() {
@@ -127,7 +128,7 @@
             selectedValue: {
                 immediate: true,
                 handler(val) {
-                    this.selectValue = val;
+                    this.selectValue = val.map(v => v);
                     this.selectItems = [];
                     this.getData();
                     // this.tableData.forEach((v, idx) => {
@@ -158,7 +159,7 @@
             },
             tableData(val) {
                 if (this.filterSelected) {
-                    this.tableDataFilterSelected = val.filter(v => this.selectedValue.indexOf(v.userId) === -1);
+                    this.tableDataFilterSelected = val.filter(v => this.selectValue.indexOf(v.userId) === -1);
                 }
                 else {
                     setTimeout(() => {
@@ -241,8 +242,10 @@
             },
             onSelectCancel(selection, row) {
                 let idx = this.selectValue.indexOf(row.userId);
-                this.selectValue.splice(idx, 1);
-                this.selectItems.splice(idx, 1);
+                if (idx !== -1) {
+                    this.selectValue.splice(idx, 1);
+                    this.selectItems.splice(idx, 1);
+                }
             },
             onSelectAll(selection) {
                 selection.forEach((val) => {
@@ -269,6 +272,7 @@
 
             addPerson() {
                 // this.loading = true;
+
                 this.$emit('handleSelect', this.selectValue, this.selectItems);
             }
         }

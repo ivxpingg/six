@@ -73,6 +73,7 @@
                 });
             },
             fileUploadSuccess(response, file, fileList) {
+
                 this.$Loading.finish();
                 this.formData.fileId = response.data.fileId;
             },

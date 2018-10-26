@@ -324,7 +324,7 @@ const QAManage = [
             {
                 path: 'QA_report',
                 name: 'QA_report',
-                //component: () => import('@/views/QAManage/QA_report/QA_report.vue'),
+                component: () => import('@/views/QAManage/QA_report/QA_report.vue'),
                 meta: {
                     icon: '_QA_report',
                     title: '质量检测报表'
@@ -333,7 +333,7 @@ const QAManage = [
             {
                 path: 'QA_analyze',
                 name: 'QA_analyze',
-                //component: () => import('@/views/QAManage/QA_analyze/QA_analyze.vue'),
+                component: () => import('@/views/QAManage/QA_analyze/QA_analyze.vue'),
                 meta: {
                     icon: '_QA_analyze',
                     title: '质量安全检测数据分析'
