@@ -76,33 +76,32 @@
             </FormItem>
             <FormItem label="项目里程(km):" prop="mileage">
                 <Input v-model="formData.mileage" number>
-                <Icon type="md-flag" slot="prefix"/>
+                    <span slot="append">km</span>
                 </Input>
             </FormItem>
             <FormItem label="设计时速(km/h):" prop="designSpeed">
                 <Input v-model="formData.designSpeed" number>
-                    <Icon type="md-speedometer" slot="prefix"/>
+                    <span slot="append">km/h</span>
                 </Input>
             </FormItem>
             <FormItem label="路基宽度(米):" prop="subgradeWidth">
                 <Input v-model="formData.subgradeWidth" number>
-
+                     <span slot="append">米</span>
                 </Input>
             </FormItem>
             <FormItem label="投资额(万元):" prop="amount">
                 <Input v-model="formData.amount" number>
-                     <Icon type="logo-usd" slot="prefix"/>
+                    <span slot="append">万元</span>
                 </Input>
-
             </FormItem>
             <FormItem label="施工合同金额(万元):" prop="constructAmount">
                 <Input v-model="formData.constructAmount" number>
-                     <Icon type="logo-usd" slot="prefix"/>
+                    <span slot="append">万元</span>
                 </Input>
             </FormItem>
             <FormItem label="监理合同金额(万元):" prop="supervisorAmount">
                 <Input v-model="formData.supervisorAmount" number>
-                    <Icon type="logo-usd" slot="prefix"/>
+                    <span slot="append">万元</span>
                 </Input>
             </FormItem>
             <FormItem label="计划开工时间:" prop="planBeginTime">
@@ -123,7 +122,6 @@
             </FormItem>
             <FormItem label="联系人:" prop="contacts">
                 <Input v-model="formData.contacts" placeholder="请输入联系人姓名">
-                     <Icon type="md-call" slot="prefix"/>
                 </Input>
             </FormItem>
             <FormItem label="联系电话:" prop="contactPhone">
@@ -265,10 +263,11 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.formData = Object.assign(this.formData, res.data, {
+                        Object.assign(this.formData, res.data, {
                             planBeginTime: res.data.planBeginTime ? MOMENT(res.data.planBeginTime).format('YYYY-MM-DD') : '',
                             planEndTime: res.data.planEndTime ? MOMENT(res.data.planEndTime).format('YYYY-MM-DD') : ''
                         });
+                        console.dir(this.formData);
                     }
                 })
             },

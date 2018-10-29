@@ -15,7 +15,9 @@
                title="附件管理"
                :width="800"
                footer-hide>
-            <vUploatFileManage :projectId="projectId" ></vUploatFileManage>
+            <vUploatFileManage :isView="isView"
+                               :projectId="projectId"
+                               :fileTemplateId="formData.fileTemplateId"  ></vUploatFileManage>
         </Modal>
         <Modal v-model="modal_remark"
                title="备注"
@@ -45,6 +47,13 @@
                 default() {
                     return '';
                 }
+            },
+            /**
+             * 模板类型 (字典) 默认：quality_supervision（质量监督申请处理标签）
+             */
+            templateType: {
+                type: String,
+                default: 'quality_supervision'
             }
         },
         created() {
@@ -67,7 +76,8 @@
                             },
                             on: {
                                 click: () => {
-
+                                    this.formData.projectFileId = params.row.projectFileId;
+                                    this.formData.remark = params.row.remark;
                                     this.modal_uploadFileManage = true;
                                 }
                             }
@@ -100,9 +110,15 @@
         updated() {
 
         },
-        watch: {},
+        watch: {
+            projectId(val) {
+                if (val !== '') {
+                    this.getData();
+                }
+            }
+        },
         mounted() {
-             this.mergeCol();
+
         },
         data() {
             return {
@@ -111,94 +127,24 @@
                     { title: '项目', width: 80, align: 'center', key: 'item'},
                     { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
                     { title: '份数', width: 80, align: 'center', key: 'num'},
-                    { title: '上传状态', width: 100, align: 'center', key: 'fileStatus'},
+                    { title: '上传状态', width: 100, align: 'center', key: 'fileStatus', render: (h, params) =>{
+                            return h('div', params.fileStatus ? params.fileStatusLabel : '未上传');
+                        }},
                     { title: '备注', width: 80, align: 'center', key: 'remark'}
                 ],
                 tableData: [
-                    {
-                        projectFileId: '0525',
-                        fileTemplateId: '001',
-                        projectId: '01',
-                        classify: '质量监督申请处理标签',
-                        item: '质量监督登记表',
-                        itemDetail: '工程基本概括一览表',
-                        num: 0,
-                        fileStatus: '',
-                        fileStatusLabel: '未上传',
-                        remark: '备注'
-                    },
-                    {
-                        projectFileId: '0525',
-                        fileTemplateId: '001',
-                        projectId: '01',
-                        classify: '质量监督申请处理标签',
-                        item: '质量监督登记表',
-                        itemDetail: '项目建设管理机构情况表',
-                        num: 0,
-                        fileStatus: '',
-                        fileStatusLabel: '未上传',
-                        remark: '备注'
-                    },
-                    {
-                        projectFileId: '0525',
-                        fileTemplateId: '001',
-                        projectId: '01',
-                        classify: '质量监督申请处理标签',
-                        item: '质量监督登记表',
-                        itemDetail: '监理单位主要人员情况表',
-                        num: 0,
-                        fileStatus: '',
-                        fileStatusLabel: '未上传',
-                        remark: '备注'
-                    },
-                    {
-                        projectFileId: '0525',
-                        fileTemplateId: '001',
-                        projectId: '01',
-                        classify: '质量监督申请处理标签',
-                        item: '质量监督登记表',
-                        itemDetail: '施工单位主要人员情况表',
-                        num: 0,
-                        fileStatus: '',
-                        fileStatusLabel: '未上传',
-                        remark: '备注'
-                    },
-                    {
-                        projectFileId: '0525',
-                        fileTemplateId: '001',
-                        projectId: '01',
-                        classify: '质量监督申请处理标签',
-                        item: '建设程序文件',
-                        itemDetail: '施工图设计批复文件',
-                        num: 0,
-                        fileStatus: '',
-                        fileStatusLabel: '未上传',
-                        remark: '备注'
-                    },
-                    {
-                        projectFileId: '0525',
-                        fileTemplateId: '001',
-                        projectId: '01',
-                        classify: '质量监督申请处理标签',
-                        item: '建设程序文件',
-                        itemDetail: '全套施工图纸',
-                        num: 0,
-                        fileStatus: '',
-                        fileStatusLabel: '未上传',
-                        remark: '备注'
-                    },
-                    {
-                        projectFileId: '0525',
-                        fileTemplateId: '001',
-                        projectId: '01',
-                        classify: '质量监督申请处理标签',
-                        item: '建设程序文件',
-                        itemDetail: '监理合同(副本)及招投标文件',
-                        num: 0,
-                        fileStatus: '',
-                        fileStatusLabel: '未上传',
-                        remark: '备注'
-                    }
+                    // {
+                    //     projectFileId: '0525',
+                    //     fileTemplateId: '001',
+                    //     projectId: '01',
+                    //     classify: '质量监督申请处理标签',
+                    //     item: '质量监督登记表',
+                    //     itemDetail: '工程基本概括一览表',
+                    //     num: 0,
+                    //     fileStatus: '',
+                    //     fileStatusLabel: '未上传',
+                    //     remark: '备注'
+                    // }
                 ],
 
                 // 附件管理
@@ -241,13 +187,18 @@
             getData() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/project/projectFileList',
                     params: {
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        templateType: this.templateType
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
                         this.tableData = res.data || [];
+
+                        setTimeout(() => {
+                            this.mergeCol();
+                        }, 200);
                     }
                 })
             },

@@ -17,12 +17,15 @@
                footer-hide>
             <vEmployeeSelectUnit unitId="unitId" @handleSelect="handleSelect_addPerson" ></vEmployeeSelectUnit>
         </Modal>
+
+
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
     import vEmployeeSelectUnit from '../../../../../Common/employeeSelect_unit/employeeSelect_unit';
+    
     export default {
         name: 'personParticipant',  // 单位参与人员
         components: {vIvxFilterBox, vEmployeeSelectUnit},

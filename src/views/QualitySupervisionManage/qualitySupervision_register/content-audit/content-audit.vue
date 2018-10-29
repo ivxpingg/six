@@ -21,17 +21,18 @@
         </template>
 
         <template slot="right">
-            <vProjectBaseInfo  v-if="activeName === '1'"
+            <vProjectBaseInfo  v-show="activeName === '1'"
                                :projectId="projectId"
                                :isView="isView"
+                               :key="'contentAudit'"
                                class="six-modal-body-inner"></vProjectBaseInfo>
 
-            <vFileDetailLists v-if="activeName === '2' && projectId !== ''"
+            <vFileDetailLists v-show="activeName === '2' && projectId !== ''"
                               :projectId="projectId"
                               :isView="isView"
                               class="six-modal-body-inner"></vFileDetailLists>
 
-            <vUnitAndPerson v-if="activeName === '3' && projectId !== ''"
+            <vUnitAndPerson v-show="activeName === '3' && projectId !== ''"
                             :projectId="projectId"
                             :isView="isView"
                             class="six-modal-body-inner"></vUnitAndPerson>

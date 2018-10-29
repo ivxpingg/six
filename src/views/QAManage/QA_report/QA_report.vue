@@ -105,6 +105,7 @@
             // this.getData();
         },
         methods: {
+            modal_add_open() {},
             /**
              * 分页控件-切换页面
              * @param current

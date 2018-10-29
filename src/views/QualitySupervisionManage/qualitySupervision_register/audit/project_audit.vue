@@ -8,9 +8,9 @@
             <FormItem label="报送单位:" prop="unitId">
                 <Input v-model="formData.unitName" readonly @on-focus="onClick_unitSelect_open"/>
             </FormItem>
-            <FormItem label="审核流程:" prop="auditProcessId">
-                <Input v-model="formData.name" readonly @on-focus="onClick_auditProcessSelect_open"/>
-            </FormItem>
+            <!--<FormItem label="审核流程:" prop="auditProcessId">-->
+                <!--<Input v-model="formData.name" readonly @on-focus="onClick_auditProcessSelect_open"/>-->
+            <!--</FormItem>-->
         </Form>
 
         <div class="ivu-modal-footer six-modal-footer-padding-bottom-0">
@@ -26,12 +26,12 @@
             <vUnitSelect @handleSelect="handleSelect_unitSelect"></vUnitSelect>
         </Modal>
 
-        <Modal v-model="modal_auditProcessSelect"
-               title="选择流程"
-               :width="1000"
-               footer-hide>
-            <vAuditProcessSelect @handleSelect="handleSelect_auditProcessSelect"></vAuditProcessSelect>
-        </Modal>
+        <!--<Modal v-model="modal_auditProcessSelect"-->
+               <!--title="选择流程"-->
+               <!--:width="1000"-->
+               <!--footer-hide>-->
+            <!--<vAuditProcessSelect @handleSelect="handleSelect_auditProcessSelect"></vAuditProcessSelect>-->
+        <!--</Modal>-->
     </div>
 </template>
 
@@ -51,13 +51,10 @@
             return {
                 formData: {
                     unitId: '',
-                    unitName: '',
-                    auditProcessId: '',
-                    name: ''
+                    unitName: ''
                 },
                 rules: {
-                    unitId: [{ required: true, message: '报送单位不能为空！', trigger: 'blur' }],
-                    auditProcessId: [{ required: true, message: '方案流程不能为空！', trigger: 'blur' }]
+                    unitId: [{ required: true, message: '报送单位不能为空！', trigger: 'blur' }]
                 },
 
                 // 单位选择
@@ -82,18 +79,21 @@
                 this.formData.unitId = selectedItems.unitId;
                 this.formData.unitName = selectedItems.unitName;
             },
-            handleSelect_auditProcessSelect(selectValue, selectedItems) {
-                this.modal_auditProcessSelect = false;
-                this.formData.auditProcessId = selectedItems.auditProcessId;
-                this.formData.name = selectedItems.name;
-            },
+            // handleSelect_auditProcessSelect(selectValue, selectedItems) {
+            //     this.modal_auditProcessSelect = false;
+            //     this.formData.auditProcessId = selectedItems.auditProcessId;
+            //     this.formData.name = selectedItems.name;
+            // },
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
-                            method: 'post',
-                            url: '/',
-                            data: JSON.stringify(this.formData)
+                            method: 'get',
+                            url: '/project/submitAudit',
+                            params: {
+                                projectId: this.projectId,
+                                unitId: this.formData.unitId
+                            }
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({

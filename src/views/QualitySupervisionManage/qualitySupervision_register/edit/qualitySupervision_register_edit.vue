@@ -21,16 +21,17 @@
         </template>
 
         <template slot="right">
-            <vProjectBaseInfo  v-if="activeName === '1'"
+            <vProjectBaseInfo  v-show="activeName === '1'"
                                :projectId="projectId"
+                               :key="'edit'"
                                @modal_updateProject_callback="modal_updateProject_callback"
                                class="six-modal-body-inner"></vProjectBaseInfo>
 
-            <vFileDetailLists v-if="activeName === '2'"
+            <vFileDetailLists v-show="activeName === '2'"
                               :projectId="projectId"
                               class="six-modal-body-inner"></vFileDetailLists>
 
-            <vUnitAndPerson v-if="activeName === '3'"
+            <vUnitAndPerson v-show="activeName === '3'"
                             :projectId="projectId"
                             class="six-modal-body-inner"></vUnitAndPerson>
 
@@ -54,7 +55,7 @@
         },
         data() {
             return {
-                activeName: '3'
+                activeName: '1'
             };
         },
         methods: {

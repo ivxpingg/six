@@ -30,13 +30,27 @@
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
     import Config from '../../../../config';
     import MOMENT from 'moment';
+    import uploadMixin from '../../../../lib/mixin/uploadMixin';
     export default {
         name: 'uploadFileManage',
+        mixins: [uploadMixin],
         components: {vIvxFilterBox},
         props: {
             isView: {
                 type: Boolean,
                 default: false
+            },
+            projectId: {
+                type: String,
+                default() {
+                    return '';
+                }
+            },
+            fileTemplateId: {
+                type: String,
+                default() {
+                    return '';
+                }
             },
         },
         created() {
@@ -153,22 +167,6 @@
             };
         },
         methods: {
-            fileBeforeUpload() {
-                this.$Loading.start();
-            },
-            exceededSize(file, fileList) {
-                this.$Notice.warning({
-                    title: '超过文件大小限制',
-                    desc: `文件   ${file.name} 太大, 不能超过 ${this.maxSize / 1024}M.`
-                });
-            },
-            fileUploadError(error, file, fileList) {
-                this.$Loading.error();
-                this.$Notice.error({
-                    title: '超过文件大小限制',
-                    desc: `${error.message}`
-                });
-            },
             fileUploadSuccess(response, file, fileList) {
                 this.$Loading.finish();
             },

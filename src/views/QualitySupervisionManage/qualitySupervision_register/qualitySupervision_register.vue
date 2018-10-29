@@ -6,10 +6,10 @@
                     icon="md-add"
                     @click="modal_add_open">登记项目</Button>
 
-            <Button v-if="auth_audit"
-                    type="primary"
-                    icon="ios-notifications"
-                    @click="modal_noticeModification_open">整改通知</Button>
+            <!--<Button v-if="auth_audit"-->
+                    <!--type="primary"-->
+                    <!--icon="ios-notifications"-->
+                    <!--@click="modal_noticeModification_open">整改通知</Button>-->
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>
@@ -36,7 +36,6 @@
 
         <div class="ivx-table-box">
             <Table border
-                   height="540"
                    :loading="tableLoading"
                    :columns="tableColumns"
                    :data="tableData"></Table>
@@ -56,8 +55,7 @@
                @on-visible-change="onVisibleChange_add"
                footer-hide>
             <div style="height: 650px;">
-                <vAdd v-if="modal_add"
-                      @modal_callback="modal_addProject_callback"></vAdd>
+                <vAdd @modal_callback="modal_addProject_callback"></vAdd>
             </div>
         </Modal>
         <!--质量监督登记-->
@@ -68,8 +66,7 @@
                @on-visible-change="onVisibleChange_edit"
                footer-hide>
             <div style="height: 650px;">
-                <vEdit v-if="modal_edit"
-                       @modal_callback="modal_updateProject_callback"
+                <vEdit @modal_callback="modal_updateProject_callback"
                        :projectId="projectId"></vEdit>
             </div>
         </Modal>
@@ -171,7 +168,7 @@
                     { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',
-                        width: 330,
+                        width: 240,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
@@ -190,7 +187,7 @@
                                 }
                             }, '查看'));
 
-                            if (this.auth_add) {
+                            if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',

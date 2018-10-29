@@ -2,7 +2,7 @@
     <div class="home-container" ref="home">
         <vCountPanel :inforCardData="inforCardData"></vCountPanel>
         <div class="gutter-line">
-            <Button type="success" @click="toPdf">topdf</Button>
+            <!--<Button type="success" @click="toPdf">topdf</Button>-->
         </div>
         <Row class="row-box" :gutter="20">
             <i-col span="8"><vUserInfoPanel></vUserInfoPanel></i-col>
@@ -61,8 +61,9 @@
                     let imgData = canvas.toDataURL('image/jpeg');
                     let doc = new jspdf("p", "pt", [1291,1313]);
                     doc.addImage(imgData, 'JPEG', 0, 0,1291,1313);
+                    console.dir(doc.output('datauristring'));
                     // that.submit(doc.output());
-                    doc.save('content.pdf');
+                    // doc.save('content.pdf');
                     // document.body.appendChild(canvas);
                 });
                 // html2canvas(this.$refs.home, {

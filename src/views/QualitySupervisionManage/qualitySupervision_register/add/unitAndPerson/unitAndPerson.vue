@@ -13,32 +13,41 @@
                    :data="tableData"></Table>
         </div>
 
-        <!--<Modal v-model="modal_addUnit"-->
-               <!--title="添加从业单位"-->
-               <!--:width="1000"-->
-               <!--footer-hide>-->
-            <!--<vUnitSelect @handleSelect="handleSelect_addUnit"></vUnitSelect>-->
-        <!--</Modal>-->
+
+        <!--添加参建单位-->
+        <Modal v-model="modal_addUnit"
+               title="添加参建单位" @on-ok="save_addUnit">
+            <Form ref="form"
+                  class="form"
+                  :model="formData"
+                  :rules="rules"
+                  :label-width="75">
+                <FormItem label="报送单位:" prop="unitId">
+                    <Input v-model="formData.unitName" readonly @on-focus="onClick_unitSelect_open"/>
+                </FormItem>
+                <FormItem label="建设内容:" prop="buildContent">
+                    <Input v-model="formData.buildContent" type="textarea" rows="5"/>
+                </FormItem>
+            </Form>
+
+        </Modal>
 
         <vModalUnitSelect ref="modal_unitSelect"
                           :zIndex="2000"
                           @modal-callback="modal_unitSelect_callback" ></vModalUnitSelect>
-
+        <!--单位参建人员-->
         <Modal v-model="modal_participant"
                title="单位参建人员"
                :width="1000"
                footer-hide>
-            <vPersonParticipant isView projectUnitId="projectUnitId"></vPersonParticipant>
+            <vPersonParticipant :isView="isView" projectUnitId="projectUnitId"></vPersonParticipant>
         </Modal>
-
-
 
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../../../components/ivxFilterBox/ivxFilterBox';
-    // import vUnitSelect from '../../../../Common/unitSelect/unitSelect';
     import vPersonParticipant from './personParticipant/personParticipant';
     import vModalUnitSelect from '../../../../Common/unitSelect/modalUnitSelect';
     export default {
@@ -118,7 +127,7 @@
                     { title: '联系方式', width: 180, align: 'center', key: 'telephone' },
                     { title: '电子邮件', width: 180, align: 'center', key: 'email' },
                     { title: '公司地址', width: 180, align: 'center', key: 'companyAddress' },
-                    // { title: '备案', width: 180, align: 'center', key: 'unitName' }
+                    { title: '建设内容', width: 180, align: 'center', key: 'buildContent' }
                 ],
                 tableData: [],
                 tableLoading: false,
@@ -131,7 +140,18 @@
 
                 // 参建单位人员信息
                 modal_participant: false,
-                projectUnitId: ''
+                projectUnitId: '',
+
+                // 添加参建单位
+                formData: {
+                    unitId: '',
+                    unitName: '',
+                    buildContent: ''
+                },
+                rules: {
+                    unitId: [{ required: true, message: '单位不能为空！', trigger: 'blur' }],
+                    buildContent: [{ required: true, message: '建设内容不能为空！', trigger: 'blur' }]
+                }
             };
         },
         watch: {
@@ -148,25 +168,41 @@
         },
         methods: {
             modal_addUnit_open() {
-                // this.modal_addUnit = true;
+                this.modal_addUnit = true;
+            },
+            onClick_unitSelect_open() {
                 this.$refs.modal_unitSelect.modalValue = true;
             },
             modal_unitSelect_callback(selectValue, selectItems) {
+                this.formData.unitId = selectItems.unitId;
+                this.formData.unitName = selectItems.unitName;
+                this.$refs.form.validateField('unitId');
+            },
 
-                this.$http({
-                    method: 'post',
-                    url: '/project/addProjectUnit',
-                    data: JSON.stringify({
-                        projectId: this.projectId,
-                        unitId: selectItems.unitId
-                    })
-                }).then((res) => {
-                    if (res.code === 'SUCCESS') {
-                        this.$Message.success('添加参建成功!');
-                        this.getData();
+            /**
+             * 添加新增选择的单位
+             */
+            save_addUnit() {
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        this.$http({
+                            method: 'post',
+                            url: '/project/addProjectUnit',
+                            data: JSON.stringify({
+                                projectId: this.projectId,
+                                unitId: this.formData.unitId,
+                                buildContent: this.formData.buildContent
+                            })
+                        }).then(res => {
+                            if(res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '添加参建单位成功！'
+                                });
+                                this.getData();
+                            }
+                        })
                     }
-                });
-
+                })
             },
             // 获取表格数据
             getData() {
@@ -188,13 +224,6 @@
                 })
             },
 
-            /**
-             * 添加新增选择的单位
-             * @param selectValue 单位数组 unitId
-             */
-            handleSelect_addUnit(selectValue) {
-
-            },
             // 移除参建单位
             removeUnit(row) {
                 this.$Modal.confirm({
