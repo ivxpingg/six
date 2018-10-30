@@ -146,7 +146,7 @@
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
+                        this.tableData = res.data.records || [];
                         this.searchParams.total = res.data.total;
                     }
                 })
@@ -162,18 +162,14 @@
              * @param selectItems
              */
             modal_addSelectedPerson_callback(selectValue, selectItems) {
-                let datas = [];
-                selectItems.forEach(val => {
-                    datas.push({
-                        userId: val.userId,
-                        unitId: this.unitId
-                    })
-                });
-
+                let datas = selectItems.map(val => val.userId);
                 this.$http({
-                    method: 'post',
+                    method: 'get',
                     url: '/unit/addUser',
-                    data: JSON.stringify(datas)
+                    params: {
+                        unitId: this.unitId,
+                        userIds: datas.join(',')
+                    }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.$Message.success({

@@ -88,7 +88,7 @@
             return {
                 searchParams: {
                     current: 1,      // 当前第几页
-                    size: 4,      // 每页几行
+                    size: 7,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
                         searchKey: '',

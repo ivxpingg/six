@@ -10,25 +10,25 @@
                    :data="tableData"></Table>
         </div>
 
-        <Modal v-model="modal_addPerson"
-               className="modal-participant-add"
-               title="单位人员"
-               :width="1000"
-               footer-hide>
-            <vEmployeeSelectUnit unitId="unitId" @handleSelect="handleSelect_addPerson" ></vEmployeeSelectUnit>
-        </Modal>
 
+        <vEmployeeSelect ref="modal_userSelect"
+                         userSourceType="hasUnit"
+                         :unitId="unitId"
+                         multiple
+                         :selectedValue="selectedValue"
+                         filterSelected
+                         @modal-callback="handleSelect_addPerson" ></vEmployeeSelect>
 
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
-    import vEmployeeSelectUnit from '../../../../../Common/employeeSelect_unit/employeeSelect_unit';
-    
+    import vEmployeeSelect from '../../../../../Common/employeeSelect/modalEmployeeSelect';
+
     export default {
         name: 'personParticipant',  // 单位参与人员
-        components: {vIvxFilterBox, vEmployeeSelectUnit},
+        components: {vIvxFilterBox, vEmployeeSelect},
         props: {
             isView: {
                 type: Boolean,
@@ -37,6 +37,10 @@
                 }
             },
             projectUnitId: {
+                type: String,
+                required: true
+            },
+            unitId:  {
                 type: String,
                 required: true
             }
@@ -74,45 +78,53 @@
                 this.tableColumns = this.tableColumns.concat(columns);
             }
         },
+        watch: {
+            projectUnitId(val) {
+                if (val !== '') {
+                    this.getData();
+                }
+            }
+        },
         data() {
             return {
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '姓名', width: 120, align: 'center', key: 'name' },
-                    { title: 'UID', width: 80, align: 'center', key: 'uId' },
-                    { title: '性别', width: 70, align: 'center', key: 'sexStr' },
-                    { title: '年龄', width: 70, align: 'center', key: 'age' },
-                    { title: '民族', width: 100, align: 'center', key: 'nationStr' },
-                    { title: '职称级别', width: 120, align: 'center', key: 'titleLevel' },
-                    { title: '技术职称', width: 120, align: 'center', key: 'titleName' },
-                    { title: '学历', width: 120, align: 'center', key: 'education' },
-                    { title: '联系电话', width: 120, align: 'center', key: 'phone' },
-                    { title: '身份证号码', width: 160, align: 'center', key: 'IdNumber' },
-                    { title: '岗位', width: 160, align: 'center', key: 'job' }
+                    { title: '所属机构', width: 180, align: 'center', key: 'unitName' }
                 ],
-                tableData: [],
-
-                // 添加从业人员
-                modal_addPerson: false
+                tableData: [
+                    // {
+                    //     beginTime: 1540880320000,
+                    //     job: "局长",
+                    //     name: "郑兆宇",
+                    //     projectUnitId: "e6bdadfaed9d46909a89412a31a904b4",
+                    //     unitName: "安徽省路港工程有限责任公司",
+                    //     userId: "3"
+                    // }
+                ]
             };
+        },
+        computed: {
+            selectedValue() {
+                return this.tableData.map(v => v.userId);
+            }
         },
         mounted() {},
         methods: {
             open_modal_addPerson() {
-                this.modal_addPerson = true;
+                this.$refs.modal_userSelect.modalValue = true;
             },
             // 获取表格数据
             getData() {
                 this.$http({
-                    method: 'post',
-                    url: '/user/list',
+                    method: 'get',
+                    url: '/project/viewProjectUser',
                     params: {
                         projectUnitId: this.projectUnitId
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records || [];
-                        this.searchParams.total = res.data.total;
+                        this.tableData = res.data || [];
                     }
                 })
             },
@@ -120,23 +132,24 @@
              * 添加单位参与人员
              * @param selectValue  人员数组 userId ['44551', '444545']
              */
-            handleSelect_addPerson(selectValue) {
+            handleSelect_addPerson(selectValue, selectItems) {
                 if (selectValue.length > 0) {
                     this.$http({
                         method: 'get',
-                        url: '',
+                        url: '/project/addProjectUser',
                         params: {
                             projectUnitId: this.projectUnitId,
                             userIds: selectValue.join(',')
                         }
                     }).then(res => {
-                        if(res.code === 'SUCCESS') {
+                        if (res.code === 'SUCCESS') {
                             this.$Message.success({
                                 content: '添加成功！'
                             });
                         }
                     })
                 }
+
             },
             removePerson(row) {
                 this.$Modal.confirm({
@@ -145,7 +158,7 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '',
+                            url: '/project/',
                             params: {
                                 projectUserId: row.projectUserId
                             }

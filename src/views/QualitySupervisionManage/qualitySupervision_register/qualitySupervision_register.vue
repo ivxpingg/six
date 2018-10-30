@@ -86,6 +86,7 @@
             <vContentAudit :projectId="projectId"
                            :processStepId="processStepId"
                            :auditProcessId="auditProcessId"
+                           isView
                            @modal_callback="modal_callback_contentAudit"></vContentAudit>
         </Modal>
 

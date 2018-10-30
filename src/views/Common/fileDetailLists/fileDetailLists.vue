@@ -17,7 +17,8 @@
                footer-hide>
             <vUploatFileManage :isView="isView"
                                :projectId="projectId"
-                               :fileTemplateId="formData.fileTemplateId"  ></vUploatFileManage>
+                               :projectFileId="currentRow.projectFileId"
+                               :fileTemplateId="currentRow.fileTemplateId" @callback="callback_uploadFileManage"></vUploatFileManage>
         </Modal>
         <Modal v-model="modal_remark"
                title="备注"
@@ -70,20 +71,19 @@
                                 marginRight: '10px'
                             },
                             props: {
-                                type: 'primary',
+                                type: this.isView ? 'text':'primary',
                                 size: 'small',
                                 icon: 'ios-document-outline'
                             },
                             on: {
                                 click: () => {
-                                    this.formData.projectFileId = params.row.projectFileId;
-                                    this.formData.remark = params.row.remark;
+                                    Object.assign(this.currentRow, params.row);
                                     this.modal_uploadFileManage = true;
                                 }
                             }
-                        }, '附件管理'));
+                        }, this.isView ? '查看附件' : '附件管理'));
 
-                        if (!this.isView) {
+                        if (!this.isView && params.row.projectFileId) {
                             list.push(h('Button', {
                                 props: {
                                     type: 'primary',
@@ -92,6 +92,7 @@
                                 },
                                 on: {
                                     click: () => {
+                                        this.formData.fileTemplateId = params.row.fileTemplateId;
                                         this.formData.projectFileId = params.row.projectFileId;
                                         this.formData.remark = params.row.remark;
                                         this.modal_remark = true;
@@ -113,6 +114,7 @@
         watch: {
             projectId(val) {
                 if (val !== '') {
+                    this.formData.projectId = val;
                     this.getData();
                 }
             }
@@ -152,6 +154,10 @@
 
                 // 备注
                 modal_remark: false,
+                currentRow: {
+                    fileTemplateId: '',
+                    projectFileId: ''
+                },
                 formData: {
                     projectId: '',
                     fileTemplateId: '',
@@ -207,11 +213,20 @@
 
             },
 
+            // 文件上传成功 回调
+            callback_uploadFileManage(row) {
+                if (row) {
+                    this.currentRow.fileTemplateId = row.fileTemplateId;
+                    this.currentRow.projectFileId = row.projectFileId;
+                }
+                this.getData();
+            },
+
             // 保存备注
             saveRemark() {
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/project/updateFileRemark',
                     data: JSON.stringify(this.formData)
                 }).then(res => {
                     if(res.code === 'SUCCESS') {

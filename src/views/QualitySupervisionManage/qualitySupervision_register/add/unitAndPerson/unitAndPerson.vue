@@ -26,7 +26,7 @@
                     <Input v-model="formData.unitName" readonly @on-focus="onClick_unitSelect_open"/>
                 </FormItem>
                 <FormItem label="建设内容:" prop="buildContent">
-                    <Input v-model="formData.buildContent" type="textarea" rows="5"/>
+                    <Input v-model="formData.buildContent" type="textarea" :rows="5"/>
                 </FormItem>
             </Form>
 
@@ -40,7 +40,9 @@
                title="单位参建人员"
                :width="1000"
                footer-hide>
-            <vPersonParticipant :isView="isView" projectUnitId="projectUnitId"></vPersonParticipant>
+            <vPersonParticipant :isView="isView"
+                                :projectUnitId="projectUnitId"
+                                :unitId="unitId"></vPersonParticipant>
         </Modal>
 
     </div>
@@ -83,6 +85,7 @@
                             },
                             on: {
                                 click: () => {
+                                    this.unitId = params.row.unitId;
                                     this.projectUnitId = params.row.projectUnitId;
                                     this.modal_participant = true;
                                 }

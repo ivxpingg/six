@@ -55,7 +55,15 @@
         data() {
             return {
                 searchParams: {
-                    searchKey: '',
+                    current: 1,      // 当前第几页
+                    size: 7,      // 每页几行
+                    total: 0,     // 总行数
+                    condition: {
+                        userSource: 'all',
+                        unitId: '',
+                        name: '',
+                        unitType: ''
+                    }
                 },
                 tableColumns: [
                     { title: '选择', width: 60, align: 'center', type: 'selection'},

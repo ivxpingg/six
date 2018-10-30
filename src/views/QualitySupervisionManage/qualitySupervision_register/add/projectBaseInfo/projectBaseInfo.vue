@@ -7,26 +7,26 @@
               :rules="rules"
               :label-width="140">
             <FormItem label="项目名称:" prop="projectName">
-                <Input v-model="formData.projectName"/>
+                <Input v-model="formData.projectName" :readonly="isView"/>
             </FormItem>
             <FormItem label="标段:" prop="part">
-                <Input v-model="formData.part"/>
+                <Input v-model="formData.part" :readonly="isView"/>
             </FormItem>
             <FormItem label="详细地址:" prop="address">
-                <Input v-model="formData.address"/>
+                <Input v-model="formData.address" :readonly="isView"/>
             </FormItem>
             <FormItem label="地区:" prop="province">
-                <Select v-model="formData.province"
+                <Select v-model="formData.province" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 12px;">
                     <Option value="1">安徽省</Option>
                     <Option value="2">福建省</Option>
                 </Select>
-                <Select v-model="formData.city"
+                <Select v-model="formData.city" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 12px;">
                     <Option value="1">厦门市</Option>
                     <Option value="2">福州市福州市福州市福州市</Option>
                 </Select>
-                <Select v-model="formData.county"
+                <Select v-model="formData.county" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 20px;">
                     <Option value="1">同安区</Option>
                     <Option value="2">思明区</Option>
@@ -34,7 +34,7 @@
             </FormItem>
 
             <FormItem label="项目类型:" prop="projectType">
-                <Select v-model="formData.projectType">
+                <Select v-model="formData.projectType" :disabled="isView">
                     <Option v-for="item in dict_projectType"
                             :value="item.value"
                             :key="item.id"
@@ -59,7 +59,7 @@
                 </Select>
             </FormItem>
             <FormItem label="结构类型:" prop="structureType">
-                <Select v-model="formData.structureType">
+                <Select v-model="formData.structureType" :disabled="isView">
                     <Option v-for="item in dict_structureType"
                             :value="item.value"
                             :key="item.id"
@@ -67,7 +67,7 @@
                 </Select>
             </FormItem>
             <FormItem label="工程性质:" prop="level">
-                <Select v-model="formData.projectProperty">
+                <Select v-model="formData.projectProperty" :disabled="isView">
                     <Option v-for="item in dict_projectProperty"
                             :value="item.value"
                             :key="item.id"
@@ -80,33 +80,34 @@
                 </Input>
             </FormItem>
             <FormItem label="设计时速(km/h):" prop="designSpeed">
-                <Input v-model="formData.designSpeed" number>
+                <Input v-model="formData.designSpeed" number :readonly="isView">
                     <span slot="append">km/h</span>
                 </Input>
             </FormItem>
             <FormItem label="路基宽度(米):" prop="subgradeWidth">
-                <Input v-model="formData.subgradeWidth" number>
+                <Input v-model="formData.subgradeWidth" number :readonly="isView">
                      <span slot="append">米</span>
                 </Input>
             </FormItem>
             <FormItem label="投资额(万元):" prop="amount">
-                <Input v-model="formData.amount" number>
+                <Input v-model="formData.amount" number :readonly="isView">
                     <span slot="append">万元</span>
                 </Input>
             </FormItem>
             <FormItem label="施工合同金额(万元):" prop="constructAmount">
-                <Input v-model="formData.constructAmount" number>
+                <Input v-model="formData.constructAmount" number :readonly="isView">
                     <span slot="append">万元</span>
                 </Input>
             </FormItem>
             <FormItem label="监理合同金额(万元):" prop="supervisorAmount">
-                <Input v-model="formData.supervisorAmount" number>
+                <Input v-model="formData.supervisorAmount" number :readonly="isView">
                     <span slot="append">万元</span>
                 </Input>
             </FormItem>
             <FormItem label="计划开工时间:" prop="planBeginTime">
                 <DatePicker
                         :value="formData.planBeginTime"
+                        :readonly="isView"
                         type="date"
                         transfer
                         @on-change="onChange_planBeginTime"
@@ -117,15 +118,16 @@
                         :value="formData.planEndTime"
                         type="date"
                         transfer
+                        :readonly="isView"
                         @on-change="onChange_planEndTime"
                         placeholder="选择时间"></DatePicker>
             </FormItem>
             <FormItem label="联系人:" prop="contacts">
-                <Input v-model="formData.contacts" placeholder="请输入联系人姓名">
+                <Input v-model="formData.contacts" placeholder="请输入联系人姓名" :readonly="isView">
                 </Input>
             </FormItem>
             <FormItem label="联系电话:" prop="contactPhone">
-                <Input v-model="formData.contactPhone" placeholder="请输入联系电话">
+                <Input v-model="formData.contactPhone" placeholder="请输入联系电话" :readonly="isView">
                     <Icon type="md-call" slot="prefix"/>
                 </Input>
             </FormItem>
@@ -267,15 +269,16 @@
                             planBeginTime: res.data.planBeginTime ? MOMENT(res.data.planBeginTime).format('YYYY-MM-DD') : '',
                             planEndTime: res.data.planEndTime ? MOMENT(res.data.planEndTime).format('YYYY-MM-DD') : ''
                         });
-                        console.dir(this.formData);
                     }
                 })
             },
 
             // 单位选择
             onFocus_unitSelect(type) {
-                this.unitType = type;
-                this.$refs.modal_unitSelect.modalValue = true;
+                if (!this.isView) {
+                    this.unitType = type;
+                    this.$refs.modal_unitSelect.modalValue = true;
+                }
             },
             modal_unitSelect_callback(selectValue, selectItems) {
                 switch (this.unitType) {

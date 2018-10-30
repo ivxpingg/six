@@ -65,7 +65,6 @@ Ajax.interceptors.request.use(function (config) {
     if (config.method === 'post' && utils.isUndefined(config.headers['Content-Type'])) {
         config.headers['Content-Type'] = 'application/json;charset=utf-8';
     }
-
     iview.LoadingBar.start();
     return config;
 }, function (error) {
