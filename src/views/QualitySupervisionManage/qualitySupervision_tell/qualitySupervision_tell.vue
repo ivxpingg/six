@@ -1,26 +1,26 @@
 <template>
     <div class="qualitySupervision_tell-container">
-        <vIvxFilterBox dashed>
+        <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.condition.searchKey"
+                    <Input v-model="searchParams.condition.projectName"
                            style="width: 220px;"
                            placeholder="项目名称"/>
                 </FormItem>
             </Form>
         </vIvxFilterBox>
 
-        <vIvxFilterBox>
-            <Form inline>
-                <FormItem label="筛选条件:" :label-width="65">
-                    <RadioGroup v-model="searchParams.condition.handleStatus" type="button">
-                        <Radio label="">全部</Radio>
-                        <Radio v-for="item in dict_handleStatus"
-                               :label="item.value" :key="'handleStatus_' + item.id">{{item.label}}</Radio>
-                    </RadioGroup>
-                </FormItem>
-            </Form>
-        </vIvxFilterBox>
+        <!--<vIvxFilterBox>-->
+            <!--<Form inline>-->
+                <!--<FormItem label="筛选条件:" :label-width="65">-->
+                    <!--<RadioGroup v-model="searchParams.condition.handleStatus" type="button">-->
+                        <!--<Radio label="">全部</Radio>-->
+                        <!--<Radio v-for="item in dict_handleStatus"-->
+                               <!--:label="item.value" :key="'handleStatus_' + item.id">{{item.label}}</Radio>-->
+                    <!--</RadioGroup>-->
+                <!--</FormItem>-->
+            <!--</Form>-->
+        <!--</vIvxFilterBox>-->
 
         <div class="ivx-table-box">
             <Table border
@@ -67,8 +67,7 @@
                     size: 10,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
-                        searchKey: '',      // 模糊查询参数
-                        handleStatus: ''
+                        projectName: '',      // 模糊查询参数
                     }
                 },
                 tableColumns: [
@@ -187,90 +186,7 @@
                     }
 
                 ],
-                tableData: [
-                    {
-                        projectId: '12',
-                        name: '霍邱县S310霍邱至众兴路一级公路改建工程',      // 项目名称
-                        part: '毛岔河段',      // 标段
-                        province: '',  // 省
-                        provinceStr: '河南省',
-                        city: '',      // 市
-                        cityStr: '六安市',
-                        county: '',    // 区
-                        countyStr: '',
-                        projectType: '',    // 项目类型
-                        projectTypeLabel: '公路',    // 项目类型
-                        buildUnit: '六安市公路管理局',      // 建设单位
-                        buildUnitStr: '六安市公路管理局',
-                        level: '',          // 技术等级
-                        levelLabel: '二级',
-                        mileage: 10.2,      // 项目里程(km)
-                        projectProperty: 'new', // 工程性质
-                        projectPropertyLabel: '新建',   // 工程性质
-                        amount: 1.251,       // 投资额(万元)
-                        constructAmount: 1256.1,  // 施工合同金额(万元)
-                        supervisorAmount: 14686.25, // 监理合同金额(万元)
-                        planBeginTime: '2018-10-01',      // 计划开工时间
-                        planEndTime: '2019-05-05',        // 计划交工时间
-                        constructUnit: '0125',       // 施工单位
-                        constructUnitStr: '中铁二局',
-                        supervisorUnit: '01',      // 监理单位
-                        supervisorUnitStr: '中铁三局',   //
-                        contacts: '陈总经理',            // 联系人
-                        contactPhone: '13959260199',       // 联系电话/联系方式
-                        projectStatus: 'to_examine',      // 项目状态
-                        projectStatusLabel: '受理材料待核查',
-                        handleStatus: 'submitted',           // 办理状态
-                        handleStatusLabel: '待提交',
-                        acceptNotice: '未发送',       // 受理通知书
-                        changeStatus: 'issue',           // 整改状态
-                        changeStatusLabel: '已下发整改通知',
-                        acceptDate: '2018-10-01',         // 受理日期
-                        noAcceptDate: '2018-10-01',      // 不予受理日期
-                        noAcceptRemark: '备注'     // 不予受理备注
-                    },
-                    {
-                        projectId: '12',
-                        name: '霍邱县S310霍邱至众兴路一级公路改建工程',      // 项目名称
-                        part: '毛岔河段',      // 标段
-                        province: '',  // 省
-                        provinceStr: '河南省',
-                        city: '',      // 市
-                        cityStr: '六安市',
-                        county: '',    // 区
-                        countyStr: '',
-                        projectType: '',    // 项目类型
-                        projectTypeLabel: '公路',    // 项目类型
-                        buildUnit: '六安市公路管理局',      // 建设单位
-                        buildUnitStr: '六安市公路管理局',
-                        level: '',          // 技术等级
-                        levelLabel: '二级',
-                        mileage: 10.2,      // 项目里程(km)
-                        projectProperty: 'new', // 工程性质
-                        projectPropertyLabel: '新建',   // 工程性质
-                        amount: 1.251,       // 投资额(万元)
-                        constructAmount: 1256.1,  // 施工合同金额(万元)
-                        supervisorAmount: 14686.25, // 监理合同金额(万元)
-                        planBeginTime: '2018-10-01',      // 计划开工时间
-                        planEndTime: '2019-05-05',        // 计划交工时间
-                        constructUnit: '0125',       // 施工单位
-                        constructUnitStr: '中铁二局',
-                        supervisorUnit: '01',      // 监理单位
-                        supervisorUnitStr: '中铁三局',   //
-                        contacts: '陈总经理',            // 联系人
-                        contactPhone: '13959260199',       // 联系电话/联系方式
-                        projectStatus: 'to_examine',      // 项目状态
-                        projectStatusLabel: '受理材料待核查',
-                        handleStatus: 'submitted',           // 办理状态
-                        handleStatusLabel: '待提交',
-                        acceptNotice: '未发送',       // 受理通知书
-                        changeStatus: 'issue',           // 整改状态
-                        changeStatusLabel: '已下发整改通知',
-                        acceptDate: '2018-10-01',         // 受理日期
-                        noAcceptDate: '2018-10-01',      // 不予受理日期
-                        noAcceptRemark: '备注'     // 不予受理备注
-                    }
-                ],
+                tableData: [],
                 tableLoading: false,
                 // 字典 - 办理状态
                 dict_handleStatus: [],
@@ -287,7 +203,10 @@
             };
         },
         watch: {
-            searchParams: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
                 deep: true,
                 handler() {
                     this.getData();
@@ -295,7 +214,7 @@
             }
         },
         mounted() {
-            // this.getData();
+            this.getData();
             this.getDict_handleStatus();
         },
         methods: {
@@ -325,13 +244,13 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'get',
-                    url: '/',
+                    method: 'post',
+                    url: '/projectAudit/listForDisclose',
                     params: this.searchParams
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
+                        this.tableData = res.data.records || [];
                         this.searchParams.total = res.data.total;
                     }
                 }).catch(() => {

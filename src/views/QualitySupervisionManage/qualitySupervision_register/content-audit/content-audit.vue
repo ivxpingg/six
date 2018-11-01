@@ -126,26 +126,18 @@
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
-                            method: 'post',
-                            url: '/',
-                            data: JSON.stringify(this.formData)
+                            method: 'get',
+                            url: '/projectAudit/projectFileNoAccept',
+                            params: {
+                                projectId: this.projectId,
+                                noAcceptRemark: this.formData.noAcceptRemark
+                            }
                         }).then(res => {
-                            this.$http({
-                                method: 'post',
-                                url: '/',
-                                data: JSON.stringify({
-                                    projectId: this.projectId,
-                                    processStepId: this.processStepId,
-                                    auditProcessId: this.auditProcessId,
-                                    noAcceptRemark: this.formData.noAcceptRemark
-                                })
-                            }).then((res) => {
+                            if (res.code === 'SUCCESS') {
                                 this.modal_declineReason = false;
-                                if (res.code === 'SUCCESS') {}
-                            })
+                                this.$Message.success('不予受理成功！');
+                            }
                         })
-                    } else {
-
                     }
                 })
 
@@ -155,7 +147,18 @@
                    title: '退回补充',
                     content: '确定退回补充？退回补充后您需要在登记填写整改通知下发《质量监督申请材料核查意见通知书》',
                     onOk:() => {
-
+                        this.$http({
+                            method: 'get',
+                            url: '/projectAudit/backToSupplement',
+                            params: {
+                                projectId: this.projectId
+                            }
+                        }).then(res => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('退回补充成功！');
+                                this.$emit('modal_callback');
+                            }
+                        })
                     }
                 });
             },
@@ -164,7 +167,18 @@
                     title: '材料受理',
                     content: '确定材料完整无遗漏？材料受理通过后会生成处理标签至后续流程人员处理。',
                     onOk:() => {
-
+                        this.$http({
+                            method: 'get',
+                            url: '/projectAudit/projectFileAccept',
+                            params: {
+                                projectId: this.projectId
+                            }
+                        }).then(res => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('材料受理成功！');
+                                this.$emit('modal_callback');
+                            }
+                        })
                     }
                 });
             }

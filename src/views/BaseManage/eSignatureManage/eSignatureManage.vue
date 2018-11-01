@@ -150,6 +150,7 @@
             },
             modal_addSignaturCallback() {
                 this.modal_addSignature = false;
+                this.getData();
             },
             // 获取表格数据
             getData() {

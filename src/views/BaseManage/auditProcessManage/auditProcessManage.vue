@@ -63,6 +63,17 @@
             vEditPlan,
             vEditPlanProcess
         },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
+            }
+        },
         data() {
             return {
                 searchParams: {

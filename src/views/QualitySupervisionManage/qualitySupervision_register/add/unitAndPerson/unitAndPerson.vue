@@ -22,7 +22,7 @@
                   :model="formData"
                   :rules="rules"
                   :label-width="75">
-                <FormItem label="报送单位:" prop="unitId">
+                <FormItem label="参建单位:" prop="unitId">
                     <Input v-model="formData.unitName" readonly @on-focus="onClick_unitSelect_open"/>
                 </FormItem>
                 <FormItem label="建设内容:" prop="buildContent">
@@ -71,7 +71,7 @@
             let columns = [
                 {
                     title: '操作',
-                    width: this.isView ? 120 : 220,
+                    width: 220,
                     align: 'center',
                     fixed: 'right',
                     render: (h, params) => {

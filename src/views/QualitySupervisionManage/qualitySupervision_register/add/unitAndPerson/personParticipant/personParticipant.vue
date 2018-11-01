@@ -146,6 +146,7 @@
                             this.$Message.success({
                                 content: '添加成功！'
                             });
+                            this.getData();
                         }
                     })
                 }

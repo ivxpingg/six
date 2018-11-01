@@ -189,6 +189,7 @@
             },
             modal_addStep_callback() {
                 this.modal_addStep = false;
+                this.getData();
             },
             modal_editStep_callback() {
                 this.modal_editStep = false;

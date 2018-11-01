@@ -4,7 +4,7 @@
             <vIvxFilterBox>
                 <Form inline>
                     <FormItem label="关键字:" :label-width="65">
-                        <Input v-model="searchParams.condition.searchKey" placeholder="请输入单位名称、机构代码" />
+                        <Input v-model="searchParams.condition.searchKey" placeholder="流程名称" />
                     </FormItem>
                     <FormItem :label-width="20">
                         <Button type="primary"
@@ -16,10 +16,10 @@
             <div class="ivx-table-box">
                 <Table ref="table"
                        border
-                       height="540"
                        :columns="tableColumns"
                        :data="tableData"
                        highlight-row
+                       @on-row-dblclick="onRowDbclick"
                        @on-current-change="onCurrentChange"></Table>
                 <Page prev-text="上一页"
                       next-text="下一页"
@@ -46,6 +46,17 @@
         name: 'auditProcessSelect',  // 审核流程选择， 默认单选
         components: {
             vIvxFilterBox
+        },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
+            }
         },
         data() {
             return {
@@ -99,14 +110,16 @@
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.page.records;
+                        this.tableData = res.data.records || [];
                         this.searchParams.total = res.data.page.total;
                     }
                 }).catch(() => {
                     this.tableLoading = false;
                 })
             },
-
+            onRowDbclick() {
+                this.add();
+            },
             onCurrentChange(currentRow, oldCurrentRow) {
                 this.selectItems = currentRow;
                 this.selectValue = currentRow.auditProcessId;

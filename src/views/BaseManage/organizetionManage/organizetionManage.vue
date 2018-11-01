@@ -226,7 +226,7 @@
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
+                        this.tableData = res.data.records || [];
                         this.searchParams.total = res.data.total;
                     }
                 }).catch(() => {
@@ -292,6 +292,7 @@
                             content: '授权成功！'
                         });
                         this.modal_eSignatrueSelect = false;
+                        this.getData();
                     }
                 })
             }

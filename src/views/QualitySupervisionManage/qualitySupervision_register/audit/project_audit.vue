@@ -23,7 +23,7 @@
                title="选择单位"
                :width="1000"
                footer-hide>
-            <vUnitSelect @handleSelect="handleSelect_unitSelect"></vUnitSelect>
+            <vUnitSelect @handleSelect="handleSelect_unitSelect" unitType="supervisory_unit"></vUnitSelect>
         </Modal>
 
         <!--<Modal v-model="modal_auditProcessSelect"-->
@@ -78,6 +78,7 @@
                 this.modal_unitSelect = false;
                 this.formData.unitId = selectedItems.unitId;
                 this.formData.unitName = selectedItems.unitName;
+                this.$refs.form.validateField('unitId');
             },
             // handleSelect_auditProcessSelect(selectValue, selectedItems) {
             //     this.modal_auditProcessSelect = false;

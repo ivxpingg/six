@@ -12,7 +12,7 @@
                     :on-success="fileUploadSuccess">
                 <Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>
             </Upload>
-            <Button type="primary">删除所有文件</Button>
+            <!--<Button type="primary">删除所有文件</Button>-->
         </vIvxFilterBox>
 
         <div class="ivx-table-box">
@@ -70,7 +70,7 @@
             let columns = [
                 {
                     title: '操作',
-                    width: this.isView ? 170:240,
+                    width: 240,
                     align: 'center',
                     // fixed: 'right',
                     render: (h, params) => {
@@ -155,41 +155,6 @@
                             return h('div', MOMENT(params.row.insTime).format('YYYY-MM-DD HH:mm:ss'));
                         }
                     }
-                    // {
-                    //     title: '操作',
-                    //     width: 240,
-                    //     align: 'center',
-                    //     // fixed: 'right',
-                    //     render: (h, params) => {
-                    //         let list = [
-                    //             h('Button', {
-                    //                 props: {
-                    //                     type: 'info',
-                    //                     size: 'small',
-                    //                     icon: 'ios-eye-outline'
-                    //                 }
-                    //             }, '预览'),
-                    //             h('Button', {
-                    //                 props: {
-                    //                     type: 'error',
-                    //                     size: 'small',
-                    //                     icon: 'ios-trash-outline'
-                    //                 }
-                    //             }, '删除'),
-                    //             h('Button', {
-                    //                 props: {
-                    //                     type: 'primary',
-                    //                     size: 'small',
-                    //                     icon: 'ios-cloud-download-outline'
-                    //                 }
-                    //             }, '下载')
-                    //         ];
-                    //
-                    //         return h('div',{
-                    //             class: 'ivx-table-cell-handle'
-                    //         },list);
-                    //     }
-                    // }
                 ],
                 tableData: [
                 ],

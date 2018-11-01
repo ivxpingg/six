@@ -1,8 +1,7 @@
 <template>
     <div class="addSuperviseTeamPerson">
         <Modal v-model="modalValue"
-               title="添加人员"
-               @on-visible-change="onVisibleChange">
+               title="添加人员">
             <Form ref="form"
                   :model="formData"
                   :rules="rules"
@@ -24,9 +23,8 @@
             </div>
         </Modal>
 
-        <vModalEmployeeSelect :value="modal_employeeSelected"
-                              @modal-callback="modal_employeeSelected_callback"
-                              @close="modal_employeeSelected_close"></vModalEmployeeSelect>
+        <vModalEmployeeSelect ref="modal_employeeSelect"
+                              @modal-callback="modal_employeeSelected_callback"></vModalEmployeeSelect>
     </div>
 </template>
 
@@ -37,9 +35,22 @@
         name: 'addSuperviseTeamPerson', // 添加监督管理人员
         mixins: [modalMixin],
         components: {vModalEmployeeSelect},
+        props: {
+            projectId: {
+                type: String,
+                required: true,
+                default: ''
+            }
+        },
+        watch: {
+            projectId(val) {
+                this.formData.projectId = val;
+            }
+        },
         data() {
             return {
                 formData: {
+                    projectId: '',
                     userId: '',
                     name: '',
                     monitorType: 'member'
@@ -47,9 +58,7 @@
                 rules: {
                     userId: [{ required: true, message: '请选择人员！', trigger: 'blur' }],
                 },
-                dict_monitorType: [],
-
-                modal_employeeSelected: false,
+                dict_monitorType: []
 
             };
         },
@@ -71,22 +80,19 @@
                 })
             },
             onSelectPerson() {
-                console.dir('onSelectPerson');
-                this.modal_employeeSelected = true;
+                this.$refs.modal_employeeSelect.modalValue = true;
             },
             modal_employeeSelected_callback(selectValue, selectItems) {
                 this.formData.userId = selectItems.userId;
                 this.formData.name = selectItems.name;
-            },
-            modal_employeeSelected_close(val) {
-                this.modal_employeeSelected = val;
+                this.$refs.form.validateField('userId');
             },
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/monitorGroup/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

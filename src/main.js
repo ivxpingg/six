@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import iView from 'iview';
+import moment from 'moment';
 import 'iview/dist/styles/iview.css';
 import router from './router';
 import store from './store/store';
@@ -17,6 +18,7 @@ Vue.use(iView, {
     transfer: true
 });
 Vue.prototype.$http = Ajax;
+Vue.prototype.$moment = moment;
 
 new Vue({
     router,

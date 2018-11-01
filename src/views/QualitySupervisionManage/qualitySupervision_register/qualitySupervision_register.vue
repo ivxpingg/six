@@ -67,6 +67,7 @@
                footer-hide>
             <div style="height: 650px;">
                 <vEdit @modal_callback="modal_updateProject_callback"
+                       :isView="isView"
                        :projectId="projectId"></vEdit>
             </div>
         </Modal>
@@ -174,6 +175,7 @@
                         fixed: 'right',
                         render: (h, params) => {
                             let list = [];
+
                             list.push(h('Button', {
                                 props: {
                                     type: 'info',
@@ -183,6 +185,14 @@
                                 on: {
                                     click: () => {
                                         this.projectId = params.row.projectId;
+
+                                        if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
+                                            this.isView = false;
+                                        }
+                                        else {
+                                            this.isView = true;
+                                        }
+
                                         this.modal_edit = true;
                                     }
                                 }
@@ -205,7 +215,7 @@
                             }
 
                             // 受理材料待审核才能审核
-                            if (params.row.projectStatus === 'to_examine' && this.auth_add) {
+                            if (params.row.handleStatus === 'handle' && this.auth_audit) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -290,6 +300,7 @@
                 modal_noticeModification: false,
                 // 编辑项目
                 modal_edit: false,
+                isView: true,    // 查看是否能编辑
                 // 提交审核
                 modal_audit: false,
                 // 材料完整性审核
@@ -377,10 +388,12 @@
             },
             // 提交审核
             modal_callback_audit() {
+                this.modal_audit = false;
                 this.getData();
             },
             // 材料完整性审核
             modal_callback_contentAudit() {
+                this.getData();
 
             },
             // 通知整改
