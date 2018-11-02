@@ -35,8 +35,12 @@ export default {
                 desc: `${error.message}`
             });
         },
+        //on-remove 文件列表移除文件时的钩子
+        fileRemove(file, fileList) {
+
+        },
         fileUploadSuccess(response, file, fileList) {
-            // this.$Loading.finish();
+            this.$Loading.finish();
         }
     }
 }

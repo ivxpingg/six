@@ -97,7 +97,7 @@ module.exports = {
                 changeOrigin: true
             },
             // '/': {
-            //     target: 'http://110.86.21.246:8880',
+            //     target: 'http://110.86.21.252:8880',
             //     ws: true,
             //     changeOrigin: true
             // }

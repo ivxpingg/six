@@ -1,15 +1,10 @@
 <template>
     <div class="qualitySupervision_register-container">
-        <vIvxFilterBox>
-            <Button v-if="auth_add"
-                    type="primary"
+        <vIvxFilterBox v-if="auth_add">
+            <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">登记项目</Button>
 
-            <!--<Button v-if="auth_audit"-->
-                    <!--type="primary"-->
-                    <!--icon="ios-notifications"-->
-                    <!--@click="modal_noticeModification_open">整改通知</Button>-->
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>
@@ -91,17 +86,6 @@
                            @modal_callback="modal_callback_contentAudit"></vContentAudit>
         </Modal>
 
-        <!--整改通知-->
-        <Modal v-model="modal_noticeModification"
-               title="整改通知"
-               :width="1000"
-               footer-hide>
-            <vNoticeModification
-                    :projectId="projectId"
-                    :tableData="tableData"
-                    @modal_callback="modal_callback_noticeModification"></vNoticeModification>
-        </Modal>
-
 
     </div>
 </template>
@@ -113,11 +97,10 @@
     import vEdit from './edit/qualitySupervision_register_edit';
     import vProjectAudit from './audit/project_audit';
     import vContentAudit from './content-audit/content-audit';
-    import vNoticeModification from './noticeModification/noticeModification';
     export default {
         name: 'qualitySupervision_register',  // 质量监督登记
         mixins: [authMixin],
-        components: {vIvxFilterBox, vAdd, vEdit, vProjectAudit, vContentAudit, vNoticeModification},
+        components: {vIvxFilterBox, vAdd, vEdit, vProjectAudit, vContentAudit},
         data() {
             return {
                 searchParams: {
@@ -296,8 +279,6 @@
                 dict_handleStatus: [],
                 // 登记项目
                 modal_add: false,
-                // 通知整改
-                modal_noticeModification: false,
                 // 编辑项目
                 modal_edit: false,
                 isView: true,    // 查看是否能编辑
@@ -366,9 +347,6 @@
             //
             modal_add_open() {
                 this.modal_add = true;
-            },
-            modal_noticeModification_open() {
-                this.modal_noticeModification = true;
             },
             // 项目登记弹出框回调
             modal_addProject_callback() {

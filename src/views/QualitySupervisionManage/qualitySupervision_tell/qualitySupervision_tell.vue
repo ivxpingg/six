@@ -1,5 +1,14 @@
 <template>
     <div class="qualitySupervision_tell-container">
+        <vIvxFilterBox dashed>
+            <Button type="primary"
+                    icon="ios-notifications"
+                    @click="modal_noticeModification_open">整改通知</Button>
+
+            <Button type="primary"
+                    icon="ios-undo"
+                    @click="modal_seeReply_open">整改回复</Button>
+        </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
@@ -9,18 +18,6 @@
                 </FormItem>
             </Form>
         </vIvxFilterBox>
-
-        <!--<vIvxFilterBox>-->
-            <!--<Form inline>-->
-                <!--<FormItem label="筛选条件:" :label-width="65">-->
-                    <!--<RadioGroup v-model="searchParams.condition.handleStatus" type="button">-->
-                        <!--<Radio label="">全部</Radio>-->
-                        <!--<Radio v-for="item in dict_handleStatus"-->
-                               <!--:label="item.value" :key="'handleStatus_' + item.id">{{item.label}}</Radio>-->
-                    <!--</RadioGroup>-->
-                <!--</FormItem>-->
-            <!--</Form>-->
-        <!--</vIvxFilterBox>-->
 
         <div class="ivx-table-box">
             <Table border
@@ -44,12 +41,14 @@
                 @modal_callback="modal_callback_superviseTeamManage"
                 @close="modal_addSuperviseTeamPerson_close"></vAccessoryFileList>
 
-
-        <vAddSupervisionTell :value="modal_addSupervisionTell"
+        <!--添加质量监督交底-->
+        <vAddSupervisionTell ref="modal_addSupervisionTell"
                              :projectId="currentRow.projectId"
-                             :projectName="currentRow.name"
-                             @modal_callback="modal_callback_addSupervisionTell"
-                             @close="modal_addSupervisionTell_close"></vAddSupervisionTell>
+                             :projectName="currentRow.projectName"
+                             @modal-callback="modal_callback_addSupervisionTell"></vAddSupervisionTell>
+
+        <!--整改通知-->
+        <vNoticeModification ref="modal_noticeModification" @modal-callback="modal_noticeModification_callback"></vNoticeModification>
     </div>
 </template>
 
@@ -57,9 +56,10 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAccessoryFileList from '../qualitySupervision_accept/accessoryFileList/accessoryFileList';
     import vAddSupervisionTell from './add/addSupervisionTell';
+    import vNoticeModification from './noticeModification/noticeModification';
     export default {
         name: 'qualitySupervision_tell',
-        components: {vIvxFilterBox, vAccessoryFileList, vAddSupervisionTell},
+        components: {vIvxFilterBox, vAccessoryFileList, vAddSupervisionTell, vNoticeModification},
         data() {
             return {
                 searchParams: {
@@ -72,7 +72,7 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '项目名称', width: 180, align: 'center', key: 'name' },
+                    { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
                     { title: '标段', width: 180, align: 'center', key: 'part' },
                     { title: '地区', width: 180, align: 'center',
                         render: (h, params) => {
@@ -85,7 +85,7 @@
                         } },
                     { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
                     { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
-                    { title: '技术等级', width: 180, align: 'center', key: 'levelLabel' },
+                    { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
                     { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
                     // { title: '路面类型', width: 180, align: 'center', key: '' },
                     { title: '工程性质', width: 180, align: 'center', key: 'projectPropertyLabel' },
@@ -111,53 +111,58 @@
                     { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',
-                        width: 480,
+                        width: 340,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
                             let list = [];
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'md-add'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.currentRow.projectId = params.row.projectId;
-                                        this.currentRow.name = params.row.name;
-                                        this.modal_addSupervisionTell = true;
+                            if (!params.row.advanceNoticeId) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'md-add'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.currentRow.projectName = params.row.projectName;
+                                            this.$refs.modal_addSupervisionTell.modalValue = true;
+                                        }
                                     }
-                                }
-                            }, '添加监督交底'));
+                                }, '添加监督交底'));
+                            }
+                            else{
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'md-done-all'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.tellComplete(params.row);
+                                        }
+                                    }
+                                }, '交底完成'));
+                            }
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'md-done-all'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.currentRow.projectId = params.row.projectId;
-                                        this.tellComplete(params.row);
-                                    }
-                                }
-                            }, '交底完成'));
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'md-arrow-down'
-                                },
-                                on: {
-                                    click: () => {
-                                        // this.currentRow.projectId = params.row.projectId;
-                                        this.sendNotice(params.row);
-                                    }
-                                }
-                            }, '下发受理通知书'));
+
+                            // list.push(h('Button', {
+                            //     props: {
+                            //         type: 'primary',
+                            //         size: 'small',
+                            //         icon: 'md-arrow-down'
+                            //     },
+                            //     on: {
+                            //         click: () => {
+                            //             // this.currentRow.projectId = params.row.projectId;
+                            //             this.sendNotice(params.row);
+                            //         }
+                            //     }
+                            // }, '下发受理通知书'));
 
                             list.push(h('Button', {
                                 props: {
@@ -188,18 +193,13 @@
                 ],
                 tableData: [],
                 tableLoading: false,
-                // 字典 - 办理状态
-                dict_handleStatus: [],
                 // 当前选择的项目信息
                 currentRow: {
                     projectId: '',
-                    name: '',
+                    projectName: '',
                 },
                 // 查看附件
-                modal_accessoryFileList: false,
-
-                // 添加监督交底
-                modal_addSupervisionTell: false
+                modal_accessoryFileList: false
             };
         },
         watch: {
@@ -215,23 +215,8 @@
         },
         mounted() {
             this.getData();
-            this.getDict_handleStatus();
         },
         methods: {
-            // 获取单位类别的数据字典
-            getDict_handleStatus() {
-                this.$http({
-                    method: 'get',
-                    url: '/dict/getListByType',
-                    params: {
-                        type: 'handleStatus'
-                    }
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this.dict_handleStatus = res.data;
-                    }
-                })
-            },
             /**
              * 分页控件-切换页面
              * @param current
@@ -265,11 +250,9 @@
             modal_addSuperviseTeamPerson_close(val) {
                 this.modal_accessoryFileList = val;
             },
-            // 添加监督交底弹窗
-            modal_addSupervisionTell_close(val) {
-                this.modal_addSupervisionTell = val;
-            },
+            // 添加质量监督交底 回调
             modal_callback_addSupervisionTell() {
+                this.$refs.modal_addSupervisionTell.modalValue = false;
                 this.getData();
             },
 
@@ -281,13 +264,15 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/projectAudit/advanceNoticeComplete',
                             params: {
-
+                                projectId: row.projectId,
+                                advanceNoticeId: row.advanceNoticeId
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('交底完成！');
+                                this.getData();
                             }
                         })
                     }
@@ -313,7 +298,17 @@
                         })
                     }
                 });
-            }
+            },
+
+            // 整改通知
+            modal_noticeModification_open() {
+                this.$refs.modal_noticeModification.modalValue = true;
+            },
+            modal_noticeModification_callback() {
+                this.$refs.modal_noticeModification.modalValue = false;
+            },
+            // 整改回复
+            modal_seeReply_open() {}
 
         }
     }

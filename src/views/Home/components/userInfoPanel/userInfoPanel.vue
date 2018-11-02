@@ -47,15 +47,30 @@
         data() {
             return {
                 userInfo: {
-                    name: '陈亮',
+                    name: '',
                     unitName: '六安市质监局',
-                    unitType: '监督单位',
-                    department: '综合科',
-                    job: '负责人',
-                    userId: '920182121',
-                    phone: '1376721121',
+                    unitType: '',
+                    department: '',
+                    job: '',
+                    userId: '',
+                    phone: '',
                     img: imgUrl
                 }
+            }
+        },
+        mounted() {
+            this.getData();
+        },
+        methods: {
+            getData() {
+                this.$http({
+                    method: 'get',
+                    url: '/user/query'
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        Object.assign(this.userInfo, res.data)
+                    }
+                })
             }
         }
     }

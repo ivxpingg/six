@@ -14,9 +14,9 @@
                 <FormItem label="交底内容:" prop="content">
                     <Input v-model="formData.content" type="textarea" placeholder="请输入内容"/>
                 </FormItem>
-                <FormItem label="计划开工时间:" prop="planBeginTime">
+                <FormItem label="交底时间:" prop="planBeginTime">
                     <DatePicker
-                            :value="formData.planBeginTime"
+                            :value="formData.advanceNoticeTime"
                             type="date"
                             transfer
                             @on-change="onChange_planBeginTime"
@@ -25,8 +25,8 @@
                 <FormItem label="通知书名称:" prop="noticeName">
                     <Input v-model="formData.noticeName" placeholder="请输入"/>
                 </FormItem>
-                <FormItem label="相关材料:">
-                    <Upload :action="uploadParams.actionUrl"
+                <FormItem label="相关材料:" prop="fileIds">
+                    <Upload :action="uploadAction"
                             :showUploadList="uploadParams.showUploadList"
                             :multiple="uploadParams.multiple"
                             :accept="uploadParams.accept"
@@ -34,8 +34,9 @@
                             :before-upload="fileBeforeUpload"
                             :on-exceeded-size="exceededSize"
                             :on-error="fileUploadError"
+                            :on-remove="fileRemove"
                             :on-success="fileUploadSuccess">
-                        <Button type="primary" icon="ios-cloud-upload-outline">上传材料</Button> 支持扩展名：.png .jpg .gif .jpeg .pdf
+                        <Button type="primary" icon="ios-cloud-upload-outline">上传材料</Button>
                     </Upload>
                 </FormItem>
             </Form>
@@ -65,18 +66,29 @@
                 required: true
             }
         },
+        computed: {
+            uploadAction() {
+                return this.uploadParams.actionUrl + '/monitor_procedure';
+            }
+        },
         data() {
             return {
+                uploadParams: {
+                    showUploadList: true,
+                    multiple: true
+                },
                 formData: {
                     projectId: '',
                     content: '',
-                    planBeginTime: '',
-                    noticeName: ''
+                    advanceNoticeTime: '',
+                    noticeName: '',
+                    fileIds: []
                 },
                 rules: {
                     content: [{ required: true, message: '交底内容不能为空！', trigger: 'blur' }],
-                    planBeginTime: [{ required: true, message: '计划开工时间不能为空！', trigger: 'blur' }],
+                    advanceNoticeTime: [{ required: true, message: '交底时间不能为空！', trigger: 'blur' }],
                     noticeName: [{ required: true, message: '通知书名称不能为空！', trigger: 'blur' }],
+                    fileIds: [{ required: true, type: 'array', message: '请上传相关材料！', trigger: 'blur' }]
                 }
             };
         },
@@ -90,21 +102,34 @@
         },
         methods: {
             onChange_planBeginTime(val) {
-                this.formData.planBeginTime = val;
+                this.formData.advanceNoticeTime = val;
+            },
+            //on-remove 文件列表移除文件时的钩子
+            fileRemove(file, fileList) {
+                let idx = this.formData.fileIds.indexOf(file.response.data.fileId);
+                if(idx > -1) {
+                    this.formData.fileIds.splice(idx, 1);
+                }
+            },
+            fileUploadSuccess(response, file, fileList) {
+                this.$Loading.finish();
+                if(response.code === 'SUCCESS') {
+                    this.formData.fileIds.push(response.data.fileId);
+                }
             },
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/addUserInfo',
+                            url: '/projectAudit/addAdvanceNotice',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
                                     content: '添加成功！'
                                 });
-                                this.$emit('modal_callback');
+                                this.$emit('modal-callback');
                             }
                         })
                     } else {

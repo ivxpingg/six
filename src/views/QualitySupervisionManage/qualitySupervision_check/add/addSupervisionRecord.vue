@@ -3,7 +3,6 @@
         <Modal v-model="modalValue"
                title="添加监督记录"
                @on-visible-change="onVisibleChange">
-
             <Form ref="form"
                   class="user-form"
                   :model="formData"
