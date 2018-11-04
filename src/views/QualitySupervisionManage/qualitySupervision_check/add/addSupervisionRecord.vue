@@ -33,39 +33,7 @@
                     </Select>
                 </FormItem>
                 <FormItem label="督查内容:" prop="content">
-                    <Input v-model="formData.content" type="textarea" placeholder="请输入"/>
-                </FormItem>
-                <FormItem label="督查类型:">
-                    <Select v-model="formData.projectId" style="width: 200px;">
-                        <Option v-for="item in dict_supervisionType"
-                                :key="item.id"
-                                :value="item.value"
-                                :label="item.label"></Option>
-                    </Select>
-                    <Upload style="display: inline-block; margin-left: 20px;" :action="uploadParams.actionUrl"
-                            :showUploadList="uploadParams.showUploadList"
-                            :multiple="uploadParams.multiple"
-                            :accept="uploadParams.accept"
-                            :maxSize="uploadParams.maxSize"
-                            :before-upload="fileBeforeUpload"
-                            :on-exceeded-size="exceededSize"
-                            :on-error="fileUploadError"
-                            :on-success="fileUploadSuccess">
-                        <Button type="primary" icon="ios-cloud-upload-outline">上传督查文件</Button>
-                    </Upload>
-                </FormItem>
-                <FormItem label="现场记录:">
-                    <Upload :action="uploadParams.actionUrl"
-                            :showUploadList="uploadParams.showUploadList"
-                            :multiple="uploadParams.multiple"
-                            :accept="uploadParams.accept"
-                            :maxSize="uploadParams.maxSize"
-                            :before-upload="fileBeforeUpload"
-                            :on-exceeded-size="exceededSize"
-                            :on-error="fileUploadError"
-                            :on-success="fileUploadSuccess">
-                        <Button type="primary" icon="ios-cloud-upload-outline">上传图片</Button> 支持扩展名：.png .jpg .gif .jpeg .pdf
-                    </Upload>
+                    <Input v-model="formData.content" type="textarea" :rows="5" placeholder="请输入" />
                 </FormItem>
             </Form>
 
@@ -80,10 +48,9 @@
 
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
-    import uploadMixin from '../../../../lib/mixin/uploadMixin';
     export default {
         name: 'addSupervisionRecord',   // 添加监督记录
-        mixins: [modalMixin, uploadMixin],
+        mixins: [modalMixin],
         props: {
             projectList: {
                 type: Array,
@@ -97,7 +64,7 @@
                     checkTime: '',
                     checkWay: '',
                     content: '',
-                    fileIds: ''
+                    moduleType: 'quality'  // 质量监督
                 },
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
@@ -106,7 +73,6 @@
                 },
 
                 dict_checkWay: [],  // 督查方式
-                dict_supervisionType: [] // 质量督查文件类别
 
             };
         },
@@ -143,12 +109,12 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/supervisionCheck/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
-                                    content: '添加成功！'
+                                    content: '添加监督成功！'
                                 });
                                 this.$emit('modal_callback');
                             }

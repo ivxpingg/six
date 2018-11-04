@@ -3,9 +3,9 @@ import { user, getUserInfo, logout } from "./user";
 
 import app from './app';
 // user
-Mock.mock(/\/mocklogin/, user);
-Mock.mock(/\/getUserInfo/, getUserInfo);
-Mock.mock(/\/logout/, logout);
+// Mock.mock(/\/mocklogin/, user);
+// Mock.mock(/\/getUserInfo/, getUserInfo);
+// Mock.mock(/\/logout/, logout);
 
 // 菜单列表
 Mock.mock(/\/getMenuList/, app.getMenuList);

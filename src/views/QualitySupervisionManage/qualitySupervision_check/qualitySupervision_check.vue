@@ -11,7 +11,7 @@
                 <FormItem label="搜索条件:" :label-width="65">
                     <Input v-model="searchParams.condition.searchKey"
                            style="width: 220px;"
-                           placeholder="项目名称"/>
+                           placeholder="检索内容"/>
                 </FormItem>
                 <FormItem label="项目名称:" :label-width="65">
                     <Select v-model="searchParams.condition.projectId">
@@ -127,17 +127,17 @@
                 ],
                 tableData: [
                     {
-                        supervisionCheckId: '',
-                        projectId: '12',
-                        checkTime: '2018-10-10',
-                        checkWay: '',   // 督察方式
-                        checkWayLabel: '日常督查',
-                        content: '现场某某情况违规',          // 督查内容
-                        checkType: '',        // 督查类型
-                        checkTypeLabel: '质量告知单',
-                        supervisionType: '',  // 监督类别（质量/安全）
-                        supervisionTypeLabel: '',
-                        moduleType: ''      // 模块类别（质量监督、安全监督、信用评价）
+                        // supervisionCheckId: '',
+                        // projectId: '12',
+                        // checkTime: '2018-10-10',
+                        // checkWay: '',   // 督察方式
+                        // checkWayLabel: '日常督查',
+                        // content: '现场某某情况违规',          // 督查内容
+                        // checkType: '',        // 督查类型
+                        // checkTypeLabel: '质量告知单',
+                        // supervisionType: '',  // 监督类别（质量/安全）
+                        // supervisionTypeLabel: '',
+                        // moduleType: ''      // 模块类别（质量监督、安全监督、信用评价）
                     }
                 ],
                 tableLoading: false,
@@ -156,11 +156,8 @@
             getProjectList() {
                 this.$http({
                     method: 'post',
-                    url: '/project/list',
-                    data: JSON.stringify({
-                        current: 1,      // 当前第几页
-                        size: 1000,      // 每页几行
-                    })
+                    url: '/supervisionCheck/list',
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.projectList = res.data.records || [];

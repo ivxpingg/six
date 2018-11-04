@@ -48,7 +48,11 @@
                              @modal-callback="modal_callback_addSupervisionTell"></vAddSupervisionTell>
 
         <!--整改通知-->
-        <vNoticeModification ref="modal_noticeModification" @modal-callback="modal_noticeModification_callback"></vNoticeModification>
+        <vNoticeModification ref="modal_noticeModification"
+                             @modal-callback="modal_noticeModification_callback"></vNoticeModification>
+
+        <!--整改回复-->
+        <vNoticeReply ref="modal_noticeReply"></vNoticeReply>
     </div>
 </template>
 
@@ -57,9 +61,15 @@
     import vAccessoryFileList from '../qualitySupervision_accept/accessoryFileList/accessoryFileList';
     import vAddSupervisionTell from './add/addSupervisionTell';
     import vNoticeModification from './noticeModification/noticeModification';
+    import vNoticeReply from './noticeReply/noticeReply.vue';
     export default {
         name: 'qualitySupervision_tell',
-        components: {vIvxFilterBox, vAccessoryFileList, vAddSupervisionTell, vNoticeModification},
+        components: {
+            vIvxFilterBox,
+            vAccessoryFileList,
+            vAddSupervisionTell,
+            vNoticeModification,
+            vNoticeReply},
         data() {
             return {
                 searchParams: {
@@ -308,7 +318,9 @@
                 this.$refs.modal_noticeModification.modalValue = false;
             },
             // 整改回复
-            modal_seeReply_open() {}
+            modal_seeReply_open() {
+                this.$refs.modal_noticeReply.modalValue = true;
+            }
 
         }
     }

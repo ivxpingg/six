@@ -16,26 +16,4 @@ const USER_MAP = {
   }
 }
 
-export const user = req => {
-  return {
-    status: 1,
-    result: {token: USER_MAP.super_admin.token},
-    msg: ''
-  }
-}
 
-export const getUserInfo = req => {
-    return {
-        status: 1,
-        result: USER_MAP.super_admin,
-        msg: ''
-    }
-}
-
-export const logout = req => {
-  return {
-    status: 1,
-    result: null,
-    msg: ''
-  }
-}

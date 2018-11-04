@@ -50,11 +50,17 @@ export default {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
-                    url: '/ajaxLogin'
+                    url: '/logout'
                 }).then((res) => {
-                    commit('setToken', '')
+                    if (res.code === 'SUCCESS') {
+                        commit('setToken', '');
+                        resolve(res);
+                    }
+                    else {
+                        reject(res);
+                    }
                     // commit('setAccess', [])
-                    resolve(res);
+
                 }).catch(err => {
                     reject(err)
                 });
