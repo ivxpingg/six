@@ -384,7 +384,7 @@ const RecordAndCompletedManage = [
             {
                 path: 'projectFileManage',
                 name: 'projectFileManage',
-                // component: () => import('@/views/RecordAndCompletedManage/projectFileManage/projectFileManage.vue'),
+                component: () => import('@/views/RecordAndCompletedManage/projectFileManage/projectFileManage.vue'),
                 meta: {
                     icon: '_projectFileManage',
                     title: '工程档案管理'

@@ -148,21 +148,32 @@
                 modal_addSupervisionRecord: false
             };
         },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
+            }
+        },
         mounted() {
+            // this.getData();
             this.getProjectList();
         },
         methods: {
             // 获取项目列表
             getProjectList() {
                 this.$http({
-                    method: 'post',
-                    url: '/supervisionCheck/list',
-                    data: JSON.stringify(this.searchParams)
+                    method: 'get',
+                    url: '/supervisionCheck/monitorProjectList'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        this.projectList = res.data.records || [];
+                        this.projectList = res.data || [];
                         if (this.projectList.length > 0) {
-                            this.searchParams.condition.projectId = res.data.records[0].projectId;
+                            this.searchParams.condition.projectId = res.data[0].projectId;
                             this.getData();
                         }
                     }
@@ -180,7 +191,7 @@
             getData() {
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/supervisionCheck/list',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;

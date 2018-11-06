@@ -53,7 +53,8 @@
                     changeContent: '',  // 整改内容
                     overdueHandle: 'notice',  // 逾期未改
                     fileIds: ''
-                }
+                },
+                rules: {}
             }
         },
         watch: {

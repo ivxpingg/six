@@ -18,6 +18,7 @@
                                 :label="item.projectName"></Option>
                     </Select>
                 </FormItem>
+
                 <FormItem label="开始整改时间:" prop="beginTime">
                     <DatePicker
                             :value="formData.beginTime"
@@ -59,7 +60,7 @@
                     </FormItem>
                     <FormItem label="接收人员:" :key="item.projectUnitId + 'user'">
                         <!--<Input v-model="item.userName" readonly placeholder="请选择接收人员" />-->
-                        <Select v-model="item.userId" placeholder="请选择接收人员">
+                        <Select v-model="item.projectUserId" placeholder="请选择接收人员">
                             <Option v-for="(userItem, idx) in item.userList"
                                     :key="userItem.userId + 'user' + idx"
                                     :value="userItem.userId"
@@ -82,7 +83,6 @@
         name: 'noticeModification',   // 整改通知
         mixins: [modalMixin],
         components: {vFilesSelectButton},
-        props: {},
         data() {
             return {
                 projectList: [],
@@ -129,7 +129,7 @@
                         projectUnitId: v.projectUnitId,
                         projectUserId: '',
                         unitName: v.unitName,
-                        userName: '',
+                        // userName: '',
                         userList: []
                     });
 
@@ -200,9 +200,6 @@
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        console.dir(idx);
-                        console.dir(this.formData.projectUnitUsers);
-
                         this.formData.projectUnitUsers[idx].userList = res.data || [];
                     }
                 })
@@ -210,7 +207,7 @@
 
             // 获取上传文件
             onSelect(fileList) {
-                this.formData.fileIds = fileList.map(v => v.fileId).join(',');
+                this.formData.fileIds = fileList.map(v => v.fileId);
             },
 
             // 保存整改通知

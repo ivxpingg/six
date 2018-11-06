@@ -67,6 +67,7 @@
                               multiple
                               :selectedValue="formData.userIds"
                               :zIndex="2000"
+                              filterSelected
                               @modal-callback="modal_userSelect_callback" ></vModalEmployeeSelect>
     </div>
 </template>
@@ -159,6 +160,7 @@
                 }
             },
             modal_userSelect_callback(selectValue, selectItems) {
+                this.formData.userList = this.formData.userList.filter(v => this.formData.userIds.indexOf(v.userId) > -1);
                 this.formData.userList = this.formData.userList.concat(selectItems);
                 this.formData.userIds = [];
                 this.formData.userList.forEach((val) => {

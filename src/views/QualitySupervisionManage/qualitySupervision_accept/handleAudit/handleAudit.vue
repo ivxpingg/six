@@ -130,7 +130,7 @@
                     onOk: () => {
                         this.$http({
                             method: 'post',
-                            url: '/projectAudit/submitAccept',
+                            url: '/projectAudit/submit',
                             data: JSON.stringify({
                                 projectId: this.projectId,
                                 auditProcessId: selectItems.auditProcessId

@@ -174,6 +174,7 @@
                 }
             },
             modal_userSelect_callback(selectValue, selectItems) {
+                this.formData.userList = this.formData.userList.filter(v => this.formData.userIds.indexOf(v.userId) > -1);
                 this.formData.userList = this.formData.userList.concat(selectItems);
                 this.formData.userIds = [];
                 this.formData.userList.forEach((val) => {

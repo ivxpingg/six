@@ -198,11 +198,6 @@
             },
             // 获取表格数据
             getData() {
-                // let data = Object.assign({}, this.searchParams);
-                //
-                // if (data.condition.unitType === 'all') {
-                //     data.condition.unitType = '';
-                // }
                 this.$http({
                     method: 'post',
                     url: '/user/list',

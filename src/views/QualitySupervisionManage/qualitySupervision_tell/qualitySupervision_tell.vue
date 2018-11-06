@@ -5,9 +5,9 @@
                     icon="ios-notifications"
                     @click="modal_noticeModification_open">整改通知</Button>
 
-            <Button type="primary"
-                    icon="ios-undo"
-                    @click="modal_seeReply_open">整改回复</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="ios-undo"-->
+                    <!--@click="modal_seeReply_open">整改回复</Button>-->
         </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
@@ -34,21 +34,20 @@
                   @on-change="onPageChange"></Page>
         </div>
 
-
-        <!--附件查看-->
-        <vAccessoryFileList
-                :value="modal_accessoryFileList"
-                @modal_callback="modal_callback_superviseTeamManage"
-                @close="modal_addSuperviseTeamPerson_close"></vAccessoryFileList>
+        <!--查看附件-->
+        <vViewFiles ref="modal_viewFiles" :data="filesData"></vViewFiles>
 
         <!--添加质量监督交底-->
         <vAddSupervisionTell ref="modal_addSupervisionTell"
                              :projectId="currentRow.projectId"
                              :projectName="currentRow.projectName"
+                             :changeNoticeId="currentRow.changeNotice.changeNoticeId"
                              @modal-callback="modal_callback_addSupervisionTell"></vAddSupervisionTell>
 
         <!--整改通知-->
         <vNoticeModification ref="modal_noticeModification"
+                             :projectId="currentRow.projectId"
+                             :projectName="currentRow.projectName"
                              @modal-callback="modal_noticeModification_callback"></vNoticeModification>
 
         <!--整改回复-->
@@ -58,7 +57,7 @@
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
-    import vAccessoryFileList from '../qualitySupervision_accept/accessoryFileList/accessoryFileList';
+    import vViewFiles from '../../Common/viewFiles/viewFiles';
     import vAddSupervisionTell from './add/addSupervisionTell';
     import vNoticeModification from './noticeModification/noticeModification';
     import vNoticeReply from './noticeReply/noticeReply.vue';
@@ -66,7 +65,7 @@
         name: 'qualitySupervision_tell',
         components: {
             vIvxFilterBox,
-            vAccessoryFileList,
+            vViewFiles,
             vAddSupervisionTell,
             vNoticeModification,
             vNoticeReply},
@@ -158,21 +157,24 @@
                                 }, '交底完成'));
                             }
 
+                            if (params.row.changeNotice) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-undo'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.currentRow.projectName = params.row.projectName;
+                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                            this.$refs.modal_noticeReply.modalValue = true;
+                                        }
+                                    }
+                                }, '整改回复'));
+                            }
 
-
-                            // list.push(h('Button', {
-                            //     props: {
-                            //         type: 'primary',
-                            //         size: 'small',
-                            //         icon: 'md-arrow-down'
-                            //     },
-                            //     on: {
-                            //         click: () => {
-                            //             // this.currentRow.projectId = params.row.projectId;
-                            //             this.sendNotice(params.row);
-                            //         }
-                            //     }
-                            // }, '下发受理通知书'));
 
                             list.push(h('Button', {
                                 props: {
@@ -183,7 +185,7 @@
                                 on: {
                                     click: () => {
                                         this.currentRow.projectId = params.row.projectId;
-                                        this.modal_accessoryFileList = true;
+                                        this.getFilesData(params.row);
                                     }
                                 }
                             }, '查看附件'));
@@ -207,9 +209,12 @@
                 currentRow: {
                     projectId: '',
                     projectName: '',
+                    changeNotice: {
+                        changeNoticeId: ''
+                    }
                 },
                 // 查看附件
-                modal_accessoryFileList: false
+                filesData: []
             };
         },
         watch: {
@@ -257,9 +262,25 @@
             modal_callback_superviseTeamManage() {},
 
             // 查看附件
-            modal_addSuperviseTeamPerson_close(val) {
-                this.modal_accessoryFileList = val;
+            getFilesData(row) {
+                // TODO 获取监督交底的附件列表
+
+                this.$http({
+                    method: 'get',
+                    url: '/file/attachList',
+                    params: {
+                        relationId: row.advanceNoticeId,
+                        fileType: 'monitor_procedure'
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.filesData = res.data || [];
+                        this.$refs.modal_viewFiles.modalValue = true;
+                    }
+                })
+
             },
+
             // 添加质量监督交底 回调
             modal_callback_addSupervisionTell() {
                 this.$refs.modal_addSupervisionTell.modalValue = false;
@@ -289,39 +310,13 @@
                 });
             },
 
-            // 下发受理通知书
-            sendNotice(row) {
-                this.$Modal.confirm({
-                    title: '提示',
-                    content: '确定下发整改通知书？下发后将会发送到参加单位信息中心。',
-                    onOk: () => {
-                        this.$http({
-                            method: 'get',
-                            url: '/',
-                            params: {
-
-                            }
-                        }).then((res) => {
-                            if (res.code === 'SUCCESS') {
-                                this.$Message.success('下发通知书成功！');
-                            }
-                        })
-                    }
-                });
-            },
-
             // 整改通知
             modal_noticeModification_open() {
                 this.$refs.modal_noticeModification.modalValue = true;
             },
             modal_noticeModification_callback() {
                 this.$refs.modal_noticeModification.modalValue = false;
-            },
-            // 整改回复
-            modal_seeReply_open() {
-                this.$refs.modal_noticeReply.modalValue = true;
             }
-
         }
     }
 </script>

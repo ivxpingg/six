@@ -41,15 +41,15 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="建设单位:" prop="buildUnit">
-                <Input v-model="formData.buildUnitStr" readonly @on-focus="onFocus_unitSelect('construction_unit')" />
-            </FormItem>
-            <FormItem label="施工单位:" prop="constructUnit">
-                <Input v-model="formData.constructUnitStr" readonly @on-focus="onFocus_unitSelect('work_unit')" />
-            </FormItem>
-            <FormItem label="监理单位:" prop="supervisorUnit">
-                <Input v-model="formData.supervisorUnitStr" readonly @on-focus="onFocus_unitSelect('supervisor_unit')" />
-            </FormItem>
+            <!--<FormItem label="建设单位:" prop="buildUnit">-->
+                <!--<Input v-model="formData.buildUnitStr" readonly @on-focus="onFocus_unitSelect('construction_unit')" />-->
+            <!--</FormItem>-->
+            <!--<FormItem label="施工单位:" prop="constructUnit">-->
+                <!--<Input v-model="formData.constructUnitStr" readonly @on-focus="onFocus_unitSelect('work_unit')" />-->
+            <!--</FormItem>-->
+            <!--<FormItem label="监理单位:" prop="supervisorUnit">-->
+                <!--<Input v-model="formData.supervisorUnitStr" readonly @on-focus="onFocus_unitSelect('supervisor_unit')" />-->
+            <!--</FormItem>-->
             <FormItem label="技术等级:" prop="technicalLevel">
                 <Select v-model="formData.technicalLevel">
                     <Option v-for="item in dict_technicalLevel"
