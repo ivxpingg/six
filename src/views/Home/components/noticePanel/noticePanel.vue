@@ -9,26 +9,62 @@
             更多
         </a>
         <div class="card-content">
-            <CellGroup>
-                <Cell v-for="(item, idx) in list" :title="item.title" :extra="item.time" :key="idx"></Cell>
+            <CellGroup @on-click="onClick_notice">
+                <Cell v-for="(item, idx) in list"
+                      :name="item.noticeId"
+                      :title="item.noticeTitle"
+                      :extra="getTime(item.insTime)"
+                      :key="`notice${item.noticeId}`"></Cell>
             </CellGroup>
         </div>
     </Card>
 </template>
 <script>
+    import MOMENT from 'moment';
     export default {
         name: 'noticePanel',
         data() {
             return {
-                list: [
-                    {title: '关于交通局下发项目监督管理等', time: '2018-09-05'},
-                    {title: '关于交通局下发项目监督管理等', time: '2018-09-05'},
-                    {title: '关于交通局下发项目监督管理等', time: '2018-09-05'},
-                    {title: '关于交通局下发项目监督管理等', time: '2018-09-05'},
-                    {title: '关于交通局下发项目监督管理等', time: '2018-09-05'},
-                    {title: '关于交通局下发项目监督管理等', time: '2018-09-05'},
-                    {title: '关于交通局下发项目监督管理等', time: '2018-09-05'}
-                ]
+                searchParams: {
+                    current: 1,      // 当前第几页
+                    size: 10,      // 每页几行
+                    total: 0     // 总行数
+                },
+                list: []
+            }
+        },
+        mounted() {
+            this.getNoticeList();
+        },
+        methods: {
+            getTime(time) {
+                return MOMENT(time).format('YYYY-MM-DD');
+            },
+            getNoticeList() {
+                this.$http({
+                    method: 'post',
+                    url: '/notice/list',
+                    data: JSON.stringify(this.searchParams)
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.list = res.data.records;
+                        this.searchParams.total = res.data.total;
+                    }
+                })
+            },
+
+            onClick_notice(noticeId) {
+
+                let item = this.getItem(noticeId)[0];
+
+                this.$Modal.info({
+                    title: item.noticeTitle,
+                    content: item.noticeContent
+                })
+            },
+
+            getItem(noticeId) {
+                return this.list.filter(v => v.noticeId === noticeId);
             }
         }
     }

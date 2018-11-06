@@ -42,11 +42,11 @@
 <script>
     import vModalBothSides from '../../../../components/modal-body/modal-both-sides';
     import vProjectBaseInfo from './projectBaseInfo/projectBaseInfo';
-    import vFileDetailLists from '../../../Common/fileDetailLists/fileDetailLists';
-    import vUnitAndPerson from './unitAndPerson/unitAndPerson';
+    // import vFileDetailLists from '../../../Common/fileDetailLists/fileDetailLists';
+    // import vUnitAndPerson from './unitAndPerson/unitAndPerson';
     export default {
         name: 'addProject',
-        components: {vModalBothSides, vProjectBaseInfo, vFileDetailLists, vUnitAndPerson},
+        components: {vModalBothSides, vProjectBaseInfo},
         deactivated () {
             this.$destroy(true);
         },

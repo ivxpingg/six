@@ -77,12 +77,12 @@
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '步骤名称', width: 100, align: 'center', key: 'name' },
-                    { title: '步骤类型', width: 100, align: 'center', key: 'stepType' },
+                    { title: '步骤类型', width: 100, align: 'center', key: 'stepTypeLabel' },
                     { title: '通过期限', width: 85, align: 'center', key: 'timeLimit' },
-                    { title: '逾期处理方式', width: 110, align: 'center', key: 'overdueHandle' },
-                    { title: '分配角色', width: 100, align: 'center', key: 'auditRoleStr' },
-                    { title: '配置用户', width: 120, align: 'center', key: 'auditUserName' },
-                    { title: '通过规则', width: 100, align: 'center', key: 'passRule' },
+                    { title: '逾期处理方式', width: 110, align: 'center', key: 'overdueHandleLabel' },
+                    // { title: '分配角色', width: 100, align: 'center', key: 'auditRoleStr' },
+                    // { title: '配置用户', width: 120, align: 'center', key: 'auditUserName' },
+                    { title: '通过规则', width: 100, align: 'center', key: 'passRuleLabel' },
                     {
                         title: '操作',
                         width: 310,
@@ -230,6 +230,8 @@
                                     content: '删除成功！'
                                 });
                                 this.getData();
+
+                                this.$emit('modal_editPanelProcess_callback');
                             }
                         })
                     }

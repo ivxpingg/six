@@ -3,10 +3,13 @@
         <ul class="file-list">
             <li v-for="(item, idx) in fileList" :key="idx">
                 <vIvxFile :title="item.fileName"
-                            :size="folderSize"
-                            :fontSize="fontSize"
-                            type="success"
-                            :rows="3" @on-select="onSelectFolder(item)"></vIvxFile>
+                          :active="isAcitve(item)"
+                          :size="folderSize"
+                          :fontSize="fontSize"
+                          type="success"
+                          :data="item"
+                          :rows="3"
+                          @on-select="onSelectFolder(item)"></vIvxFile>
             </li>
         </ul>
     </div>
@@ -22,6 +25,15 @@
                 type: String,
                 default: ''
             },
+            /*
+            * folderType: {
+                    parentId: '',
+                    index: 0,
+                    folderName: '',
+                    url: '',
+                    selectedFileList: []
+                }
+            * */
             folderType: {
                 type: Object,
                 default() {
@@ -60,8 +72,13 @@
                     }
                 })
             },
-            onSelectFolder() {
-
+            // 判断文件是否已选
+            isAcitve(item) {
+                return this.folderType.selectedFileList.indexOf(item) > -1;
+            },
+            onSelectFolder(data, active){
+                debugger
+                this.$emit('callback', data, active);
             }
         }
     }

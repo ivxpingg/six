@@ -23,13 +23,15 @@
                 </Select>
                 <Select v-model="formData.city" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 12px;">
-                    <Option value="1">厦门市</Option>
-                    <Option value="2">福州市福州市福州市福州市</Option>
+                    <Option value="1">六安市</Option>
+                    <Option value="2">合肥市</Option>
+                    <Option value="3">芜湖市</Option>
                 </Select>
                 <Select v-model="formData.county" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 20px;">
-                    <Option value="1">同安区</Option>
-                    <Option value="2">思明区</Option>
+                    <Option value="1">金安区</Option>
+                    <Option value="2">裕安区</Option>
+                    <Option value="3">叶集区</Option>
                 </Select>
             </FormItem>
 

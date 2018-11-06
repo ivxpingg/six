@@ -48,7 +48,8 @@
 
                     <vProjectFilesList v-show="openFilesList"
                                        :folderType="folderType"
-                                       :projectId="projectId" ></vProjectFilesList>
+                                       :projectId="projectId"
+                                       @callback="callback_change" ></vProjectFilesList>
 
                 </template>
             </vModalBothSides>
@@ -183,6 +184,17 @@
             onSelect_folderType(folderInfo) {
                 Object.assign(this.folderType, folderInfo);
                 this.openFilesList = true;
+            },
+            // 文件选择
+            callback_change(data, active) {
+                debugger
+                if (active) {
+                    this.folderType.selectedFileList.push(data);
+                }
+                else {
+                    let idx = this.folderType.selectedFileList.indexOf(data);
+                    this.folderType.selectedFileList.splice(idx, 1);
+                }
             }
         }
     }

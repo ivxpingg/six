@@ -17,6 +17,7 @@
                :width="800"
                footer-hide>
             <vUploatFileManage :isView="isView"
+
                                :projectId="projectId"
                                :projectFileId="currentRow.projectFileId"
                                :fileTemplateId="currentRow.fileTemplateId" @callback="callback_uploadFileManage"></vUploatFileManage>
@@ -130,7 +131,8 @@
                                     },
                                     on: {
                                         click: () => {
-                                            Object.assign(this.currentRow, params.row);
+                                            this.currentRow.fileTemplateId = params.row.fileTemplateId || '';
+                                            this.currentRow.projectFileId = params.row.projectFileId || '';
                                             this.modal_uploadFileManage = true;
                                         }
                                     }
@@ -167,7 +169,10 @@
                                     },
                                     on: {
                                         click: () => {
-                                            Object.assign(this.currentRow, params.row);
+
+                                            this.currentRow.fileTemplateId = params.row.fileTemplateId || '';
+                                            this.currentRow.projectFileId = params.row.projectFileId || '';
+
                                             this.modal_uploadFileManage = true;
                                         }
                                     }
@@ -183,7 +188,7 @@
                                         on: {
                                             click: () => {
                                                 this.formData.fileTemplateId = params.row.fileTemplateId;
-                                                this.formData.projectFileId = params.row.projectFileId;
+                                                this.formData.projectFileId = params.row.projectFileId || '';
                                                 this.formData.remark = params.row.remark;
                                                 this.modal_remark = true;
                                             }

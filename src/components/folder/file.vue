@@ -1,5 +1,6 @@
 <template>
     <div class="file-container"
+         :class="{active}"
          @click="onSelect"
          @mouseover="onMouseOver"
          @mouseleave="onMouseLeave">
@@ -72,7 +73,8 @@
                 return str.replace(/[\u0391-\uFFE5]/g,"aa").length; //先把中文替换成两个字节的英文，在计算长度
             },
             onSelect() {
-
+                debugger
+                this.$emit('on-select', this.data, !this.active);
             },
             onMouseOver() {
                 this.hover = true;
@@ -89,6 +91,11 @@
         position: relative;
         text-align: center;
         cursor: pointer;
+
+        &.active {
+            background-color: #f8f8f9;
+            box-shadow: 1px 2px 2px #dcdee2;
+        }
         .folder-icon {
             color: rgba(244, 158, 34, 0.7);
             &:hover {

@@ -1,11 +1,12 @@
 <template>
     <div class="supervisorDetail-container">
         <Form ref="form"
-              class="user-form"
+              class="form"
               inline
               :model="formData"
+              :rules="rules"
               :label-width="120">
-            <FormItem label="姓名:">
+            <FormItem label="姓名:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
             <FormItem label="科室:">
@@ -104,6 +105,12 @@
                 <Input v-model="formData.remark"/>
             </FormItem>
         </Form>
+
+        <div class="ivu-modal-footer">
+            <Button type="primary"
+                    size="large"
+                    @click="save">保存</Button>
+        </div>
     </div>
 </template>
 
@@ -120,6 +127,7 @@
         data() {
             return {
                 formData: {
+                    userId: '',
                     name: '',
                     department: '',
                     job: '',
@@ -151,6 +159,13 @@
                     belongState: '',
                     remark: ''
                 },
+                rules: {
+                    name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
+                    // uId: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
+                    // titleLevel: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
+                    // age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
+                    // titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
+                },
 
                 dict_sex: [],         // 性别
                 dict_titleName: [],   // 技术职称
@@ -163,12 +178,14 @@
                 immediate: true,
                 handler(val) {
                     if (val) {
+                        this.formData.userId = val;
                         this.getUserInfo();
                     }
                 }
             }
         },
         mounted() {
+
             this.getDicts(['sex','titleName','titleLevel', 'education']);
         },
         methods: {
@@ -204,6 +221,25 @@
                         });
                     }
                 });
+            },
+            // 添加从业人员
+            save() {
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        this.$http({
+                            method: 'post',
+                            url: '/user/update',
+                            data: JSON.stringify(this.formData)
+                        }).then(res => {
+                            if(res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '更新成功！'
+                                });
+                                this.$emit('modal-callback');
+                            }
+                        })
+                    }
+                });
             }
         }
     }
@@ -211,12 +247,20 @@
 
 <style lang="scss" scoped>
     .supervisorDetail-container {
-        .user-form {
+        padding-bottom: 61px;
+        .form {
             .ivu-form-item {
                 .ivu-form-item-content > div{
                     width: 240px;
                 }
             }
+        }
+        .ivu-modal-footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #FFF;
         }
     }
 </style>

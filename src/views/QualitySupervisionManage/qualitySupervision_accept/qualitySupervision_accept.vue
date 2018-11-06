@@ -318,7 +318,9 @@
             },
 
             // 分配监督小组
-            modal_callback_superviseTeamManage() {},
+            modal_callback_superviseTeamManage() {
+
+            },
 
             // 查看附件
             modal_addSuperviseTeamPerson_close(val) {

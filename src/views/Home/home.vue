@@ -1,9 +1,7 @@
 <template>
     <div class="home-container" ref="home">
         <vCountPanel :inforCardData="inforCardData"></vCountPanel>
-        <div class="gutter-line">
-            <!--<Button type="success" @click="toPdf">topdf</Button>-->
-        </div>
+        <div class="gutter-line"> </div>
         <Row class="row-box" :gutter="20">
             <i-col span="8"><vUserInfoPanel></vUserInfoPanel></i-col>
             <i-col span="16"><vSupervisionCount></vSupervisionCount></i-col>
@@ -25,9 +23,6 @@
     import vProjectPanel from './components/projectPanel/projectPanel.vue';
     import vFilesManage from './components/filesManage/filesManagePanel.vue';
     import vLogPanel from './components/logPanel/logPanel.vue';
-
-    import html2canvas from 'html2canvas';
-    import jspdf from 'jspdf/dist/jspdf.debug';
     export default {
         name: 'mhome',
         components: {
@@ -51,6 +46,13 @@
                     { title: '监督工作(人次)', icon: '_safetySupervision_check', count: 14, color: '#9A66E4' }
                 ]
             };
+        },
+        mounted() {
+            this.$Notice.info({
+                title: '消息通知',
+                desc: '您还有3项事务暂未处理，其中2项即将逾期，请尽快处理。',
+                duration: 10
+            });
         },
         methods: {
             toPdf() {
@@ -84,20 +86,6 @@
                 //         doc.save('content.pdf');
                 //     }
                 // });
-            },
-            submit(str) {
-                this.$http({
-                    method: 'post',
-                    url: '/projectAudit/test',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                    },
-                    data: {
-                        file: str
-                    }
-                }).then((res) => {
-                })
-
             }
         }
     }

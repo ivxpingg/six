@@ -98,9 +98,6 @@
             }
         },
         watch: {
-            'formData.relationId'() {
-                this.getReply();
-            },
             changeNoticeId(val) {
                 if(val) {
                     this.getReply();

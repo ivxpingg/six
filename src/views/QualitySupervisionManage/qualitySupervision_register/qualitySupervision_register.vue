@@ -97,6 +97,7 @@
     import vEdit from './edit/qualitySupervision_register_edit';
     import vProjectAudit from './audit/project_audit';
     import vContentAudit from './content-audit/content-audit';
+    import MOMENT from 'moment';
     export default {
         name: 'qualitySupervision_register',  // 质量监督登记
         mixins: [authMixin],
@@ -126,7 +127,7 @@
                             return h('div', str);
                         } },
                     { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
-                    { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
+                    // { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
                     { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
                     { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
                     // { title: '路面类型', width: 180, align: 'center', key: '' },
@@ -134,10 +135,18 @@
                     { title: '投资额(万元)', width: 180, align: 'center', key: 'amount' },
                     { title: '施工合同金额(万元)', width: 180, align: 'center', key: 'constructAmount' },
                     { title: '监理合同金额(万元)', width: 180, align: 'center', key: 'supervisorAmount' },
-                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime' },
-                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime' },
-                    { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
-                    { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
+                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime',
+                        render(h, params) {
+                            return h('div', MOMENT(params.row.planBeginTime).format('YYYY-MM-DD'));
+                        }
+                    },
+                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime',
+                        render(h, params) {
+                            return h('div', MOMENT(params.row.planEndTime).format('YYYY-MM-DD'));
+                        }
+                    },
+                    // { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
+                    // { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
                     // TODO 收件日期
                     // { title: '收件日期', width: 180, align: 'center', key: '' },
                     { title: '联系人', width: 180, align: 'center', key: 'contacts' },

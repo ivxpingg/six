@@ -141,6 +141,9 @@
                 if(val !== '') {
                     this.getData();
                 }
+                else {
+                    this.tableData = [];
+                }
             }
         },
         data() {

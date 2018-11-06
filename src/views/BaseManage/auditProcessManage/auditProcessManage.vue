@@ -42,9 +42,10 @@
         <Modal v-model="modal_editPlanProcess"
                className="modal-editPlanProcess"
                title="审核步骤"
-               :width="1300"
+               :width="1100"
                footer-hide>
-            <vEditPlanProcess :auditProcessId="auditProcessId" @modal_editPanelProcess_callback="modal_editPanelProcess_callback"></vEditPlanProcess>
+            <vEditPlanProcess :auditProcessId="auditProcessId"
+                              @modal_editPanelProcess_callback="modal_editPanelProcess_callback"></vEditPlanProcess>
         </Modal>
     </div>
 </template>
@@ -214,7 +215,9 @@
                 this.modal_editPlan = false;
                 this.getData();
             },
-            modal_editPanelProcess_callback() {},
+            modal_editPanelProcess_callback() {
+                this.getData();
+            },
             // 删除审核方案
             delPlan(row) {
                 this.$Modal.confirm({

@@ -10,13 +10,17 @@
                   :model="formData"
                   :rules="rules"
                   :label-width="100">
-                <FormItem label="项目名称:" prop="projectId">
-                    <Select v-model="formData.relationId">
-                        <Option v-for="item in projectList"
-                                :key="item.projectId+'project'"
-                                :value="item.projectId"
-                                :label="item.projectName"></Option>
-                    </Select>
+                <!--<FormItem label="项目名称:" prop="projectId">-->
+                    <!--<Select v-model="formData.relationId">-->
+                        <!--<Option v-for="item in projectList"-->
+                                <!--:key="item.projectId+'project'"-->
+                                <!--:value="item.projectId"-->
+                                <!--:label="item.projectName"></Option>-->
+                    <!--</Select>-->
+                <!--</FormItem>-->
+
+                <FormItem label="项目名称:">
+                    <Input v-model="projectName" readonly/>
                 </FormItem>
 
                 <FormItem label="开始整改时间:" prop="beginTime">
@@ -132,7 +136,7 @@
             };
         },
         watch: {
-            'advanceNoticeId'(val) {
+            advanceNoticeId(val) {
                 if(val) {
                     this.formData.relationId = val;
                     this.formData.projectUnitUsers = [];
@@ -224,6 +228,7 @@
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.$Message.success('添加整改通知成功!');
+                        this.$emit('modal-callback');
                         this.modalValue = false;
                     }
                 })

@@ -52,7 +52,7 @@
                         title: '操作',
                         width: 120,
                         align: 'center',
-                        fixed: 'right',
+                        // fixed: 'right',
                         render: (h, params) => {
                             let list = [];
 
@@ -90,7 +90,8 @@
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '姓名', width: 120, align: 'center', key: 'name' },
-                    { title: '所属机构', width: 180, align: 'center', key: 'unitName' }
+                    { title: '所属机构', width: 180, align: 'center', key: 'unitName' },
+                    { title: '职务', width: 180, align: 'center', key: '职务' }
                 ],
                 tableData: [
                     // {

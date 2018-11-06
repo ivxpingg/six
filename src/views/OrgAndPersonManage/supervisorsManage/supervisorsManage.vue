@@ -41,7 +41,7 @@
                title="监督单位人员详情"
                :width="1200"
                footer-hide>
-            <vSupervisorDetail :userId="userId"></vSupervisorDetail>
+            <vSupervisorDetail :userId="userId" @modal-callback="modal_supervisorDetail_callback"></vSupervisorDetail>
         </Modal>
 
     </Card>
@@ -163,6 +163,12 @@
                 this.modal_addSupervisor = false;
                 this.getData();
             },
+            // 更新人员回调
+            modal_supervisorDetail_callback() {
+                this.getData();
+                this.modal_supervisorDetail = false;
+            },
+
             // 获取表格数据
             getData() {
                 this.tableLoading = true;

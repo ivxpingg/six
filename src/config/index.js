@@ -17,8 +17,10 @@ export default {
     },
     production: {
         origin: window.location.origin,
-        ajaxUrl: '/pqs',
+        ajaxUrl: PROJECT_NAME,
         staticUrl: '',
-        cookiePath: '/'
+        cookiePath: '/',
+        actionUrl: window.location.origin + PROJECT_NAME + '/file/upload',  // 文件上传路径
+        filePath: window.location.origin + PROJECT_NAME + '/'               // 文件路径前缀
     }
 }

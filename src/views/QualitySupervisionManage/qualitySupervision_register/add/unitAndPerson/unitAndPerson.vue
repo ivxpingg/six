@@ -38,7 +38,7 @@
         <!--单位参建人员-->
         <Modal v-model="modal_participant"
                title="单位参建人员"
-               :width="1000"
+               :width="700"
                footer-hide>
             <vPersonParticipant :isView="isView"
                                 :projectUnitId="projectUnitId"
@@ -235,10 +235,9 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/project/deleteProjectUnit',
                             params: {
-                                projectId: this.projectId,
-                                unitId: row.unitId
+                                projectUnitId: row.projectUnitId
                             }
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

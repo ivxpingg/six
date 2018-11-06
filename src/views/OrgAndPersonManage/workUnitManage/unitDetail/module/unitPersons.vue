@@ -64,13 +64,13 @@
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '姓名', width: 120, align: 'center', key: 'name' },
-                    { title: 'UID', width: 80, align: 'center', key: 'uId' },
-                    { title: '性别', width: 70, align: 'center', key: 'sexStr' },
+                    // { title: 'UID', width: 80, align: 'center', key: 'uId' },
+                    { title: '性别', width: 70, align: 'center', key: 'sexLabel' },
                     { title: '年龄', width: 70, align: 'center', key: 'age' },
-                    { title: '民族', width: 100, align: 'center', key: 'nationStr' },
+                    { title: '民族', width: 100, align: 'center', key: 'nation' },
                     { title: '职称级别', width: 120, align: 'center', key: 'titleLevel' },
                     { title: '技术职称', width: 120, align: 'center', key: 'titleName' },
-                    { title: '学历', width: 120, align: 'center', key: 'education' },
+                    { title: '学历', width: 120, align: 'center', key: 'educationLabel' },
                     { title: '联系电话', width: 120, align: 'center', key: 'phone' },
                     { title: '身份证号码', width: 160, align: 'center', key: 'IdNumber' },
                     { title: '岗位', width: 160, align: 'center', key: 'job' },
@@ -198,6 +198,7 @@
                                 this.$Message.success({
                                     content: '移除成功！'
                                 });
+                                this.getData();
                             }
                         })
                     }

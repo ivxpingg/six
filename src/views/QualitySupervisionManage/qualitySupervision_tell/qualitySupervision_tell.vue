@@ -47,7 +47,7 @@
         <vNoticeModification ref="modal_noticeModification"
                              :projectId="currentRow.projectId"
                              :projectName="currentRow.projectName"
-                             :advanceNotice="currentRow.advanceNotice.advanceNoticeId"
+                             :advanceNoticeId="currentRow.advanceNotice.advanceNoticeId"
                              @modal-callback="modal_noticeModification_callback"></vNoticeModification>
 
         <!--整改回复-->
@@ -174,7 +174,8 @@
                                         click: () => {
                                             this.currentRow.projectId = params.row.projectId;
                                             this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                            this.currentRow.advanceNotice.advanceNoticeId = params.row.advanceNotice.advanceNoticeId;
+
                                             this.$refs.modal_noticeModification.modalValue = true;
                                         }
                                     }
@@ -338,6 +339,7 @@
             },
             modal_noticeModification_callback() {
                 this.$refs.modal_noticeModification.modalValue = false;
+                this.getData();
             }
         }
     }
