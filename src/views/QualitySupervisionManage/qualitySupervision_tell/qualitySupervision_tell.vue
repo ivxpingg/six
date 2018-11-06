@@ -1,9 +1,9 @@
 <template>
     <div class="qualitySupervision_tell-container">
         <vIvxFilterBox dashed>
-            <Button type="primary"
-                    icon="ios-notifications"
-                    @click="modal_noticeModification_open">整改通知</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="ios-notifications"-->
+                    <!--@click="modal_noticeModification_open">整改通知</Button>-->
 
             <!--<Button type="primary"-->
                     <!--icon="ios-undo"-->
@@ -41,17 +41,20 @@
         <vAddSupervisionTell ref="modal_addSupervisionTell"
                              :projectId="currentRow.projectId"
                              :projectName="currentRow.projectName"
-                             :changeNoticeId="currentRow.changeNotice.changeNoticeId"
                              @modal-callback="modal_callback_addSupervisionTell"></vAddSupervisionTell>
 
         <!--整改通知-->
         <vNoticeModification ref="modal_noticeModification"
                              :projectId="currentRow.projectId"
                              :projectName="currentRow.projectName"
+                             :advanceNotice="currentRow.advanceNotice.advanceNoticeId"
                              @modal-callback="modal_noticeModification_callback"></vNoticeModification>
 
         <!--整改回复-->
-        <vNoticeReply ref="modal_noticeReply"></vNoticeReply>
+        <vNoticeReply ref="modal_noticeReply"
+                      :projectId="currentRow.projectId"
+                      :projectName="currentRow.projectName"
+                      :changeNoticeId="currentRow.changeNotice.changeNoticeId"></vNoticeReply>
     </div>
 </template>
 
@@ -125,7 +128,7 @@
                         fixed: 'right',
                         render: (h, params) => {
                             let list = [];
-                            if (!params.row.advanceNoticeId) {
+                            if (!params.row.advanceNotice) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -157,6 +160,27 @@
                                 }, '交底完成'));
                             }
 
+                            // 出现条件
+                            // 1.监督交底添加完，首次可以添加整改通知
+                            // 2.已经添加过整改通知后，必须整改通知整改通知通过后才能在提交
+                            if ((params.row.advanceNotice && !params.row.changeNotice) || (params.row.changeNotice && params.row.changeNotice.changeStatus === 'pass')) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-notifications'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.currentRow.projectName = params.row.projectName;
+                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                            this.$refs.modal_noticeModification.modalValue = true;
+                                        }
+                                    }
+                                }, '整改通知'));
+                            }
+
                             if (params.row.changeNotice) {
                                 list.push(h('Button', {
                                     props: {
@@ -168,7 +192,7 @@
                                         click: () => {
                                             this.currentRow.projectId = params.row.projectId;
                                             this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                            this.currentRow.advanceNotice.advanceNoticeId = params.row.advanceNotice.advanceNoticeId;
                                             this.$refs.modal_noticeReply.modalValue = true;
                                         }
                                     }
@@ -209,8 +233,11 @@
                 currentRow: {
                     projectId: '',
                     projectName: '',
-                    changeNotice: {
+                    changeNotice: {   // 整改通知
                         changeNoticeId: ''
+                    },
+                    advanceNotice: {  // 上传监督交底
+                        advanceNoticeId: ''
                     }
                 },
                 // 查看附件
@@ -298,7 +325,7 @@
                             url: '/projectAudit/advanceNoticeComplete',
                             params: {
                                 projectId: row.projectId,
-                                advanceNoticeId: row.advanceNoticeId
+                                advanceNoticeId: row.advanceNotice.advanceNoticeId
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
@@ -308,11 +335,6 @@
                         })
                     }
                 });
-            },
-
-            // 整改通知
-            modal_noticeModification_open() {
-                this.$refs.modal_noticeModification.modalValue = true;
             },
             modal_noticeModification_callback() {
                 this.$refs.modal_noticeModification.modalValue = false;

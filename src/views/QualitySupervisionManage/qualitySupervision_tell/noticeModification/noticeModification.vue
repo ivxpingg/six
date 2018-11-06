@@ -83,6 +83,20 @@
         name: 'noticeModification',   // 整改通知
         mixins: [modalMixin],
         components: {vFilesSelectButton},
+        props: {
+            projectId: {
+                type: String,
+                default: ''
+            },
+            projectName: {
+                type: String,
+                default: ''
+            },
+            advanceNoticeId: {
+                type: String,
+                default: ''
+            }
+        },
         data() {
             return {
                 projectList: [],
@@ -118,9 +132,12 @@
             };
         },
         watch: {
-            'formData.relationId'() {
-                this.formData.projectUnitUsers = [];
-                this.getUnitList();
+            'advanceNoticeId'(val) {
+                if(val) {
+                    this.formData.relationId = val;
+                    this.formData.projectUnitUsers = [];
+                    this.getUnitList();
+                }
             },
             unitList(val) {
                 this.formData.projectUnitUsers = [];
@@ -139,7 +156,6 @@
         },
         mounted() {
             this.getDict(['overdueHandle']);
-            this.getProjectList();
         },
         methods: {
             getDict(list) {
@@ -165,24 +181,13 @@
                 this.formData.endTime = val;
             },
 
-            // 获取项目列表
-            getProjectList() {
-                this.$http({
-                    method: 'get',
-                    url: '/supervisionCheck/monitorProjectList'
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this.projectList = res.data || [];
-                    }
-                })
-            },
             // 获取项目参建单位
             getUnitList() {
                 this.$http({
                     method: 'get',
                     url: '/project/projectUnitList',
                     params: {
-                        projectId: this.formData.relationId
+                        projectId: this.projectId
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
