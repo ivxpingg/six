@@ -10,14 +10,6 @@
                   inline
                   :model="formData"
                   :label-width="100">
-                <!--<FormItem label="项目名称:" prop="projectId">-->
-                    <!--<Select v-model="formData.relationId">-->
-                        <!--<Option v-for="item in projectList"-->
-                                <!--:key="item.projectId+'project1'"-->
-                                <!--:value="item.projectId"-->
-                                <!--:label="`${item.projectName}(${item.part})`"></Option>-->
-                    <!--</Select>-->
-                <!--</FormItem>-->
                 <FormItem label="项目名称:">
                     <Input v-model="projectName" readonly/>
                 </FormItem>
@@ -50,6 +42,20 @@
                     </Select>
                 </FormItem>
 
+                <template v-for="item in formData.changeReplyList">
+                    <FormItem :label="`${item.unitName}回复：`" :key="`${item.changeReplyId}1`">
+                        <Input :value="item.reply" type="textarea" style="width: 590px;" :rows="5" readonly/>
+                    </FormItem>
+                    <FormItem :label="`处理人：`"  :key="`${item.changeReplyId}2`">
+                        <Input :value="item.userName" style="width: 135px;" readonly/>
+                    </FormItem>
+                    <FormItem :label="`联系方式：`" :label-width="80" :key="`${item.changeReplyId}3`">
+                        <Input :value="item.phone" style="width: 135px;" readonly/>
+                    </FormItem>
+                    <FormItem :label="`回复时间：`" :label-width="80" :key="`${item.changeReplyId}4`">
+                        <Input :value="item.replyDate || ''"  style="width: 135px;" readonly/>
+                    </FormItem>
+                </template>
 
             </Form>
             <div slot="footer">
@@ -80,7 +86,6 @@
         },
         data() {
             return {
-                projectList: [],
                 formData: {
                     changeNoticeId: '',
                     relationId: '',
@@ -92,7 +97,8 @@
                     overdueHandle: 'notice',  // 逾期未改
                     changeStatus: '',
                     fileIds: '',
-                    createId: ''
+                    createId: '',
+                    changeReplyList: []
                 },
                 dict_overdueHandle: []
             }
@@ -144,7 +150,26 @@
             },
 
             // 整改通过
-            savePass() {}
+            savePass() {
+                this.$Modal.confirm({
+                    title: '提示',
+                    content: '确定整改通过?',
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/changeNotice/changePassForDisclose',
+                            params: {
+                                changeNoticeId: this.changeNoticeId
+                            }
+                        }).then(res => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('整改通过！');
+                                this.$emit('modal-callback');
+                            }
+                        })
+                    }
+                })
+            }
         }
     }
 </script>

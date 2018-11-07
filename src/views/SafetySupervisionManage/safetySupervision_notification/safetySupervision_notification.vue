@@ -9,7 +9,7 @@
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.condition.fileName"
+                    <Input v-model="searchParams.condition.searchKey"
                            style="width: 220px;"
                            placeholder="名称"/>
                 </FormItem>
@@ -50,7 +50,7 @@
                     size: 10,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
-                        fileName: '',      // 模糊查询参数
+                        searchKey: '',      // 模糊查询参数
                     }
                 },
                 tableColumns: [
@@ -153,7 +153,7 @@
         },
         mounted() {
             // TODO 首次加载获取表格数据
-            // this.getData();
+            this.getData();
         },
         methods: {
             /**
@@ -168,7 +168,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/project/list',
+                    url: '/safeNotice/list',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;

@@ -71,19 +71,6 @@
             <FormItem label="身份证号:" prop="idNumber">
                 <Input v-model="formData.idNumber"/>
             </FormItem>
-            <FormItem label="相关材料:" v-if="editable">
-                <Upload :action="uploadParams.actionUrl"
-                        :showUploadList="uploadParams.showUploadList"
-                        :multiple="uploadParams.multiple"
-                        :accept="uploadParams.accept"
-                        :maxSize="uploadParams.maxSize"
-                        :before-upload="fileBeforeUpload"
-                        :on-exceeded-size="exceededSize"
-                        :on-error="fileUploadError"
-                        :on-success="fileUploadSuccess">
-                    <Button type="primary" icon="ios-cloud-upload-outline">上传图片</Button> 支持扩展名：.png .jpg .gif .jpeg
-                </Upload>
-            </FormItem>
         </Form>
 
         <div class="ivu-modal-footer" v-if="editable">
@@ -134,8 +121,7 @@
                     unitName: '',
                     unitType: '',
                     unitTypeLabel: '',
-                    job: '',
-                    fileIds: ''
+                    job: ''
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
@@ -152,16 +138,6 @@
                     idNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
                 },
 
-                uploadParams: {
-                    actionUrl: Config[Config.env].origin + Config[Config.env].ajaxUrl + '',
-                    showUploadList: false,  // 显示已上传列表
-                    multiple: false,        // 是否支持多选
-                    data: {},               // 上传附带参数
-                    //name: '',               // 上传的文件字段名, 默认file
-                    accept: '.png,.jpg,.gif,.jpeg',             // 接收上传的文件类型
-                    maxSize: 4096,                // 文件大小限制，单位 kb
-                },
-
                 dict_sex: [],         // 性别
                 dict_titleName: [],   // 技术职称
                 dict_titleLevel: [],  // 职称级别
@@ -173,6 +149,32 @@
                 immediate: true,
                 handler(val) {
                     if (val) {
+
+                        Object.assign(this.formData, {
+                            userId: '',
+                            name: '',
+                            userNo: '',
+                            sex: '',
+                            age: null,
+                            nation: '',
+                            nationStr: '',
+                            titleLevel: '',
+                            titleName: '',
+                            certificate: '',
+                            certificateNo: '',
+                            education: '',
+                            graduateSchool: '',
+                            profession: '',
+                            graduateDate: '',
+                            phone: '',
+                            email: '',
+                            idNumber: '',
+                            unitName: '',
+                            unitType: '',
+                            unitTypeLabel: '',
+                            job: '',
+                            fileIds: ''
+                        });
                         this.getUserInfo();
                     }
                 }
@@ -201,28 +203,6 @@
                 this.formData.graduateDate = time;
             },
 
-            // 图片上传
-            fileBeforeUpload() {
-                this.$Loading.start();
-            },
-            exceededSize(file, fileList) {
-                this.$Notice.warning({
-                    title: '超过文件大小限制',
-                    desc: `文件   ${file.name} 太大, 不能超过 ${this.maxSize / 1024}M.`
-                });
-            },
-            fileUploadError(error, file, fileList) {
-                this.$Loading.error();
-                this.$Notice.error({
-                    title: '超过文件大小限制',
-                    desc: `${error.message}`
-                });
-            },
-            fileUploadSuccess(response, file, fileList) {
-                // TODO 用户附件信息
-                this.$Loading.finish();
-            },
-
             getUserInfo() {
                 this.$http({
                     method: 'get',
@@ -232,7 +212,6 @@
                     }
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
-
                         Object.assign(this.formData, res.data, {
                             graduateDate: res.data.graduateDate ? MOMENT(res.data.graduateDate).format('YYYY-MM-DD') : ''
                         });

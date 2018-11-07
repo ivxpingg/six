@@ -1,77 +1,73 @@
 <template>
-    <div class="noticeModification_check-container"></div>
-    <Modal v-model="modalValue"
-           title="整改通知"
-           :width="800"
-           @on-visible-change="onVisibleChange">
-        <Form ref="form"
-              class="form"
-              inline
-              :model="formData"
-              :rules="rules"
-              :label-width="100">
-            <FormItem label="项目名称:" prop="projectId">
-                <Select v-model="formData.relationId">
-                    <Option v-for="item in projectList"
-                            :key="item.projectId+'project'"
-                            :value="item.projectId"
-                            :label="item.projectName"></Option>
-                </Select>
-            </FormItem>
-            <FormItem label="开始整改时间:" prop="beginTime">
-                <DatePicker
-                        :value="formData.beginTime"
-                        type="date"
-                        @on-change="onChange_beginTime"
-                        placeholder="开始整改时间"></DatePicker>
-            </FormItem>
-            <FormItem label="最迟整改时间:" prop="endTime">
-                <DatePicker
-                        :value="formData.endTime"
-                        type="date"
-                        @on-change="onChange_endTime"
-                        placeholder="最迟整改时间"></DatePicker>
-            </FormItem>
-            <FormItem label="整改标题:" prop="changeTitle">
-                <Input v-model="formData.changeTitle"
-                       placeholder="请输入整改标题"/>
-            </FormItem>
-            <FormItem label="整改内容:" prop="changeContent">
-                <Input v-model="formData.changeContent"
-                       placeholder="请输入整改内容"/>
-            </FormItem>
-            <FormItem label="逾期未改:">
-                <Select v-model="formData.overdueHandle">
-                    <Option v-for="item in dict_overdueHandle"
-                            :key="item.id"
-                            :value="item.value"
-                            :label="item.label"></Option>
-                </Select>
-            </FormItem>
-            <FormItem label="相关材料:">
-                <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect" multiple></vFilesSelectButton></div>
-            </FormItem>
-
-            <template v-for="item in formData.projectUnitUsers">
-                <FormItem label="通知单位:" :key="item.projectUnitId">
-                    <Input v-model="item.unitName" readonly />
-                    <!--接收人员: <Input v-model="item.userName" readonly  placeholder="请选择接收人员" />-->
+    <div class="noticeModification_check-container">
+        <Modal v-model="modalValue"
+               title="整改通知"
+               :width="800"
+               @on-visible-change="onVisibleChange">
+            <Form ref="form"
+                  class="form"
+                  inline
+                  :model="formData"
+                  :rules="rules"
+                  :label-width="100">
+                <FormItem label="项目名称:">
+                    <Input v-model="projectName" readonly/>
                 </FormItem>
-                <FormItem label="接收人员:" :key="item.projectUnitId + 'user'">
-                    <!--<Input v-model="item.userName" readonly placeholder="请选择接收人员" />-->
-                    <Select v-model="item.userId" placeholder="请选择接收人员">
-                        <Option v-for="(userItem, idx) in item.userList"
-                                :key="userItem.userId + 'user' + idx"
-                                :value="userItem.userId"
-                                :label="userItem.name"></Option>
+                <FormItem label="开始整改时间:" prop="beginTime">
+                    <DatePicker
+                            :value="formData.beginTime"
+                            type="date"
+                            @on-change="onChange_beginTime"
+                            placeholder="开始整改时间"></DatePicker>
+                </FormItem>
+                <FormItem label="最迟整改时间:" prop="endTime">
+                    <DatePicker
+                            :value="formData.endTime"
+                            type="date"
+                            @on-change="onChange_endTime"
+                            placeholder="最迟整改时间"></DatePicker>
+                </FormItem>
+                <FormItem label="整改标题:" prop="changeTitle">
+                    <Input v-model="formData.changeTitle"
+                           placeholder="请输入整改标题"/>
+                </FormItem>
+                <FormItem label="整改内容:" prop="changeContent">
+                    <Input v-model="formData.changeContent"
+                           placeholder="请输入整改内容"/>
+                </FormItem>
+                <FormItem label="逾期未改:">
+                    <Select v-model="formData.overdueHandle">
+                        <Option v-for="item in dict_overdueHandle"
+                                :key="item.id"
+                                :value="item.value"
+                                :label="item.label"></Option>
                     </Select>
                 </FormItem>
-            </template>
-        </Form>
-        <div slot="footer">
-            <Button type="primary" size="large" @click="save">发送通知</Button>
-        </div>
-    </Modal>
+                <FormItem label="相关材料:">
+                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect" multiple></vFilesSelectButton></div>
+                </FormItem>
+
+                <template v-for="item in formData.projectUnitUsers">
+                    <FormItem label="通知单位:" :key="item.projectUnitId">
+                        <Input v-model="item.unitName" readonly />
+                        <!--接收人员: <Input v-model="item.userName" readonly  placeholder="请选择接收人员" />-->
+                    </FormItem>
+                    <FormItem label="接收人员:" :key="item.projectUnitId + 'user'">
+                        <!--<Input v-model="item.userName" readonly placeholder="请选择接收人员" />-->
+                        <Select v-model="item.projectUserId" placeholder="请选择接收人员" clearable>
+                            <Option v-for="(userItem, idx) in item.userList"
+                                    :key="userItem.projectUserId + 'user' + idx"
+                                    :value="userItem.projectUserId"
+                                    :label="userItem.name"></Option>
+                        </Select>
+                    </FormItem>
+                </template>
+            </Form>
+            <div slot="footer">
+                <Button type="primary" size="large" @click="save">发送通知</Button>
+            </div>
+        </Modal>
+    </div>
 </template>
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
@@ -80,6 +76,20 @@
         name: 'noticeModification_check',
         mixins: [modalMixin],
         components: {vFilesSelectButton},
+        props: {
+            projectId: {
+                type: String,
+                default: ''
+            },
+            projectName: {
+                type: String,
+                default: ''
+            },
+            supervisionCheckId: {
+                type: String,
+                default: ''
+            }
+        },
         data() {
             return {
                 projectList: [],
@@ -88,7 +98,7 @@
                 formData: {
                     // changeNoticeId: '',
                     relationId: '',
-                    moduleType: 'inform',   // 模块类别字典，固定值，  监督交底： inform
+                    moduleType: 'quality',   // 模块类别字典，固定值，  质量监督： quality
                     beginTime: '',      // 开始整改时间
                     endTime: '',        // 最迟整改时间
                     changeTitle: '',    // 整改标题
@@ -115,9 +125,12 @@
             }
         },
         watch: {
-            'formData.relationId'() {
-                this.formData.projectUnitUsers = [];
-                this.getUnitList();
+            supervisionCheckId(val) {
+                if(val) {
+                    this.formData.relationId = val;
+                    this.formData.projectUnitUsers = [];
+                    this.getUnitList();
+                }
             },
             unitList(val) {
                 this.formData.projectUnitUsers = [];
@@ -179,7 +192,7 @@
                     method: 'get',
                     url: '/project/projectUnitList',
                     params: {
-                        projectId: this.formData.relationId
+                        projectId: this.projectId
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
@@ -207,7 +220,7 @@
 
             // 获取上传文件
             onSelect(fileList) {
-                this.formData.fileIds = fileList.map(v => v.fileId).join(',');
+                this.formData.fileIds = fileList.map(v => v.fileId);
             },
 
             // 保存整改通知

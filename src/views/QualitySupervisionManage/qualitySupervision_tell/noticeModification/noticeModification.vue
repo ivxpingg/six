@@ -10,14 +10,6 @@
                   :model="formData"
                   :rules="rules"
                   :label-width="100">
-                <!--<FormItem label="项目名称:" prop="projectId">-->
-                    <!--<Select v-model="formData.relationId">-->
-                        <!--<Option v-for="item in projectList"-->
-                                <!--:key="item.projectId+'project'"-->
-                                <!--:value="item.projectId"-->
-                                <!--:label="item.projectName"></Option>-->
-                    <!--</Select>-->
-                <!--</FormItem>-->
 
                 <FormItem label="项目名称:">
                     <Input v-model="projectName" readonly/>
@@ -66,8 +58,8 @@
                         <!--<Input v-model="item.userName" readonly placeholder="请选择接收人员" />-->
                         <Select v-model="item.projectUserId" placeholder="请选择接收人员">
                             <Option v-for="(userItem, idx) in item.userList"
-                                    :key="userItem.userId + 'user' + idx"
-                                    :value="userItem.userId"
+                                    :key="userItem.projectUserId + 'user' + idx"
+                                    :value="userItem.projectUserId"
                                     :label="userItem.name"></Option>
                         </Select>
                     </FormItem>

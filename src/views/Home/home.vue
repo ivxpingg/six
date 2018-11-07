@@ -38,16 +38,18 @@
         data() {
             return {
                 inforCardData: [
-                    { title: '从业单位(家)', icon: '_unit', count: 803, color: '#2d8cf0' },
-                    { title: '从业人员(人)', icon: 'md-person', count: 13432, color: '#19be6b' },
-                    { title: '在建项目(个)', icon: 'md-cube', count: 142, color: '#ff9900' },
-                    { title: '交竣工项目(个)', icon: '_projectCompleteQuality_authenticate2', count: 657, color: '#ed3f14' },
-                    { title: '建设里程(km)', icon: 'md-flag', count: 112, color: '#E46CBB' },
-                    { title: '监督工作(人次)', icon: '_safetySupervision_check', count: 14, color: '#9A66E4' }
+                    { title: '从业单位(家)', icon: '_unit', count: 0, color: '#2d8cf0' },
+                    { title: '从业人员(人)', icon: 'md-person', count: 0, color: '#19be6b' },
+                    { title: '在建项目(个)', icon: 'md-cube', count: 0, color: '#ff9900' },
+                    { title: '交竣工项目(个)', icon: '_projectCompleteQuality_authenticate2', count: 0, color: '#ed3f14' },
+                    { title: '建设里程(km)', icon: 'md-flag', count: 0, color: '#E46CBB' },
+                    { title: '监督工作(人次)', icon: '_safetySupervision_check', count: 0, color: '#9A66E4' }
                 ]
             };
         },
         mounted() {
+            this.getBaseInfoCount();
+
             this.$Notice.info({
                 title: '消息通知',
                 desc: '您还有3项事务暂未处理，其中2项即将逾期，请尽快处理。',
@@ -55,6 +57,23 @@
             });
         },
         methods: {
+            // 基础信息统计（从业单位数量、从业人员数量、在建项目个数、交竣工项目个数、建设里程、监督工作人次）
+            getBaseInfoCount() {
+                this.$http({
+                    method: 'get',
+                    url: '/index/baseInfoCount'
+                }).then(res => {
+                   if (res.code === 'SUCCESS') {
+                       this.inforCardData[0].count = res.data.unitCount;
+                       this.inforCardData[1].count = res.data.employeeCount;
+                       this.inforCardData[2].count = res.data.projectCount;
+                       this.inforCardData[3].count = res.data.completeProjectCount;
+                       this.inforCardData[4].count = res.data.mileageCount;
+                       this.inforCardData[5].count = res.data.supervisionCount;
+                   }
+                });
+            },
+
             toPdf() {
 
                 let that = this;

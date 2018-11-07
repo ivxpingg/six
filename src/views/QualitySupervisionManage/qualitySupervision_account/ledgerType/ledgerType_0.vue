@@ -3,7 +3,7 @@
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.condition.searchKey"
+                    <Input v-model="searchParams.projectName"
                            style="width: 220px;"
                            placeholder="项目名称"/>
                 </FormItem>
@@ -21,13 +21,6 @@
                    :loading="tableLoading"
                    :columns="tableColumns"
                    :data="tableData"></Table>
-            <Page prev-text="上一页"
-                  next-text="下一页"
-                  show-total
-                  :current="searchParams.current"
-                  :page-size="searchParams.size"
-                  :total="searchParams.total"
-                  @on-change="onPageChange"></Page>
         </div>
     </div>
 </template>
@@ -41,26 +34,26 @@
         data() {
             return {
                 searchParams: {
-                    current: 1,      // 当前第几页
-                    size: 10,      // 每页几行
-                    total: 0,     // 总行数
-                    condition: {
-                        searchKey: '',      // 模糊查询参数
-                        beginTime: '',
-                        endTime: ''
-                    }
+                    projectName: '',      // 模糊查询参数
+                    beginTime: '',
+                    endTime: ''
                 },
 
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '日期', width: 180, align: 'center', key: 'recordDate',
+                    { title: '日期', width: 120, align: 'center', key: 'recordDate',
                         render: (h, params) => {
                             return h('div', MOMENT(params.row.recordDate).format('YYYY-MM-DD'));
                         }},
-                    { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
+                    { title: '项目名称', minWidth: 180, align: 'center', key: 'projectName' },
                     { title: '标段', width: 180, align: 'center', key: 'part' },
+                    { title: '累计监督次数', width: 180, align: 'center', key: 'totalSupTimes' },
+                    { title: '告知单及检查单（份数）', width: 180, align: 'center', key: 'noticeNum' },
+                    { title: '抽查意见书（份数）', width: 180, align: 'center', key: 'opinionNum' },
+                    { title: '督查通报（份数）', width: 180, align: 'center', key: 'notifyNum' },
+                    { title: '不良行为（份数）', width: 180, align: 'center', key: 'badBehaviorNum' },
                     { title: '监督负责人', width: 180, align: 'center', key: 'supervisor' },
-                    { title: '监督成员', width: 180, align: 'center', key: 'supervisor' },
+                    { title: '监督成员', width: 180, align: 'center', key: 'supervisorMember' },
                     { title: '备注', width: 180, align: 'center', key: 'remark' },
 
                 ],
@@ -78,10 +71,7 @@
             };
         },
         watch: {
-            'searchParams.current'() {
-                this.getData();
-            },
-            'searchParams.condition': {
+            searchParams: {
                 deep: true,
                 handler(val) {
                     this.getData();
@@ -92,28 +82,21 @@
             this.getData();
         },
         methods: {
-            /**
-             * 分页控件-切换页面
-             * @param current
-             */
-            onPageChange(current) {
-                this.searchParams.current = current;
-            },
             onChage_daterange(value) {
-                this.searchParams.condition.beginTime = value[0];
-                this.searchParams.condition.endTime = value[1];
+                this.searchParams.beginTime = value[0];
+                this.searchParams.endTime = value[1];
             },
             // 获取表格数据
             getData() {
+                this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/record/supervisionCountRecord',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
-                        this.searchParams.total = res.data.total;
+                        this.tableData = res.data || [];
                     }
                 }).catch(() => {
                     this.tableLoading = false;

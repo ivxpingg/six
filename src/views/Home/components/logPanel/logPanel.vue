@@ -16,6 +16,14 @@
         name: 'logPanel',
         data() {
             return {
+                searchParams: {
+                    current: 1,      // 当前第几页
+                    size: 10,      // 每页几行
+                    total: 0,     // 总行数
+                    condition: {
+
+                    }
+                },
                 tableColumns: [
                     {
                         type: 'index',
@@ -25,18 +33,21 @@
                     },
                     {
                         title: '操作人',
+                        width: 80,
                         key: 'operator',
                         align: 'center'
                     }
                     ,
                     {
                         title: '操作类型',
+                        width: 90,
                         key: 'operatorType',
                         align: 'center'
                     },
                     {
                         title: '操作内容',
-                        key: 'content',
+                        tooltip: true,
+                        key: 'operateContent',
                         align: 'center'
                     }
                 ],
@@ -44,35 +55,51 @@
                     {
                         operator: '管理员',
                         operatorType: '新增',
-                        content: '添加从业人员'
+                        operateContent: '添加从业人员添加从业人员添加从业人员'
                     },
                     {
                         operator: '管理员',
                         operatorType: '新增',
-                        content: '添加从业人员'
+                        operateContent: '添加从业人员'
                     },
                     {
                         operator: '管理员',
                         operatorType: '新增',
-                        content: '添加从业人员'
+                        operateContent: '添加从业人员添加从业人员添加从业人员'
                     },{
                         operator: '管理员',
                         operatorType: '新增',
-                        content: '添加从业人员'
+                        operateContent: '添加从业人员'
                     },{
                         operator: '管理员',
                         operatorType: '新增',
-                        content: '添加从业人员'
+                        operateContent: '添加从业人员'
                     },{
                         operator: '管理员',
                         operatorType: '新增',
-                        content: '添加从业人员'
+                        operateContent: '添加从业人员'
                     },{
                         operator: '管理员',
                         operatorType: '新增',
-                        content: '添加从业人员'
+                        operateContent: '添加从业人员'
                     }
                 ]
+            }
+        },
+        mounted() {
+            this.getLog();
+        },
+        methods: {
+            getLog() {
+                this.$http({
+                    method: 'post',
+                    url: '/operateLog/list',
+                    data: JSON.stringify(this.searchParams)
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.tableData = res.data.records || [];
+                    }
+                });
             }
         }
     }

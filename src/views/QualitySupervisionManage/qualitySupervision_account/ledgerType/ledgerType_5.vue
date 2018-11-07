@@ -1,9 +1,9 @@
 <template>
-    <div class="ledgerType_1-container">
+    <div class="ledgerType_5-container">
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.condition.searchKey"
+                    <Input v-model="searchParams.projectName"
                            style="width: 220px;"
                            placeholder="项目名称"/>
                 </FormItem>
@@ -21,13 +21,6 @@
                    :loading="tableLoading"
                    :columns="tableColumns"
                    :data="tableData"></Table>
-            <Page prev-text="上一页"
-                  next-text="下一页"
-                  show-total
-                  :current="searchParams.current"
-                  :page-size="searchParams.size"
-                  :total="searchParams.total"
-                  @on-change="onPageChange"></Page>
         </div>
     </div>
 </template>
@@ -36,19 +29,14 @@
     import vIvxFilterBox from '../../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     export default {
-        name: 'ledgerType_1',  // 质量安全抽查意见书登记台帐
+        name: 'ledgerType_5',  //  督查通报登记台帐
         components: {vIvxFilterBox},
         data() {
             return {
                 searchParams: {
-                    current: 1,      // 当前第几页
-                    size: 10,      // 每页几行
-                    total: 0,     // 总行数
-                    condition: {
-                        searchKey: '',      // 模糊查询参数
-                        beginTime: '',
-                        endTime: ''
-                    }
+                    projectName: '',      // 模糊查询参数
+                    beginTime: '',
+                    endTime: ''
                 },
 
                 tableColumns: [
@@ -88,10 +76,7 @@
             };
         },
         watch: {
-            'searchParams.current'() {
-                this.getData();
-            },
-            'searchParams.condition': {
+            searchParams: {
                 deep: true,
                 handler(val) {
                     this.getData();
@@ -102,28 +87,21 @@
             this.getData();
         },
         methods: {
-            /**
-             * 分页控件-切换页面
-             * @param current
-             */
-            onPageChange(current) {
-                this.searchParams.current = current;
-            },
             onChage_daterange(value) {
-                this.searchParams.condition.beginTime = value[0];
-                this.searchParams.condition.endTime = value[1];
+                this.searchParams.beginTime = value[0];
+                this.searchParams.endTime = value[1];
             },
             // 获取表格数据
             getData() {
+                this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/record/qualityNoticeRecord',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
-                        this.searchParams.total = res.data.total;
+                        this.tableData = res.data || [];
                     }
                 }).catch(() => {
                     this.tableLoading = false;
@@ -135,7 +113,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .ledgerType_1-container {
+    .ledgerType_5-container {
         padding-top:  10px;
     }
 </style>

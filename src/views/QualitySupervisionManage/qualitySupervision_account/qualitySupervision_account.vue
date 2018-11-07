@@ -19,6 +19,7 @@
         <vLedgerType3 v-show="ledgerType === '3'"></vLedgerType3>
         <vLedgerType4 v-show="ledgerType === '4'"></vLedgerType4>
         <vLedgerType5 v-show="ledgerType === '5'"></vLedgerType5>
+        <vLedgerType6 v-show="ledgerType === '6'"></vLedgerType6>
 
     </div>
 </template>
@@ -31,6 +32,7 @@
     import vLedgerType3 from './ledgerType/ledgerType_3';
     import vLedgerType4 from './ledgerType/ledgerType_4';
     import vLedgerType5 from './ledgerType/ledgerType_5';
+    import vLedgerType6 from './ledgerType/ledgerType_6';
     export default {
         name: 'qualitySupervision_account',
         components: {
@@ -40,21 +42,14 @@
             vLedgerType2,
             vLedgerType3,
             vLedgerType4,
-            vLedgerType5
+            vLedgerType5,
+            vLedgerType6
         },
         data() {
             return {
                 ledgerType: '0',
                 dict_ledgerType: [],
             };
-        },
-        watch: {
-            'searchParams.condition': {
-                deep: true,
-                handler(){
-                    this.getData();
-                }
-            }
         },
         mounted() {
             this.getDict('ledgerType');

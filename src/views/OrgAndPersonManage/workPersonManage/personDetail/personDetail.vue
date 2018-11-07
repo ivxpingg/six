@@ -2,6 +2,7 @@
     <div class="personDetail-container">
         <div class="left-panel">
             <Menu theme="light"
+                  style="height: 100%;"
                   :width="`160px`"
                   :activeName="activeName"
                   @on-select="onSelect">

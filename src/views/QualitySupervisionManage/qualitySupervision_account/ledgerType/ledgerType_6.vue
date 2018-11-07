@@ -1,9 +1,9 @@
 <template>
-    <div class="ledgerType_2-container">
+    <div class="ledgerType_6-container">
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.condition.searchKey"
+                    <Input v-model="searchParams.projectName"
                            style="width: 220px;"
                            placeholder="项目名称"/>
                 </FormItem>
@@ -21,13 +21,6 @@
                    :loading="tableLoading"
                    :columns="tableColumns"
                    :data="tableData"></Table>
-            <Page prev-text="上一页"
-                  next-text="下一页"
-                  show-total
-                  :current="searchParams.current"
-                  :page-size="searchParams.size"
-                  :total="searchParams.total"
-                  @on-change="onPageChange"></Page>
         </div>
     </div>
 </template>
@@ -36,19 +29,13 @@
     import vIvxFilterBox from '../../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     export default {
-        name: 'ledgerType_2',  // 质量监督申请材料核查意见书登记台账
-        components: {vIvxFilterBox},
+        name: 'ledgerType_6',  // 质量告知单登记台帐
         data() {
             return {
                 searchParams: {
-                    current: 1,      // 当前第几页
-                    size: 10,      // 每页几行
-                    total: 0,     // 总行数
-                    condition: {
-                        searchKey: '',      // 模糊查询参数
-                        beginTime: '',
-                        endTime: ''
-                    }
+                    projectName: '',      // 模糊查询参数
+                    beginTime: '',
+                    endTime: ''
                 },
 
                 tableColumns: [
@@ -57,7 +44,7 @@
                         render: (h, params) => {
                             return h('div', MOMENT(params.row.recordDate).format('YYYY-MM-DD'));
                         }},
-                    { title: '编号', width: 180, align: 'center', key: '' },
+                    { title: '编号', width: 180, align: 'center', key: 'recordNo' },
                     { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
                     { title: '标段', width: 180, align: 'center', key: 'part' },
                     { title: '督查类型', width: 180, align: 'center', key: '' },
@@ -65,33 +52,17 @@
                     { title: '发出单位', width: 180, align: 'center', key: '' },
                     { title: '责任单位', width: 180, align: 'center', key: '' },
                     { title: '整改回复状态', width: 180, align: 'center', key: '' },
-                    { title: '整改回复时间', width: 180, align: 'center', key: 'recordDate',
-                        render: (h, params) => {
-                            return h('div', MOMENT(params.row.recordDate).format('YYYY-MM-DD'));
-                        }},
                     { title: '发出人员', width: 180, align: 'center', key: '' },
                     { title: '监督负责人', width: 180, align: 'center', key: 'supervisor' },
                     { title: '备注', width: 180, align: 'center', key: 'remark' }
 
                 ],
-                tableData: [
-                    {
-                        projectId: '12',
-                        recordDate: '2018-10-10',
-                        projectName: '',   // 项目名称
-                        part: '',          // 标段
-                        supervisor: '',   // 监督负责人
-                        remark: ''        // 备注
-                    }
-                ],
+                tableData: [],
                 tableLoading: false,
             };
         },
         watch: {
-            'searchParams.current'() {
-                this.getData();
-            },
-            'searchParams.condition': {
+            searchParams: {
                 deep: true,
                 handler(val) {
                     this.getData();
@@ -102,28 +73,21 @@
             this.getData();
         },
         methods: {
-            /**
-             * 分页控件-切换页面
-             * @param current
-             */
-            onPageChange(current) {
-                this.searchParams.current = current;
-            },
             onChage_daterange(value) {
-                this.searchParams.condition.beginTime = value[0];
-                this.searchParams.condition.endTime = value[1];
+                this.searchParams.beginTime = value[0];
+                this.searchParams.endTime = value[1];
             },
             // 获取表格数据
             getData() {
+                this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/record/qualityNoticeRecord',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
-                        this.searchParams.total = res.data.total;
+                        this.tableData = res.data || [];
                     }
                 }).catch(() => {
                     this.tableLoading = false;
@@ -135,7 +99,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .ledgerType_2-container {
-        padding-top:  10px;
+    .ledgerType_6-container {
     }
 </style>

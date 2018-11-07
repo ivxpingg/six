@@ -1,5 +1,5 @@
 <template>
-    <div class="ledgerType_1-container">
+    <div class="ledgerType_4-container">
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
@@ -36,7 +36,7 @@
     import vIvxFilterBox from '../../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     export default {
-        name: 'ledgerType_1',  // 质量安全抽查意见书登记台帐
+        name: 'ledgerType_4',  // 安全不良行为登记台帐
         components: {vIvxFilterBox},
         data() {
             return {
@@ -135,7 +135,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .ledgerType_1-container {
+    .ledgerType_4-container {
         padding-top:  10px;
     }
 </style>

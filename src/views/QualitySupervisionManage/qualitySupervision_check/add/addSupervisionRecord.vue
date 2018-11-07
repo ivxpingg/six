@@ -35,6 +35,14 @@
                 <FormItem label="督查内容:" prop="content">
                     <Input v-model="formData.content" type="textarea" :rows="5" placeholder="请输入" />
                 </FormItem>
+                <FormItem label="督查类型:">
+                    <Select v-model="formData.checkType">
+                        <Option v-for="item in dict_checkType"
+                                :key="item.id"
+                                :value="item.value"
+                                :label="item.label"></Option>
+                    </Select>
+                </FormItem>
             </Form>
 
             <div slot="footer">
@@ -64,15 +72,18 @@
                     checkTime: '',
                     checkWay: '',
                     content: '',
+                    checkType: '',
                     moduleType: 'quality'  // 质量监督
                 },
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
                     content: [{ required: true, message: '督查内容不能为空！', trigger: 'blur' }],
-                    checkTime: [{ required: true, message: '督察时间不能为空！', trigger: 'blur' }]
+                    checkTime: [{ required: true, message: '督察时间不能为空！', trigger: 'blur' }],
+                    checkType: [{ required: true, message: '督察类型不能为空！', trigger: 'blur' }]
                 },
 
                 dict_checkWay: [],  // 督查方式
+                dict_checkType: []  // 督查类型
 
             };
         },
@@ -82,7 +93,7 @@
             }
         },
         mounted() {
-            this.getDict(['checkWay', 'supervisionType']);
+            this.getDict(['checkWay', 'checkType']);
         },
         methods: {
             getDict(list) {
@@ -116,7 +127,7 @@
                                 this.$Message.success({
                                     content: '添加监督成功！'
                                 });
-                                this.$emit('modal_callback');
+                                this.$emit('modal-callback');
                             }
                         })
                     } else {

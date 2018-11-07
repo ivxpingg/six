@@ -9,7 +9,7 @@
                   :model="formData"
                   :rules="rules"
                   :label-width="80">
-                <FormItem label="项目名称:" prop="fileName">
+                <FormItem label="文件名称:" prop="fileName">
                     <Input v-model="formData.fileName"  placeholder="请输入项目名称"/>
                 </FormItem>
                 <FormItem label="文件编号:" prop="fileNo">
@@ -36,11 +36,12 @@
                            placeholder="请输入简介"/>
                 </FormItem>
                 <FormItem label="相关材料:">
-                    <Upload :action="uploadParams.actionUrl"
+                    <Upload :action="uploadActive"
                             :showUploadList="uploadParams.showUploadList"
                             :multiple="uploadParams.multiple"
                             :accept="uploadParams.accept"
                             :maxSize="uploadParams.maxSize"
+                            :on-remove="onRemoveFile"
                             :before-upload="fileBeforeUpload"
                             :on-exceeded-size="exceededSize"
                             :on-error="fileUploadError"
@@ -71,9 +72,15 @@
         name: 'add_notification',  // 添加安全通知
         mixins: [modalMixin, uploadMixin],
         components: {vModalUnitSelect},
+        computed: {
+            uploadActive() {
+                return this.uploadParams.actionUrl + '/notice_file';
+            }
+        },
         data() {
             return {
                 uploadParams: {
+                    showUploadList: true,
                     multiple: true
                 },
                 formData: {
@@ -89,7 +96,8 @@
                     operateUnitStr: '',
                     operator: '',  //  操作人
                     publishTime: '',  // 发布时间
-                    cancelTime: ''  // 作废时间
+                    cancelTime: '',  // 作废时间
+                    fileIds: []
                 },
                 rules: {
                     fileName: [{ required: true, message: '文件名称不能为空！', trigger: 'blur' }],
@@ -107,9 +115,13 @@
                 this.formData.beginTime = val;
             },
 
+            // 文件移除
+            onRemoveFile(file, fileList) {
+                this.formData.fileIds = fileList.map(v => v.response.data.fileId);
+            },
+
             fileUploadSuccess(response, file, fileList) {
-                console.dir(response);
-                // this.$Loading.finish();
+                this.formData.fileIds = fileList.map(v => v.response.data.fileId);
             },
 
             // 单位选择
@@ -129,7 +141,7 @@
 
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/safeNotice/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

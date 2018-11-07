@@ -54,7 +54,8 @@
         <vNoticeReply ref="modal_noticeReply"
                       :projectId="currentRow.projectId"
                       :projectName="currentRow.projectName"
-                      :changeNoticeId="currentRow.changeNotice.changeNoticeId"></vNoticeReply>
+                      :changeNoticeId="currentRow.changeNotice.changeNoticeId"
+                      @modal-callback="modal_noticeReply_callback"></vNoticeReply>
     </div>
 </template>
 
@@ -297,7 +298,7 @@
                     method: 'get',
                     url: '/file/attachList',
                     params: {
-                        relationId: row.advanceNoticeId,
+                        relationId: row.advanceNotice.advanceNoticeId,
                         fileType: 'monitor_procedure'
                     }
                 }).then((res) => {
@@ -339,6 +340,10 @@
             },
             modal_noticeModification_callback() {
                 this.$refs.modal_noticeModification.modalValue = false;
+                this.getData();
+            },
+            modal_noticeReply_callback() {
+                this.$refs.modal_noticeReply.modalValue = false;
                 this.getData();
             }
         }
