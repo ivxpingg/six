@@ -73,7 +73,7 @@
                 return str.replace(/[\u0391-\uFFE5]/g,"aa").length; //先把中文替换成两个字节的英文，在计算长度
             },
             onSelect() {
-                debugger
+
                 this.$emit('on-select', this.data, !this.active);
             },
             onMouseOver() {
@@ -93,8 +93,14 @@
         cursor: pointer;
 
         &.active {
-            background-color: #f8f8f9;
+            background-color: #cdcdce;
             box-shadow: 1px 2px 2px #dcdee2;
+
+            .title {
+                &.hover-title{
+                    background-color: #cdcdce;
+                }
+            }
         }
         .folder-icon {
             color: rgba(244, 158, 34, 0.7);

@@ -20,6 +20,7 @@
             <Table border
                    :loading="tableLoading"
                    :columns="tableColumns"
+                   :height="540"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
@@ -30,7 +31,9 @@
                   @on-change="onPageChange"></Page>
         </div>
 
-        <vAdd ref="add"></vAdd>
+        <vAdd ref="add" @modal-callback="modal_add_callback"></vAdd>
+
+        <vViewFiles ref="viewFile" :data="viewFilesData"></vViewFiles>
 
     </div>
 </template>
@@ -39,9 +42,12 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import authMixin from '../../../lib/mixin/authMixin';
     import vAdd from './add/add';
+    // import vViewFiles from '../../Common/viewFiles/viewFiles';
+    import MOMENT from 'moment';
+    import viewFilesMixin from '../../Common/viewFiles/mixin';
     export default {
         name: 'safetySupervision_notification',  // 安全通知
-        mixins: [authMixin],
+        mixins: [authMixin, viewFilesMixin],
         components: {vIvxFilterBox, vAdd},
         data() {
             return {
@@ -55,48 +61,81 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '名称', width: 120, align: 'center', key: 'fileName' },
+                    { title: '名称', minWidth: 120, align: 'center', key: 'fileName' },
                     { title: '文件编号', width: 100, align: 'center', key: 'fileNo' },
-                    { title: '主编单位', width: 120, align: 'center', key: 'editUnitStr' },
-                    { title: '操作单位', width: 120, align: 'center', key: 'operateUnitStr' },
-                    { title: '操作人', width: 100, align: 'center', key: 'operator' },
-                    { title: '发布日期', width: 120, align: 'center', key: 'publishTime' },
-                    { title: '附件', width: 80, align: 'center', key: 'fileNum' },
-                    { title: '实施日期', width: 120, align: 'center', key: 'beginTime' },
-                    { title: '作废日期', width: 120, align: 'center', key: 'cancelTime' },
+                    { title: '主编单位', width: 120, align: 'center', key: 'editUnit' },
+                    { title: '操作单位', width: 180, align: 'center', key: 'unitName' },
+                    { title: '操作人', width: 100, align: 'center', key: 'userName' },
+                    { title: '发布日期', width: 120, align: 'center', key: 'publishTime',
+                        render(h, params) {
+                            return h('div', params.row.publishTime ? MOMENT(params.row.publishTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '附件', width: 80, align: 'center', key: 'fileNum',
+                        render: (h, params) => {
+                            return h('div', {
+                                style: {
+                                    'textDecoration': 'underline',
+                                    'cursor': 'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.getData_vViewFile(params.row.safeNoticeId, 'notice_file', 'viewFilesData');
+                                        this.$refs.viewFile.modalValue = true;
+                                    }
+                                }
+                            }, params.row.fileNum);
+                        }
+                    },
+                    { title: '实施日期', width: 120, align: 'center', key: 'beginTime',
+                        render(h, params) {
+                            return h('div', params.row.beginTime ? MOMENT(params.row.beginTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '作废日期', width: 120, align: 'center', key: 'cancelTime',
+                        render(h, params) {
+                            return h('div', params.row.cancelTime ? MOMENT(params.row.cancelTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     {
                         title: '操作',
-                        width: 250,
+                        width: 200,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
                             let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'md-megaphone'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.publicNotice(params.row);
+                            if (params.row.safeNoticeStatus === 'wait_publish'){
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'md-megaphone'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.publicNotice(params.row);
+                                        }
                                     }
-                                }
-                            }, '发布'));
+                                }, '发布'));
+                            }
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small',
-                                    icon: 'md-remove-circle'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.cancelNotice(params.row);
+
+                            if (params.row.safeNoticeStatus === 'publish'){
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small',
+                                        icon: 'md-remove-circle'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.cancelNotice(params.row);
+                                        }
                                     }
-                                }
-                            }, '作废'));
+                                }, '作废'));
+                            }
+
 
                             list.push(h('Button', {
                                 props: {
@@ -120,24 +159,26 @@
                     }
                 ],
                 tableData: [
-                    {
-                        safeNoticeId: '001',
-                        fileName: '文件名',  // 文件名称
-                        fileNo: 'NO.12545',    // 文件编号
-                        editUnit: '',  // 主编单位
-                        editUnitStr: '合肥华德交通工程咨询有限公司',
-                        beginTime: '2018-01-01',  // 施行时间
-                        intro: '介绍',  // 简介
-                        fileNum: null,  // 附件数量
-                        insTime: '2018-01-01',  // 创建时间
-                        operateUnit: '',  // 操作单位
-                        operateUnitStr: '合肥华德交通工程咨询有限公司',
-                        operator: 'admin',  //  操作人
-                        publishTime: '2018-01-01',  // 发布时间
-                        cancelTime: '2018-01-01'  // 作废时间
-                    }
+                    // {
+                    //     safeNoticeId: '001',
+                    //     fileName: '文件名',  // 文件名称
+                    //     fileNo: 'NO.12545',    // 文件编号
+                    //     editUnit: '',  // 主编单位
+                    //     editUnitStr: '合肥华德交通工程咨询有限公司',
+                    //     beginTime: '2018-01-01',  // 施行时间
+                    //     intro: '介绍',  // 简介
+                    //     fileNum: null,  // 附件数量
+                    //     insTime: '2018-01-01',  // 创建时间
+                    //     operateUnit: '',  // 操作单位
+                    //     operateUnitStr: '合肥华德交通工程咨询有限公司',
+                    //     operator: 'admin',  //  操作人
+                    //     publishTime: '2018-01-01',  // 发布时间
+                    //     cancelTime: '2018-01-01'  // 作废时间
+                    // }
                 ],
                 tableLoading: false,
+
+                viewFilesData: []
             };
         },
         watch: {
@@ -152,7 +193,6 @@
             }
         },
         mounted() {
-            // TODO 首次加载获取表格数据
             this.getData();
         },
         methods: {
@@ -185,7 +225,10 @@
             modal_add_open() {
                 this.$refs.add.modalValue = true;
             },
-
+            modal_add_callback() {
+                this.getData();
+                this.$refs.add.modalValue = false;
+            },
             // 发布
             publicNotice(row) {
                 this.$Modal.confirm({
@@ -194,13 +237,14 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/safeNotice/publish',
                             params: {
                                 safeNoticeId: row.safeNoticeId
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('发布成功!');
+                                this.getData();
                             }
                         });
                     }
@@ -214,13 +258,14 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/safeNotice/cancel',
                             params: {
                                 safeNoticeId: row.safeNoticeId
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('作废成功!');
+                                this.getData();
                             }
                         });
                     }
@@ -234,13 +279,14 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/safeNotice/delete',
                             params: {
                                 safeNoticeId: row.safeNoticeId
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('删除成功!');
+                                this.getData();
                             }
                         });
                     }
@@ -252,5 +298,6 @@
 
 <style lang="scss" scoped>
     .safetySupervision_notification-container {
+
     }
 </style>

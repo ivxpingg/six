@@ -12,19 +12,19 @@
                           @on-select="onSelect">
                         <MenuItem name="1">
                             <Icon type="md-document" />
-                            <Badge :count="5" type="success" :offset="offset">监督受理材料</Badge>
+                            <Badge :count="getCount(0)" type="success" :offset="offset">监督受理材料</Badge>
                         </MenuItem>
                         <MenuItem name="2">
                             <Icon type="md-document" />
-                            <Badge :count="5" type="success" :offset="offset">监督过程材料</Badge>
+                            <Badge :count="getCount(1)" type="success" :offset="offset">监督过程材料</Badge>
                         </MenuItem>
                         <MenuItem name="3">
                             <Icon type="md-document" />
-                            <Badge :count="5" type="success" :offset="offset">交工验收材料</Badge>
+                            <Badge :count="getCount(2)" type="success" :offset="offset">交工验收材料</Badge>
                         </MenuItem>
                         <MenuItem name="4">
                             <Icon type="md-document" />
-                            <Badge :count="5" type="success" :offset="offset">竣工鉴定材料</Badge>
+                            <Badge :count="getCount(3)" type="success" :offset="offset">竣工鉴定材料</Badge>
                         </MenuItem>
                     </Menu>
                 </template>
@@ -54,7 +54,7 @@
                 </template>
             </vModalBothSides>
             <div slot="footer">
-                <Button type="primary" size="large">移送交通行政执法局</Button>
+                <Button type="primary" size="large" @click="save">移送交通行政执法局</Button>
             </div>
         </Modal>
     </div>
@@ -64,9 +64,9 @@
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import vModalBothSides from '../../../../components/modal-body/modal-both-sides';
     import vProjectFiles_0 from './module/projectFiles_0';
-    import vProjectFiles_1 from './module/projectFiles_1';
-    import vProjectFiles_2 from './module/projectFiles_2';
-    import vProjectFiles_3 from './module/projectFiles_3';
+    // import vProjectFiles_1 from './module/projectFiles_1';
+    // import vProjectFiles_2 from './module/projectFiles_2';
+    // import vProjectFiles_3 from './module/projectFiles_3';
     import vProjectFilesList from './module/projectFilesList';
     export default {
         name: 'modalProjectFiles',
@@ -74,15 +74,31 @@
         components: {
             vModalBothSides,
             vProjectFiles_0,
-            vProjectFiles_1,
-            vProjectFiles_2,
-            vProjectFiles_3,
             vProjectFilesList
         },
         props: {
             projectId: {
                 type: String,
                 default: ''
+            }
+        },
+        watch: {
+            projectId(val) {
+                this.folderList.projectFiles_0[0].forEach(v => {
+                    v.selectedFileList = [];
+                });
+
+                this.folderList.projectFiles_0[1].forEach(v => {
+                    v.selectedFileList = [];
+                });
+
+                this.folderList.projectFiles_0[2].forEach(v => {
+                    v.selectedFileList = [];
+                });
+
+                this.folderList.projectFiles_0[3].forEach(v => {
+                    v.selectedFileList = [];
+                });
             }
         },
         data() {
@@ -185,9 +201,16 @@
                 Object.assign(this.folderType, folderInfo);
                 this.openFilesList = true;
             },
+
+            getCount(idx) {
+                let count = 0;
+                this.folderList[`projectFiles_${idx}`].forEach(v => {
+                    count += v.selectedFileList.length;
+                });
+                return count;
+            },
             // 文件选择
             callback_change(data, active) {
-                debugger
                 if (active) {
                     this.folderType.selectedFileList.push(data);
                 }
@@ -195,6 +218,11 @@
                     let idx = this.folderType.selectedFileList.indexOf(data);
                     this.folderType.selectedFileList.splice(idx, 1);
                 }
+            },
+
+            // 移送交通行政执法局
+            save() {
+
             }
         }
     }

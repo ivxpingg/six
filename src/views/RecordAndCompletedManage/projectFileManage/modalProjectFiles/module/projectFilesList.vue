@@ -9,7 +9,7 @@
                           type="success"
                           :data="item"
                           :rows="3"
-                          @on-select="onSelectFolder(item)"></vIvxFile>
+                          @on-select="onSelectFolder"></vIvxFile>
             </li>
         </ul>
     </div>
@@ -68,16 +68,39 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.fileList = res.data || [];
+
+                        this.fileList = [
+                            {
+                                fileId: '001',
+                                fileName: '文件1'
+                            },{
+                                fileId: '002',
+                                fileName: '文件2'
+                            },
+                            {
+                                fileId: '003',
+                                fileName: '文件3'
+                            },
+                            {
+                                fileId: '004',
+                                fileName: '文件4'
+                            }
+
+                        ];
                     }
                 })
             },
             // 判断文件是否已选
             isAcitve(item) {
-                return this.folderType.selectedFileList.indexOf(item) > -1;
+                // return this.folderType.selectedFileList.indexOf(item) > -1;
+                for(let i = 0; i < this.folderType.selectedFileList.length; i++) {
+                    if (this.folderType.selectedFileList[i].fileId === item.fileId) {
+                        return true;
+                    }
+                }
+                return false;
             },
             onSelectFolder(data, active){
-                debugger
                 this.$emit('callback', data, active);
             }
         }
