@@ -64,9 +64,6 @@
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import vModalBothSides from '../../../../components/modal-body/modal-both-sides';
     import vProjectFiles_0 from './module/projectFiles_0';
-    // import vProjectFiles_1 from './module/projectFiles_1';
-    // import vProjectFiles_2 from './module/projectFiles_2';
-    // import vProjectFiles_3 from './module/projectFiles_3';
     import vProjectFilesList from './module/projectFilesList';
     export default {
         name: 'modalProjectFiles',

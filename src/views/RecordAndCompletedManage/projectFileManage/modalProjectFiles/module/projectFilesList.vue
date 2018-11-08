@@ -68,25 +68,25 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-
-                        this.fileList = [
-                            {
-                                fileId: '001',
-                                fileName: '文件1'
-                            },{
-                                fileId: '002',
-                                fileName: '文件2'
-                            },
-                            {
-                                fileId: '003',
-                                fileName: '文件3'
-                            },
-                            {
-                                fileId: '004',
-                                fileName: '文件4'
-                            }
-
-                        ];
+                        this.fileList = res.data || [];
+                        // this.fileList = [
+                        //     {
+                        //         fileId: '001',
+                        //         fileName: '文件1'
+                        //     },{
+                        //         fileId: '002',
+                        //         fileName: '文件2'
+                        //     },
+                        //     {
+                        //         fileId: '003',
+                        //         fileName: '文件3'
+                        //     },
+                        //     {
+                        //         fileId: '004',
+                        //         fileName: '文件4'
+                        //     }
+                        //
+                        // ];
                     }
                 })
             },
