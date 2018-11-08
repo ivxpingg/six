@@ -38,15 +38,47 @@
                   :total="searchParams.total"
                   @on-change="onPageChange"></Page>
         </div>
+
+        <!--查看附件-->
+        <vViewFiles ref="modal_viewFiles" :data="filesData"></vViewFiles>
+
+        <!--添加监督记录-->
+        <vAddSupervisionRecord ref="modal_addSupervisionRecord"
+                               :projectList="projectList"
+                               @modal-callback="modal_addSupervisionRecord_callback"></vAddSupervisionRecord>
+
+        <!--整改通知-->
+        <vNoticeModification_check ref="modal_noticeModification_check"
+                                   :projectId="currentRow.projectId"
+                                   :projectName="currentRow.projectName"
+                                   :supervisionCheckId="currentRow.supervisionCheckId"
+                                   @modal-callback="modal_noticeModification_check_callback" ></vNoticeModification_check>
+        <!--整改回复-->
+        <vNoticeReply_check ref="modal_noticeReply_check"
+                            :projectId="currentRow.projectId"
+                            :projectName="currentRow.projectName"
+                            :changeNoticeId="currentRow.changeNotice.changeNoticeId"
+                            @modal-callback="modal_noticeReply_check_callback"></vNoticeReply_check>
+
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
+    import vViewFiles from '../../Common/viewFiles/viewFiles';
+    import vAddSupervisionRecord from './add/addSafeSupervisionRecord';
+    import vNoticeModification_check from './noticeModification_check/noticeModification_check';
+    import vNoticeReply_check from './noticeReply_check/noticeReply_check';
     export default {
         name: 'safetySupervision_check',  // 安全督查检查
-        components: {vIvxFilterBox},
+        components: {
+            vIvxFilterBox,
+            vViewFiles,
+            vAddSupervisionRecord,
+            vNoticeModification_check,
+            vNoticeReply_check
+        },
         data() {
             return {
                 searchParams: {
@@ -55,43 +87,69 @@
                     total: 0,     // 总行数
                     condition: {
                         searchKey: '',      // 模糊查询参数
-                        projectId: ''
+                        projectId: '',
+                        moduleType: 'security'  // 安全监督
                     }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '督查时间', width: 180, align: 'center',
+                    { title: '督查时间', width: 120, align: 'center',
                         render: (h, params) => {
                             return h('div', MOMENT(params.row.checkTime).format('YYYY-MM-DD'));
                         }},
-                    { title: '督察方式', width: 180, align: 'center', key: 'checkWayLabel' },
-                    { title: '督查内容', width: 180, align: 'center', key: 'content' },
+                    { title: '督察方式', width: 120, align: 'center', key: 'checkWayLabel' },
+                    { title: '督查内容', minWidth: 180, align: 'center', key: 'content' },
                     { title: '督查类型', width: 180, align: 'center', key: 'checkTypeLabel' },
-                    { title: '附件', width: 100, align: 'center', key: '' },
-                    { title: '下发单位', width: 100, align: 'center', key: '' },
-                    { title: '发出人或负责人', width: 130, align: 'center', key: '' },
-                    { title: '整改状态', width: 100, align: 'center', key: '' },
-                    { title: '通知查看时间', width: 120, align: 'center', key: '' },
-                    { title: '整改回复时间', width: 120, align: 'center', key: '' },
-                    { title: '回复内容', width: 120, align: 'center', key: '' },
+                    // { title: '下发单位', width: 100, align: 'center', key: '' },
+                    { title: '发出人或负责人', width: 130, align: 'center', key: 'creator' },
+                    { title: '整改状态', width: 100, align: 'center', key: 'changeStatusLabel' },
+                    { title: '通知查看时间', width: 120, align: 'center', key: '',
+                        render(h, params) {
+                            return h('div', params.row.checkTime ? MOMENT(params.row.checkTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     {
                         title: '操作',
                         width: 240,
                         render: (h, params) => {
                             let list = [];
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-eye-outline'
-                                },
-                                on: {
-                                    click: () => {
+
+                            if (!params.row.changeNotice || params.row.changeNotice.changeStatus === 'pass') {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-notifications'
+                                    },
+                                    on: {
+                                        click: () => {
+
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.currentRow.projectName = params.row.projectName;
+                                            this.currentRow.supervisionCheckId = params.row.supervisionCheckId;
+                                            this.$refs.modal_noticeModification_check.modalValue = true;
+                                        }
                                     }
-                                }
-                            }, '查看整改回复'));
+                                }, '整改通知'));
+                            }
 
-
+                            if (params.row.changeNotice) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-undo'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.currentRow.projectName = params.row.projectName;
+                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                            this.$refs.modal_noticeReply_check.modalValue = true;
+                                        }
+                                    }
+                                }, '查看整改回复'));
+                            }
 
                             list.push(h('Button', {
                                 props: {
@@ -101,7 +159,8 @@
                                 },
                                 on: {
                                     click: () => {
-
+                                        this.currentRow.projectId = params.row.projectId;
+                                        this.getFilesData(params.row);
                                     }
                                 }
                             }, '查看附件'));
@@ -119,28 +178,34 @@
                     }
 
                 ],
-                tableData: [
-                    {
-                        supervisionCheckId: '',
-                        projectId: '12',
-                        checkTime: '2018-10-10',
-                        checkWay: '',   // 督察方式
-                        checkWayLabel: '日常督查',
-                        content: '现场某某情况违规',          // 督查内容
-                        checkType: '',        // 督查类型
-                        checkTypeLabel: '质量告知单',
-                        supervisionType: '',  // 监督类别（质量/安全）
-                        supervisionTypeLabel: '',
-                        moduleType: ''      // 模块类别（质量监督、安全监督、信用评价）
-                    }
-                ],
+                tableData: [],
                 tableLoading: false,
 
                 projectList: [],
 
-                // 添加监督记录
-                modal_addSupervisionRecord: false
+                currentRow: {
+                    projectId: '',
+                    projectName: '',
+                    supervisionCheckId: '',
+                    changeNotice: {   // 整改通知
+                        changeNoticeId: ''
+                    },
+                },
+                // 查看附件
+                filesData: []
             };
+        },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
+            }
         },
         mounted() {
             this.getProjectList();
@@ -149,17 +214,13 @@
             // 获取项目列表
             getProjectList() {
                 this.$http({
-                    method: 'post',
-                    url: '/project/list',
-                    data: JSON.stringify({
-                        current: 1,      // 当前第几页
-                        size: 1000,      // 每页几行
-                    })
+                    method: 'get',
+                    url: '/supervisionCheck/monitorProjectList'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        this.projectList = res.data.records || [];
+                        this.projectList = res.data || [];
                         if (this.projectList.length > 0) {
-                            this.searchParams.condition.projectId = res.data.records[0].projectId;
+                            this.searchParams.condition.projectId = res.data[0].projectId;
                             this.getData();
                         }
                     }
@@ -177,7 +238,7 @@
             getData() {
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/supervisionCheck/list',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
@@ -188,6 +249,43 @@
                 }).catch(() => {
                     this.tableLoading = false;
                 })
+            },
+
+            // 添加监督记录
+            modal_addSupervisionRecord_open() {
+                this.$refs.modal_addSupervisionRecord.modalValue = true;
+            },
+            modal_addSupervisionRecord_callback() {
+                this.getData();
+                this.$refs.modal_addSupervisionRecord.modalValue = false;
+            },
+
+            // 添加整改通知的回调
+            modal_noticeModification_check_callback() {
+                this.getData();
+                this.$refs.modal_noticeModification_check.modalValue = false;
+            },
+            // 整改通过的回调
+            modal_noticeReply_check_callback() {
+                this.$refs.modal_noticeReply_check.modalValue = false;
+                this.getData();
+            },
+            // 查看附件
+            getFilesData(row) {
+                this.$http({
+                    method: 'get',
+                    url: '/file/attachList',
+                    params: {
+                        relationId: row.changeNotice.changeNoticeId,
+                        fileType: 'monitor_procedure'
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.filesData = res.data || [];
+                        this.$refs.modal_viewFiles.modalValue = true;
+                    }
+                })
+
             }
 
         }

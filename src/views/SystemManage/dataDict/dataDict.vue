@@ -134,7 +134,10 @@
             dictList_dom() {
                 let list = [];
                 this.dictList.forEach((val) => {
-                    if ((val.label.indexOf(this.filterValue.trim()) > -1 || val.description.indexOf(this.filterValue.trim()) > -1) && (this.filterType === 'all' || val.type === this.filterType.trim())) {
+                    if ((val.label.indexOf(this.filterValue.trim()) > -1
+                        || val.description.indexOf(this.filterValue.trim()) > -1
+                        || val.type.indexOf(this.filterValue.trim()) > -1)
+                        && (this.filterType === 'all' || val.type === this.filterType.trim())) {
                         list.push(val);
                     }
                 });

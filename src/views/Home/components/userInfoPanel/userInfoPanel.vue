@@ -25,13 +25,13 @@
                 <Row>
                     <i-col span="12">
                         <Button type="success" size="large">
-                            <Badge type="success" :count="6"></Badge>
+                            <Badge type="success" :count="waitHandleNum" show-zero></Badge>
                             待办事项
                         </Button>
                     </i-col>
                     <i-col span="12">
                         <Button type="info" size="large">
-                            <Badge type="info" :count="12"></Badge>
+                            <Badge type="info" :count="unReadNoticeNum" show-zero></Badge>
                             消息通知
                         </Button>
                     </i-col>
@@ -55,11 +55,15 @@
                     userId: '',
                     phone: '',
                     img: imgUrl
-                }
+                },
+
+                unReadNoticeNum: 0,
+                waitHandleNum: 0
             }
         },
         mounted() {
             this.getData();
+            this.getUnReadNoticeNum();
         },
         methods: {
             getData() {
@@ -69,6 +73,29 @@
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         Object.assign(this.userInfo, res.data)
+                    }
+                })
+            },
+            // 获取未读消息通知数量
+            getUnReadNoticeNum() {
+                this.$http({
+                    method: 'get',
+                    url: '/index/unReadNoticeNum'
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.unReadNoticeNum = res.data || 0;
+                    }
+                })
+            },
+
+            // 待办事项数量
+            getWaitHandleNum() {
+                this.$http({
+                    method: 'get',
+                    url: '/index/waitHandleNum'
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.waitHandleNum = res.data || 0;
                     }
                 })
             }

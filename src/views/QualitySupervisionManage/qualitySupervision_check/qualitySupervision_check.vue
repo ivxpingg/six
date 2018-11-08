@@ -178,7 +178,7 @@
 
                 ],
                 tableData: [
-                    {
+                    // {
                         // supervisionCheckId: '',
                         // projectId: '12',
                         // checkTime: '2018-10-10',
@@ -190,7 +190,7 @@
                         // supervisionType: '',  // 监督类别（质量/安全）
                         // supervisionTypeLabel: '',
                         // moduleType: ''      // 模块类别（质量监督、安全监督、信用评价）
-                    }
+                    // }
                 ],
                 tableLoading: false,
                 projectList: [],
@@ -287,8 +287,6 @@
             },
             // 查看附件
             getFilesData(row) {
-                // TODO 获取监督交底的附件列表
-
                 this.$http({
                     method: 'get',
                     url: '/file/attachList',
