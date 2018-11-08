@@ -72,13 +72,13 @@
                     { title: '标段', width: 180, align: 'center', key: 'part' },
                     { title: '备案单位', width: 180, align: 'center', key: '' },
                     { title: '单位类型', width: 180, align: 'center', key: '' },
-                    { title: '备案内容', width: 180, align: 'center', key: '' },
+                    { title: '备案类型', width: 180, align: 'center', key: 'recordTypeLabel' },
                     { title: '项目状态', width: 180, align: 'center', key: '' },
                     { title: '流程状态', width: 180, align: 'center', key: '' },
                     { title: '办理状态', width: 180, align: 'center', key: '' },
                     { title: '附件', width: 180, align: 'center', key: '' },
                     { title: '负责人', width: 180, align: 'center', key: '' },
-                    { title: '联系方式', width: 180, align: 'center', key: '' },
+                    { title: '联系方式', width: 180, align: 'center', key: 'phone' },
                     {
                         title: '操作',
                         width: 200,
@@ -98,7 +98,7 @@
                                         this.check(params.row);
                                     }
                                 }
-                            }, '备案审核'));
+                            }, '提交审核'));
 
                             list.push(h('Button', {
                                 props: {
@@ -120,7 +120,19 @@
                         }
                     }
                 ],
-                tableData: [],
+                tableData: [
+                    {
+                        projectUnitId: '',
+                        unitType: '',
+                        recordContent: '',  // 备案内容
+                        userId: '',
+                        userName: '',
+                        recordType: '',      // 备案类别
+                        recordTypeLabel: '',
+                        phone: ''
+
+                    }
+                ],
                 tableLoading: true,
 
                 dict_handleStatus: []

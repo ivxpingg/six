@@ -96,6 +96,7 @@
                 unitList: [],
 
                 formData: {
+                    projectId: '',
                     // changeNoticeId: '',
                     relationId: '',
                     moduleType: 'quality',   // 模块类别字典，固定值，  质量监督： quality
@@ -125,6 +126,9 @@
             }
         },
         watch: {
+            projectId(val) {
+                this.formData.projectId = val;
+            },
             supervisionCheckId(val) {
                 if(val) {
                     this.formData.relationId = val;

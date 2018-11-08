@@ -99,6 +99,7 @@
                 unitList: [],
 
                 formData: {
+                    projectId: '',
                     // changeNoticeId: '',
                     relationId: '',
                     moduleType: 'inform',   // 模块类别字典，固定值，  监督交底： inform
@@ -128,6 +129,9 @@
             };
         },
         watch: {
+            projectId(val) {
+                this.formData.projectId = val;
+            },
             advanceNoticeId(val) {
                 if(val) {
                     this.formData.relationId = val;
@@ -141,6 +145,7 @@
                     this.formData.projectUnitUsers.push({
                         projectUnitId: v.projectUnitId,
                         projectUserId: '',
+                        userId: '',
                         unitName: v.unitName,
                         // userName: '',
                         userList: []
