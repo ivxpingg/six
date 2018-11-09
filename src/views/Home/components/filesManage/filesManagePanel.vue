@@ -28,20 +28,30 @@
                        :columns="tableColumns_receive"
                        :width="tableWidth"
                        :height="288"
-                       :data="tableData"></Table>
+                       :data="tableData_receive"></Table>
 
                 <Table v-show="type === 'send'"
-                       :columns="tableColumns_receive"
+                       :columns="tableColumns_send"
                        :width="tableWidth"
                        :height="288"
-                       :data="tableData"></Table>
+                       :data="tableData_send"></Table>
             </div>
         </div>
+
+        <vModalSendFile ref="modal_sendFile" @modal-callback="modal_sendFile_callback"></vModalSendFile>
+
+        <vViewFiles ref="viewFile" :data="viewFilesList"></vViewFiles>
+
     </Card>
 </template>
 <script>
+    import vModalSendFile from './sendFile/modalSendFile';
+    import viewFilesMixin from '../../../Common/viewFiles/mixin';
+    import MOMENT from 'moment';
     export default {
         name: 'filesManagePanel',
+        mixins: [viewFilesMixin],
+        components: {vModalSendFile},
         data() {
             return {
                 searchParams_receive: {
@@ -63,93 +73,81 @@
                 type: 'receive',
                 tableColumns_receive: [
                     { type: 'index', title: '序号', width: 60, align: 'center'},
-                    { title: '文件名称', key: 'folderName', width: 120, align: 'center' },
-                    { title: '文件类型', key: 'folderType', width: 120, align: 'center' },
-                    { title: '收文日期', key: 'time', width: 120, align: 'center' },
-                    { title: '截止处理日期', key: 'time2', width: 120, align: 'center' },
-                    { title: '状态', key: 'state', width: 120, align: 'center' },
-                    { title: '附件', key: 'num', width: 120, align: 'center' },
-                    { title: '发件单位', key: 'unit', width: 120, align: 'center' },
-                    { title: '发件部门', key: 'depart', width: 120, align: 'center' },
-                    { title: '发件人', key: 'userName', width: 120, align: 'center' },
-                    { title: '操作', width: 120, align: 'center' }
+                    { title: '文件名称', key: 'fileName', width: 120, align: 'center' },
+                    { title: '发文日期', key: 'insTime', width: 120, align: 'center',
+                        render(h, params) {
+                            return h('div', params.row.insTime ? MOMENT(params.row.insTime).format('YYYY-MM-DD HH:mm:ss'):'');
+                        }
+                    },
+                    { title: '状态', key: 'noticeStatusLabel', width: 120, align: 'center' },
+                    { title: '收件单位', key: 'unitName', width: 120, tooltip: true, align: 'center' },
+                    { title: '收件人', key: 'userName', width: 120, align: 'center' },
+                    {
+                        title: '操作',
+                        key: 'operator',
+                        width: 80,
+                        align: 'center',
+                        fixed: 'right',
+                        render: (h, params) => {
+                            return h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.getData_vViewFile(params.row.receiveSendId, 'receive_send', 'viewFilesList');
+                                        this.$refs.viewFile.modalValue = true;
+
+                                        this.updateState_receiveSend(params.row);
+                                    }
+                                }
+                            }, '查看');
+                        }
+                    }
                 ],
                 tableColumns_send: [
                     { type: 'index', title: '序号', width: 60, align: 'center'},
-                    { title: '文件名称', key: 'folderName', width: 120, align: 'center' },
-                    { title: '文件类型', key: 'folderType', width: 120, align: 'center' },
-                    { title: '发文日期', key: 'time', width: 120, align: 'center' },
-                    { title: '截止处理日期', key: 'time2', width: 120, align: 'center' },
-                    { title: '状态', key: 'state', width: 120, align: 'center' },
-                    { title: '附件', key: 'num', width: 120, align: 'center' },
-                    { title: '收件单位', key: 'unit', width: 120, align: 'center' },
-                    { title: '收件部门', key: 'depart', width: 120, align: 'center' },
+                    { title: '文件名称', key: 'fileName', width: 120, align: 'center' },
+                    { title: '发文日期', key: 'insTime', width: 120, align: 'center',
+                        render(h, params) {
+                            return h('div', params.row.insTime ? MOMENT(params.row.insTime).format('YYYY-MM-DD HH:mm:ss'):'');
+                        }
+                    },
+                    { title: '收件单位', key: 'unitName', width: 120, tooltip: true,  align: 'center' },
                     { title: '收件人', key: 'userName', width: 120, align: 'center' },
-                    { title: '操作', key: 'operator', width: 120, align: 'center' }
-                ],
-                tableData_receive: [
                     {
-                        folderName: '关于某专项督查活动通知',
-                        folderType: '通知',
-                        time: '2018-09-05',
-                        time2: '2018-09-05',
-                        state: '未查看',
-                        num: '1份',
-                        unit: '质监局',
-                        depart: '安全科',
-                        userName: '余科长'
-                    },
-                    {
-                        folderName: '关于某专项督查活动通知',
-                        folderType: '通知',
-                        time: '2018-09-05',
-                        time2: '2018-09-05',
-                        state: '未查看',
-                        num: '1份',
-                        unit: '质监局',
-                        depart: '安全科',
-                        userName: '余科长'
-                    },
-                    {
-                        folderName: '关于某专项督查活动通知',
-                        folderType: '通知',
-                        time: '2018-09-05',
-                        time2: '2018-09-05',
-                        state: '未查看',
-                        num: '1份',
-                        unit: '质监局',
-                        depart: '安全科',
-                        userName: '余科长'
-                    },
-                    {
-                        folderName: '关于某专项督查活动通知',
-                        folderType: '通知',
-                        time: '2018-09-05',
-                        time2: '2018-09-05',
-                        state: '未查看',
-                        num: '1份',
-                        unit: '质监局',
-                        depart: '安全科',
-                        userName: '余科长'
-                    },
-                    {
-                        folderName: '关于某专项督查活动通知',
-                        folderType: '通知',
-                        time: '2018-09-05',
-                        time2: '2018-09-05',
-                        state: '未查看',
-                        num: '1份',
-                        unit: '质监局',
-                        depart: '安全科',
-                        userName: '余科长'
+                        title: '操作',
+                        key: 'operator',
+                        width: 120,
+                        align: 'center',
+                        fixed: 'right',
+                        render: (h, params) => {
+                            return h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.getData_vViewFile(params.row.receiveSendId, 'receive_send', 'viewFilesList');
+                                        this.$refs.viewFile.modalValue = true;
+                                    }
+                                }
+                            }, '查看');
+                        }
                     }
                 ],
+                tableData_receive: [],
                 tableData_send: [],
 
                 // 未读文件数量
                 unReadNum: 0,
 
-                tableWidth: 0
+                tableWidth: 0,
+
+                // 附件列表
+                viewFilesList: []
             }
         },
         watch: {
@@ -160,6 +158,10 @@
             }
         },
         mounted() {
+            this.getUnReadNum();
+            this.getData_receive();
+            this.getData_send();
+
             setTimeout(() => {
                 this.tableWidth = this.$refs.rightConent.clientWidth;
             },200);
@@ -168,7 +170,6 @@
             onClickFile(type) {
                 this.type = type;
             },
-
             getUnReadNum() {
                 this.$http({
                     method: 'get',
@@ -179,7 +180,6 @@
                     }
                 })
             },
-
             getData_receive() {
                 this.$http({
                     method: 'post',
@@ -203,7 +203,26 @@
                 })
             },
             onClick_sendFile() {
+                this.$refs.modal_sendFile.modalValue = true;
+            },
+            modal_sendFile_callback() {
+                this.getData_send();
+            },
 
+            // 标记收到文件为已读
+            updateState_receiveSend(row) {
+                this.$http({
+                    method: 'get',
+                    url: '/receiveSend/updateStatus',
+                    params: {
+                        receiveSendId: row.receiveSendId
+                    }
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.getUnReadNum();
+                        this.getData_receive();
+                    }
+                })
             }
         }
     }

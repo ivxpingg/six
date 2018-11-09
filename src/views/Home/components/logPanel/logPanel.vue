@@ -21,7 +21,7 @@
                     size: 10,      // 每页几行
                     total: 0,     // 总行数
                     condition: {
-
+                        logType: 'index'
                     }
                 },
                 tableColumns: [
@@ -41,7 +41,7 @@
                     {
                         title: '操作类型',
                         width: 90,
-                        key: 'operatorType',
+                        key: 'operateTypeLabel',
                         align: 'center'
                     },
                     {
@@ -52,37 +52,11 @@
                     }
                 ],
                 tableData: [
-                    {
-                        operator: '管理员',
-                        operatorType: '新增',
-                        operateContent: '添加从业人员添加从业人员添加从业人员'
-                    },
-                    {
-                        operator: '管理员',
-                        operatorType: '新增',
-                        operateContent: '添加从业人员'
-                    },
-                    {
-                        operator: '管理员',
-                        operatorType: '新增',
-                        operateContent: '添加从业人员添加从业人员添加从业人员'
-                    },{
-                        operator: '管理员',
-                        operatorType: '新增',
-                        operateContent: '添加从业人员'
-                    },{
-                        operator: '管理员',
-                        operatorType: '新增',
-                        operateContent: '添加从业人员'
-                    },{
-                        operator: '管理员',
-                        operatorType: '新增',
-                        operateContent: '添加从业人员'
-                    },{
-                        operator: '管理员',
-                        operatorType: '新增',
-                        operateContent: '添加从业人员'
-                    }
+                    // {
+                    //     operator: '管理员',
+                    //     operatorType: '新增',
+                    //     operateContent: '添加从业人员添加从业人员添加从业人员'
+                    // }
                 ]
             }
         },

@@ -15,7 +15,10 @@
 
                       :extra="getTime(item.insTime)"
                       :key="`notice${item.noticeId}`">
-                    <Badge :count="getNoticeStatus(item.noticeStatus)" type="error" dot>
+                    <Badge :count="getNoticeStatus(item.noticeStatus)"
+                           type="error"
+                           class="notice-badge-alone"
+                           dot>
                         {{item.noticeTitle}}
                     </Badge>
                 </Cell>
@@ -45,7 +48,7 @@
                 return MOMENT(time).format('YYYY-MM-DD');
             },
             getNoticeStatus(noticeStatus) {
-                return noticeStatus === 'unRead' ? 1 : 0
+                return noticeStatus === 'unRead' ? 1 : 0;
             },
             getNoticeList() {
                 this.$http({
@@ -93,4 +96,12 @@
         }
     }
 </script>
-<style lang="scss" rel="stylesheet/scss" scoped></style>
+<style lang="scss" rel="stylesheet/scss" >
+    .notice-badge-alone {
+        .ivu-badge-dot {
+            top: 3px;
+            left: -3px;
+            right: auto;
+        }
+    }
+</style>

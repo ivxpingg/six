@@ -43,6 +43,10 @@
             unitId:  {
                 type: String,
                 required: true
+            },
+            projectId: {
+                type: String,
+                default: ''
             }
         },
         created() {
@@ -139,6 +143,7 @@
                         method: 'get',
                         url: '/project/addProjectUser',
                         params: {
+                            projectId: this.projectId,
                             projectUnitId: this.projectUnitId,
                             userIds: selectValue.join(',')
                         }

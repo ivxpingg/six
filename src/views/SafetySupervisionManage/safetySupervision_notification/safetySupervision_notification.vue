@@ -42,7 +42,6 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import authMixin from '../../../lib/mixin/authMixin';
     import vAdd from './add/add';
-    // import vViewFiles from '../../Common/viewFiles/viewFiles';
     import MOMENT from 'moment';
     import viewFilesMixin from '../../Common/viewFiles/mixin';
     export default {

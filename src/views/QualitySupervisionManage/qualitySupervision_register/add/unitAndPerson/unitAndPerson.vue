@@ -42,6 +42,7 @@
                footer-hide>
             <vPersonParticipant :isView="isView"
                                 :projectUnitId="projectUnitId"
+                                :projectId="projectId"
                                 :unitId="unitId"></vPersonParticipant>
         </Modal>
 
