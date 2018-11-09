@@ -10,7 +10,7 @@
                             </Input>
                         </FormItem>
                         <FormItem>
-                            <Select v-model="filterType" style="width: 120px" transfer>
+                            <Select v-model="filterType" style="width: 120px" >
                                 <Option value="all">全部</Option>
                                 <Option v-for="item in dictTypeList" :value="item.type" :key="item.type">{{item.description}}</Option>
                             </Select>

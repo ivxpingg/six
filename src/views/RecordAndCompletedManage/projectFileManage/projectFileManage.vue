@@ -22,7 +22,7 @@
             </li>
         </ul>
 
-        <vModalProjectFiles ref="modal_projectFiles" :projectId="'f998391b01d64445b427eb04716fec7f'"></vModalProjectFiles>
+        <vModalProjectFiles ref="modal_projectFiles" :projectId="currentRow.projectId"></vModalProjectFiles>
     </Card>
 </template>
 
@@ -40,87 +40,15 @@
                 },
                 folderSize: 90,
                 projectList: [
-                    {
-                        projectId: '001',
-                        projectName: '六安市眉山大桥建设项目1'
-                    },
-                    {
-                        projectId: '002',
-                        projectName: '六安市眉山大桥建设项目2'
-                    },
-                    {
-                        projectId: '003',
-                        projectName: '六安市眉山大桥建设项目31'
-                    },
-                    {
-                        projectId: '004',
-                        projectName: '六安市眉山大桥建设项目4'
-                    },
-                    {
-                        projectId: '005',
-                        projectName: '六安市眉山大桥建设项目5六安市眉山大桥建设项目5六安市眉山大桥建设项目5'
-                    },
-                    {
-                        projectId: '001',
-                        projectName: '六安市眉山大桥建设项目1'
-                    },
-                    {
-                        projectId: '002',
-                        projectName: '六安市眉山大桥建设项目2'
-                    },
-                    {
-                        projectId: '003',
-                        projectName: '六安市眉山大桥建设项目3六安市眉山大桥建设项目3六安市眉山大桥建设项目3六安市眉山大桥建设项目3'
-                    },
-                    {
-                        projectId: '004',
-                        projectName: '六安市眉山大桥建设项目4'
-                    },
-                    {
-                        projectId: '005',
-                        projectName: '六安市眉山大桥建设项目5'
-                    },
-                    {
-                        projectId: '001',
-                        projectName: '六安市眉山大桥建设项目1'
-                    },
-                    {
-                        projectId: '002',
-                        projectName: '六安市眉山大桥建设项目2'
-                    },
-                    {
-                        projectId: '003',
-                        projectName: '六安市眉山大桥建设项目3'
-                    },
-                    {
-                        projectId: '004',
-                        projectName: '六安市眉山大桥建设项目4'
-                    },
-                    {
-                        projectId: '005',
-                        projectName: '六安市眉山大桥建设项目5'
-                    },
-                    {
-                        projectId: '001',
-                        projectName: '六安市眉山大桥建设项目1'
-                    },
-                    {
-                        projectId: '002',
-                        projectName: '六安市眉山大桥建设项目2'
-                    },
-                    {
-                        projectId: '003',
-                        projectName: '六安市眉山大桥建设项目3'
-                    },
-                    {
-                        projectId: '004',
-                        projectName: '六安市眉山大桥建设项目4'
-                    },
-                    {
-                        projectId: '005',
-                        projectName: '六安市眉山大桥建设项目5'
-                    }
-                ]
+                    // {
+                    //     projectId: '001',
+                    //     projectName: '六安市眉山大桥建设项目1'
+                    // }
+                ],
+
+                currentRow: {
+                    projectId: ''
+                }
             };
         },
         watch: {
@@ -141,6 +69,7 @@
             },
             // 选择的文件夹
             onSelectFolder(item) {
+                this.currentRow.projectId = item.projectId;
                 this.$refs.modal_projectFiles.modalValue = true;
             },
 

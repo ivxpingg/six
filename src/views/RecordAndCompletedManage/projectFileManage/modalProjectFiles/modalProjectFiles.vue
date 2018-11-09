@@ -124,56 +124,56 @@
                     projectFiles_1: [
                         {
                             folderName: '工程备案材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/projectRecordAttachList',
                             selectedFileList: []
                         },
                         {
                             folderName: '质量监督过程材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/qualityProcessAttachList',
                             selectedFileList: []
                         },
                         {
                             folderName: '安全监督过程材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/safeProcessAttachList',
                             selectedFileList: []
                         },
                         {
                             folderName: '监督通知材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/supervisionNoticeAttachList',
                             selectedFileList: []
                         },
                         {
                             folderName: '信用评价记录材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/',
                             selectedFileList: []
                         },
                         {
                             folderName: '质量安全投诉材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/',
                             selectedFileList: []
                         },
                     ],
                     projectFiles_2: [
                         {
                             folderName: '交工检测核验材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/',
                             selectedFileList: []
                         },
                         {
                             folderName: '平安工地考核材料',
-                            url: '/archive/sendAttachList',
+                            url: '/archive/',
                             selectedFileList: []
                         }
                     ],
                     projectFiles_3: [
                         {
                             folderName: '竣工质量鉴定材料',
-                            url: '/archive/registerAttachList',
+                            url: '/archive/',
                             selectedFileList: []
                         },
                         {
                             folderName: '品质工程材料',
-                            url: '/archive/sendAttachList',
+                            url: '/archive/',
                             selectedFileList: []
                         }
                     ]

@@ -4,12 +4,20 @@
             <Icon type="ios-folder" />
             文件管理
         </p>
+        <a href="#" slot="extra" @click.prevent="onClick_sendFile">
+            <Icon type="ios-send"></Icon>
+            发送文件
+        </a>
         <div class="card-content">
             <div class="left-content">
+
                 <Button :type="type === 'receive' ? 'primary' : 'default'"
                         size="large"
                         @click="onClickFile('receive')"
-                        custom-icon="iconfont icon-receive-file">收到文件</Button>
+                        custom-icon="iconfont icon-receive-file">
+                    <Badge :count="unReadNum" type="error" :offset="[-5,-5]">收到文件</Badge>
+                </Button>
+
                 <Button :type="type === 'send' ? 'primary' : 'default'"
                         size="large"
                         @click="onClickFile('send')"
@@ -36,6 +44,22 @@
         name: 'filesManagePanel',
         data() {
             return {
+                searchParams_receive: {
+                    current: 1,      // 当前第几页
+                    size: 10,      // 每页几行
+                    total: 0,     // 总行数
+                    condition: {
+                        receiveSendType: 'receive'     // 收发文类型
+                    }
+                },
+                searchParams_send: {
+                    current: 1,      // 当前第几页
+                    size: 10,      // 每页几行
+                    total: 0,     // 总行数
+                    condition: {
+                        receiveSendType: 'send'     // 收发文类型
+                    }
+                },
                 type: 'receive',
                 tableColumns_receive: [
                     { type: 'index', title: '序号', width: 60, align: 'center'},
@@ -63,7 +87,7 @@
                     { title: '收件人', key: 'userName', width: 120, align: 'center' },
                     { title: '操作', key: 'operator', width: 120, align: 'center' }
                 ],
-                tableData: [
+                tableData_receive: [
                     {
                         folderName: '关于某专项督查活动通知',
                         folderType: '通知',
@@ -120,6 +144,10 @@
                         userName: '余科长'
                     }
                 ],
+                tableData_send: [],
+
+                // 未读文件数量
+                unReadNum: 0,
 
                 tableWidth: 0
             }
@@ -139,6 +167,43 @@
         methods: {
             onClickFile(type) {
                 this.type = type;
+            },
+
+            getUnReadNum() {
+                this.$http({
+                    method: 'get',
+                    url: '/receiveSend/unReadNum'
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.unReadNum = res.data || 0;
+                    }
+                })
+            },
+
+            getData_receive() {
+                this.$http({
+                    method: 'post',
+                    url: '/receiveSend/list',
+                    data: JSON.stringify(this.searchParams_receive)
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.tableData_receive = res.data.records || [];
+                    }
+                })
+            },
+            getData_send() {
+                this.$http({
+                    method: 'post',
+                    url: '/receiveSend/list',
+                    data: JSON.stringify(this.searchParams_send)
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.tableData_send = res.data.records || [];
+                    }
+                })
+            },
+            onClick_sendFile() {
+
             }
         }
     }

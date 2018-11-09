@@ -24,7 +24,7 @@
             <div class="btn-list">
                 <Row>
                     <i-col span="12">
-                        <Button type="success" size="large">
+                        <Button type="success" size="large" @click="modal_todo_open">
                             <Badge type="success" :count="waitHandleNum" show-zero></Badge>
                             待办事项
                         </Button>
@@ -38,12 +38,16 @@
                 </Row>
             </div>
         </div>
+
+        <vModalTodo ref="modaltodo" @modal-callback="modal_todo_callback"></vModalTodo>
     </Card>
 </template>
 <script>
     import imgUrl from '@/assets/images/user.jpg';
+    import vModalTodo from './todo/modal_todo';
     export default {
         name: 'userInfoPanel',
+        components: {vModalTodo},
         data() {
             return {
                 userInfo: {
@@ -54,7 +58,8 @@
                     job: '',
                     userId: '',
                     phone: '',
-                    img: imgUrl
+                    img: imgUrl,
+                    headPortrait: ''
                 },
 
                 unReadNoticeNum: 0,
@@ -64,6 +69,7 @@
         mounted() {
             this.getData();
             this.getUnReadNoticeNum();
+            this.getWaitHandleNum();
         },
         methods: {
             getData() {
@@ -72,7 +78,9 @@
                     url: '/user/query'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        Object.assign(this.userInfo, res.data)
+                        Object.assign(this.userInfo, {
+                            headPortrait: imgUrl
+                        }, res.data);
                     }
                 })
             },
@@ -98,6 +106,13 @@
                         this.waitHandleNum = res.data || 0;
                     }
                 })
+            },
+
+            modal_todo_open() {
+                this.$refs.modaltodo.modalValue = true;
+            },
+            modal_todo_callback() {
+                this.getWaitHandleNum();
             }
         }
     }

@@ -12,9 +12,13 @@
             <CellGroup @on-click="onClick_notice">
                 <Cell v-for="(item, idx) in list"
                       :name="item.noticeId"
-                      :title="item.noticeTitle"
+
                       :extra="getTime(item.insTime)"
-                      :key="`notice${item.noticeId}`"></Cell>
+                      :key="`notice${item.noticeId}`">
+                    <Badge :count="getNoticeStatus(item.noticeStatus)" type="error" dot>
+                        {{item.noticeTitle}}
+                    </Badge>
+                </Cell>
             </CellGroup>
         </div>
     </Card>
@@ -40,6 +44,9 @@
             getTime(time) {
                 return MOMENT(time).format('YYYY-MM-DD');
             },
+            getNoticeStatus(noticeStatus) {
+                return noticeStatus === 'unRead' ? 1 : 0
+            },
             getNoticeList() {
                 this.$http({
                     method: 'post',
@@ -60,7 +67,24 @@
                 this.$Modal.info({
                     title: item.noticeTitle,
                     content: item.noticeContent
-                })
+                });
+
+                this.updateStatus(noticeId);
+
+            },
+
+            updateStatus(noticeId) {
+                this.$http({
+                    method: 'get',
+                    url: '/notice/updateStatus',
+                    params: {
+                        noticeId: noticeId
+                    }
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.getNoticeList();
+                    }
+                });
             },
 
             getItem(noticeId) {

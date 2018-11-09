@@ -7,6 +7,7 @@
         </vIvxFilterBox>
         <div class="ivx-table-box">
             <Table border
+                   :height="540"
                    :loading="tableLoading"
                    :columns="tableColumns"
                    :data="tableData"></Table>
