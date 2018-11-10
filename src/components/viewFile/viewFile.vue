@@ -6,7 +6,7 @@
                :title="title"
                footer-hide>
             <div style="text-align: center">
-                <img class="img" :src="src" alt="" style="max-width: 768px;">
+                <img class="img" :src="_src" alt="" style="max-width: 768px;">
             </div>
         </Modal>
     </div>
@@ -69,12 +69,14 @@
         },
         methods: {
             refresh() {
-                if ( this.formats.indexOf(this.fileFormat) === -1 || this.target === '_blank') {
-                    window.open(this._src);
-                }
-                else {
-                    this.modalShow = true;
-                }
+                setTimeout(() => {
+                    if ( this.formats.indexOf(this.fileFormat) === -1 || this.target === '_blank') {
+                        window.open(this._src);
+                    }
+                    else {
+                        this.modalShow = true;
+                    }
+                },100);
             }
         }
     }
