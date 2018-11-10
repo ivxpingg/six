@@ -187,15 +187,15 @@
                     }).then(res => {
                         if(res.code === 'SUCCESS') {
                             this.$Message.success('上传成功！');
-
+                            setTimeout(() => {
+                                this.getData();
+                            }, 100);
                             if (this.projectFileId === '') {
                                 this.$emit('callback', res.data);
                             }
                             else {
                                 this.$emit('callback');
                             }
-
-                            this.getData();
                         }
                     })
                 }

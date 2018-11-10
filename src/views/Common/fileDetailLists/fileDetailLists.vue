@@ -17,7 +17,6 @@
                :width="800"
                footer-hide>
             <vUploatFileManage :isView="isView"
-
                                :projectId="projectId"
                                :projectFileId="currentRow.projectFileId"
                                :fileTemplateId="currentRow.fileTemplateId" @callback="callback_uploadFileManage"></vUploatFileManage>
@@ -148,7 +147,7 @@
                         { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
                         { title: '份数', width: 80, align: 'center', key: 'num'},
                         { title: '上传状态', width: 100, align: 'center', key: 'fileStatus', render: (h, params) =>{
-                                return h('div', params.fileStatus ? params.fileStatusLabel : '未上传');
+                                return h('div', params.row.fileStatus ? '已上传' : '未上传');
                             }},
                         { title: '备注', width: 80, align: 'center', key: 'remark'},
                         {
