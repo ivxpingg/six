@@ -13,11 +13,21 @@
         <p class="title hover-title"
            v-show="hover"
            :style="{width: `${size}px`, fontSize: `${fontSize}px`, top: `${size}px`}">{{title}}</p>
+
+        <div class="cover" :class="{'cover-show': hover}">
+            <Icon type="ios-eye" size="20" color="#FFF" title="预览" @click.stop="onClick_view"/>
+            <Icon type="md-download" size="20" color="#FFF" title="下载" @click.stop="onClick_download" />
+        </div>
+
+        <vViewFile ref="viewFile" :title="data.fileName" :src="data.url" :format="data.fileFormat"></vViewFile>
     </div>
 </template>
 <script>
+    import Config from '../../config';
+    import vViewFile from '../viewFile/viewFile';
     export default {
         name: 'ivx-file',
+        components: {vViewFile},
         props: {
             active: {
                 type: Boolean,
@@ -81,6 +91,14 @@
             },
             onMouseLeave() {
                 this.hover = false;
+            },
+
+            onClick_view() {
+                this.$refs.viewFile.refresh();
+            },
+
+            onClick_download() {
+                window.open( Config[Config.env].filePath +  this.data.url);
             }
         }
     }
@@ -91,6 +109,7 @@
         position: relative;
         text-align: center;
         cursor: pointer;
+        overflow: hidden;
 
         &.active {
             background-color: #cdcdce;
@@ -115,6 +134,27 @@
                 position: absolute;
                 z-index: 99;
                 background-color: #f8f8f9;
+            }
+        }
+
+        .cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transform: translate(0, -56px);
+            transition: all 0.2s;
+            background: rgba(0, 0, 0, .6);
+
+            .ivu-icon {
+                cursor: pointer;
+                margin: 4px 10px;
+            }
+
+            &.cover-show {
+                opacity: 1;
+                transform: translate(0, 0);
             }
         }
     }

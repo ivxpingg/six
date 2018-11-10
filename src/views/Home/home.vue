@@ -1,13 +1,13 @@
 <template>
     <div class="home-container" ref="home">
-        <vCountPanel :inforCardData="inforCardData"></vCountPanel>
-        <div class="gutter-line"> </div>
+        <vCountPanel :inforCardData="inforCardData"  v-if="auth_home_count"></vCountPanel>
+        <div class="gutter-line"  v-if="auth_home_count"> </div>
         <Row class="row-box" :gutter="20">
             <i-col span="8"><vUserInfoPanel></vUserInfoPanel></i-col>
-            <i-col span="16"><vSupervisionCount></vSupervisionCount></i-col>
+            <i-col span="16" v-if="auth_home_supervisionCount"><vSupervisionCount></vSupervisionCount></i-col>
             <i-col span="8"><vNoticePanel></vNoticePanel></i-col>
             <i-col span="8"><vInfoCollectionPanel></vInfoCollectionPanel></i-col>
-            <i-col span="8"><vProjectPanel></vProjectPanel></i-col>
+            <i-col span="8" v-if="auth_home_projectPanel"><vProjectPanel></vProjectPanel></i-col>
             <i-col span="16"><vFilesManage></vFilesManage></i-col>
             <i-col span="8"><vLogPanel></vLogPanel></i-col>
         </Row>
@@ -23,8 +23,10 @@
     import vProjectPanel from './components/projectPanel/projectPanel.vue';
     import vFilesManage from './components/filesManage/filesManagePanel.vue';
     import vLogPanel from './components/logPanel/logPanel.vue';
+    import authMixin from '../../lib/mixin/authMixin';
     export default {
         name: 'mhome',
+        mixins: [authMixin],
         components: {
             vCountPanel,
             vUserInfoPanel,

@@ -3,6 +3,7 @@
         <Modal v-model="modalValue"
                :width="800"
                title="工程档案"
+               @on-visible-change="onVisibleChange"
                class-name="modal-body-padding0">
             <vModalBothSides :height="460">
                 <template slot="left">
@@ -12,19 +13,19 @@
                           @on-select="onSelect">
                         <MenuItem name="1">
                             <Icon type="md-document" />
-                            <Badge :count="getCount(0)" type="success" :offset="offset">监督受理材料</Badge>
+                            <Badge :count="menuCount_0" type="success" :offset="offset">监督受理材料</Badge>
                         </MenuItem>
                         <MenuItem name="2">
                             <Icon type="md-document" />
-                            <Badge :count="getCount(1)" type="success" :offset="offset">监督过程材料</Badge>
+                            <Badge :count="menuCount_1" type="success" :offset="offset">监督过程材料</Badge>
                         </MenuItem>
                         <MenuItem name="3">
                             <Icon type="md-document" />
-                            <Badge :count="getCount(2)" type="success" :offset="offset">交工验收材料</Badge>
+                            <Badge :count="menuCount_2" type="success" :offset="offset">交工验收材料</Badge>
                         </MenuItem>
                         <MenuItem name="4">
                             <Icon type="md-document" />
-                            <Badge :count="getCount(3)" type="success" :offset="offset">竣工鉴定材料</Badge>
+                            <Badge :count="menuCount_3" type="success" :offset="offset">竣工鉴定材料</Badge>
                         </MenuItem>
                     </Menu>
                 </template>
@@ -81,21 +82,55 @@
         },
         watch: {
             projectId(val) {
-                this.folderList.projectFiles_0[0].forEach(v => {
+                this.folderList.projectFiles_0.forEach(v => {
                     v.selectedFileList = [];
                 });
 
-                this.folderList.projectFiles_0[1].forEach(v => {
+                this.folderList.projectFiles_1.forEach(v => {
                     v.selectedFileList = [];
                 });
 
-                this.folderList.projectFiles_0[2].forEach(v => {
+                this.folderList.projectFiles_2.forEach(v => {
                     v.selectedFileList = [];
                 });
 
-                this.folderList.projectFiles_0[3].forEach(v => {
+                this.folderList.projectFiles_3.forEach(v => {
                     v.selectedFileList = [];
                 });
+            }
+        },
+        computed: {
+            menuCount_0() {
+                let count = 0;
+                this.folderList.projectFiles_0.forEach(v => {
+                    count += v.selectedFileList.length;
+                });
+
+                return count;
+            },
+            menuCount_1() {
+                let count = 0;
+                this.folderList.projectFiles_1.forEach(v => {
+                    count += v.selectedFileList.length;
+                });
+
+                return count;
+            },
+            menuCount_2() {
+                let count = 0;
+                this.folderList.projectFiles_2.forEach(v => {
+                    count += v.selectedFileList.length;
+                });
+
+                return count;
+            },
+            menuCount_3() {
+                let count = 0;
+                this.folderList.projectFiles_3.forEach(v => {
+                    count += v.selectedFileList.length;
+                });
+
+                return count;
             }
         },
         data() {
@@ -190,6 +225,11 @@
             };
         },
         methods:{
+            onVisibleChange(val) {
+                if (!val) {
+                    this.openFilesList = false;
+                }
+            },
             onSelect(name) {
                 this.openFilesList = false;
                 this.activeName = name;
@@ -197,14 +237,6 @@
             onSelect_folderType(folderInfo) {
                 Object.assign(this.folderType, folderInfo);
                 this.openFilesList = true;
-            },
-
-            getCount(idx) {
-                let count = 0;
-                this.folderList[`projectFiles_${idx}`].forEach(v => {
-                    count += v.selectedFileList.length;
-                });
-                return count;
             },
             // 文件选择
             callback_change(data, active) {

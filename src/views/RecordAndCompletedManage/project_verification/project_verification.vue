@@ -60,7 +60,6 @@
                         searchKey: '',      // 模糊查询参数
                         handleStatus: ''
                     }
-
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },

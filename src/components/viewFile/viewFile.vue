@@ -13,6 +13,7 @@
 </template>
 
 <script>
+    import Config from '../../config';
     export default {
         name: 'viewFile',  // 查看文件
         props: {
@@ -43,10 +44,18 @@
                 else {
                     return '';
                 }
+            },
+            _src() {
+                if (this.src.length > 0 && this.src.indexOf('http://') === -1) {
+                    return Config[Config.env].filePath + this.src;
+                }
+                else {
+                    return this.src;
+                }
             }
         },
         watch: {
-            src(val) {
+            _src(val) {
                 if(val !== '') {
                     this.refresh();
                 }
@@ -54,13 +63,14 @@
         },
         data() {
             return {
-                modalShow: false
+                modalShow: false,
+                formats: ['png', 'jpg', 'jpeg', 'pdf', 'bmp']
             }
         },
         methods: {
             refresh() {
-                if (this.fileFormat === '' || this.target === '_blank') {
-                    window.open(this.src);
+                if ( this.formats.indexOf(this.fileFormat) === -1 || this.target === '_blank') {
+                    window.open(this._src);
                 }
                 else {
                     this.modalShow = true;

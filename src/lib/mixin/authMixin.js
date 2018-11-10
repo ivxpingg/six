@@ -5,6 +5,21 @@ export default {
         }
     },
     computed: {
+        // start 首页权限设置
+        auth_home_count() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('count') > -1);
+        },
+        auth_home_supervisionCount() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('supervisionCount') > -1);
+        },
+        auth_home_projectPanel() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('projectPanel') > -1);
+        },
+        auth_home_other() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('other') > -1);
+        },
+        // end 首页权限设置
+
         // 添加权限
         auth_add() {
             return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('add') > -1);
