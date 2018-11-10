@@ -64,7 +64,7 @@
         data() {
             return {
                 modalShow: false,
-                formats: ['png', 'jpg', 'jpeg', 'pdf', 'bmp']
+                formats: ['png', 'jpg', 'jpeg', 'bmp']
             }
         },
         methods: {
