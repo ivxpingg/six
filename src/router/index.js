@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import iView from 'iview';
 import routes from './routers';
+import { getToken } from '@/lib/util';
 
 Vue.use(Router);
 const router = new Router({
@@ -15,10 +16,19 @@ router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     // let router = new Router();
 
-    if (to.name === 'roleManage') {
-
+    if (to.path === 'login' || !to.meta.requireAuth) {
+        next();
+        return;
     }
-    next();
+    if (to.meta.requireAuth && getToken()) {
+        next();
+    }
+    else {
+        next({
+            name: 'login'
+        })
+    }
+
 
     // if (!token && to.name !== LOGIN_PAGE_NAME) {
     //     // 未登录且要跳转的页面不是登录页

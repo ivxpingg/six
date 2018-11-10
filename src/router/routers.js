@@ -16,7 +16,8 @@ const ShowSystem = [
         path: '/showSystem',
         name: 'showSystem',
         meta: {
-            title: '综合展示'
+            title: '综合展示',
+            requireAuth: true
         },
         component: () => import('@/views/ShowSystem/showSystem.vue')
     }
@@ -31,7 +32,8 @@ const Home = [
         component: Main,
         meta: {
             hideInMenu: true,
-            notCache: true
+            notCache: true,
+            requireAuth: true
         },
         children: [{
             path: '/home',
@@ -40,7 +42,8 @@ const Home = [
             meta: {
                 hideInMenu: true,
                 title: '首页',
-                notCache: true
+                notCache: true,
+                requireAuth: true
             }
         }]
     }
@@ -54,7 +57,8 @@ const BaseManage = [
         component: Main,
         meta: {
             icon: 'ios-paper',
-            title: '基础信息管理'
+            title: '基础信息管理',
+            requireAuth: true
         },
         children: [
             {
@@ -62,7 +66,8 @@ const BaseManage = [
                 name: 'organizetionManage',
                 meta: {
                     icon: 'md-git-network',
-                    title: '组织结构管理'
+                    title: '组织结构管理',
+                    requireAuth: true
                 },
                 component: () => import('@/views/BaseManage/organizetionManage/organizetionManage.vue')
             },
@@ -72,7 +77,8 @@ const BaseManage = [
                 component: () => import('@/views/BaseManage/roleManage/roleManage.vue'),
                 meta: {
                     icon: 'ios-people',
-                    title: '角色管理'
+                    title: '角色管理',
+                    requireAuth: true
                 }
             },
             {
@@ -81,7 +87,8 @@ const BaseManage = [
                 component: () => import('@/views/BaseManage/eSignatureManage/eSignatureManage.vue'),
                 meta: {
                     icon: 'ios-image',
-                    title: '电子签名管理'
+                    title: '电子签名管理',
+                    requireAuth: true
                 }
             },
             {
@@ -90,7 +97,8 @@ const BaseManage = [
                 component: () => import('@/views/BaseManage/auditProcessManage/auditProcessManage.vue'),
                 meta: {
                     icon: 'ios-infinite',
-                    title: '审核流程管理'
+                    title: '审核流程管理',
+                    requireAuth: true
                 }
             }
         ]
@@ -105,7 +113,8 @@ const OrgAndPersonManage = [
         component: Main,
         meta: {
             icon: 'ios-people',
-            title: '机构与人员管理'
+            title: '机构与人员管理',
+            requireAuth: true
         },
         children: [
             {
@@ -114,7 +123,8 @@ const OrgAndPersonManage = [
                 component: () => import('@/views/OrgAndPersonManage/workUnitManage/workUnitManage.vue'),
                 meta: {
                     icon: '_unit',
-                    title: '从业单位管理'
+                    title: '从业单位管理',
+                    requireAuth: true
                 }
             },
             {
@@ -123,7 +133,8 @@ const OrgAndPersonManage = [
                 component: () => import('@/views/OrgAndPersonManage/workPersonManage/workPersonManage.vue'),
                 meta: {
                     icon: '_person-manage',
-                    title: '从业人员管理'
+                    title: '从业人员管理',
+                    requireAuth: true
                 }
             },
             {
@@ -132,7 +143,8 @@ const OrgAndPersonManage = [
                 component: () => import('@/views/OrgAndPersonManage/supervisorsManage/supervisorsManage.vue'),
                 meta: {
                     icon: '_supervise-person-manage',
-                    title: '监督单位人员管理'
+                    title: '监督单位人员管理',
+                    requireAuth: true
                 }
             }
         ]
@@ -147,7 +159,8 @@ const QualitySupervisionManage = [
         component: Main,
         meta: {
             icon: 'ios-ribbon',
-            title: '质量监督管理'
+            title: '质量监督管理',
+            requireAuth: true
         },
         children: [
             {
@@ -156,7 +169,8 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_register/qualitySupervision_register.vue'),
                 meta: {
                     icon: '_qualitySupervision_register',
-                    title: '质量监督登记'
+                    title: '质量监督登记',
+                    requireAuth: true
                 }
             },
             {
@@ -165,7 +179,8 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_accept/qualitySupervision_accept.vue'),
                 meta: {
                     icon: '_qualitySupervision_accept',
-                    title: '质量监督受理'
+                    title: '质量监督受理',
+                    requireAuth: true
                 }
             },
             {
@@ -174,7 +189,8 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_tell/qualitySupervision_tell.vue'),
                 meta: {
                     icon: '_qualitySupervision_tell',
-                    title: '质量监督交底'
+                    title: '质量监督交底',
+                    requireAuth: true
                 }
             },
             {
@@ -183,7 +199,8 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_check/qualitySupervision_check.vue'),
                 meta: {
                     icon: '_qualitySupervision_check',
-                    title: '质量监督检查'
+                    title: '质量监督检查',
+                    requireAuth: true
                 }
             },
             {
@@ -192,7 +209,8 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_account/qualitySupervision_account.vue'),
                 meta: {
                     icon: '_account',
-                    title: '质量监督台账'
+                    title: '质量监督台账',
+                    requireAuth: true
                 }
             },
             {
@@ -201,7 +219,8 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_complaint/qualitySupervision_complaint.vue'),
                 meta: {
                     icon: '_qualitySupervision_complaint',
-                    title: '质量安全投诉管理'
+                    title: '质量安全投诉管理',
+                    requireAuth: true
                 }
             },
             {
@@ -210,7 +229,8 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualityProjectCreate/qualityProjectCreate.vue'),
                 meta: {
                     icon: '_qualityProjectCreate',
-                    title: '品质工程创建'
+                    title: '品质工程创建',
+                    requireAuth: true
                 }
             }
         ]
@@ -225,7 +245,8 @@ const SafetySupervisionManage = [
         component: Main,
         meta: {
             icon: 'ios-book',
-            title: '安全监督管理'
+            title: '安全监督管理',
+            requireAuth: true
         },
         children: [
             {
@@ -234,7 +255,8 @@ const SafetySupervisionManage = [
                 component: () => import('@/views/SafetySupervisionManage/safetySupervision_notification/safetySupervision_notification.vue'),
                 meta: {
                     icon: '_safetySupervision_notification',
-                    title: '安全通知'
+                    title: '安全通知',
+                    requireAuth: true
                 }
             },
             {
@@ -243,7 +265,8 @@ const SafetySupervisionManage = [
                 component: () => import('@/views/SafetySupervisionManage/safetySupervision_check/safetySupervision_check.vue'),
                 meta: {
                     icon: '_safetySupervision_check',
-                    title: '安全督查检查'
+                    title: '安全督查检查',
+                    requireAuth: true
                 }
             },
             {
@@ -252,7 +275,8 @@ const SafetySupervisionManage = [
                 component: () => import('@/views/SafetySupervisionManage/safetySupervision_account/safetySupervision_account.vue'),
                 meta: {
                     icon: '_account',
-                    title: '安全督查台账'
+                    title: '安全督查台账',
+                    requireAuth: true
                 }
             },
             {
@@ -261,7 +285,8 @@ const SafetySupervisionManage = [
                 // component: () => import('@/views/SafetySupervisionManage/safetySupervision_examine/safetySupervision_examine.vue'),
                 meta: {
                     icon: '_safetySupervision_examine',
-                    title: '平安工地考核'
+                    title: '平安工地考核',
+                    requireAuth: true
                 }
             }
         ]
@@ -276,7 +301,8 @@ const CreditRatingManage = [
         component: Main,
         meta: {
             icon: 'ios-medal',
-            title: '信用评价管理'
+            title: '信用评价管理',
+            requireAuth: true
         },
         children: [
             {
@@ -285,7 +311,8 @@ const CreditRatingManage = [
                 component: () => import('@/views/CreditRatingManage/creditRating_record/creditRating_record.vue'),
                 meta: {
                     icon: '_creditRating_record',
-                    title: '信用评价记录'
+                    title: '信用评价记录',
+                    requireAuth: true
                 }
             },
             {
@@ -294,7 +321,8 @@ const CreditRatingManage = [
                 component: () => import('@/views/CreditRatingManage/creditRating_account/creditRating_account.vue'),
                 meta: {
                     icon: '_account',
-                    title: '信用评价管理台账'
+                    title: '信用评价管理台账',
+                    requireAuth: true
                 }
             },
             {
@@ -303,7 +331,8 @@ const CreditRatingManage = [
                 // component: () => import('@/views/CreditRatingManage/majorProject_check/majorProject_check.vue'),
                 meta: {
                     icon: '_majorProject_check',
-                    title: '重点项目考勤管理'
+                    title: '重点项目考勤管理',
+                    requireAuth: true
                 }
             }
         ]
@@ -318,7 +347,8 @@ const QAManage = [
         component: Main,
         meta: {
             icon: 'ios-construct',
-            title: '质量检测管理'
+            title: '质量检测管理',
+            requireAuth: true
         },
         children: [
             {
@@ -327,7 +357,8 @@ const QAManage = [
                 component: () => import('@/views/QAManage/QA_report/QA_report.vue'),
                 meta: {
                     icon: '_QA_report',
-                    title: '质量检测报表'
+                    title: '质量检测报表',
+                    requireAuth: true
                 }
             },
             {
@@ -336,7 +367,8 @@ const QAManage = [
                 component: () => import('@/views/QAManage/QA_analyze/QA_analyze.vue'),
                 meta: {
                     icon: '_QA_analyze',
-                    title: '质量安全检测数据分析'
+                    title: '质量安全检测数据分析',
+                    requireAuth: true
                 }
             }
         ]
@@ -351,7 +383,8 @@ const RecordAndCompletedManage = [
         component: Main,
         meta: {
             icon: 'ios-clipboard',
-            title: '备案及交竣工管理'
+            title: '备案及交竣工管理',
+            requireAuth: true
         },
         children: [
             {
@@ -360,7 +393,8 @@ const RecordAndCompletedManage = [
                 component: () => import('@/views/RecordAndCompletedManage/projectRecords/projectRecords.vue'),
                 meta: {
                     icon: '_projectRecords',
-                    title: '工程备案'
+                    title: '工程备案',
+                    requireAuth: true
                 }
             },
             {
@@ -369,7 +403,8 @@ const RecordAndCompletedManage = [
                 component: () => import('@/views/RecordAndCompletedManage/project_verification/project_verification.vue'),
                 meta: {
                     icon: '_project_verification',
-                    title: '交工检测核验'
+                    title: '交工检测核验',
+                    requireAuth: true
                 }
             },
             {
@@ -378,7 +413,8 @@ const RecordAndCompletedManage = [
                 component: () => import('@/views/RecordAndCompletedManage/projectCompleteQuality_authenticate/projectCompleteQuality_authenticate.vue'),
                 meta: {
                     icon: '_projectCompleteQuality_authenticate2',
-                    title: '竣工质量鉴定'
+                    title: '竣工质量鉴定',
+                    requireAuth: true
                 }
             },
             {
@@ -387,7 +423,8 @@ const RecordAndCompletedManage = [
                 component: () => import('@/views/RecordAndCompletedManage/projectFileManage/projectFileManage.vue'),
                 meta: {
                     icon: '_projectFileManage',
-                    title: '工程档案管理'
+                    title: '工程档案管理',
+                    requireAuth: true
                 }
             }
         ]
@@ -402,7 +439,8 @@ const SystemManage = [
         component: Main,
         meta: {
             icon: 'ios-settings',
-            title: '系统管理'
+            title: '系统管理',
+            requireAuth: true
         },
         children: [
             {
@@ -410,7 +448,8 @@ const SystemManage = [
                 name: 'dataDict',
                 meta: {
                     icon: '_data-dict',
-                    title: '数据字典'
+                    title: '数据字典',
+                    requireAuth: true
                 },
                 component: () => import('@/views/SystemManage/dataDict/dataDict.vue')
             }
