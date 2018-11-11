@@ -12,27 +12,27 @@
                         <Select v-model="searchParams.condition.creditType" clearable
                                 placeholder="全选"
                                 style="width: 200px;">
-                            <Option v-for="item in select_creditType"
-                                    :value="item.value"
-                                    :key="`unitType_${item.id}`">{{item.label}}</Option>
+                            <Option v-for="(item, idx) in select_creditType"
+                                    :value="item"
+                                    :key="`creditType_${idx}`">{{item}}</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="一级目录:" :label-width="70">
+                    <FormItem label="一级目录:" :label-width="70" v-show="select_firstDirectory.length > 0">
                         <Select v-model="searchParams.condition.firstDirectory" clearable
                                 placeholder="全选"
                                 style="width: 200px;">
-                            <Option v-for="item in select_firstDirectory"
-                                    :value="item.value"
-                                    :key="`unitType_${item.id}`">{{item.label}}</Option>
+                            <Option v-for="(item, idx) in select_firstDirectory"
+                                    :value="item"
+                                    :key="`firstDirectory_${idx}`">{{item}}</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="二级目录:" :label-width="70">
+                    <FormItem label="二级目录:" :label-width="70" v-show="select_secondDirectory.length > 0">
                         <Select v-model="searchParams.condition.secondDirectory" clearable
                                 placeholder="全选"
                                 style="width: 200px;">
-                            <Option v-for="item in select_secondDirectory"
-                                    :value="item.value"
-                                    :key="`unitType_${item.id}`">{{item.label}}</Option>
+                            <Option v-for="(item, idx) in select_secondDirectory"
+                                    :value="item"
+                                    :key="`secondDirectory_${idx}`">{{item}}</Option>
                         </Select>
                     </FormItem>
                 </Form>
@@ -45,11 +45,8 @@
                        :columns="tableColumns"
                        :data="filterData"
                        :highlight-row="!multiple"
-                       @on-current-change="onCurrentChange"
-                       @on-select="onSelect"
-                       @on-select-cancel="onSelectCancel"
-                       @on-select-all="onSelectAll"
-                       @on-selection-change="onSelectionChange"></Table>
+                       @on-row-dblclick="onRowDbclick"
+                       @on-current-change="onCurrentChange"></Table>
                 <Page prev-text="上一页"
                       next-text="下一页"
                       show-total
@@ -156,7 +153,7 @@
                 }
             },
             'searchParams.condition.creditType'(val) {
-                if (val === '') {
+                if (!val) {
                     this.searchParams.condition.firstDirectory = '';
                     this.searchParams.condition.secondDirectory = '';
                     this.select_firstDirectory = [];
@@ -167,7 +164,7 @@
                 }
             },
             'searchParams.condition.firstDirectory'(val) {
-                if (val === '') {
+                if (!val) {
                     this.searchParams.condition.firstDirectory = '';
                     this.searchParams.condition.secondDirectory = '';
                     this.select_firstDirectory = [];
@@ -206,7 +203,7 @@
             get_creditType() {
                 this.$http({
                     method: 'get',
-                    url: '/'
+                    url: '/creditCode/creditTypeList'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.select_creditType = res.data || [];
@@ -217,7 +214,7 @@
             get_firstDirectory() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/creditCode/firstDirectoryList',
                     params: {
                         creditType: this.searchParams.condition.creditType
                     }
@@ -231,10 +228,10 @@
             get_secondDirectory() {
                 this.$http({
                     method: 'get',
-                    url: '/',
+                    url: '/creditCode/secondDirectoryList',
                     params: {
                         creditType: this.searchParams.condition.creditType,
-                        secondDirectory: this.searchParams.condition.secondDirectory
+                        firstDirectory: this.searchParams.condition.firstDirectory
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
@@ -254,7 +251,7 @@
             getData() {
                 this.$http({
                     method: 'post',
-                    url: '/unit/list',
+                    url: '/creditCode/creditCodePage',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
@@ -264,47 +261,19 @@
                 })
             },
 
+            // 双击选择数据
+            onRowDbclick() {
+                this.onSelected();
+            },
             onCurrentChange(currentRow, oldCurrentRow) {
                 this.selectItems = currentRow;
                 this.selectValue = currentRow.creditCodeId;
-            },
-            /**
-             * 表格选择
-             */
-            onSelect(selection, row) {
-                this.selectItems.push(row);
-                this.selectValue.push(row.creditCodeId);
-            },
-            onSelectCancel(selection, row) {
-                let idx = this.selectValue.indexOf(row.creditCodeId);
-                this.selectValue.splice(idx, 1);
-                this.selectItems.splice(idx, 1);
-            },
-            onSelectAll(selection) {
-                selection.forEach((val) => {
-                    let idx = this.selectValue.indexOf(val.creditCodeId);
-                    if (idx === -1) {
-                        this.selectValue.push(val.creditCodeId);
-                        this.selectItems.push(val);
-                    }
-                });
-            },
-            onSelectionChange(selection) {
-                if (selection.length === 0) {
-                    this.tableData.forEach((val) => {
-                        let idx = this.selectValue.indexOf(val.creditCodeId);
-                        if (idx !== -1) {
-                            this.selectValue.splice(idx, 1);
-                            this.selectItems.splice(idx, 1);
-                        }
-                    });
-                }
             },
 
             // 确定已选内容返回父组件
             onSelected() {
                 if (this.selectItems) {
-                    this.$emit('handleSelect', this.selectValue, this.selectItems);
+                    this.$emit('modal-callback', this.selectValue, this.selectItems);
                 }
                 this.modalValue = false;
             }

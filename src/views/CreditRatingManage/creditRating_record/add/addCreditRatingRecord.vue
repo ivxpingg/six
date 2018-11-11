@@ -15,24 +15,19 @@
                         <Option v-for="item in projectList"
                                 :key="item.projectId"
                                 :value="item.projectId"
-                                :label="item.projectName"></Option>
+                                :label="`${item.projectName}(${item.part})`"></Option>
                     </Select>
                 </FormItem>
-                <FormItem label="标段:">
-                    <Input v-model="formData.part" disabled/>
-                </FormItem>
-                <FormItem label="单位名称:" prop="unitId">
-                    <Input v-model="formData.unitName" readonly @on-focus="modal_unitSelect_open"/>
-                </FormItem>
-                <FormItem label="单位类型:">
-                    <Select v-model="formData.unitType"  placeholder="">
-                        <Option v-for="item in dict_unitType"
-                                :key="item.id"
-                                :value="item.value"
-                                :label="item.label"></Option>
+                <FormItem label="单位名称:" prop="projectUnitId">
+                    <Select v-model="formData.projectUnitId">
+                        <Option v-for="item in projectUnitList"
+                                :key="item.projectUnitId"
+                                :value="item.projectUnitId"
+                                :label="item.unitName"></Option>
                     </Select>
+
                 </FormItem>
-                <FormItem label="扣分代码:" prop="creditNo">
+                <FormItem label="扣分代码:" prop="creditCodeId">
                     <Input v-model="formData.creditNo"
                            readonly
                            @on-focus="modal_creditCodeSelect_open"/>
@@ -73,9 +68,6 @@
             </div>
         </Modal>
 
-        <vModalUnitSelect
-                ref="unitSelect"
-                @modal-callback="modal_unitSelect_callback" ></vModalUnitSelect>
 
         <vModalCreditCodeSelect
                 ref="creditCodeSelect"
@@ -86,12 +78,11 @@
 
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
-    import vModalUnitSelect from '../../../Common/unitSelect/modalUnitSelect';
     import vModalCreditCodeSelect from '../../../Common/creditCodeSelect/modalCreditCodeSelect';
     export default {
         name: 'addCreditRatingRecord',
         mixins: [modalMixin],
-        components: {vModalUnitSelect, vModalCreditCodeSelect},
+        components: {vModalCreditCodeSelect},
         props: {
             projectList: {
                 type: Array,
@@ -103,10 +94,11 @@
                 formData: {
                     projectId: '',
                     part: '',
-                    unitId: '12',
+                    projectUnitId: '12',
                     unitName: '',
-                    unitType: '',
-                    creditNo: 'N.123',
+                    // unitType: '',
+                    creditCodeId: '',
+                    creditNo: '',
                     scoreStandard: '',  // 评分标准
                     deduct: null,      // 扣分
                     deductDetail: '',   // 扣分项
@@ -114,13 +106,16 @@
                 },
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
-                    unitId: [{ required: true, message: '单位不能为空！', trigger: 'blur' }],
-                    creditNo: [{ required: true, message: '扣分代码不能为空！', trigger: 'blur' }],
-                    deduct: [{ required: true, message: '扣分不能为空！', trigger: 'blur' }],
+                    projectUnitId: [{ required: true, message: '单位不能为空！', trigger: 'blur' }],
+                    creditCodeId: [{ required: true, message: '扣分代码不能为空！', trigger: 'blur' }],
+                    deduct: [{ required: true, type:'number', message: '扣分不能为空！', trigger: 'blur' }],
                     deductDetail: [{ required: true, message: '扣分项不能为空！', trigger: 'blur' }],
                 },
 
-                dict_unitType: []
+                dict_unitType: [],
+
+                // 参建单位列表
+                projectUnitList: []
             };
         },
         watch: {
@@ -131,6 +126,8 @@
                         break;
                     }
                 }
+
+                this.get_projectUnitList();
             }
         },
         mounted() {
@@ -153,15 +150,19 @@
                     }
                 })
             },
-            modal_unitSelect_open() {
-                this.$refs.unitSelect.modalValue = true;
-            },
-            modal_unitSelect_callback(selectValue, selectItems) {
-                this.formData.unitId = selectItems.unitId;
-                this.formData.unitName = selectItems.unitName;
-
-                this.formData.unitType = selectItems.unitType;
-                this.$refs.form.validateField('unitId');
+            // 获取参建单位列表
+            get_projectUnitList() {
+                this.$http({
+                    method: 'get',
+                    url: '/project/projectUnitList',
+                    params: {
+                        projectId: this.formData.projectId
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.projectUnitList = res.data || [];
+                    }
+                })
             },
             // 扣分代码选择
             modal_creditCodeSelect_open() {
@@ -169,17 +170,18 @@
             },
             modal_creditCodeSelect_callback(selectValue, selectItems) {
 
+                this.formData.creditCodeId = selectItems.creditCodeId;
                 this.formData.creditNo = selectItems.creditNo;
                 this.formData.scoreStandard = selectItems.scoreStandard;
                 this.formData.content = selectItems.content;
-                this.$refs.form.validateField('creditNo');
+                this.$refs.form.validateField('creditCodeId');
             },
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/creditEvaluate/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

@@ -144,9 +144,9 @@
                         // break;
                     case 'examine_reply':        // 质量检查整改
                         // break;
-                    case 'safety _reply':        // 安全检查整改
+                    case 'safety_reply':        // 安全检查整改
                         // break;
-                    case 'credit _reply':        // 信用评价整改
+                    case 'credit_reply':        // 信用评价整改
                         this.$refs.modal_todoReply.modalValue = true;
                         break;
                     case 'change_notice_reply':  // 材料核查意见书审核

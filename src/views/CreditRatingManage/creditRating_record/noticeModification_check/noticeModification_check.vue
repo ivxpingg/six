@@ -214,9 +214,6 @@
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        console.dir(idx);
-                        console.dir(this.formData.projectUnitUsers);
-
                         this.formData.projectUnitUsers[idx].userList = res.data || [];
                     }
                 })
