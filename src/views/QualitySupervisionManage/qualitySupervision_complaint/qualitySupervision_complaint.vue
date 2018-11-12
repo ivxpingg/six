@@ -4,7 +4,7 @@
             <Button v-if="auth_add"
                     type="primary"
                     icon="md-add"
-                    @click="modal_add_open">登记投述</Button>
+                    @click="modal_add_open">登记投诉</Button>
         </vIvxFilterBox>
 
         <div class="ivx-table-box">
@@ -22,6 +22,21 @@
                   @on-change="onPageChange"></Page>
         </div>
 
+        <!--<Modal v-model="modal_complaint" title="上报审核">-->
+
+        <!--</Modal>-->
+
+        <!--添加登记投诉-->
+        <vAddComplaint ref="modal_addComplaint" @modal-callback="modal_addComplaint_callback"></vAddComplaint>
+
+        <!--监督人员选择-->
+        <vModalEmployeeSelect ref="modal_employeeSelect"
+                              userSourceType="hasUnit"
+                              unitId="8"
+                              @modal-callback="modal_employeeSelect_callback"></vModalEmployeeSelect>
+        <!--查看附件-->
+        <vViewFiles ref="viewFiles" :data="fileList"></vViewFiles>
+
     </div>
 </template>
 
@@ -30,10 +45,12 @@
     import authMixin from '../../../lib/mixin/authMixin';
     import viewFilesMixin from '../../Common/viewFiles/mixin';
     import MOMENT from 'moment';
+    import vAddComplaint from './add/addComplaint';
+    import vModalEmployeeSelect from '../../Common/employeeSelect/modalEmployeeSelect';
     export default {
         name: 'qualitySupervision_complaint',
         mixins: [authMixin, viewFilesMixin],
-        components: {vIvxFilterBox},
+        components: {vIvxFilterBox, vAddComplaint, vModalEmployeeSelect},
         data() {
             return {
                 searchParams: {
@@ -42,26 +59,27 @@
                     total: 0,     // 总行数
                     condition: {
                         searchKey: '',      // 模糊查询参数
+                        handleStatus: ''
                     }
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '编号', minWidth: 120, align: 'center', key: 'fileName' },
-                    { title: '投诉人', width: 100, align: 'center', key: 'fileNo' },
-                    { title: '投诉日期', width: 120, align: 'center', key: 'publishTime',
+                    { title: '编号', minWidth: 120, align: 'center', key: 'complaintNo' },
+                    { title: '投诉人', width: 100, align: 'center', key: 'complaintant' },
+                    { title: '投诉日期', width: 120, align: 'center', key: 'complaintDate',
                         render(h, params) {
-                            return h('div', params.row.publishTime ? MOMENT(params.row.publishTime).format('YYYY-MM-DD') : '');
+                            return h('div', params.row.complaintDate ? MOMENT(params.row.complaintDate).format('YYYY-MM-DD') : '');
                         }
                     },
-                    { title: '投诉人联系方式', width: 130, align: 'center', key: 'editUnit' },
-                    { title: '投诉人邮箱', width: 180, align: 'center', key: 'unitName' },
-                    { title: '投诉事项', width: 100, align: 'center', key: 'userName' },
-                    { title: '回复日期', width: 120, align: 'center', key: 'publishTime',
+                    { title: '投诉人联系方式', width: 130, align: 'center', key: 'phone' },
+                    { title: '投诉人邮箱', width: 180, align: 'center', key: 'email' },
+                    { title: '投诉事项', width: 100, align: 'center', key: 'complaintContent' },
+                    { title: '回复日期', width: 120, align: 'center', key: 'replyDate',
                         render(h, params) {
-                            return h('div', params.row.publishTime ? MOMENT(params.row.publishTime).format('YYYY-MM-DD') : '');
+                            return h('div', params.row.replyDate ? MOMENT(params.row.replyDate).format('YYYY-MM-DD') : '');
                         }
                     },
-                    { title: '处理回复', width: 100, align: 'center', key: '' },
+                    { title: '回复内容', width: 100, align: 'center', key: 'replyContent' },
                     {
                         title: '操作',
                         width: 220,
@@ -70,31 +88,35 @@
                         render: (h, params) => {
                             let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'md-megaphone'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.publicNotice(params.row);
+                            if (params.row.handleStatus === 'submitted') {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'md-megaphone'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.auditInfo.complaintId = params.row.complaintId;
+                                            this.$refs.modal_employeeSelect.modalValue = true;
+                                        }
                                     }
-                                }
-                            }, '上报审核'));
+                                }, '上报审核'));
+                            }
 
                             list.push(h('Button', {
                                 props: {
                                     type: 'primary',
                                     size: 'small',
-                                    icon: 'md-remove-circle'
+                                    icon: 'ios-eye-outline'
                                 },
                                 on: {
                                     click: () => {
-                                        this.cancelNotice(params.row);
+                                        this.getFiles(params.row.complaintId);
+                                        this.$refs.viewFiles.modalValue = true;
                                     }
                                 }
-                            }, '处理回复'));
+                            }, '查看附件'));
 
                             // 设置列宽度
                             return h('div',{
@@ -106,6 +128,17 @@
                 ],
                 tableData: [],
                 tableLoading: false,
+
+                // 上报审核
+                modal_complaint: false,
+                auditInfo: {              // 提交审核内容
+                    complaintId: '',
+                    auditPerson: ''       // 用户Id
+                },
+
+                // 附件列表
+                fileList: []
+
             };
         },
         watch: {
@@ -135,7 +168,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/safeNotice/list',
+                    url: '/complaint/complaintPage',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
@@ -149,11 +182,51 @@
             },
             // 新增
             modal_add_open() {
-                this.$refs.add.modalValue = true;
+                this.$refs.modal_addComplaint.modalValue = true;
             },
-            modal_add_callback() {
+            modal_addComplaint_callback() {
                 this.getData();
-                this.$refs.add.modalValue = false;
+            },
+
+            // 选择监督人员
+            modal_employeeSelect_callback(selectValue, selectItems) {
+                this.auditInfo.auditPerson = selectItems.userId;
+
+                this.$Modal.confirm({
+                    title: '上报审核',
+                    content: `确定要提交给<${selectItems.name}>审核?`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/complaint/submitAudit',
+                            params: {
+                                complaintId: this.auditInfo.complaintId,
+                                auditPerson: this.auditInfo.auditPerson
+                            }
+                        }).then(res => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('提交审核成功!');
+                                this.getData();
+                            }
+                        })
+                    }
+                })
+            },
+
+            // 获取附件
+            getFiles(complaintId) {
+                this.$http({
+                    method: 'get',
+                    url: '/file/attachList',
+                    params: {
+                        relationId: complaintId,
+                        fileType: 'complaint'
+                    }
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+                        this.fileList = res.data || [];
+                    }
+                })
             },
         }
     }

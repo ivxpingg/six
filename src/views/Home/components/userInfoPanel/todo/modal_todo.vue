@@ -25,17 +25,25 @@
                     :part="currentRow.part"
                     :changeNoticeId="currentRow.changeNoticeId"
                     @modal-callback="modal_todoReply_callback"></vTodoReply>
+
+        <vComplaintReply ref="modal_complaintReply"
+                         :projectId="complaint.projectId"
+                         :projectName="complaint.projectName"
+                         :part="complaint.part"
+                         :complaintId="complaint.complaintId"
+                         @modal-callback="modal_complaintReply_callback"></vComplaintReply>
     </div>
 </template>
 
 <script>
     import modalMixin from '../../../../../lib/mixin/modalMixin';
     import vTodoReply from './module/todoReply';
+    import vComplaintReply from './module/complaintReply';
     import MOMENT from 'moment';
     export default {
         name: 'modal_todo',   // 代办
         mixins: [modalMixin],
-        components: {vTodoReply},
+        components: {vTodoReply, vComplaintReply},
         data() {
             return {
                 searchParams: {
@@ -99,12 +107,22 @@
                     // }
                 ],
 
+                // 整改通知回复参数
                 currentRow: {
                     projectId: '',
                     projectName: '',
                     part: '',
                     changeNoticeId: '',
+                },
+
+                // 质量安全投诉处理参数
+                complaint: {
+                    projectId: '',
+                    projectName: '',
+                    part: '',
+                    complaintId: ''
                 }
+
             };
         },
         watch: {
@@ -131,13 +149,8 @@
                 this.searchParams.current = current;
             },
             todoHandle(row) {
-                let param = eval(`[${row.param}]`);
-                Object.assign(this.currentRow, {
-                    part: '',
-                    changeNoticeId: '',
-                    projectName: '',
-                    projectId: ''
-                }, param[0]);
+                let param;
+
 
                 switch (row.waitHandleType) {
                     case 'disclose_reply':       // 监督交底整改
@@ -147,6 +160,13 @@
                     case 'safety_reply':        // 安全检查整改
                         // break;
                     case 'credit_reply':        // 信用评价整改
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.currentRow, {
+                            part: '',
+                            changeNoticeId: '',
+                            projectName: '',
+                            projectId: ''
+                        }, param[0]);
                         this.$refs.modal_todoReply.modalValue = true;
                         break;
                     case 'change_notice_reply':  // 材料核查意见书审核
@@ -160,9 +180,13 @@
                         });
                         break;
                     case 'complaint_reply':      // 质量安全投诉处理
-                        this.$router.push({
-                            name: 'qualitySupervision_complaint'
-                        });
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.complaint, {
+                            projectId: '',
+                            projectName: '',
+                            complaintId: ''
+                        }, param[0]);
+                        this.$refs.modal_complaintReply.modalValue = true;
                         break;
                     case 'project_record_audit': // 工程备案审核
                         this.$router.push({
@@ -188,6 +212,9 @@
             },
 
             modal_todoReply_callback() {
+                this.getData();
+            },
+            modal_complaintReply_callback(){
                 this.getData();
             },
 
