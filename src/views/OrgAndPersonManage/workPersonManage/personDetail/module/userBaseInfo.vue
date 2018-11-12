@@ -20,6 +20,9 @@
             <FormItem label="UID:" prop="userNo">
                 <Input v-model="formData.userNo"/>
             </FormItem>
+            <FormItem label="现任职务:" prop="job">
+                <Input v-model="formData.job"/>
+            </FormItem>
             <FormItem label="年龄:" prop="age">
                 <Input v-model="formData.age" number/>
             </FormItem>
@@ -37,6 +40,14 @@
             <FormItem label="职称级别:" prop="titleLevel">
                 <Select v-model="formData.titleLevel">
                     <Option v-for="item in dict_titleLevel"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
+            </FormItem>
+            <FormItem label="学历:">
+                <Select v-model="formData.education">
+                    <Option v-for="item in dict_education"
                             :key="item.id"
                             :value="item.value"
                             :label="item.label"></Option>
@@ -230,6 +241,7 @@
                                 this.$Message.success({
                                     content: '更新成功！'
                                 });
+                                this.$emit('callback');
                             }
                         })
                     } else {

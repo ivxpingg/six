@@ -73,15 +73,15 @@
                 type: 'receive',
                 tableColumns_receive: [
                     { type: 'index', title: '序号', width: 60, align: 'center'},
-                    { title: '文件名称', key: 'fileName', width: 120, align: 'center' },
+                    { title: '文件名称', key: 'fileName', minWidth: 120, align: 'center' },
                     { title: '发文日期', key: 'insTime', width: 120, align: 'center',
                         render(h, params) {
                             return h('div', params.row.insTime ? MOMENT(params.row.insTime).format('YYYY-MM-DD HH:mm:ss'):'');
                         }
                     },
                     { title: '状态', key: 'noticeStatusLabel', width: 120, align: 'center' },
-                    { title: '收件单位', key: 'unitName', width: 120, tooltip: true, align: 'center' },
-                    { title: '收件人', key: 'userName', width: 120, align: 'center' },
+                    { title: '发件单位', key: 'unitName', width: 120, tooltip: true, align: 'center' },
+                    { title: '发件人', key: 'userName', width: 120, align: 'center' },
                     {
                         title: '操作',
                         key: 'operator',
@@ -108,7 +108,7 @@
                 ],
                 tableColumns_send: [
                     { type: 'index', title: '序号', width: 60, align: 'center'},
-                    { title: '文件名称', key: 'fileName', width: 120, align: 'center' },
+                    { title: '文件名称', key: 'fileName', minWidth: 120, align: 'center' },
                     { title: '发文日期', key: 'insTime', width: 120, align: 'center',
                         render(h, params) {
                             return h('div', params.row.insTime ? MOMENT(params.row.insTime).format('YYYY-MM-DD HH:mm:ss'):'');

@@ -70,6 +70,7 @@
         methods: {
             refresh() {
                 setTimeout(() => {
+
                     if ( this.formats.indexOf(this.fileFormat) === -1 || this.target === '_blank') {
                         window.open(this._src);
                     }

@@ -11,27 +11,47 @@
             </FormItem>
             <FormItem label="性别:">
                 <Select v-model="formData.sex">
-                    <Option value="0">女</Option>
-                    <Option value="1">男</Option>
+                    <Option v-for="item in dict_sex"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
                 </Select>
             </FormItem>
             <FormItem label="UID:" prop="uId">
                 <Input v-model="formData.uId"/>
             </FormItem>
+            <FormItem label="现任职务:" prop="job">
+                <Input v-model="formData.job"/>
+            </FormItem>
             <FormItem label="年龄:" prop="age">
                 <Input v-model="formData.age" number/>
             </FormItem>
             <FormItem label="民族:">
-                <Select v-model="formData.nation">
-                    <Option value="0">汉族</Option>
-                    <Option value="1">满族</Option>
-                </Select>
+                <Input v-model="formData.nation"/>
             </FormItem>
             <FormItem label="技术职称:" prop="titleName">
-                <Input v-model="formData.titleName"/>
+                <Select v-model="formData.titleName">
+                    <Option v-for="item in dict_titleName"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="职称级别:" prop="titleLevel">
-                <Input v-model="formData.titleLevel"/>
+                <Select v-model="formData.titleLevel">
+                    <Option v-for="item in dict_titleLevel"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
+            </FormItem>
+            <FormItem label="学历:">
+                <Select v-model="formData.education">
+                    <Option v-for="item in dict_education"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="毕业院校:" prop="graduateSchool">
                 <Input v-model="formData.graduateSchool"/>
@@ -61,19 +81,6 @@
             </FormItem>
             <FormItem label="身份证号:" prop="IdNumber">
                 <Input v-model="formData.IdNumber"/>
-            </FormItem>
-            <FormItem label="相关材料:">
-                <Upload :action="uploadParams.actionUrl"
-                        :showUploadList="uploadParams.showUploadList"
-                        :multiple="uploadParams.multiple"
-                        :accept="uploadParams.accept"
-                        :maxSize="uploadParams.maxSize"
-                        :before-upload="fileBeforeUpload"
-                        :on-exceeded-size="exceededSize"
-                        :on-error="fileUploadError"
-                        :on-success="fileUploadSuccess">
-                    <Button type="primary" icon="ios-cloud-upload-outline">上传图片</Button> 支持扩展名：.png .jpg .gif .jpeg
-                </Upload>
             </FormItem>
         </Form>
 
@@ -134,10 +141,35 @@
                     //name: '',               // 上传的文件字段名, 默认file
                     accept: '.png,.jpg,.gif,.jpeg',             // 接收上传的文件类型
                     maxSize: 4096,                // 文件大小限制，单位 kb
-                }
+                },
+
+                // 字典
+                dict_sex: [],
+                dict_education: [],  // 学历
+                dict_titleName: [],  // 技术职称
+                dict_titleLevel: [], // 职称级别
             };
         },
+        mounted() {
+            this.getDict(['sex', 'education', 'titleName', 'titleLevel']);
+        },
         methods: {
+            // 获取字典
+            getDict(list) {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByTypes',
+                    params: {
+                        types: list.join(',')
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        list.forEach(v => {
+                            this[`dict_${v}`] = res.data[v] || [];
+                        });
+                    }
+                });
+            },
             onChange_graduateDate(time) {
                 this.formData.graduateDate = time;
             },

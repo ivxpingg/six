@@ -11,12 +11,12 @@
         <div class="card-content">
             <div class="user-info">
                 <Form class="text-info" >
+                    <FormItem label="账号：">{{userInfo.loginName}}</FormItem>
                     <FormItem label="姓名：">{{userInfo.name}}</FormItem>
                     <FormItem label="单位：">{{userInfo.unitName}}</FormItem>
                     <FormItem label="单位类型：">{{userInfo.unitType}}</FormItem>
                     <FormItem label="部门：">{{userInfo.department}}</FormItem>
                     <FormItem label="职务：">{{userInfo.job}}</FormItem>
-                    <FormItem label="账号ID：">{{userInfo.userId}}</FormItem>
                     <FormItem label="电话号码：">{{userInfo.phone}}</FormItem>
                 </Form>
                 <img class="user-img" :src="userInfo.img" alt="">
@@ -56,7 +56,7 @@
                     unitType: '',
                     department: '',
                     job: '',
-                    userId: '',
+                    loginName: '',
                     phone: '',
                     img: imgUrl,
                     headPortrait: ''

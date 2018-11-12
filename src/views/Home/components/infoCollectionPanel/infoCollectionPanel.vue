@@ -29,7 +29,7 @@
                 <Row :gutter="10">
                     <template v-for="(item, idx) in fileList">
                         <i-col span="8" :key="`thumb-${idx}`">
-                            <vThumb :src="getImageUrl(item.url)" :title="item.fileName"></vThumb>
+                            <vThumb :src="item.url" :title="item.fileName"></vThumb>
                         </i-col>
                     </template>
                 </Row>

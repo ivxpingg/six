@@ -58,7 +58,7 @@
                title="从业人员详情"
                :width="1200"
                footer-hide>
-            <vPersonDetail :userId="userId"></vPersonDetail>
+            <vPersonDetail :userId="userId" editable @callback="callback_edit"></vPersonDetail>
         </Modal>
 
         <Modal v-model="modal_addUser"
@@ -251,6 +251,10 @@
                 }).catch(() => {
                     this.tableLoading = false;
                 })
+            },
+
+            callback_edit() {
+                this.getData();
             }
         }
     }

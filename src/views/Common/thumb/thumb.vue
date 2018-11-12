@@ -2,7 +2,7 @@
     <div class="thumb-container">
         <div class="img-box"
              @click="showModal"
-             :style="{ backgroundImage: `url(${src})`, height: `${height}px` }">
+             :style="{ backgroundImage: `url(${_src})`, height: `${height}px` }">
         </div>
         <p v-show="title!== ''" class="title">{{title}}</p>
 
@@ -11,13 +11,14 @@
                :width="800"
                :title="title">
             <div style="text-align: center">
-                <img class="img" :src="src" alt="">
+                <img class="img" :src="_src" alt="">
             </div>
         </Modal>
     </div>
 </template>
 
 <script>
+    import Config from '../../../config';
     export default {
         name: 'thumb',
         props: {
@@ -32,6 +33,16 @@
             height: {
                 type: Number,
                 default: 100
+            }
+        },
+        computed: {
+            _src() {
+                if (this.src.length > 0 && this.src.indexOf('http://') === -1) {
+                    return Config[Config.env].filePath + this.src;
+                }
+                else {
+                    return this.src;
+                }
             }
         },
         data() {

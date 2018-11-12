@@ -26,8 +26,10 @@
             </FormItem>
             <FormItem label="单位类型:" prop="unitType">
                 <Select v-model="formData.unitType">
-                    <Option value="1">施工单位</Option>
-                    <Option value="2">建设单位</Option>
+                    <Option v-for="item in dict_unitType"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
                 </Select>
             </FormItem>
             <FormItem label="技术总人数:" prop="totalTechnology">
@@ -125,10 +127,33 @@
                     email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
                     companyAddress: [{ required: true, message: '公司地址不能为空！', trigger: 'blur' }],
                     qualification: [{ required: true, message: '资质许可证等级不能为空！', trigger: 'blur' }]
-                }
+                },
+
+                // 字典
+                dict_unitType: [],
+                dict_qualificationType: []
             };
         },
+        mounted() {
+            this.getDict(['unitType','qualificationType'])
+        },
         methods: {
+            // 获取字典
+            getDict(list) {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByTypes',
+                    params: {
+                        types: list.join(',')
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        list.forEach(v => {
+                            this[`dict_${v}`] = res.data[v] || [];
+                        });
+                    }
+                });
+            },
             // 添加单位基础信息
             save() {
                 this.$refs.form.validate((valid) => {

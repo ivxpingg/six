@@ -7,16 +7,16 @@
               :rules="rules"
               :label-width="120">
             <FormItem label="姓名:" prop="name">
-                <Input v-model="formData.name"/>
+                <Input v-model="formData.name" :readonly="!editable"/>
             </FormItem>
             <FormItem label="科室:">
-                <Input v-model="formData.department"/>
+                <Input v-model="formData.department" :readonly="!editable"/>
             </FormItem>
             <FormItem label="现任职务:">
-                <Input v-model="formData.job"/>
+                <Input v-model="formData.job" :readonly="!editable"/>
             </FormItem>
             <FormItem label="职位级别:">
-                <Select v-model="formData.titleLevel">
+                <Select v-model="formData.titleLevel" :disabled="!editable">
                     <Option v-for="item in dict_titleLevel"
                             :key="item.id"
                             :value="item.value"
@@ -24,16 +24,16 @@
                 </Select>
             </FormItem>
             <FormItem label="办公固话:">
-                <Input v-model="formData.telephone"/>
+                <Input v-model="formData.telephone" :readonly="!editable"/>
             </FormItem>
             <FormItem label="移动小号:">
-                <Input v-model="formData.mobileShortNum"/>
+                <Input v-model="formData.mobileShortNum" :readonly="!editable"/>
             </FormItem>
             <FormItem label="手机:">
-                <Input v-model="formData.phone"/>
+                <Input v-model="formData.phone" :readonly="!editable"/>
             </FormItem>
             <FormItem label="性别:">
-                <Select v-model="formData.sex">
+                <Select v-model="formData.sex" :disabled="!editable">
                     <Option v-for="item in dict_sex"
                             :key="item.id"
                             :value="item.value"
@@ -41,19 +41,19 @@
                 </Select>
             </FormItem>
             <FormItem label="年龄:">
-                <Input v-model="formData.age" number/>
+                <Input v-model="formData.age" number :readonly="!editable"/>
             </FormItem>
             <FormItem label="民族:">
-                <Input v-model="formData.nation"/>
+                <Input v-model="formData.nation" :readonly="!editable"/>
             </FormItem>
             <FormItem label="籍贯:">
-                <Input v-model="formData.nativePlace"/>
+                <Input v-model="formData.nativePlace" :readonly="!editable"/>
             </FormItem>
             <!--<FormItem label="身份证号码:">-->
                 <!--<Input v-model="formData.idNumber"/>-->
             <!--</FormItem>-->
             <FormItem label="技术职称:">
-                <Select v-model="formData.titleName">
+                <Select v-model="formData.titleName" :disabled="!editable">
                     <Option v-for="item in dict_titleName"
                             :key="item.id"
                             :value="item.value"
@@ -61,28 +61,51 @@
                 </Select>
             </FormItem>
             <FormItem label="身份类别:">
-                <Input v-model="formData.identityType"/>
+                <Input v-model="formData.identityType" :disabled="!editable"/>
             </FormItem>
             <FormItem label="执法证类型:">
-                <Input v-model="formData.lawType"/>
+                <Select v-model="formData.lawType" :disabled="!editable">
+                    <Option v-for="item in dict_lawType"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="执法号码:">
-                <Input v-model="formData.lawNumber"/>
+                <Input v-model="formData.lawNumber" :readonly="!editable"/>
             </FormItem>
             <FormItem label="分工:">
-                <Input v-model="formData.divideWork"/>
+                <Input v-model="formData.divideWork" :readonly="!editable"/>
             </FormItem>
             <FormItem label="任职时间:">
-                <Input v-model="formData.tenureTime"/>
+                <DatePicker
+                        :value="formData.tenureTime"
+                        type="month"
+                        transfer
+                        @on-change="onChange_tenureTime"
+                        placeholder="选择时间"
+                        :readonly="!editable"></DatePicker>
             </FormItem>
             <FormItem label="工作时间:">
-                <Input v-model="formData.workDate"/>
+                <DatePicker
+                        :value="formData.workDate"
+                        type="month"
+                        transfer
+                        @on-change="onChange_workDate"
+                        placeholder="选择时间"
+                        :readonly="!editable"></DatePicker>
             </FormItem>
             <FormItem label="入党时间:">
-                <Input v-model="formData.joinPartyDate"/>
+                <DatePicker
+                        :value="formData.joinPartyDate"
+                        type="month"
+                        transfer
+                        @on-change="onChange_joinPartyDate"
+                        placeholder="选择时间"
+                        :readonly="!editable"></DatePicker>
             </FormItem>
             <FormItem label="学历:">
-                <Select v-model="formData.education">
+                <Select v-model="formData.education" :disabled="!editable">
                     <Option v-for="item in dict_education"
                             :key="item.id"
                             :value="item.value"
@@ -90,23 +113,29 @@
                 </Select>
             </FormItem>
             <FormItem label="毕业院校:">
-                <Input v-model="formData.graduateSchool"/>
+                <Input v-model="formData.graduateSchool" :readonly="!editable"/>
             </FormItem>
             <FormItem label="专业:">
-                <Input v-model="formData.profession"/>
+                <Input v-model="formData.profession" :readonly="!editable"/>
             </FormItem>
-            <FormItem label="出生年月:">
-                <Input v-model="formData.birthday"/>
+            <FormItem label="出生年月:" prop="birthday">
+                <DatePicker
+                        :value="formData.birthday"
+                        type="date"
+                        transfer
+                        @on-change="onChange_birthday"
+                        placeholder="选择时间"
+                        :readonly="!editable"></DatePicker>
             </FormItem>
             <!--<FormItem label="编制状态:">-->
                 <!--<Input v-model="formData.belongStateLabel"/>-->
             <!--</FormItem>-->
             <FormItem label="备注:">
-                <Input v-model="formData.remark"/>
+                <Input v-model="formData.remark" :readonly="!editable"/>
             </FormItem>
         </Form>
 
-        <div class="ivu-modal-footer">
+        <div class="ivu-modal-footer" v-if="editable">
             <Button type="primary"
                     size="large"
                     @click="save">保存</Button>
@@ -122,6 +151,10 @@
             userId: {
                 type: String,
                 required: true
+            },
+            editable: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
@@ -168,9 +201,11 @@
                 },
 
                 dict_sex: [],         // 性别
-                dict_titleName: [],   // 技术职称
-                dict_titleLevel: [],  // 职称级别
-                dict_education: []    // 学历
+                dict_education: [],  // 学历
+                dict_titleName: [],  // 技术职称
+                dict_titleLevel: [], // 职称级别
+                dict_lawType: [],    // 执法证类型
+                dict_identityType: [],  // 身份类别
             };
         },
         watch: {
@@ -185,8 +220,7 @@
             }
         },
         mounted() {
-
-            this.getDicts(['sex','titleName','titleLevel', 'education']);
+            this.getDicts(['sex', 'titleName', 'titleLevel', 'lawType', 'education', 'identityType']);
         },
         methods: {
             getDicts(list) {
@@ -204,6 +238,20 @@
                     }
                 })
             },
+
+            onChange_tenureTime(time) {
+                this.formData.tenureTime = time;
+            },
+            onChange_workDate(time) {
+                this.formData.workDate = time;
+            },
+            onChange_joinPartyDate(time) {
+                this.formData.joinPartyDate = time;
+            },
+            onChange_birthday(time) {
+                this.formData.birthday = time;
+            },
+
             getUserInfo() {
                 this.$http({
                     method: 'get',

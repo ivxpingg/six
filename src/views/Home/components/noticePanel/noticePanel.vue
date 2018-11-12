@@ -12,7 +12,6 @@
             <CellGroup @on-click="onClick_notice">
                 <Cell v-for="(item, idx) in list"
                       :name="item.noticeId"
-
                       :extra="getTime(item.insTime)"
                       :key="`notice${item.noticeId}`">
                     <Badge :count="getNoticeStatus(item.noticeStatus)"
@@ -24,6 +23,9 @@
                 </Cell>
             </CellGroup>
         </div>
+
+        <Modal></Modal>
+
     </Card>
 </template>
 <script>

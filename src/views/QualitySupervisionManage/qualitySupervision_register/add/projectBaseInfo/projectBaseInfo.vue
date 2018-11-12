@@ -15,23 +15,27 @@
             <FormItem label="详细地址:" prop="address">
                 <Input v-model="formData.address" :readonly="isView"/>
             </FormItem>
-            <FormItem label="地区:" prop="province">
+            <FormItem label="地区:" prop="county">
                 <Select v-model="formData.province" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 12px;">
-                    <Option value="1">安徽省</Option>
-                    <Option value="2">福建省</Option>
+                    <Option v-for="item in provinceList"
+                            :key="item.regionCode"
+                            :value="item.regionId"
+                            :label="item.regionName"></Option>
                 </Select>
                 <Select v-model="formData.city" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 12px;">
-                    <Option value="1">六安市</Option>
-                    <Option value="2">合肥市</Option>
-                    <Option value="3">芜湖市</Option>
+                    <Option v-for="item in cityList"
+                            :key="item.regionCode"
+                            :value="item.regionId"
+                            :label="item.regionName"></Option>
                 </Select>
                 <Select v-model="formData.county" :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 20px;">
-                    <Option value="1">金安区</Option>
-                    <Option value="2">裕安区</Option>
-                    <Option value="3">叶集区</Option>
+                    <Option v-for="item in countyList"
+                            :key="item.regionCode"
+                            :value="item.regionId"
+                            :label="item.regionName"></Option>
                 </Select>
             </FormItem>
 
@@ -173,9 +177,10 @@
                     projectId: '',
                     projectName: '',      // 项目名称
                     part: '',      // 标段
-                    province: '',  // 省
-                    city: '',      // 市
-                    county: '',    // 区
+                    province: 13,  // 省
+                    city: null,      // 市
+                    county: null,    // 区
+
                     address: '',
                     projectType: '',    // 项目类型
                     buildUnit: '',      // 建设单位
@@ -202,6 +207,7 @@
                     projectName: [{ required: true, message: '项目名称不能为空！', trigger: 'blur' }],
                     part: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
                     address: [{ required: true, message: '地址不能为空！', trigger: 'blur' }],
+                    county: [{ required: true, type: 'number', message: '请选择完整地区！', trigger: 'blur' }],
                     mileage: [{ required: true, type: 'number', message: '项目里程不能为空！', trigger: 'blur' }],
                     amount: [{ required: true, type: 'number', message: '投资额不能为空！', trigger: 'blur' }],
                     constructAmount: [{ required: true, type: 'number', message: '施工合同金额不能为空！', trigger: 'blur' }],
@@ -209,8 +215,7 @@
                     designSpeed: [{ required: true, type: 'number', message: '设计时速不能为空！', trigger: 'blur' }],
                     subgradeWidth: [{ required: true, type: 'number', message: '路基宽度不能为空！', trigger: 'blur' }],
                     planBeginTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
-                    planEndTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
-
+                    planEndTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }]
                 },
 
                 //
@@ -220,7 +225,11 @@
                 dict_projectType: [],
                 dict_technicalLevel: [],
                 dict_projectProperty: [],
-                dict_structureType: []
+                dict_structureType: [],
+
+                provinceList: [],
+                cityList: [],
+                countyList: []
             };
         },
         watch: {
@@ -231,12 +240,43 @@
                         this.getData_detail();
                     }
                 }
+            },
+
+            'formData.province'(val) {
+                this.formData.city = null;
+                this.formData.county = null;
+                this.cityList = [];
+                this.countyList = [];
+                this.getAreaInfo(val, 'cityList');
+            },
+            'formData.city'(val) {
+                this.formData.county = null;
+                this.countyList = [];
+                this.getAreaInfo(val, 'countyList');
             }
+
         },
         mounted() {
             this.getDict(['projectType', 'technicalLevel', 'projectProperty', 'structureType']);
+            this.getAreaInfo('', 'provinceList');
+            this.getAreaInfo(this.formData.province, 'cityList');
         },
         methods: {
+            // 获取地区选择信息
+            //获取省、市、区
+            getAreaInfo(parentId, key) {
+                this.$http({
+                    method: 'get',
+                    url: '/region/regionList',
+                    params: {
+                        parentId: parentId || ''
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this[key] = res.data || [];
+                    }
+                })
+            },
             getDict(list) {
                 this.$http({
                     method: 'get',

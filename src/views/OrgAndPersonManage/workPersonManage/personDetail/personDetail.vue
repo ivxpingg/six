@@ -25,10 +25,10 @@
             </Menu>
         </div>
         <div class="right-panel">
-            <vUserBaseInfo v-show="activeName === '1'" :userId="userId" editable></vUserBaseInfo>
-            <vUserUnit v-show="activeName === '2'" :userId="userId"></vUserUnit>
-            <vUserEvaluate v-show="activeName === '3'" :userId="userId" ></vUserEvaluate>
-            <vUserAccessory v-show="activeName === '4'" :userId="userId"></vUserAccessory>
+            <vUserBaseInfo v-show="activeName === '1'" :userId="userId" :editable="editable" @callback="callback_edit"></vUserBaseInfo>
+            <vUserUnit v-show="activeName === '2'" :userId="userId" :editable="editable"></vUserUnit>
+            <vUserEvaluate v-show="activeName === '3'" :userId="userId" :editable="editable" ></vUserEvaluate>
+            <vUserAccessory v-show="activeName === '4'" :userId="userId" :editable="editable"></vUserAccessory>
         </div>
     </div>
 </template>
@@ -50,6 +50,10 @@
             userId: {
                 type: String,
                 required: true
+            },
+            editable: {
+                type: Boolean,
+                required: true
             }
         },
         data() {
@@ -60,6 +64,10 @@
         methods: {
             onSelect(name) {
                 this.activeName = name;
+            },
+
+            callback_edit() {
+                this.$emit('callback');
             }
         }
     }

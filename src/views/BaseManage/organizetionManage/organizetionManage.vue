@@ -31,8 +31,8 @@
                :title="userType === 'employee' ? '从业人员详情' : '监督人员详情'"
                :width="1200"
                footer-hide>
-            <vPersonDetail v-show="userType === 'employee'" :userId="userId"></vPersonDetail>
-            <vSupervisorDetail v-show="userType === 'supervisor'" :userId="userId"></vSupervisorDetail>
+            <vPersonDetail v-show="userType === 'employee'" :userId="userId" :editable="false"></vPersonDetail>
+            <vSupervisorDetail v-show="userType === 'supervisor'" :userId="userId" :editable="false"></vSupervisorDetail>
         </Modal>
 
         <vModalEmployeeSelect

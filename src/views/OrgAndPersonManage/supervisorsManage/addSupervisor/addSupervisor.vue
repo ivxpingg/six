@@ -9,9 +9,9 @@
             <FormItem label="姓名:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
-            <FormItem label="UID:" prop="uId">
-                <Input v-model="formData.uId"/>
-            </FormItem>
+            <!--<FormItem label="UID:" prop="uId">-->
+                <!--<Input v-model="formData.uId"/>-->
+            <!--</FormItem>-->
             <FormItem label="科室:">
                 <Input v-model="formData.department"/>
             </FormItem>
@@ -19,7 +19,12 @@
                 <Input v-model="formData.job"/>
             </FormItem>
             <FormItem label="职位级别:" prop="titleLevel">
-                <Input v-model="formData.titleLevel"/>
+                <Select v-model="formData.titleLevel">
+                    <Option v-for="item in dict_titleLevel"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="办公固话:" prop="telephone">
                 <Input v-model="formData.telephone"/>
@@ -32,38 +37,46 @@
             </FormItem>
             <FormItem label="性别:">
                 <Select v-model="formData.sex">
-                    <Option value="0">女</Option>
-                    <Option value="1">男</Option>
+                    <Option v-for="item in dict_sex"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
                 </Select>
             </FormItem>
             <FormItem label="年龄:" prop="age">
                 <Input v-model="formData.age" number/>
             </FormItem>
             <FormItem label="民族:">
-                <Select v-model="formData.nation">
-                    <Option value="0">汉族</Option>
-                    <Option value="1">满族</Option>
-                </Select>
+                <Input v-model="formData.nation"/>
             </FormItem>
             <FormItem label="籍贯:" prop="nativePlace">
                 <Input v-model="formData.nativePlace"/>
             </FormItem>
-            <FormItem label="身份证号码:" prop="IdNumber">
-                <Input v-model="formData.IdNumber"/>
-            </FormItem>
+            <!--<FormItem label="身份证号码:" prop="IdNumber">-->
+                <!--<Input v-model="formData.IdNumber"/>-->
+            <!--</FormItem>-->
             <FormItem label="技术职称:" prop="titleName">
-                <Input v-model="formData.titleName"/>
+                <Select v-model="formData.titleName">
+                    <Option v-for="item in dict_titleName"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="身份类别:">
                 <Select v-model="formData.identityType">
-                    <Option value="0">干部</Option>
-                    <Option value="1">副干部</Option>
+                    <Option v-for="item in dict_identityType"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
                 </Select>
             </FormItem>
             <FormItem label="执法证类型:">
                 <Select v-model="formData.lawType">
-                    <Option value="0">类型一</Option>
-                    <Option value="1">类型二</Option>
+                    <Option v-for="item in dict_lawType"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
                 </Select>
             </FormItem>
             <FormItem label="执法号码:">
@@ -97,7 +110,12 @@
                         placeholder="选择时间"></DatePicker>
             </FormItem>
             <FormItem label="学历:">
-                <Input v-model="formData.education"/>
+                <Select v-model="formData.education">
+                    <Option v-for="item in dict_education"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="毕业院校:">
                 <Input v-model="formData.graduateSchool"/>
@@ -173,10 +191,37 @@
                     titleLevel: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
                     age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
                     titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
-                }
+                },
+
+                // 字典
+                dict_sex: [],
+                dict_education: [],  // 学历
+                dict_titleName: [],  // 技术职称
+                dict_titleLevel: [], // 职称级别
+                dict_lawType: [],    // 执法证类型
+                dict_identityType: [],  // 身份类别
             };
         },
+        mounted() {
+            this.getDict(['sex', 'titleName', 'titleLevel', 'lawType', 'education', 'identityType']);
+        },
         methods: {
+            // 获取字典
+            getDict(list) {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByTypes',
+                    params: {
+                        types: list.join(',')
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        list.forEach(v => {
+                            this[`dict_${v}`] = res.data[v] || [];
+                        });
+                    }
+                });
+            },
             onChange_tenureTime(time) {
                 this.formData.tenureTime = time;
             },
