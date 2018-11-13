@@ -58,7 +58,7 @@
                 let length = this.getStringLength(this.title);
                 let row_words = parseInt(this.size / this.fontSize);
 
-                if (this.rows && length > (this.rows * row_words * 2) ) {
+                if (this.rows && length >= (this.rows * row_words * 2) ) {
                     return this.title.substr(0, (this.rows * row_words - 2)) + '...';
                 }
                 else {
@@ -109,6 +109,7 @@
         }
         .title {
             line-height: 20px;
+            word-break: break-all;
 
             &.hover-title{
                 position: absolute;

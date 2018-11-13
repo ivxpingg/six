@@ -209,9 +209,10 @@
                                     },
                                     on: {
                                         click: () => {
+                                            debugger
                                             this.currentRow.projectId = params.row.projectId;
                                             this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.advanceNotice.advanceNoticeId = params.row.advanceNotice.advanceNoticeId;
+                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
                                             this.$refs.modal_noticeReply.modalValue = true;
                                         }
                                     }

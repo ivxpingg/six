@@ -53,7 +53,7 @@
                         <Input :value="item.phone" style="width: 135px;" readonly/>
                     </FormItem>
                     <FormItem :label="`回复时间：`" :label-width="80" :key="`${item.changeReplyId}4`">
-                        <Input :value="item.replyDate || ''"  style="width: 135px;" readonly/>
+                        <Input :value="transformTime(item.replyDate)"  style="width: 135px;" readonly/>
                     </FormItem>
                 </template>
 
@@ -169,6 +169,11 @@
                         })
                     }
                 })
+            },
+
+            // 转化日期
+            transformTime(time) {
+                return time ? MOMENT(time).format('YYYY-MM-DD') : '';
             }
         }
     }

@@ -13,10 +13,10 @@
                                  :processStepId="processStepId"
                                  :projectId="projectId" @modal-eSignature="modal_eSignature"></vQualitySupervision>
             <div slot="footer">
-                <Button type="info" size="large" @click="exportPDF">打印</Button>
+                <Button type="info" size="large" @click="exportPDF(false)">打印</Button>
                 <Button type="primary" size="large" @click="onClick_selectAuditProcess_open" v-show="!auditProcessId"> 提交审核</Button>
                 <Button type="primary" size="large" @click="onClick_selectSignature" v-show="auditProcessId">盖章</Button>
-                <Button type="success" size="large" v-show="auditProcessId" @click="auditPass">审核通过</Button>
+                <Button type="success" size="large" v-show="auditProcessId" @click="uploadFile">审核通过</Button>
             </div>
         </Modal>
 
@@ -63,59 +63,69 @@
                     signatureId: ''
                 },
 
-                auditInfo: {}
+                auditInfo: {
+                    fileId: ''
+                }
             };
         },
         methods: {
             // 导出PDF
-            exportPDF() {
+            exportPDF(isUpload) {
                 let that = this;
                 this.$Spin.show();
-                try {
-                    html2canvas(this.$refs.qualitySupervision.$el).then((canvas) => {
-                        let moveHight = [841.89, 841.89, 841.89];
-                        let idx = 0;
+                return new Promise(((resolve, reject) => {
+                    try {
+                        html2canvas(this.$refs.qualitySupervision.$el).then((canvas) => {
+                            let moveHight = [841.89, 841.89, 841.89];
+                            let idx = 0;
 
-                        let pageData = canvas.toDataURL('image/jpeg', 1.0);
-                        let pdf = new jspdf("", "pt", 'a4');
+                            let pageData = canvas.toDataURL('image/jpeg', 1.0);
+                            let pdf = new jspdf("", "pt", 'a4');
 
-                        let contentWidth = canvas.width;
-                        let contentHeight = canvas.height;
+                            let contentWidth = canvas.width;
+                            let contentHeight = canvas.height;
 
-                        //一页pdf显示html页面生成的canvas高度;
-                        let pageHeight = contentWidth / 592.28 * 841.89;
-                        //未生成pdf的html页面高度
-                        let leftHeight = contentHeight;
-                        //页面偏移
-                        let position = 0;
-                        //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-                        let imgWidth = 595.28;
-                        let imgHeight = (592.28/contentWidth * contentHeight) - 84;
+                            //一页pdf显示html页面生成的canvas高度;
+                            let pageHeight = contentWidth / 592.28 * 841.89;
+                            //未生成pdf的html页面高度
+                            let leftHeight = contentHeight;
+                            //页面偏移
+                            let position = 0;
+                            //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                            let imgWidth = 595.28;
+                            let imgHeight = (592.28/contentWidth * contentHeight) - 84;
 
-                        //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-                        //当内容未超过pdf一页显示的范围，无需分页
-                        if (leftHeight < pageHeight) {
-                            pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
-                        } else {
-                            while(leftHeight > 0) {
-                                pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight);
-                                leftHeight -= pageHeight;
-                                position -= moveHight[idx++];
-                                //避免添加空白页
-                                if(leftHeight > 0) {
-                                    pdf.addPage();
+                            //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                            //当内容未超过pdf一页显示的范围，无需分页
+                            if (leftHeight < pageHeight) {
+                                pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+                            } else {
+                                while(leftHeight > 0) {
+                                    pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight);
+                                    leftHeight -= pageHeight;
+                                    position -= moveHight[idx++];
+                                    //避免添加空白页
+                                    if(leftHeight > 0) {
+                                        pdf.addPage();
+                                    }
                                 }
                             }
-                        }
-                        console.dir(pdf.output('datauristring'));
+                            this.$Spin.hide();
+                            if (isUpload) {
+                                resolve(pdf.output('datauristring').substr(28));
+                            }
+                            else {
+                                pdf.save('content.pdf');
+                                resolve();
+                            }
+                        });
+                    }
+                    catch (e) {
+                        resolve();
                         this.$Spin.hide();
-                        pdf.save('content.pdf');
-                    });
-                }
-                catch (e) {
-                    this.$Spin.hide();
-                    this.$Notice.warning('导出失败！');
-                }
+                        this.$Notice.warning('生成PDF失败！');
+                    }
+                }));
             },
 
             // 打开提交审核选流程
@@ -168,7 +178,8 @@
                     name: '',
                     url: '',
                     userId: '',
-                    signatureId: ''
+                    signatureId: '',
+                    fileId: ''
                 });
 
                 this.auditInfo = auditInfo;
@@ -176,7 +187,8 @@
             },
 
             // 通过审核
-            auditPass() {
+            auditPass(fileId) {
+                this.auditInfo.fileId = fileId || '';
                 this.$http({
                     method: 'post',
                     url: '/projectAudit/audit',
@@ -193,6 +205,23 @@
                         this.modalValue = false;
                     }
                 })
+            },
+            uploadFile() {
+
+                this.exportPDF(true).then(data => {
+                    this.$http({
+                        method: 'post',
+                        url: '/file/uploadAuditFile',
+                        data: JSON.stringify({
+                            base64Content: data,
+                            fileRecordType: 'accept_notice',
+                        })
+                    }).then(res => {
+                        if(res.code === 'SUCCESS') {
+                            this.auditPass(res.data.fileId);
+                        }
+                    })
+                });
             }
         }
     }
