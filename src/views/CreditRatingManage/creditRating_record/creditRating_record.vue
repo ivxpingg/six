@@ -184,7 +184,7 @@
 
                             }
 
-                            if (params.row.changeNotice) {
+                            if (params.row.changeNotice && params.row.changeNotice.changeStatus !== 'pass') {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',

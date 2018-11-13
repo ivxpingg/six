@@ -16,7 +16,7 @@
         </vIvxFilterBox>
         <Row :gutter="10">
             <template v-for="(item, idx) in list">
-                <i-col span="4" :key="`thumb-${idx}`">
+                <i-col span="4" :key="`thumb-${idx}`" style="margin-top: 10px;">
                     <vThumb :src="item.url" :title="item.fileName"></vThumb>
                 </i-col>
             </template>
@@ -58,14 +58,14 @@
                 immediate: true,
                 handler(val) {
                     if (val) {
-                       this.userAttachList();
+                       this.getAccessory();
                     }
                 }
             }
         },
         mounted() {},
         methods: {
-            userAttachList() {
+            getAccessory() {
                 this.$http({
                     method: 'get',
                     url: '/user/userAttachList',
@@ -95,7 +95,7 @@
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
                         this.$Message.success('上传成功！');
-                        this.userAttachList();
+                        this.getAccessory();
                     }
                 })
             }

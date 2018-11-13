@@ -66,10 +66,20 @@
                 <Input v-model="formData.countTime" />
             </FormItem>
             <FormItem label="资质类别:" prop="qualificationType">
-                <Input v-model="formData.qualificationTypeLabel"/>
+                <Select v-model="formData.qualificationType">
+                    <Option v-for="item in dict_qualificationType"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="资质许可证等级:" prop="qualification">
-                <Input v-model="formData.qualification" />
+                <Select v-model="formData.qualification">
+                    <Option v-for="item in dict_qualification"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="母体机构单位名称:" prop="parentUnitName">
                 <Input v-model="formData.parentUnitName" />
@@ -138,8 +148,10 @@
                     qualification: [{ required: true, message: '资质许可证等级不能为空！', trigger: 'blur' }]
                 },
 
-                dict_unitType: []
-            };
+                dict_unitType: [],
+                dict_qualificationType: [],
+                dict_qualification: []
+             };
         },
         watch: {
             unitId: {
@@ -152,20 +164,22 @@
             }
         },
         mounted() {
-            this.getDict();
+            this.getDicts(['unitType','qualificationType','qualification']);
         },
         methods: {
              // 获取单位类别的数据字典
-            getDict() {
+            getDicts(list) {
                 this.$http({
                     method: 'get',
-                    url: '/dict/getListByType',
+                    url: '/dict/getListByTypes',
                     params: {
-                        type: 'unitType'
+                        types: list.join(',')
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.dict_unitType = res.data;
+                        list.forEach((val, idx) => {
+                            this[`dict_${val}`] = res.data[val] || [];
+                        });
                     }
                 })
             },
@@ -189,7 +203,7 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/updateUnitInfo',
+                            url: '/unit/update',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {

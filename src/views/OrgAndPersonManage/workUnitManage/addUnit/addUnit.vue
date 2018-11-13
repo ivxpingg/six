@@ -66,10 +66,20 @@
                 <Input v-model="formData.countTime" />
             </FormItem>
             <FormItem label="资质类别:" prop="qualificationType">
-                <Input v-model="formData.qualificationTypeLabel"/>
+                <Select v-model="formData.qualificationType">
+                    <Option v-for="item in dict_qualificationType"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="资质许可证等级:" prop="qualification">
-                <Input v-model="formData.qualification" />
+                <Select v-model="formData.qualification">
+                    <Option v-for="item in dict_qualification"
+                            :key="item.id"
+                            :value="item.value"
+                            :label="item.label"></Option>
+                </Select>
             </FormItem>
             <FormItem label="母体机构单位名称:" prop="parentUnitName">
                 <Input v-model="formData.parentUnitName" />
@@ -131,11 +141,12 @@
 
                 // 字典
                 dict_unitType: [],
-                dict_qualificationType: []
+                dict_qualificationType: [],
+                dict_qualification: []
             };
         },
         mounted() {
-            this.getDict(['unitType','qualificationType'])
+            this.getDict(['unitType','qualificationType', 'qualification']);
         },
         methods: {
             // 获取字典

@@ -158,8 +158,16 @@
                     { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
                     { title: '受理通知书', width: 180, align: 'center', key: 'acceptNotice' },
                     { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
-                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate' },
-                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate' },
+                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate',
+                        render(h, params) {
+                            return h('div', params.row.acceptDate ? MOMENT(params.row.acceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate',
+                        render(h, params) {
+                            return h('div', params.row.noAcceptDate ? MOMENT(params.row.noAcceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',

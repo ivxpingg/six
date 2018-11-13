@@ -98,7 +98,7 @@
                     },
                     {
                         title: '操作',
-                        width: 200,
+                        width: 170,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
@@ -135,19 +135,20 @@
                                 }, '作废'));
                             }
 
-
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small',
-                                    icon: 'ios-trash-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.delNotice(params.row);
+                            if (params.row.safeNoticeStatus === 'wait_publish') {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small',
+                                        icon: 'ios-trash-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.delNotice(params.row);
+                                        }
                                     }
-                                }
-                            }, '删除'));
+                                }, '删除'));
+                            }
 
                             // 设置列宽度
                             return h('div',{

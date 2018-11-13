@@ -6,7 +6,7 @@
         <div class="ivx-table-box">
             <Table border
                    height="405"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
         </div>
 
@@ -25,7 +25,7 @@
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
     import vEmployeeSelect from '../../../../../Common/employeeSelect/modalEmployeeSelect';
-
+    import MOMENT from 'moment';
     export default {
         name: 'personParticipant',  // 单位参与人员
         components: {vIvxFilterBox, vEmployeeSelect},
@@ -50,37 +50,7 @@
             }
         },
         created() {
-            if (!this.isView) {
-                let columns = [
-                    {
-                        title: '操作',
-                        width: 120,
-                        align: 'center',
-                        // fixed: 'right',
-                        render: (h, params) => {
-                            let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small',
-                                    icon: 'ios-trash-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.removePerson(params.row);
-                                    }
-                                }
-                            }, '移除'));
-                            return h('div',{
-                                class: 'ivx-table-cell-handle'
-                            },list);
-                        }
-                    }
-                ];
-
-                this.tableColumns = this.tableColumns.concat(columns);
-            }
         },
         watch: {
             projectUnitId(val) {
@@ -93,18 +63,40 @@
             return {
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '姓名', width: 120, align: 'center', key: 'name' },
+                    { title: '姓名', width: 100, align: 'center', key: 'name' },
                     { title: '所属机构', width: 180, align: 'center', key: 'unitName' },
-                    { title: '职务', width: 180, align: 'center', key: '职务' }
+                    { title: '职称级别', width: 120, align: 'center', key: 'titleLevelLabel' },
+                    { title: '技术职称', width: 120, align: 'center', key: 'titleNameLabel' },
+                    { title: '职务', width: 160, align: 'center', key: 'job' },
+                    { title: '到岗时间', width: 110, align: 'center',
+                        render: (h, params) => {
+                            return h('div', params.row.beginTime ? MOMENT(params.row.beginTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '离职时间', width: 110, align: 'center',
+                        render: (h, params) => {
+                            return h('div', params.row.endTime ? MOMENT(params.row.endTime).format('YYYY-MM-DD') : '');
+                        }
+                    }
                 ],
                 tableData: [
                     // {
-                    //     beginTime: 1540880320000,
-                    //     job: "局长",
-                    //     name: "郑兆宇",
-                    //     projectUnitId: "e6bdadfaed9d46909a89412a31a904b4",
-                    //     unitName: "安徽省路港工程有限责任公司",
-                    //     userId: "3"
+                    //     age: 20,
+                    //     certificate: "二级建造师",
+                    //     certificateNo: "00247946",
+                    //     graduateSchool: "中国科学技术大学",
+                    //     idNumber: "342401196707274917",
+                    //     name: "储修华",
+                    //     nation: "汉",
+                    //     phone: "12030001400",
+                    //     profession: "计算机应用",
+                    //     sexLabel: "男",
+                    //     titleLevelLabel: "高级",
+                    //     titleNameLabel: "工程师",
+                    //     unitName: "安徽巢湖路桥建设集团有限公司",
+                    //     unitTypeLabel: "建设单位",
+                    //     userId: "30",
+                    //     userNo: "E56152",
                     // }
                 ]
             };
@@ -112,6 +104,69 @@
         computed: {
             selectedValue() {
                 return this.tableData.map(v => v.userId);
+            },
+
+            _tableColumns() {
+               return this.isView ? [
+                   { title: '序号', width: 60, align: 'center', type: 'index', },
+                   { title: '姓名', width: 100, align: 'center', key: 'name' },
+                   { title: '所属机构', width: 180, align: 'center', key: 'unitName' },
+                   { title: '职称级别', width: 120, align: 'center', key: 'titleLevelLabel' },
+                   { title: '技术职称', width: 120, align: 'center', key: 'titleNameLabel' },
+                   { title: '职务', width: 160, align: 'center', key: 'job' },
+                   { title: '到岗时间', width: 110, align: 'center',
+                       render: (h, params) => {
+                           return h('div', params.row.beginTime ? MOMENT(params.row.beginTime).format('YYYY-MM-DD') : '');
+                       }
+                   },
+                   { title: '离职时间', width: 110, align: 'center',
+                       render: (h, params) => {
+                           return h('div', params.row.endTime ? MOMENT(params.row.endTime).format('YYYY-MM-DD') : '');
+                       }
+                   }
+               ] : [
+                   { title: '序号', width: 60, align: 'center', type: 'index', },
+                   { title: '姓名', width: 100, align: 'center', key: 'name' },
+                   { title: '所属机构', width: 180, align: 'center', key: 'unitName' },
+                   { title: '职称级别', width: 120, align: 'center', key: 'titleLevelLabel' },
+                   { title: '技术职称', width: 120, align: 'center', key: 'titleNameLabel' },
+                   { title: '职务', width: 160, align: 'center', key: 'job' },
+                   { title: '到岗时间', width: 110, align: 'center',
+                       render: (h, params) => {
+                           return h('div', params.row.beginTime ? MOMENT(params.row.beginTime).format('YYYY-MM-DD') : '');
+                       }
+                   },
+                   { title: '离职时间', width: 110, align: 'center',
+                       render: (h, params) => {
+                           return h('div', params.row.endTime ? MOMENT(params.row.endTime).format('YYYY-MM-DD') : '');
+                       }
+                   },
+                   {
+                       title: '操作',
+                       width: 120,
+                       align: 'center',
+                       fixed: 'right',
+                       render: (h, params) => {
+                           let list = [];
+
+                           list.push(h('Button', {
+                               props: {
+                                   type: 'error',
+                                   size: 'small',
+                                   icon: 'ios-trash-outline'
+                               },
+                               on: {
+                                   click: () => {
+                                       this.removePerson(params.row);
+                                   }
+                               }
+                           }, '移除'));
+                           return h('div',{
+                               class: 'ivx-table-cell-handle'
+                           },list);
+                       }
+                   }
+               ]
             }
         },
         mounted() {},

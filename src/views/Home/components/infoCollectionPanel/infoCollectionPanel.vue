@@ -4,10 +4,10 @@
             <Icon type="ios-folder" />
             信息采集管理
         </p>
-        <a href="#" slot="extra">
-            <Icon type="ios-more" />
-            更多
-        </a>
+        <!--<a href="#" slot="extra">-->
+            <!--<Icon type="ios-more" />-->
+            <!--更多-->
+        <!--</a>-->
         <div class="card-content">
             <Row :gutter="10">
                  <template v-for="item in folderList">

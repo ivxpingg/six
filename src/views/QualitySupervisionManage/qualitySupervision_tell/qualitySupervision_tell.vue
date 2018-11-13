@@ -65,6 +65,7 @@
     import vAddSupervisionTell from './add/addSupervisionTell';
     import vNoticeModification from './noticeModification/noticeModification';
     import vNoticeReply from './noticeReply/noticeReply.vue';
+    import MOMENT from 'moment';
     export default {
         name: 'qualitySupervision_tell',
         components: {
@@ -105,8 +106,16 @@
                     { title: '投资额(万元)', width: 180, align: 'center', key: 'amount' },
                     { title: '施工合同金额(万元)', width: 180, align: 'center', key: 'constructAmount' },
                     { title: '监理合同金额(万元)', width: 180, align: 'center', key: 'supervisorAmount' },
-                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime' },
-                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime' },
+                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime',
+                        render(h, params) {
+                            return h('div', params.row.planBeginTime ? MOMENT(params.row.planBeginTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime',
+                        render(h, params) {
+                            return h('div', params.row.planEndTime ? MOMENT(params.row.planEndTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
                     { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
                     // TODO 收件日期
@@ -119,8 +128,16 @@
                     { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
                     { title: '受理通知书', width: 180, align: 'center', key: 'acceptNotice' },
                     { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
-                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate' },
-                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate' },
+                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate',
+                        render(h, params) {
+                            return h('div', params.row.acceptDate ? MOMENT(params.row.acceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate',
+                        render(h, params) {
+                            return h('div', params.row.noAcceptDate ? MOMENT(params.row.noAcceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',
@@ -183,7 +200,7 @@
                                 }, '整改通知'));
                             }
 
-                            if (params.row.changeNotice) {
+                            if (params.row.changeNotice && params.row.changeNotice.changeStatus !== 'pass') {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',

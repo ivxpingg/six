@@ -107,7 +107,7 @@
                                 }
                             }
                         }
-                        // console.dir(doc.output('datauristring'));
+                        console.dir(pdf.output('datauristring'));
                         this.$Spin.hide();
                         pdf.save('content.pdf');
                     });

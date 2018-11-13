@@ -32,12 +32,12 @@
                     { title: '在职情况', width: 100, align: 'center', key: 'workStatusLabel' },
                     { title: '入职时间', width: 100, align: 'center', key: 'beginTime',
                         render(h, params) {
-                            return h('div', MOMENT(params.row.beginTime).format('YYYY-MM-DD'));
+                            return h('div',params.row.beginTime ? MOMENT(params.row.beginTime).format('YYYY-MM-DD') : '');
                         }
                     },
                     { title: '离职时间', width: 100, align: 'center', key: 'endTime',
                         render(h, params) {
-                            return h('div', MOMENT(params.row.endTime).format('YYYY-MM-DD'));
+                            return h('div', params.row.endTime? MOMENT(params.row.endTime).format('YYYY-MM-DD') : '');
                         }
                     }
                 ],

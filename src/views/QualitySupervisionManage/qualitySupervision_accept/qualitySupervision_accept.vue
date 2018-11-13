@@ -53,11 +53,9 @@
                     :projectId="curentRow.projectId"
                     @modal_callback="modal_callback_superviseTeamManage"></vSuperviseTeamManage>
         </Modal>
-        <!--附件查看-->
-        <vAccessoryFileList
-                :value="modal_accessoryFileList"
-                @modal_callback="modal_callback_superviseTeamManage"
-                @close="modal_addSuperviseTeamPerson_close"></vAccessoryFileList>
+
+        <!--查看附件-->
+        <vViewFiles ref="modal_viewFiles" :data="filesData"></vViewFiles>
 
     </div>
 </template>
@@ -66,12 +64,13 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import authMixin from '../../../lib/mixin/authMixin';
     import vSuperviseTeamManage from './superviseTeamManage/superviseTeamManage';
-    import vAccessoryFileList from './accessoryFileList/accessoryFileList';
     import vHandleAudit from './handleAudit/handleAudit';
+    import viewFilesMixin from '../../Common/viewFiles/mixin';
+    import MOMENT from 'moment';
     export default {
         name: 'qualitySupervision_accept',
-        mixins: [authMixin],
-        components: {vIvxFilterBox, vSuperviseTeamManage, vAccessoryFileList, vHandleAudit},
+        mixins: [authMixin, viewFilesMixin],
+        components: {vIvxFilterBox, vSuperviseTeamManage, vHandleAudit},
         data() {
             return {
                 searchParams: {
@@ -104,8 +103,16 @@
                     { title: '投资额(万元)', width: 180, align: 'center', key: 'amount' },
                     { title: '施工合同金额(万元)', width: 180, align: 'center', key: 'constructAmount' },
                     { title: '监理合同金额(万元)', width: 180, align: 'center', key: 'supervisorAmount' },
-                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime' },
-                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime' },
+                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime',
+                        render(h, params) {
+                            return h('div', params.row.planBeginTime ? MOMENT(params.row.planBeginTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime',
+                        render(h, params) {
+                            return h('div', params.row.planEndTime ? MOMENT(params.row.planEndTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
                     { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
                     // TODO 收件日期
@@ -118,8 +125,16 @@
                     { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
                     { title: '受理通知书', width: 180, align: 'center', key: 'acceptNotice' },
                     { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
-                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate' },
-                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate' },
+                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate',
+                        render(h, params) {
+                            return h('div', params.row.acceptDate ? MOMENT(params.row.acceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate',
+                        render(h, params) {
+                            return h('div', params.row.noAcceptDate ? MOMENT(params.row.noAcceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',
@@ -165,7 +180,7 @@
                                 on: {
                                     click: () => {
                                         Object.assign(this.curentRow, params.row);
-                                        this.modal_accessoryFileList = true;
+                                        this.getFilesData(params.row);
                                     }
                                 }
                             }, '查看附件'));
@@ -235,8 +250,9 @@
                 },
                 // 监督小组管理
                 modal_superviseTeamManage: false,
+
                 // 查看附件
-                modal_accessoryFileList: false
+                filesData: []
 
             };
         },
@@ -323,8 +339,21 @@
             },
 
             // 查看附件
-            modal_addSuperviseTeamPerson_close(val) {
-                this.modal_accessoryFileList = val;
+            getFilesData(row) {
+                this.$http({
+                    method: 'get',
+                    url: '/file/attachList',
+                    params: {
+                        relationId: row.projectId,
+                        fileType: 'register'
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.filesData = res.data || [];
+                        this.$refs.modal_viewFiles.modalValue = true;
+                    }
+                })
+
             }
         }
     }

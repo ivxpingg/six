@@ -1,22 +1,22 @@
 <template>
     <Card class="workUnitManage-container">
-        <vIvxFilterBox dashed>
-            <Upload :action="uploadParams.actionUrl"
-                    :showUploadList="uploadParams.showUploadList"
-                    :multiple="uploadParams.multiple"
-                    :accept="uploadParams.accept"
-                    :maxSize="uploadParams.maxSize"
-                    :before-upload="fileBeforeUpload"
-                    :on-exceeded-size="exceededSize"
-                    :on-error="fileUploadError"
-                    :on-success="fileUploadSuccess">
-                <Button type="primary" icon="ios-cloud-upload-outline">导入单位</Button>
-            </Upload>
-            <Button
-                    type="primary"
-                    icon="md-add"
-                    @click="modal_addUnit_open">添加单位</Button>
-        </vIvxFilterBox>
+        <!--<vIvxFilterBox dashed>-->
+            <!--<Upload :action="uploadParams.actionUrl"-->
+                    <!--:showUploadList="uploadParams.showUploadList"-->
+                    <!--:multiple="uploadParams.multiple"-->
+                    <!--:accept="uploadParams.accept"-->
+                    <!--:maxSize="uploadParams.maxSize"-->
+                    <!--:before-upload="fileBeforeUpload"-->
+                    <!--:on-exceeded-size="exceededSize"-->
+                    <!--:on-error="fileUploadError"-->
+                    <!--:on-success="fileUploadSuccess">-->
+                <!--<Button type="primary" icon="ios-cloud-upload-outline">导入单位</Button>-->
+            <!--</Upload>-->
+            <!--<Button-->
+                    <!--type="primary"-->
+                    <!--icon="md-add"-->
+                    <!--@click="modal_addUnit_open">添加单位</Button>-->
+        <!--</vIvxFilterBox>-->
 
         <vIvxFilterBox dashed>
             <Form inline>
@@ -98,7 +98,7 @@
                     { title: '单位名称', width: 180, align: 'center', key: 'unitName' },
                     { title: '机构代码', width: 180, align: 'center', key: 'orgCode' },
                     { title: '资质类别', width: 180, align: 'center', key: 'qualificationTypeLabel' },
-                    { title: '资质许可等级', width: 180, align: 'center', key: 'qualification' },
+                    { title: '资质许可等级', width: 180, align: 'center', key: 'qualificationLabel' },
                     { title: '单位类型', width: 180, align: 'center', key: 'unitTypeLabel' },
                     { title: '负责人', width: 180, align: 'center', key: 'leader' },
                     { title: '联系方式', width: 180, align: 'center', key: 'telephone' },

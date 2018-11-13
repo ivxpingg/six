@@ -1,10 +1,10 @@
 <template>
     <Card class="supervisorsManage-container">
-        <vIvxFilterBox dashed>
-            <Button type="primary"
-                    icon="md-add"
-                    @click="modal_addSupervisor_open">新增人员</Button>
-        </vIvxFilterBox>
+        <!--<vIvxFilterBox dashed>-->
+            <!--<Button type="primary"-->
+                    <!--icon="md-add"-->
+                    <!--@click="modal_addSupervisor_open">新增人员</Button>-->
+        <!--</vIvxFilterBox>-->
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">

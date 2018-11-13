@@ -4,10 +4,10 @@
             <Icon type="ios-notifications" />
             通知公告
         </p>
-        <a href="#" slot="extra">
-            <Icon type="ios-more" />
-            更多
-        </a>
+        <!--<a href="#" slot="extra">-->
+            <!--<Icon type="ios-more" />-->
+            <!--更多-->
+        <!--</a>-->
         <div class="card-content">
             <CellGroup @on-click="onClick_notice">
                 <Cell v-for="(item, idx) in list"

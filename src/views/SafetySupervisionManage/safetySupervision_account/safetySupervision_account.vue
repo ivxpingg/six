@@ -3,9 +3,9 @@
         <vIvxFilterBox dashed>
             <Form inline>
                 <FormItem label="台账类型:" :label-width="65">
-                    <Select v-model="safeLedgerType">
-                        <Option v-for="item in dict_safeLedgerType"
-                                :key="item.id"
+                    <Select v-model="ledgerType">
+                        <Option v-for="(item, idx) in ledgerTypeList"
+                                :key="idx"
                                 :value="item.value"
                                 :label="item.label"></Option>
                     </Select>
@@ -13,45 +13,54 @@
             </Form>
         </vIvxFilterBox>
 
-        <vLedgerTyper_safe_0 v-show="safeLedgerType === '0'"></vLedgerTyper_safe_0>
-        <vLedgerTyper_safe_1 v-show="safeLedgerType === '1'"></vLedgerTyper_safe_1>
+        <vSupervisionContentRecord v-show="type === '2'"
+                                   :checkType="checkType"></vSupervisionContentRecord>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
-    import vLedgerTyper_safe_0 from './ledgerType/ledgerTyper_safe_0';
-    import vLedgerTyper_safe_1 from './ledgerType/ledgerTyper_safe_1';
+    import vSupervisionContentRecord from '../../Common/ledgerTable/supervisionContentRecord';
     export default {
         name: 'safetySupervision_account',   // 安全督查台账
         components: {
             vIvxFilterBox,
-            vLedgerTyper_safe_0,
-            vLedgerTyper_safe_1
+            vSupervisionContentRecord
+        },
+        computed: {
+            type() {
+                for (let i = 0; i < this.ledgerTypeList.length; i++) {
+                    if (this.ledgerType === this.ledgerTypeList[i].value) {
+                        return this.ledgerTypeList[i].type;
+                    }
+                }
+            },
+            checkType () {
+                for (let i = 0; i < this.ledgerTypeList.length; i++) {
+                    if (this.ledgerType === this.ledgerTypeList[i].value) {
+                        return this.ledgerTypeList[i].checkType || '';
+                    }
+                }
+            }
         },
         data() {
             return {
-                safeLedgerType: '0',
-                dict_safeLedgerType: [],
+                ledgerType: '1',
+                ledgerTypeList: [
+                    {
+                        type: '2',
+                        label: '安全告知单台账',
+                        value: '1',
+                        checkType: 'safe_notice'
+                    },
+                    {
+                        type: '2',
+                        label: '安全不良行为记录台账',
+                        value: '2',
+                        checkType: 'safe_bad_behavior'
+                    }
+                ],
             };
-        },
-        mounted() {
-            this.getDict('safeLedgerType');
-        },
-        methods: {
-            getDict(type) {
-                this.$http({
-                    method: 'get',
-                    url: '/dict/getListByType',
-                    params: {
-                        type: type
-                    }
-                }).then(res => {
-                    if (res.code === 'SUCCESS') {
-                        this[`dict_${type}`] = res.data;
-                    }
-                })
-            },
         }
     }
 </script>

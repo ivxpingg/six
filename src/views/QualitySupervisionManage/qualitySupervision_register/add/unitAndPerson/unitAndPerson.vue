@@ -38,7 +38,7 @@
         <!--单位参建人员-->
         <Modal v-model="modal_participant"
                title="单位参建人员"
-               :width="700"
+               :width="1000"
                footer-hide>
             <vPersonParticipant :isView="isView"
                                 :projectUnitId="projectUnitId"

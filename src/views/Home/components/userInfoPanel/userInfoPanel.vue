@@ -4,10 +4,10 @@
             <Icon type="md-person" />
             个人信息
         </p>
-        <a href="#" slot="extra">
-            <Icon type="ios-create-outline" />
-            编辑
-        </a>
+        <!--<a href="#" slot="extra">-->
+            <!--<Icon type="ios-create-outline" />-->
+            <!--编辑-->
+        <!--</a>-->
         <div class="card-content">
             <div class="user-info">
                 <Form class="text-info" >
@@ -104,6 +104,14 @@
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.waitHandleNum = res.data || 0;
+
+                        if (this.waitHandleNum > 0) {
+                            this.$Notice.info({
+                                title: '消息通知',
+                                desc: `您还有${this.waitHandleNum}项事务暂未处理，请尽快处理。`,
+                                duration: 10
+                            });
+                        }
                     }
                 })
             },

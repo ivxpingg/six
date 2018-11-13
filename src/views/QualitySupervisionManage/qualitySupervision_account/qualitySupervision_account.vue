@@ -4,8 +4,8 @@
             <Form inline>
                 <FormItem label="台账类型:" :label-width="65">
                     <Select v-model="ledgerType">
-                        <Option v-for="item in dict_ledgerType"
-                                :key="item.id"
+                        <Option v-for="(item, idx) in ledgerTypeList"
+                                :key="idx"
                                 :value="item.value"
                                 :label="item.label"></Option>
                     </Select>
@@ -13,61 +13,98 @@
             </Form>
         </vIvxFilterBox>
 
-        <vLedgerType0 v-show="ledgerType === '0'"></vLedgerType0>
-        <vLedgerType1 v-show="ledgerType === '1'"></vLedgerType1>
-        <vLedgerType2 v-show="ledgerType === '2'"></vLedgerType2>
-        <vLedgerType3 v-show="ledgerType === '3'"></vLedgerType3>
-        <vLedgerType4 v-show="ledgerType === '4'"></vLedgerType4>
-        <vLedgerType5 v-show="ledgerType === '5'"></vLedgerType5>
-        <vLedgerType6 v-show="ledgerType === '6'"></vLedgerType6>
-
+        <vSupervisionCountRecord v-show="type === '1'"></vSupervisionCountRecord>
+        <vSupervisionContentRecord v-show="type === '2'"
+                                   :checkType="checkType"></vSupervisionContentRecord>
+        <vFileRegisterRecord v-show="type === '3'"
+                             :fileRecordType="fileRecordType"></vFileRegisterRecord>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
-    import vLedgerType0 from './ledgerType/ledgerType_0';
-    import vLedgerType1 from './ledgerType/ledgerType_1';
-    import vLedgerType2 from './ledgerType/ledgerType_2';
-    import vLedgerType3 from './ledgerType/ledgerType_3';
-    import vLedgerType4 from './ledgerType/ledgerType_4';
-    import vLedgerType5 from './ledgerType/ledgerType_5';
-    import vLedgerType6 from './ledgerType/ledgerType_6';
+    import vSupervisionCountRecord from '../../Common/ledgerTable/supervisionCountRecord';
+    import vSupervisionContentRecord from '../../Common/ledgerTable/supervisionContentRecord';
+    import vFileRegisterRecord from '../../Common/ledgerTable/fileRegisterRecord';
     export default {
         name: 'qualitySupervision_account',
         components: {
             vIvxFilterBox,
-            vLedgerType0,
-            vLedgerType1,
-            vLedgerType2,
-            vLedgerType3,
-            vLedgerType4,
-            vLedgerType5,
-            vLedgerType6
+            vSupervisionCountRecord,
+            vSupervisionContentRecord,
+            vFileRegisterRecord
+        },
+        computed: {
+            type() {
+                for (let i = 0; i < this.ledgerTypeList.length; i++) {
+                    if (this.ledgerType === this.ledgerTypeList[i].value) {
+                        return this.ledgerTypeList[i].type;
+                    }
+                }
+            },
+            checkType () {
+                for (let i = 0; i < this.ledgerTypeList.length; i++) {
+                    if (this.ledgerType === this.ledgerTypeList[i].value) {
+                        return this.ledgerTypeList[i].checkType || '';
+                    }
+                }
+            },
+            fileRecordType() {
+                for (let i = 0; i < this.ledgerTypeList.length; i++) {
+                    if (this.ledgerType === this.ledgerTypeList[i].value) {
+                        return this.ledgerTypeList[i].fileRecordType || '';
+                    }
+                }
+            }
         },
         data() {
             return {
-                ledgerType: '0',
-                dict_ledgerType: [],
+                ledgerType: '1',
+                // 固定台账分类
+                ledgerTypeList: [
+                    {
+                        type: '1',
+                        label: '在监项目督查台账',
+                        value: '1'
+                    },
+                    {
+                        type: '2',
+                        label: '质量告知单台账',
+                        value: '2',
+                        checkType: 'quality_notice'
+                    },
+                    {
+                        type: '2',
+                        label: '质量安全抽查意见书台账',
+                        value: '3',
+                        checkType: 'spot_check'
+                    },
+                    {
+                        type: '2',
+                        label: '质量不良行为记录台账',
+                        value: '4',
+                        checkType: 'quality_bad_behavior'
+                    },
+                    {
+                        type: '2',
+                        label: '督查通报台账',
+                        value: '5',
+                        checkType: 'check_notice'
+                    },
+                    {
+                        type: '3',
+                        label: '质量监督申请材料核查意见书台账',
+                        value: '6',
+                        fileRecordType: 'apply_file_check'
+                    },
+                    {
+                        type: '3',
+                        label: '质量监督管理受理通知书台账',
+                        value: '7',
+                        fileRecordType: 'accept_notice'
+                    }
+                ],
             };
-        },
-        mounted() {
-            this.getDict('ledgerType');
-        },
-        methods: {
-            getDict(type) {
-                this.$http({
-                    method: 'get',
-                    url: '/dict/getListByType',
-                    params: {
-                        type: type
-                    }
-                }).then(res => {
-                    if(res.code === 'SUCCESS') {
-                        this[`dict_${type}`] = res.data;
-                    }
-                })
-            }
         }
     }
 </script>

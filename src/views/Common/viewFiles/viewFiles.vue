@@ -1,7 +1,7 @@
 <template>
     <div class="viewFiles-container">
         <Modal v-model="modalValue"
-               title="选择人员"
+               title="查看附件"
                :width="800"
                footer-hide>
             <div class="ivx-table-box">

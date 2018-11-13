@@ -16,10 +16,14 @@
             window.onresize = function (e) {
                 that.onresize(e);
             }
+            this.getMenuList();
         },
         methods: {
             ...mapMutations([
                 'onresize'
+            ]),
+            ...mapActions([
+                'getMenuList'
             ])
         }
     }

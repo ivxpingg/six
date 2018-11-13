@@ -51,12 +51,6 @@
         },
         mounted() {
             this.getBaseInfoCount();
-
-            this.$Notice.info({
-                title: '消息通知',
-                desc: '您还有3项事务暂未处理，其中2项即将逾期，请尽快处理。',
-                duration: 10
-            });
         },
         methods: {
             // 基础信息统计（从业单位数量、从业人员数量、在建项目个数、交竣工项目个数、建设里程、监督工作人次）
