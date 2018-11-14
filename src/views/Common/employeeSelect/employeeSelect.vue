@@ -4,7 +4,7 @@
             <vIvxFilterBox>
                 <Form inline>
                     <FormItem label="检索:" :label-width="65">
-                        <Input v-model="searchParams.condition.name" placeholder="请输入姓名、UID" />
+                        <Input v-model="searchParams.condition.name" placeholder="请输入姓名" />
                     </FormItem>
                     <FormItem label="所属单位类型:" :label-width="90">
                         <Select v-model="searchParams.condition.unitType"
@@ -107,11 +107,11 @@
                     { title: '性别', width: 70, align: 'center', key: 'sexLabel' },
                     { title: '年龄', width: 70, align: 'center', key: 'age' },
                     { title: '民族', width: 100, align: 'center', key: 'nation' },
-                    { title: '职称级别', width: 120, align: 'center', key: 'titleLevel' },
-                    { title: '技术职称', width: 120, align: 'center', key: 'titleName' },
+                    { title: '职称级别', width: 120, align: 'center', key: 'titleLevelLabel' },
+                    { title: '技术职称', width: 120, align: 'center', key: 'titleNameLabel' },
                     { title: '学历', width: 120, align: 'center', key: 'educationLabel' },
                     { title: '联系电话', width: 120, align: 'center', key: 'phone' },
-                    { title: '身份证号码', width: 160, align: 'center', key: 'IdNumber' },
+                    { title: '身份证号码', width: 160, align: 'center', key: 'idNumber' },
                     { title: '岗位', width: 160, align: 'center', key: 'job' }
                 ],
                 tableData: [],

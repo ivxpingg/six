@@ -68,7 +68,7 @@
         },
         computed: {
             uploadAction() {
-                return this.uploadParams.actionUrl + '/monitor_procedure';
+                return this.uploadParams.actionUrl + '/acceptance';
             }
         },
         data() {

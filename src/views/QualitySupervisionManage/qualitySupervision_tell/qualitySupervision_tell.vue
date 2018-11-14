@@ -317,7 +317,7 @@
                     url: '/file/attachList',
                     params: {
                         relationId: row.advanceNotice.advanceNoticeId,
-                        fileType: 'monitor_procedure'
+                        fileType: 'acceptance'
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {

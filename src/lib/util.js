@@ -200,11 +200,12 @@ export const transformMenu = menuList => {
 
 export const setMenuAuth = (menuList, authList) => {
     menuList.forEach((val) => {
+        authList[val.url] = [];
         if (hasChild(val) && val.children[0].url) {
             setMenuAuth(val.children, authList);
         }
         else if (hasChild(val) && val.url.indexOf('http://') === -1) {
-            // authList[val.url] = [];
+
             val.children.forEach(v => {
                 if (v.permission) {
                     authList[val.url].push(v.permission.split(':').reverse()[0]);

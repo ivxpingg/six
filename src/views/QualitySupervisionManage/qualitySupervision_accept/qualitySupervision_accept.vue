@@ -51,6 +51,7 @@
             <vSuperviseTeamManage
                     class="six-modal-body-inner"
                     :projectId="curentRow.projectId"
+                    :isView="!!curentRow.auditProcessId"
                     @modal_callback="modal_callback_superviseTeamManage"></vSuperviseTeamManage>
         </Modal>
 
@@ -95,7 +96,7 @@
                             return h('div', str);
                         } },
                     { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
-                    { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
+                    // { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
                     { title: '技术等级', width: 180, align: 'center', key: 'levelLabel' },
                     { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
                     // { title: '路面类型', width: 180, align: 'center', key: '' },
@@ -113,8 +114,8 @@
                             return h('div', params.row.planEndTime ? MOMENT(params.row.planEndTime).format('YYYY-MM-DD') : '');
                         }
                     },
-                    { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
-                    { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
+                    // { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
+                    // { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
                     // TODO 收件日期
                     // { title: '收件日期', width: 180, align: 'center', key: '' },
                     { title: '联系人', width: 180, align: 'center', key: 'contacts' },
@@ -123,22 +124,22 @@
                     // TODO 流程状态
                     // { title: '流程状态', width: 180, align: 'center', key: '' },
                     { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
-                    { title: '受理通知书', width: 180, align: 'center', key: 'acceptNotice' },
-                    { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
-                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate',
-                        render(h, params) {
-                            return h('div', params.row.acceptDate ? MOMENT(params.row.acceptDate).format('YYYY-MM-DD') : '');
-                        }
-                    },
-                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate',
-                        render(h, params) {
-                            return h('div', params.row.noAcceptDate ? MOMENT(params.row.noAcceptDate).format('YYYY-MM-DD') : '');
-                        }
-                    },
-                    { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
+                    // { title: '受理通知书', width: 180, align: 'center', key: 'acceptNotice' },
+                    // { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
+                    // { title: '受理日期', width: 180, align: 'center', key: 'acceptDate',
+                    //     render(h, params) {
+                    //         return h('div', params.row.acceptDate ? MOMENT(params.row.acceptDate).format('YYYY-MM-DD') : '');
+                    //     }
+                    // },
+                    // { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate',
+                    //     render(h, params) {
+                    //         return h('div', params.row.noAcceptDate ? MOMENT(params.row.noAcceptDate).format('YYYY-MM-DD') : '');
+                    //     }
+                    // },
+                    // { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',
-                        width: 360,
+                        width: 300,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
@@ -152,7 +153,7 @@
                                 on: {
                                     click: () => {
                                         Object.assign(this.curentRow, params.row);
-                                        this.$refs.modal_handleAudit.modalValue = true;
+                                        this.getMonitorGroupData(params.row.projectId);
                                     }
                                 }
                             }, '处理标签审核'));
@@ -171,19 +172,20 @@
                                 }
                             }, '分配监督小组'));
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-eye-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        Object.assign(this.curentRow, params.row);
-                                        this.getFilesData(params.row);
-                                    }
-                                }
-                            }, '查看附件'));
+
+                            // list.push(h('Button', {
+                            //     props: {
+                            //         type: 'primary',
+                            //         size: 'small',
+                            //         icon: 'ios-eye-outline'
+                            //     },
+                            //     on: {
+                            //         click: () => {
+                            //             Object.assign(this.curentRow, params.row);
+                            //             this.getFilesData(params.row);
+                            //         }
+                            //     }
+                            // }, '查看附件'));
 
 
 
@@ -312,6 +314,26 @@
                 })
             },
 
+            // 获取有没有配置监督小组成员
+            getMonitorGroupData(projectId) {
+                this.$http({
+                    method: 'get',
+                    url: '/monitorGroup/list',
+                    params: {
+                        projectId: projectId
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        if(res.data && res.data.length > 0) {
+                            this.$refs.modal_handleAudit.modalValue = true;
+                        }
+                        else {
+                            this.$Message.error('请先分配监督小组！');
+                        }
+                    }
+                })
+            },
+
             // 提交审核回调
             modal_submitAudit_callback() {
                 this.$refs.modal_handleAudit.modalValue = false;
@@ -345,7 +367,7 @@
                     url: '/file/attachList',
                     params: {
                         relationId: row.projectId,
-                        fileType: 'register'
+                        fileType: 'acceptance'
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {

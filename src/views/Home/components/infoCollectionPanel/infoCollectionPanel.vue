@@ -28,7 +28,7 @@
             <div style="height: 500px; overflow-y: auto; overflow-x: hidden;">
                 <Row :gutter="10">
                     <template v-for="(item, idx) in fileList">
-                        <i-col span="8" :key="`thumb-${idx}`">
+                        <i-col span="6" :key="`thumb-${idx}`">
                             <vThumb :src="item.url" :title="item.fileName"></vThumb>
                         </i-col>
                     </template>

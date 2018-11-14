@@ -27,7 +27,7 @@
         computed: {
             objData() {
                 return this.data.map((v) => {
-                    return Object.assign({}, v, {url: Config[Config.env].filePath + v.url});
+                    return Object.assign({}, v, {url: v.url});
                 });
             }
         },

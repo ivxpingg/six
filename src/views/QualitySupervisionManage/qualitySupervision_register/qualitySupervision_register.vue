@@ -216,7 +216,9 @@
                             }
 
                             // 受理材料待审核才能审核
-                            if (params.row.handleStatus === 'handle' && this.auth_audit) {
+                            if (params.row.handleStatus === 'handle'
+                                && this.auth_audit
+                                && (params.row.projectStatus === 'register' || params.row.projectStatus === 'to_examine')) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -390,6 +392,7 @@
             // 材料完整性审核
             modal_callback_contentAudit() {
                 this.getData();
+                this.modal_contentAudit = false;
 
             },
             // 通知整改

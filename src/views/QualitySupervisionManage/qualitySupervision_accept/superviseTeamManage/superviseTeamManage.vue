@@ -1,6 +1,6 @@
 <template>
     <div class="superviseTeamManage-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox v-show="!isView">
             <Button type="primary"
                     icon="md-add" @click="modal_addStep_open">新增人员</Button>
         </vIvxFilterBox>
@@ -9,7 +9,7 @@
             <Table border
                    height="280"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
         </div>
         <!--<div class="ivu-modal-footer">-->
@@ -37,6 +37,10 @@
                 type: String,
                 required: true,
                 default: ''
+            },
+            isView: {
+                type: Boolean,
+                default: false
             }
         },
         watch:{
@@ -46,11 +50,47 @@
                 }
             }
         },
+        computed: {
+            _tableColumns() {
+                if (this.isView) {
+                    return this.tableColumns;
+                }
+                else {
+                    return this.tableColumns.concat([
+                        {
+                            title: '操作',
+                            width: 100,
+                            align: 'center',
+                            render: (h, params) => {
+                                let list = [
+                                    h('Button', {
+                                        props: {
+                                            type: 'error',
+                                            size: 'small',
+                                            icon: 'ios-trash-outline'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.delPerson(params.row);
+                                            }
+                                        }
+                                    }, '移除')
+                                ];
+
+                                return h('div',{
+                                    class: 'ivx-table-cell-handle'
+                                },list);
+                            }
+                        }
+                    ]);
+                }
+            }
+        },
         data() {
             return {
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '人员名称', width: 100, align: 'center', key: 'name' },
+                    { title: '人员名称', minWidth: 100, align: 'center', key: 'name' },
                     { title: '类型', width: 100, align: 'center', key: 'monitorTypeLabel' },
                     // { title: '监督项目', align: 'center', key: 'projectName' },
                     { title: '操作时间', width: 140, align: 'center', key: 'insTime',
@@ -58,32 +98,8 @@
                             return h('div', this.$moment(params.row.insTime).format('YYYY-MM-DD HH:mm'));
                         }
                     },
-                    { title: '操作用户', width: 100, align: 'center', key: 'createBy' },
-                    {
-                        title: '操作',
-                        width: 100,
-                        align: 'center',
-                        render: (h, params) => {
-                            let list = [
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small',
-                                        icon: 'ios-trash-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.delPerson(params.row);
-                                        }
-                                    }
-                                }, '移除')
-                            ];
+                    { title: '操作用户', width: 100, align: 'center', key: 'createBy' }
 
-                            return h('div',{
-                                class: 'ivx-table-cell-handle'
-                            },list);
-                        }
-                    }
                 ],
                 tableData:[
                     // {

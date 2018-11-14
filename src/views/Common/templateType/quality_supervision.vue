@@ -1,18 +1,18 @@
 <template>
     <div class="quality_supervision-container">
         <div class="title-unit">六安市交通建设工程质量监督局</div>
-        <div class="title-template">交工验收申请处理标签</div>
+        <div class="title-template">质量监督申请处理标签</div>
         <Row>
             <i-col span="12">
                 <div class="item">
                     <span class="item-label">报送单位：</span>
-                    <span> {{projectInfo.buildUnitStr}} </span>
+                    <span> {{projectInfo.unitName}} </span>
                 </div>
             </i-col>
             <i-col span="12">
                 <div class="item">
                     <span class="item-label">收件日期：</span>
-                    <span></span>
+                    <span>{{projectInfo.insTime}}</span>
                 </div>
             </i-col>
         </Row>
@@ -124,12 +124,12 @@
              class="signature-box"
              :style="{
                  transform: `translate(${item.x-50}px, ${item.y-50}px)`}">
-            <img :src="item.url" alt=""/>
+            <img :src="joinUrl(item.url)" alt=""/>
         </div>
 
         <div class="stamp-layer" v-show="stampState">
             <img class="signature-img"
-                 :src="eSignatureUrl"
+                 :src="joinUrl(eSignatureUrl)"
                  :alt="eSignatureName"
                  :style="{
                  transform: `translate(${offsetX-50}px, ${offsetY-50}px)`}">
@@ -142,6 +142,8 @@
 
 <script>
     import vFileDetailLists from '../fileDetailLists/fileDetailLists';
+    import Config from '../../../config';
+    import MOMENT from 'moment';
     export default {
         name: 'quality_supervision',  // 质量监督申请处理标签
         components: {vFileDetailLists},
@@ -177,8 +179,10 @@
         },
         watch: {
             projectId(val) {
-                this.getData();
-                this.getAuditContent();
+                if (val) {
+                    this.getData();
+                    this.getAuditContent();
+                }
             },
             eSignatureUrl(val) {
                 if (val !== '') {
@@ -195,6 +199,8 @@
                 currentUserId: this.$store.state.user.userId,
                 // 项目信息
                 projectInfo: {
+                    insTime: '',
+                    unitName: '',
                     projectName: '',
                     buildUnitStr: '',
                     contacts: '',
@@ -237,6 +243,11 @@
             };
         },
         methods: {
+            // 拼接图片地址
+            joinUrl(url) {
+                return Config[Config.env].filePath + url;
+            },
+
             // 获取项目详情
             getData() {
                 this.$http({
@@ -247,7 +258,9 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        Object.assign(this.projectInfo, res.data);
+                        Object.assign(this.projectInfo, res.data, {
+                            insTime: res.data.insTime ? MOMENT(res.data.insTime).format('YYYY-MM-DD') : ''
+                        });
                         this.auditInfo.projectId = res.data.projectId;
                         this.auditInfo.auditProcessId = res.data.auditProcessId;
                         this.auditInfo.processStepId = res.data.processStepId;
@@ -263,6 +276,7 @@
                 }
             },
 
+            // 获取审核内容信息
             getAuditContent() {
                 this.$http({
                     method: 'get',
@@ -276,6 +290,7 @@
                          if (res.data.auditContent) {
                              try {
                                  this.auditContent = eval(res.data.auditContent);
+
                              }
                              catch (e) {
 
