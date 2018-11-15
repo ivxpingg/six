@@ -55,6 +55,7 @@
                       :projectId="currentRow.projectId"
                       :projectName="currentRow.projectName"
                       :changeNoticeId="currentRow.changeNotice.changeNoticeId"
+                      :changeStatus="currentRow.changeNotice.changeStatus"
                       @modal-callback="modal_noticeReply_callback"></vNoticeReply>
     </div>
 </template>
@@ -98,7 +99,6 @@
                             return h('div', str);
                         } },
                     { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
-                    { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
                     { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
                     { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
                     // { title: '路面类型', width: 180, align: 'center', key: '' },
@@ -116,8 +116,6 @@
                             return h('div', params.row.planEndTime ? MOMENT(params.row.planEndTime).format('YYYY-MM-DD') : '');
                         }
                     },
-                    { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
-                    { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
                     // TODO 收件日期
                     // { title: '收件日期', width: 180, align: 'center', key: '' },
                     { title: '联系人', width: 180, align: 'center', key: 'contacts' },
@@ -179,8 +177,7 @@
                             }
 
                             // 出现条件
-                            // 1.监督交底添加完，首次可以添加整改通知
-                            // 2.已经添加过整改通知后，必须整改通知整改通知通过后才能在提交
+                            // 1.监督交底添加完，只能添加一次整改通知
                             if ((params.row.advanceNotice && !params.row.changeNotice) || (params.row.changeNotice && params.row.changeNotice.changeStatus === 'pass')) {
                                 list.push(h('Button', {
                                     props: {
@@ -200,7 +197,7 @@
                                 }, '整改通知'));
                             }
 
-                            if (params.row.changeNotice && params.row.changeNotice.changeStatus !== 'pass') {
+                            if (params.row.changeNotice) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -209,14 +206,14 @@
                                     },
                                     on: {
                                         click: () => {
-                                            debugger
                                             this.currentRow.projectId = params.row.projectId;
                                             this.currentRow.projectName = params.row.projectName;
                                             this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                            this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
                                             this.$refs.modal_noticeReply.modalValue = true;
                                         }
                                     }
-                                }, '整改回复'));
+                                }, '查看整改回复'));
                             }
 
 
@@ -257,7 +254,8 @@
                         changeNoticeId: ''
                     },
                     advanceNotice: {  // 上传监督交底
-                        advanceNoticeId: ''
+                        advanceNoticeId: '',
+                        changeStatus: ''
                     }
                 },
                 // 查看附件

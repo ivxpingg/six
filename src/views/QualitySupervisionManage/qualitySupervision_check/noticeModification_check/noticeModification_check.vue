@@ -214,8 +214,6 @@
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
-                        console.dir(idx);
-                        console.dir(this.formData.projectUnitUsers);
 
                         this.formData.projectUnitUsers[idx].userList = res.data || [];
                     }
@@ -237,6 +235,7 @@
                     if (res.code === 'SUCCESS') {
                         this.$Message.success('添加整改通知成功!');
                         this.modalValue = false;
+                        this.$emit('modal-callback');
                     }
                 })
             }

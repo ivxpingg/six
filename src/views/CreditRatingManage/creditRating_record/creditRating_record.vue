@@ -57,6 +57,7 @@
                             :projectId="currentRow.projectId"
                             :projectName="currentRow.projectName"
                             :changeNoticeId="currentRow.changeNotice.changeNoticeId"
+                            :changeStatus="currentRow.changeNotice.changeStatus"
                             @modal-callback="modal_noticeReply_check_callback"></vNoticeReply_check>
 
         <Modal v-model="modal_content"
@@ -165,7 +166,7 @@
                                 }, '整改通知'));
                             }
 
-                            if (params.row.changeNotice && params.row.changeNotice.changeStatus !== 'pass') {
+                            if (params.row.changeNotice) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -177,6 +178,7 @@
                                             this.currentRow.projectId = params.row.projectId;
                                             this.currentRow.projectName = params.row.projectName;
                                             this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                            this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
                                             this.$refs.modal_noticeReply_check.modalValue = true;
                                         }
                                     }
@@ -184,7 +186,7 @@
 
                             }
 
-                            if (params.row.changeNotice && params.row.changeNotice.changeStatus !== 'pass') {
+                            if (params.row.changeNotice) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -238,7 +240,8 @@
                     projectName: '',
                     supervisionCheckId: '',
                     changeNotice: {   // 整改通知
-                        changeNoticeId: ''
+                        changeNoticeId: '',
+                        changeStatus: ''
                     },
                 },
                 // 查看附件

@@ -50,17 +50,17 @@
                     <span class="item-label">监督科办理情况：</span>
                 </div>
                 <i-col span="24">
-                    <Input v-model="auditContent[0].textarea_0"
+                    <Input v-model="textObj.textarea_0"
                            type="textarea"
                            :rows="5"
-                           :readonly="ifReadonly(0)"
+                           :readonly="textObj.readonly_0"
                            :autosize="{minRows:5, maxRows: 5}" />
                 </i-col>
                 <i-col span="24">
                     <div class="form-item">
                         <label>签名：</label>
                         <div class="form-content">
-                            <Input v-model="auditContent[0].name_0" :readonly="ifReadonly(0)" />
+                            <Input v-model="textObj.name_0" :readonly="textObj.readonly_0" />
                         </div>
                     </div>
                 </i-col>
@@ -76,17 +76,17 @@
                 </div>
             </i-col>
             <i-col span="24">
-                <Input v-model="auditContent[0].textarea_1"
+                <Input v-model="textObj.textarea_1"
                        type="textarea"
                        :rows="5"
-                       :readonly="ifReadonly(1)"
+                       :readonly="textObj.readonly_1"
                        :autosize="{minRows:5, maxRows: 5}"/>
             </i-col>
             <i-col span="24">
                 <div class="form-item">
                     <label>签名：</label>
                     <div class="form-content">
-                        <Input v-model="auditContent[0].name_1" :readonly="ifReadonly(1)"/>
+                        <Input v-model="textObj.name_1" :readonly="textObj.readonly_1"/>
                     </div>
                 </div>
             </i-col>
@@ -101,17 +101,17 @@
                 </div>
             </i-col>
             <i-col span="24">
-                <Input v-model="auditContent[0].textarea_2"
+                <Input v-model="textObj.textarea_2"
                        type="textarea"
                        :rows="5"
-                       :readonly="ifReadonly(2)"
+                       :readonly="textObj.readonly_2"
                        :autosize="{minRows:5, maxRows: 5}" />
             </i-col>
             <i-col span="24">
                 <div class="form-item">
                     <label>签名：</label>
                     <div class="form-content">
-                        <Input v-model="auditContent[0].name_2" :readonly="ifReadonly(2)"/>
+                        <Input v-model="textObj.name_2" :readonly="textObj.readonly_2"/>
                     </div>
                 </div>
             </i-col>
@@ -192,7 +192,22 @@
                     this.stampState = false;
                 }
             },
-            processStepId(val) {}
+            processStepId(val) {},
+            textObj: {
+                deep: true,
+                handler() {
+                    this.auditContent[0].textarea_0 = this.textObj.textarea_0;
+                    this.auditContent[0].textarea_1 = this.textObj.textarea_1;
+                    this.auditContent[0].textarea_2 = this.textObj.textarea_2;
+                    this.auditContent[0].name_0 = this.textObj.name_0;
+                    this.auditContent[0].name_1 = this.textObj.name_1;
+                    this.auditContent[0].name_2 = this.textObj.name_2;
+
+                    this.auditInfo.auditContent = JSON.stringify(this.auditContent);
+
+                    this.$emit('modal-eSignature', this.auditInfo);
+                }
+            }
         },
         data() {
             return {
@@ -239,7 +254,20 @@
                         //     y: 0
                         // }
                     ]
-                }]
+                }],
+
+                // 存放内容审核的内容
+                textObj: {
+                    textarea_0: '',
+                    textarea_1: '',
+                    textarea_2: '',
+                    name_0: '',
+                    name_1: '',
+                    name_2: '',
+                    readonly_0: false,
+                    readonly_1: false,
+                    readonly_2: false
+                }
             };
         },
         methods: {
@@ -268,13 +296,6 @@
                 })
             },
 
-            ifReadonly(idx) {
-                return false;
-                if (this.auditContent[0] && this.auditContent[0].userInfo === this.currentUserId) {
-                    // todo 判断已审核通过的内容框不能修改
-
-                }
-            },
 
             // 获取审核内容信息
             getAuditContent() {
@@ -290,6 +311,13 @@
                          if (res.data.auditContent) {
                              try {
                                  this.auditContent = eval(res.data.auditContent);
+
+                                 this.textObj.textarea_0 = this.auditContent[0].textarea_0;
+                                 this.textObj.textarea_1 = this.auditContent[0].textarea_1;
+                                 this.textObj.textarea_2 = this.auditContent[0].textarea_2;
+                                 this.textObj.name_0 = this.auditContent[0].name_0;
+                                 this.textObj.name_1 = this.auditContent[0].name_1;
+                                 this.textObj.name_2 = this.auditContent[0].name_2;
 
                              }
                              catch (e) {
@@ -326,6 +354,13 @@
                     })
                 }
                 this.stampState = false;
+
+                this.auditContent[0].textarea_0 = this.textObj.textarea_0;
+                this.auditContent[0].textarea_1 = this.textObj.textarea_1;
+                this.auditContent[0].textarea_2 = this.textObj.textarea_2;
+                this.auditContent[0].name_0 = this.textObj.name_0;
+                this.auditContent[0].name_1 = this.textObj.name_1;
+                this.auditContent[0].name_2 = this.textObj.name_2;
 
                 this.auditInfo.auditContent = JSON.stringify(this.auditContent);
 

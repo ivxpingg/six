@@ -234,6 +234,7 @@
                     if (res.code === 'SUCCESS') {
                         this.$Message.success('添加整改通知成功!');
                         this.modalValue = false;
+                        this.$emit('modal-callback');
                     }
                 })
             }

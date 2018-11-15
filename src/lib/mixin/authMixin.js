@@ -35,6 +35,16 @@ export default {
         // 审核权限
         auth_audit() {
             return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('audit') > -1);
-        }
+        },
+
+
+        //#START 工程档案管理
+        auth_projectFile() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('projectFile') > -1);
+        },
+        auth_supervisionFile() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('supervisionFile') > -1);
+        },
+        //#END 工程档案管理
     }
 }

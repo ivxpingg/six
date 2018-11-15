@@ -59,7 +59,7 @@
 
             </Form>
             <div slot="footer">
-                <Button type="primary" size="large" @click="savePass">整改通过</Button>
+                <Button type="primary" size="large" @click="savePass" v-show="changeStatus === 'reply'">整改通过</Button>
             </div>
         </Modal>
     </div>
@@ -80,6 +80,10 @@
                 default: ''
             },
             changeNoticeId: {
+                type: String,
+                default: ''
+            },
+            changeStatus: {
                 type: String,
                 default: ''
             }
@@ -132,7 +136,6 @@
             },
             // 获取整改回复的信息
             getReply() {
-                debugger
                 this.$http({
                     method: 'get',
                     url: '/changeNotice/viewChangeReply',

@@ -122,10 +122,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'get',
-                    url: '/project/viewProjectAttachList',
-                    params: {
-                        projectFileId: 'eec181b38e864023b97e7a8c39eba0a6'
-                    }
+                    url: '/file/userCanChooseFileList'
                 }).then(res => {
                     this.tableLoading = false;
                     if(res.code === 'SUCCESS') {

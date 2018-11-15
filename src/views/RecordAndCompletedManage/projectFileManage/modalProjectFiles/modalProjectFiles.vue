@@ -63,12 +63,13 @@
 
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
+    import authMixin from '../../../../lib/mixin/authMixin';
     import vModalBothSides from '../../../../components/modal-body/modal-both-sides';
     import vProjectFiles_0 from './module/projectFiles_0';
     import vProjectFilesList from './module/projectFilesList';
     export default {
         name: 'modalProjectFiles',
-        mixins: [modalMixin],
+        mixins: [modalMixin, authMixin],
         components: {
             vModalBothSides,
             vProjectFiles_0,
@@ -131,6 +132,95 @@
                 });
 
                 return count;
+            },
+
+            folderList() {
+                return {
+                    projectFiles_0: [
+                        {
+                            parentId: 'projectFiles_0',
+                            index: 0,
+                            folderName: '项目受理登记材料',
+                            url: '/archive/registerAttachList',
+                            selectedFileList: [],
+                            auth: this.auth_projectFile
+                        },
+                        {
+                            parentId: 'projectFiles_0',
+                            index: 1,
+                            folderName: '项目受理下发材料',
+                            url: '/archive/sendAttachList',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        }
+                    ],
+                    projectFiles_1: [
+                        {
+                            folderName: '工程备案材料',
+                            url: '/archive/projectRecordAttachList',
+                            selectedFileList: [],
+                            auth: this.auth_projectFile
+                        },
+                        {
+                            folderName: '质量监督过程材料',
+                            url: '/archive/qualityProcessAttachList',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        },
+                        {
+                            folderName: '安全监督过程材料',
+                            url: '/archive/safeProcessAttachList',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        },
+                        {
+                            folderName: '监督通知材料',
+                            url: '/archive/supervisionNoticeAttachList',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        },
+                        {
+                            folderName: '信用评价记录材料',
+                            url: '/archive/',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        },
+                        {
+                            folderName: '质量安全投诉材料',
+                            url: '/archive/',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        },
+                    ],
+                    projectFiles_2: [
+                        {
+                            folderName: '交工检测核验材料',
+                            url: '/archive/',
+                            selectedFileList: [],
+                            auth: this.auth_projectFile
+                        },
+                        {
+                            folderName: '平安工地考核材料',
+                            url: '/archive/',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        }
+                    ],
+                    projectFiles_3: [
+                        {
+                            folderName: '竣工质量鉴定材料',
+                            url: '/archive/',
+                            selectedFileList: [],
+                            auth: this.auth_projectFile
+                        },
+                        {
+                            folderName: '品质工程材料',
+                            url: '/archive/',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        }
+                    ]
+                };
             }
         },
         data() {
@@ -139,80 +229,92 @@
                 openFilesList: false,
                 offset: [-3, -3],
 
-                folderList: {
-                    projectFiles_0: [
-                        {
-                            parentId: 'projectFiles_0',
-                            index: 0,
-                            folderName: '项目受理登记材料',
-                            url: '/archive/registerAttachList',
-                            selectedFileList: []
-                        },
-                        {
-                            parentId: 'projectFiles_0',
-                            index: 1,
-                            folderName: '项目受理下发材料',
-                            url: '/archive/sendAttachList',
-                            selectedFileList: []
-                        }
-                    ],
-                    projectFiles_1: [
-                        {
-                            folderName: '工程备案材料',
-                            url: '/archive/projectRecordAttachList',
-                            selectedFileList: []
-                        },
-                        {
-                            folderName: '质量监督过程材料',
-                            url: '/archive/qualityProcessAttachList',
-                            selectedFileList: []
-                        },
-                        {
-                            folderName: '安全监督过程材料',
-                            url: '/archive/safeProcessAttachList',
-                            selectedFileList: []
-                        },
-                        {
-                            folderName: '监督通知材料',
-                            url: '/archive/supervisionNoticeAttachList',
-                            selectedFileList: []
-                        },
-                        {
-                            folderName: '信用评价记录材料',
-                            url: '/archive/',
-                            selectedFileList: []
-                        },
-                        {
-                            folderName: '质量安全投诉材料',
-                            url: '/archive/',
-                            selectedFileList: []
-                        },
-                    ],
-                    projectFiles_2: [
-                        {
-                            folderName: '交工检测核验材料',
-                            url: '/archive/',
-                            selectedFileList: []
-                        },
-                        {
-                            folderName: '平安工地考核材料',
-                            url: '/archive/',
-                            selectedFileList: []
-                        }
-                    ],
-                    projectFiles_3: [
-                        {
-                            folderName: '竣工质量鉴定材料',
-                            url: '/archive/',
-                            selectedFileList: []
-                        },
-                        {
-                            folderName: '品质工程材料',
-                            url: '/archive/',
-                            selectedFileList: []
-                        }
-                    ]
-                },
+                // folderList1: {
+                //     projectFiles_0: [
+                //         {
+                //             parentId: 'projectFiles_0',
+                //             index: 0,
+                //             folderName: '项目受理登记材料',
+                //             url: '/archive/registerAttachList',
+                //             selectedFileList: [],
+                //             auth: this.auth_projectFile
+                //         },
+                //         {
+                //             parentId: 'projectFiles_0',
+                //             index: 1,
+                //             folderName: '项目受理下发材料',
+                //             url: '/archive/sendAttachList',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         }
+                //     ],
+                //     projectFiles_1: [
+                //         {
+                //             folderName: '工程备案材料',
+                //             url: '/archive/projectRecordAttachList',
+                //             selectedFileList: [],
+                //             auth: this.auth_projectFile
+                //         },
+                //         {
+                //             folderName: '质量监督过程材料',
+                //             url: '/archive/qualityProcessAttachList',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         },
+                //         {
+                //             folderName: '安全监督过程材料',
+                //             url: '/archive/safeProcessAttachList',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         },
+                //         {
+                //             folderName: '监督通知材料',
+                //             url: '/archive/supervisionNoticeAttachList',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         },
+                //         {
+                //             folderName: '信用评价记录材料',
+                //             url: '/archive/',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         },
+                //         {
+                //             folderName: '质量安全投诉材料',
+                //             url: '/archive/',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         },
+                //     ],
+                //     projectFiles_2: [
+                //         {
+                //             folderName: '交工检测核验材料',
+                //             url: '/archive/',
+                //             selectedFileList: [],
+                //             auth: this.auth_projectFile
+                //         },
+                //         {
+                //             folderName: '平安工地考核材料',
+                //             url: '/archive/',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         }
+                //     ],
+                //     projectFiles_3: [
+                //         {
+                //             folderName: '竣工质量鉴定材料',
+                //             url: '/archive/',
+                //             selectedFileList: [],
+                //             auth: this.auth_projectFile
+                //         },
+                //         {
+                //             folderName: '品质工程材料',
+                //             url: '/archive/',
+                //             selectedFileList: [],
+                //             auth: this.auth_supervisionFile
+                //         }
+                //     ]
+                // },
 
                 //
                 folderType: {
@@ -223,6 +325,9 @@
                     selectedFileList: []
                 }
             };
+        },
+        mounted() {
+
         },
         methods:{
             onVisibleChange(val) {

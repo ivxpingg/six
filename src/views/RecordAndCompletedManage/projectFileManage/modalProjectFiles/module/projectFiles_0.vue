@@ -1,7 +1,7 @@
 <template>
     <div class="projectFiles_0-container">
         <ul class="folder-list">
-            <li v-for="(item, idx) in folderList" :key="idx">
+            <li v-for="(item, idx) in folderList" :key="idx" v-show="item.auth">
                 <vIvxFolder :title="item.folderName"
                             :size="folderSize"
                             :fontSize="fontSize"

@@ -59,7 +59,7 @@
 
             </Form>
             <div slot="footer">
-                <Button type="primary" size="large" @click="savePass">整改通过</Button>
+                <Button type="primary" size="large" @click="savePass" v-show="changeStatus === 'reply'">整改通过</Button>
             </div>
         </Modal>
     </div>
@@ -82,6 +82,10 @@
             changeNoticeId: {
                 type: String,
                 default: ''
+            },
+            changeStatus: {
+                type: String,
+                default: ''
             }
         },
         data() {
@@ -95,7 +99,7 @@
                     changeTitle: '',    // 整改标题
                     changeContent: '',  // 整改内容
                     overdueHandle: 'notice',  // 逾期未改
-                    changeStatus: '',
+                    changeStatus: '',    // reply
                     fileIds: '',
                     createId: '',
                     changeReplyList: []
