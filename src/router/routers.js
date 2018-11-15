@@ -328,7 +328,7 @@ const CreditRatingManage = [
             {
                 path: 'majorProject_check',
                 name: 'majorProject_check',
-                // component: () => import('@/views/CreditRatingManage/majorProject_check/majorProject_check.vue'),
+                component: () => import('@/views/CreditRatingManage/majorProject_check/majorProject_check.vue'),
                 meta: {
                     icon: '_majorProject_check',
                     title: '重点项目考勤管理',
