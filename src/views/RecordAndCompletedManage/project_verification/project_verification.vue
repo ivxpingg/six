@@ -42,14 +42,18 @@
                   :total="searchParams.total"
                   @on-change="onPageChange"></Page>
         </div>
+
+        <!--交工项目选择-->
+        <vHandleProjectSelect ref="modal_handleProjectSelect" @modal-callback="modal_selectProject_callback"></vHandleProjectSelect>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
+    import vHandleProjectSelect from './add/handleProjectSelect';
     export default {
         name: 'project_verification',   // 交工检测核验
-        components: {vIvxFilterBox},
+        components: {vIvxFilterBox, vHandleProjectSelect},
         data() {
             return {
                 searchParams: {
@@ -149,7 +153,12 @@
                 tableData: [],
                 tableLoading: true,
 
-                dict_handleStatus: []
+                dict_handleStatus: [],
+
+                // 当前查看的项目
+                currentProject: {
+
+                }
             };
         },
         watch: {
@@ -207,8 +216,14 @@
                 })
             },
 
-            // 交工验收审核登记
-            modal_add_open() { },
+            // 交工验收审核登记, 选择项目
+            modal_add_open() {
+                this.$refs.modal_handleProjectSelect.modalValue = true;
+            },
+            // 选择返回项目
+            modal_selectProject_callback(selectItems) {
+
+            },
 
             // 处理标签审核
             handleLabelCheck(row) {

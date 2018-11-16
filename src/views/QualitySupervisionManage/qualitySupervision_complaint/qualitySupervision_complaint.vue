@@ -6,7 +6,27 @@
                     icon="md-add"
                     @click="modal_add_open">登记投诉</Button>
         </vIvxFilterBox>
+        <vIvxFilterBox dashed>
+            <Form inline>
+                <FormItem label="搜索条件:" :label-width="65">
+                    <Input v-model="searchParams.condition.name"
+                           style="width: 220px;"
+                           placeholder="姓名"/>
+                </FormItem>
+            </Form>
+        </vIvxFilterBox>
 
+        <vIvxFilterBox>
+            <Form inline>
+                <FormItem label="筛选条件:" :label-width="65">
+                    <RadioGroup v-model="searchParams.condition.handleStatus" type="button">
+                        <Radio label="">全部</Radio>
+                        <Radio v-for="(item, idx) in dict_handleStatus"
+                               :label="item.value" :key="'unitType_' + idx">{{item.label}}</Radio>
+                    </RadioGroup>
+                </FormItem>
+            </Form>
+        </vIvxFilterBox>
         <div class="ivx-table-box">
             <Table border
                    :loading="tableLoading"
@@ -137,7 +157,9 @@
                 },
 
                 // 附件列表
-                fileList: []
+                fileList: [],
+
+                dict_handleStatus: []
 
             };
         },
@@ -153,9 +175,26 @@
             }
         },
         mounted() {
+            this.getDict(['handleStatus']);
             this.getData();
         },
         methods: {
+            getDict(list) {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByTypes',
+                    params: {
+                        types: list.join(',')
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        list.forEach(val => {
+                            this[`dict_${val}`] = res.data[val];
+                        });
+
+                    }
+                })
+            },
             /**
              * 分页控件-切换页面
              * @param current

@@ -3,8 +3,7 @@
         <vIvxFilterBox dashed>
             <Button type="primary"
                     icon="md-add"
-                    @click="modal_record_open">添加重点项目考勤</Button>
-
+                    @click="modal_add_open">添加重点项目考勤</Button>
         </vIvxFilterBox>
 
         <vIvxFilterBox>
@@ -33,14 +32,18 @@
                    :data="tableData"></Table>
         </div>
 
+        <vAddMajorProject_check ref="modal_add"></vAddMajorProject_check>
+
     </div>
 </template>
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
+    import vAddMajorProject_check from './add/addMajorProject_check';
     export default {
         name: 'majorProject_check',
         components: {
-            vIvxFilterBox
+            vIvxFilterBox,
+            vAddMajorProject_check
         },
         data() {
             return {
@@ -51,11 +54,11 @@
                 projectList: [],
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '单位类型', width: 180, align: 'center', key: '' },
-                    { title: '人员名称', width: 180, align: 'center', key: '' },
-                    { title: '职务', width: 180, align: 'center', key: '' },
-                    { title: '联系方式', width: 180, align: 'center', key: '' },
-                    { title: '身份证号', width: 180, align: 'center', key: '' },
+                    { title: '单位类型', width: 180, align: 'center', key: 'unitTypeLabel' },
+                    { title: '人员名称', width: 180, align: 'center', key: 'name' },
+                    { title: '职务', width: 180, align: 'center', key: 'job' },
+                    { title: '联系方式', width: 180, align: 'center', key: 'phone' },
+                    { title: '身份证号', width: 180, align: 'center', key: 'idNumber' },
                     { title: '初次考勤时间', width: 180, align: 'center', key: '' },
                     { title: '到场天数', width: 180, align: 'center', key: '' },
                     { title: '工时统计', width: 180, align: 'center', key: '' },
@@ -74,7 +77,7 @@
                 }
             }
         },
-        method: {
+        methods: {
              // 获取项目列表
             getProjectList() {
                 this.$http({
@@ -106,6 +109,11 @@
                     this.tableLoading = false;
                 })
             },
+
+            // 添加
+            modal_add_open() {
+                this.$refs.modal_add.modalValue = true;
+            }
         }
     }
 </script>

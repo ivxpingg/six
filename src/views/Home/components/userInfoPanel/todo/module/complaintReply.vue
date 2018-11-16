@@ -129,7 +129,7 @@
                             url: '/complaint/handleReply',
                             data: JSON.stringify({
                                 complaintId: this.complaintId,
-                                reply: this.formData.reply
+                                replyContent: this.formData.replyContent
                             })
                         }).then(res => {
                             if (res.code === 'SUCCESS') {
