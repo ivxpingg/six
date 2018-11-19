@@ -44,16 +44,72 @@
         </div>
 
         <!--交工项目选择-->
-        <vHandleProjectSelect ref="modal_handleProjectSelect" @modal-callback="modal_selectProject_callback"></vHandleProjectSelect>
+        <!--<vHandleProjectSelect ref="modal_handleProjectSelect" @modal-callback="modal_selectProject_callback"></vHandleProjectSelect>-->
+        <Modal v-model="modal_projectSelect"
+               title="选择项目"
+               :width="400">
+            <Form>
+                <FormItem label="项目：" :label-width="60">
+                    <Select v-model="currentProject.projectId" filterable>
+                        <Option v-for="item in projectList"
+                                :value="item.projectId"
+                                :key="item.projectId" :label="`${item.projectName}(${item.part})`"></Option>
+                    </Select>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="primary"
+                        size="large"
+                        @click="onClick_add">添加</Button>
+            </div>
+        </Modal>
+
+        <!--交工检测核验登记-->
+        <Modal v-model="modal_edit"
+               class-name="modal-body-padding0"
+               title="交工检测核验登记"
+               :width="1200"
+               footer-hide>
+            <div style="height: 650px;">
+                <vProjectVerification_apply :projectId="currentProject.projectId"
+                                            :isView="isView"
+                                            @modal_callback="modal_edit_callback"></vProjectVerification_apply>
+            </div>
+        </Modal>
+
+        <!--材料完整性审核-->
+        <Modal v-model="modal_contentAudit"
+               class-name="modal-body-padding0"
+               title="材料完整性审核"
+               :width="1200"
+               footer-hide>
+            <vContentAudit :projectId="currentProject.projectId"
+                           @modal_callback="modal_callback_contentAudit"></vContentAudit>
+        </Modal>
+
+        <!--处理标签审核-->
+        <vHandleAudit ref="modal_handleAudit"
+                      :projectId="currentProject.projectId"
+                      :auditProcessId="currentProject.auditProcessId"
+                      :processStepId="currentProject.processStepId"
+                      @modal-auditPass-callback="modal_auditPass_callback"></vHandleAudit>
+
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
-    import vHandleProjectSelect from './add/handleProjectSelect';
+    import vProjectVerification_apply from './edit/projectVerification_apply';
+    import vContentAudit from './content-audit/content-audit';
+    import vHandleAudit from './handleAudit/handleAudit';
     export default {
         name: 'project_verification',   // 交工检测核验
-        components: {vIvxFilterBox, vHandleProjectSelect},
+        components: {
+            vIvxFilterBox,
+            vProjectVerification_apply,
+            vContentAudit,
+            vHandleAudit
+        },
         data() {
             return {
                 searchParams: {
@@ -71,7 +127,6 @@
                     { title: '标段', width: 180, align: 'center', key: 'part' },
                     { title: '地市', width: 180, align: 'center', key: '' },
                     { title: '项目类型', width: 180, align: 'center', key: '' },
-                    { title: '建设单位', width: 180, align: 'center', key: '' },
                     { title: '技术等级', width: 180, align: 'center', key: '' },
 
                     { title: '项目里程(km)', width: 180, align: 'center', key: '' },
@@ -82,8 +137,6 @@
                     { title: '监理合同金额(万元)', width: 180, align: 'center', key: '' },
                     { title: '计划开工时间', width: 180, align: 'center', key: '' },
                     { title: '计划交工时间', width: 180, align: 'center', key: '' },
-                    { title: '施工单位', width: 180, align: 'center', key: '' },
-                    { title: '监理单位', width: 180, align: 'center', key: '' },
                     { title: '收件日期', width: 180, align: 'center', key: '' },
 
                     { title: '联系人', width: 180, align: 'center', key: '' },
@@ -112,36 +165,107 @@
                                 },
                                 on: {
                                     click: () => {
-                                        this.handleLabelCheck(params.row);
+                                        if (params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') {
+                                            this.isView = false;
+                                        }
+                                        else {
+                                            this.isView = true;
+                                        }
+                                        this.currentProject.projectId = params.row.projectId;
+                                        this.modal_edit = true;
                                     }
                                 }
-                            }, '处理标签审核'));
+                            }, '查看'));
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'success',
-                                    size: 'small',
-                                    icon: 'md-checkmark'
-                                },
-                                on: {
-                                    click: () => {
-                                       this.pass(params.row);
+                            if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'md-checkmark-circle'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentProject.projectId = params.row.projectId;
+                                            this.$Modal.confirm({
+                                                title: '提交审核',
+                                                content: `确定要提交审核<${params.row.projectName}>项目`,
+                                                okText: '提交审核',
+                                                onOk: () => {
+                                                    this.$http({
+                                                        method: 'get',
+                                                        url: '/'
+                                                    }).then(res => {
+                                                        if (res.code === 'SUCCESS') {
+                                                            this.$Message.success('提交审核成功!');
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        }
                                     }
-                                }
-                            }, '审核通过'));
+                                }, '提交审核'));
+                            }
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small',
-                                    icon: 'md-close'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.noPass(params.row);
+                            // 受理材料待审核才能审核  并且还没进流程
+                            if (params.row.handleStatus === 'handle'
+                                && this.auth_audit
+                                && params.row.projectStatus === 'handover_apply' ) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-document'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentProject.projectId = params.row.projectId;
+                                            this.modal_contentAudit = true;
+                                        }
                                     }
-                                }
-                            }, '审核不通过'));
+                                }, '材料完整性审核'));
+                            }
+
+                            // 办理状态(handleStatus)是待补充，并且有审核流程步骤(auditProcessId 和 processStepId)
+                            if (params.row.handleStatus === 'replenish'
+                                && params.row.auditProcessId
+                                && params.row.processStepId) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-create-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.handleLabelCheck(params.row);
+                                        }
+                                    }
+                                }, '下发工程交工质量核验意见'));
+                            }
+
+                            // 办理状态(handleStatus)是办理中, 并且有审核流程步骤(auditProcessId 和 processStepId)
+                            if (params.row.handleStatus === 'handle'
+                                && params.row.auditProcessId
+                                && params.row.processStepId) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-create-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentProject.projectId = params.row.projectId;
+                                            this.currentProject.auditProcessId = params.row.auditProcessId || '';
+                                            this.currentProject.processStepId = params.row.processStepId || '';
+                                            this.$refs.modal_handleAudit.modalValue = true;
+
+                                            // this.handleLabelCheck(params.row);
+                                        }
+                                    }
+                                }, '处理标签审核'));
+                            }
 
                             return h('div', {
                                 class: 'ivx-table-cell-handle'
@@ -153,12 +277,28 @@
                 tableData: [],
                 tableLoading: true,
 
+                // 字典
                 dict_handleStatus: [],
+
+                // 选择用于交工的项目列表
+                modal_projectSelect: false,
+                projectList: [],
 
                 // 当前查看的项目
                 currentProject: {
+                    projectId: '',
+                    auditProcessId: '',
+                    processStepId: ''
+                },
 
-                }
+                // 编辑交工项目
+                isView: false,
+                modal_edit: false,
+
+                // 材料完整性审核
+                modal_contentAudit: false,
+
+
             };
         },
         watch: {
@@ -173,6 +313,7 @@
             }
         },
         mounted() {
+            this.getProjectList();
             this.getData();
             this.getDict();
         },
@@ -187,6 +328,20 @@
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
                         this.dict_handleStatus = res.data;
+                    }
+                })
+            },
+
+            // 获取交工项目列表
+            getProjectList() {
+                this.$http({
+                    method: 'post',
+                    url: '/project/list',
+                    data: JSON.stringify(this.searchParams)
+                }).then((res) => {
+                    this.tableLoading = false;
+                    if (res.code === 'SUCCESS') {
+                        this.projectList = res.data.records || [];
                     }
                 })
             },
@@ -218,17 +373,26 @@
 
             // 交工验收审核登记, 选择项目
             modal_add_open() {
-                this.$refs.modal_handleProjectSelect.modalValue = true;
+                this.modal_projectSelect = true;
             },
-            // 选择返回项目
-            modal_selectProject_callback(selectItems) {
-
+            onClick_add() {
+                this.isView = false;
+                this.modal_projectSelect = false;
+                this.modal_edit = true;
+            },
+            // 编辑交工项目返回
+            modal_edit_callback() {
+                this.modal_edit = false;
+            },
+            // 材料完整性审核
+            modal_callback_contentAudit() {
+                this.getData();
+                this.modal_contentAudit = false;
             },
 
             // 处理标签审核
-            handleLabelCheck(row) {
-
-            },
+            // 审核通过
+            modal_auditPass_callback() {},
 
             // 审核通过
             pass(row) {

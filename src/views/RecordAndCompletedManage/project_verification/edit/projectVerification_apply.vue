@@ -1,5 +1,5 @@
 <template>
-    <div class="projectVerification_apply-container" :height="650">
+    <vModalBothSides class="projectVerification_apply-container" :height="650">
         <template slot="left">
             <Menu theme="light"
                   :width="`200px`"
@@ -24,8 +24,7 @@
             <vProjectBaseInfo  v-show="activeName === '1'"
                                :projectId="projectId"
                                :key="'edit'"
-                               isView
-                               @modal_updateProject_callback="modal_updateProject_callback"
+                               :isView="true"
                                class="six-modal-body-inner"></vProjectBaseInfo>
 
             <vFileDetailLists v-show="activeName === '2'"
@@ -35,11 +34,11 @@
 
             <vUnitAndPerson v-show="activeName === '3'"
                             :projectId="projectId"
-                            isView
+                            :isView="true"
                             class="six-modal-body-inner"></vUnitAndPerson>
 
         </template>
-    </div>
+    </vModalBothSides>
 </template>
 
 <script>
@@ -58,9 +57,7 @@
         props: {
             isView: {
                 type: Boolean,
-                default() {
-                    return false;
-                }
+                default: false
             },
             projectId: {
                 type: String,
@@ -71,6 +68,11 @@
             return {
                 activeName: '1'
             };
+        },
+        methods: {
+            onSelect(name) {
+                this.activeName = name;
+            }
         }
     }
 </script>

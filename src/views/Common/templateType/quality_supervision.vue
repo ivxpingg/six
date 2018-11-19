@@ -1,7 +1,7 @@
 <template>
     <div class="quality_supervision-container">
         <div class="title-unit">六安市交通建设工程质量监督局</div>
-        <div class="title-template">质量监督申请处理标签</div>
+        <div class="title-template">{{templateTitle}}</div>
         <Row>
             <i-col span="12">
                 <div class="item">
@@ -42,7 +42,7 @@
         </Row>
         <vFileDetailLists :projectId="projectId"
                           isView
-                          templateType="quality_supervision"></vFileDetailLists>
+                          :templateType="templateType"></vFileDetailLists>
 
         <Row>
             <i-col span="24">
@@ -176,6 +176,15 @@
                 type: String,
                 default: ''
             },
+            // 模板名称
+            templateTitle: {
+                type: String,
+                default: '质量监督申请处理标签'
+            },
+            templateType: {
+                type: String,
+                default: 'quality_supervision'
+            }
         },
         watch: {
             projectId(val) {

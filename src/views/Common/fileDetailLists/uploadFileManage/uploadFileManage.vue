@@ -64,6 +64,10 @@
                 default() {
                     return '';
                 }
+            },
+            templateType: {
+                type: String,
+                required: ''
             }
         },
         created() {
@@ -182,6 +186,7 @@
                             fileIds: [response.data.fileId],
                             projectId: this.projectId,
                             fileTemplateId: this.fileTemplateId,
+                            templateType: this.templateType,
                             projectFileId: this.projectFileId
                         })
                     }).then(res => {

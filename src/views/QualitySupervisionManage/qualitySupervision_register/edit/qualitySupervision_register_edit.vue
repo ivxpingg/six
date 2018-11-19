@@ -31,6 +31,7 @@
             <vFileDetailLists v-show="activeName === '2'"
                               :projectId="projectId"
                               :isView="isView"
+                              templateType="quality_supervision"
                               class="six-modal-body-inner"></vFileDetailLists>
 
             <vUnitAndPerson v-show="activeName === '3'"

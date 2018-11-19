@@ -23,19 +23,18 @@
         <template slot="right">
             <vProjectBaseInfo  v-show="activeName === '1'"
                                :projectId="projectId"
-                               :isView="isView"
+                               :isView="true"
                                :key="'contentAudit'"
                                class="six-modal-body-inner"></vProjectBaseInfo>
 
             <vFileDetailLists v-show="activeName === '2' && projectId !== ''"
                               :projectId="projectId"
-                              :isView="isView"
-                              templateType="quality_supervision"
+                              :isView="true"
                               class="six-modal-body-inner"></vFileDetailLists>
 
             <vUnitAndPerson v-show="activeName === '3' && projectId !== ''"
                             :projectId="projectId"
-                            :isView="isView"
+                            :isView="true"
                             class="six-modal-body-inner"></vUnitAndPerson>
 
             <div class="ivu-modal-footer content-audit-modal-footer">
@@ -77,11 +76,11 @@
 
 <script>
     import vModalBothSides from '../../../../components/modal-body/modal-both-sides';
-    import vProjectBaseInfo from '../add/projectBaseInfo/projectBaseInfo';
+    import vProjectBaseInfo from '../../../QualitySupervisionManage/qualitySupervision_register/add/projectBaseInfo/projectBaseInfo';
     import vFileDetailLists from '../../../Common/fileDetailLists/fileDetailLists';
-    import vUnitAndPerson from '../add/unitAndPerson/unitAndPerson';
+    import vUnitAndPerson from '../../../QualitySupervisionManage/qualitySupervision_register/add/unitAndPerson/unitAndPerson';
     export default {
-        name: 'content-audit',  // 材料完整性审核
+        name: 'content-audit-hand',  //交工 材料完整性审核
         components: {vModalBothSides, vProjectBaseInfo, vFileDetailLists, vUnitAndPerson},
         props: {
             isView: {
@@ -91,14 +90,6 @@
                 }
             },
             projectId: {
-                type: String,
-                required: true
-            },
-            processStepId: {
-                type: String,
-                required: true
-            },
-            auditProcessId: {
                 type: String,
                 required: true
             }
@@ -145,7 +136,7 @@
             },
             onClick_back() {
                 this.$Modal.confirm({
-                   title: '退回补充',
+                    title: '退回补充',
                     content: '确定退回补充？退回补充后您需要在登记填写整改通知下发《质量监督申请材料核查意见通知书》',
                     onOk:() => {
                         this.$http({

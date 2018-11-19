@@ -19,6 +19,7 @@
             <vUploatFileManage :isView="isView"
                                :projectId="projectId"
                                :projectFileId="currentRow.projectFileId"
+                               :templateType="currentRow.templateType"
                                :fileTemplateId="currentRow.fileTemplateId" @callback="callback_uploadFileManage"></vUploatFileManage>
         </Modal>
         <Modal v-model="modal_remark"
@@ -51,11 +52,12 @@
                 }
             },
             /**
-             * 模板类型 (字典) 默认：quality_supervision（质量监督申请处理标签）
+             * 模板类型 (字典) 默认：quality_supervision（质量监督申请处理标签）,
+             * 空字符串代表全部模板
              */
             templateType: {
                 type: String,
-                default: 'quality_supervision'
+                default: ''
             }
         },
         created() {},
@@ -110,6 +112,7 @@
                     projectId: '',
                     fileTemplateId: '',
                     projectFileId: '',
+                    templateType: '',
                     remark: ''
                 }
             };
@@ -132,6 +135,7 @@
                                         click: () => {
                                             this.currentRow.fileTemplateId = params.row.fileTemplateId || '';
                                             this.currentRow.projectFileId = params.row.projectFileId || '';
+                                            this.currentRow.templateType = params.row.templateType || '';
                                             this.modal_uploadFileManage = true;
                                         }
                                     }
@@ -171,7 +175,7 @@
 
                                             this.currentRow.fileTemplateId = params.row.fileTemplateId || '';
                                             this.currentRow.projectFileId = params.row.projectFileId || '';
-
+                                            this.currentRow.templateType = params.row.templateType;
                                             this.modal_uploadFileManage = true;
                                         }
                                     }
@@ -237,7 +241,7 @@
 
                         setTimeout(() => {
                             this.mergeCol();
-                        }, 200);
+                        }, 1000);
                     }
                 })
             },
