@@ -64,7 +64,7 @@
             <div style="height: 650px;">
                 <vEdit @modal_callback="modal_updateProject_callback"
                        :isView="isView"
-                       :projectId="projectId"></vEdit>
+                       :projectId="modal_edit_param.projectId"></vEdit>
             </div>
         </Modal>
         <!--提交审核-->
@@ -131,7 +131,7 @@
                     // { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
                     { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
                     { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
-                    // { title: '路面类型', width: 180, align: 'center', key: '' },
+                    { title: '路面类型', width: 180, align: 'center', key: 'structureTypeLabel' },
                     { title: '工程性质', width: 180, align: 'center', key: 'projectPropertyLabel' },
                     { title: '投资额(万元)', width: 180, align: 'center', key: 'amount' },
                     { title: '施工合同金额(万元)', width: 180, align: 'center', key: 'constructAmount' },
@@ -185,7 +185,7 @@
                                 },
                                 on: {
                                     click: () => {
-                                        this.projectId = params.row.projectId;
+                                        this.modal_edit_param.projectId = params.row.projectId;
 
                                         if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
                                             this.isView = false;
@@ -301,6 +301,9 @@
                 modal_add: false,
                 // 编辑项目
                 modal_edit: false,
+                modal_edit_param: {
+                    projectId: ''
+                },
                 isView: true,    // 查看是否能编辑
                 // 提交审核
                 modal_audit: false,

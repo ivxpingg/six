@@ -102,8 +102,11 @@
     import vProjectVerification_apply from './edit/projectVerification_apply';
     import vContentAudit from './content-audit/content-audit';
     import vHandleAudit from './handleAudit/handleAudit';
+    import authMixin from '../../../lib/mixin/authMixin'
+    import MOMENT from 'moment';
     export default {
         name: 'project_verification',   // 交工检测核验
+        mixins: [authMixin],
         components: {
             vIvxFilterBox,
             vProjectVerification_apply,
@@ -125,30 +128,50 @@
                     { title: '序号', width: 60, type: 'index', },
                     { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
                     { title: '标段', width: 180, align: 'center', key: 'part' },
-                    { title: '地市', width: 180, align: 'center', key: '' },
-                    { title: '项目类型', width: 180, align: 'center', key: '' },
-                    { title: '技术等级', width: 180, align: 'center', key: '' },
+                    { title: '地区', width: 180, align: 'center',
+                        render: (h, params) => {
+                            let str = '';
+                            str += params.row.provinceStr || '';
+                            str += params.row.cityStr || '';
+                            str += params.row.countyStr || '';
 
-                    { title: '项目里程(km)', width: 180, align: 'center', key: '' },
-                    { title: '路面类型', width: 180, align: 'center', key: '' },
-                    { title: '工程性质', width: 180, align: 'center', key: '' },
-                    { title: '投资额(万元)', width: 180, align: 'center', key: '' },
-                    { title: '施工合同金额(万元)', width: 180, align: 'center', key: '' },
-                    { title: '监理合同金额(万元)', width: 180, align: 'center', key: '' },
-                    { title: '计划开工时间', width: 180, align: 'center', key: '' },
-                    { title: '计划交工时间', width: 180, align: 'center', key: '' },
-                    { title: '收件日期', width: 180, align: 'center', key: '' },
+                            return h('div', str);
+                        } },
+                    { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
+                    { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
 
-                    { title: '联系人', width: 180, align: 'center', key: '' },
-                    { title: '联系方式', width: 180, align: 'center', key: '' },
-                    { title: '项目状态', width: 180, align: 'center', key: '' },
-                    { title: '流程状态', width: 180, align: 'center', key: '' },
-                    { title: '办理状态', width: 180, align: 'center', key: '' },
-                    { title: '交工质量检测意见书', width: 180, align: 'center', key: '' },
-                    { title: '整改状态', width: 180, align: 'center', key: '' },
+                    { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
+                    { title: '路面类型', width: 180, align: 'center', key: 'structureTypeLabel' },
+                    { title: '工程性质', width: 180, align: 'center', key: 'projectPropertyLabel' },
+                    { title: '投资额(万元)', width: 180, align: 'center', key: 'amount' },
+                    { title: '施工合同金额(万元)', width: 180, align: 'center', key: 'constructAmount' },
+                    { title: '监理合同金额(万元)', width: 180, align: 'center', key: 'supervisorAmount' },
+                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime',
+                        render(h, params) {
+                            return h('div', MOMENT(params.row.planBeginTime).format('YYYY-MM-DD'));
+                        }
+                    },
+                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime',
+                        render(h, params) {
+                            return h('div', MOMENT(params.row.planEndTime).format('YYYY-MM-DD'));
+                        }
+                    },
+                    // { title: '收件日期', width: 180, align: 'center', key: '' },
+
+                    { title: '联系人', width: 180, align: 'center', key: 'contacts' },
+                    { title: '联系方式', width: 180, align: 'center', key: 'contactPhone' },
+                    { title: '项目状态', width: 180, align: 'center', key: 'projectStatusLabel' },
+                    // { title: '流程状态', width: 180, align: 'center', key: '' },
+                    { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
+                    { title: '交工质量检测意见书', width: 180, align: 'center',
+                        render: (h, params) => {
+                            return h('div', params.row.handoverOpinion === '1' ? '已发送' : '未发送');
+                        }
+                    },
+                    { title: '核验意见编号', width: 180, align: 'center', key: 'handoverOpinionNo' },
+                    { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
                     { title: '监督负责人', width: 180, align: 'center', key: '' },
                     { title: '监督成员', width: 180, align: 'center', key: '' },
-                    { title: '核验意见编号', width: 180, align: 'center', key: '' },
                     {
                         title: '操作',
                         width: 350,
@@ -194,10 +217,14 @@
                                                 onOk: () => {
                                                     this.$http({
                                                         method: 'get',
-                                                        url: '/'
+                                                        url: '/projectAudit/handoverSubmit',
+                                                        params:{
+                                                            projectId: params.row.projectId
+                                                        }
                                                     }).then(res => {
                                                         if (res.code === 'SUCCESS') {
                                                             this.$Message.success('提交审核成功!');
+                                                            this.getData();
                                                         }
                                                     })
                                                 }
@@ -209,6 +236,7 @@
 
                             // 受理材料待审核才能审核  并且还没进流程
                             if (params.row.handleStatus === 'handle'
+                                && !params.row.auditProcessId
                                 && this.auth_audit
                                 && params.row.projectStatus === 'handover_apply' ) {
                                 list.push(h('Button', {
@@ -226,28 +254,11 @@
                                 }, '材料完整性审核'));
                             }
 
-                            // 办理状态(handleStatus)是待补充，并且有审核流程步骤(auditProcessId 和 processStepId)
-                            if (params.row.handleStatus === 'replenish'
-                                && params.row.auditProcessId
-                                && params.row.processStepId) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-create-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            // this.handleLabelCheck(params.row);
-                                        }
-                                    }
-                                }, '下发工程交工质量核验意见'));
-                            }
-
                             // 办理状态(handleStatus)是办理中, 并且有审核流程步骤(auditProcessId 和 processStepId)
                             if (params.row.handleStatus === 'handle'
                                 && params.row.auditProcessId
-                                && params.row.processStepId) {
+                                && params.row.processStepId
+                                && params.row.projectStatus === 'handover_apply') {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -335,13 +346,12 @@
             // 获取交工项目列表
             getProjectList() {
                 this.$http({
-                    method: 'post',
-                    url: '/project/list',
-                    data: JSON.stringify(this.searchParams)
+                    method: 'get',
+                    url: '/projectAudit/chooseProjectListForHandover'
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.projectList = res.data.records || [];
+                        this.projectList = res.data || [];
                     }
                 })
             },
@@ -358,7 +368,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/project/list',
+                    url: '/projectAudit/listForHandover',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
@@ -373,12 +383,26 @@
 
             // 交工验收审核登记, 选择项目
             modal_add_open() {
+                this.currentProject.projectId = '';
                 this.modal_projectSelect = true;
             },
+            // 登记添加项目
             onClick_add() {
-                this.isView = false;
-                this.modal_projectSelect = false;
-                this.modal_edit = true;
+                this.$http({
+                    method: 'get',
+                    url: '/projectAudit/handoverRegister',
+                    params: {
+                        projectId: this.currentProject.projectId
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.isView = false;
+                        this.modal_projectSelect = false;
+                        this.modal_edit = true;
+                        this.getData();
+                        this.getProjectList();
+                    }
+                });
             },
             // 编辑交工项目返回
             modal_edit_callback() {
@@ -387,6 +411,9 @@
             // 材料完整性审核
             modal_callback_contentAudit() {
                 this.getData();
+                this.currentProject.projectId = '';
+                this.currentProject.auditProcessId = '';
+                this.currentProject.processStepId = '';
                 this.modal_contentAudit = false;
             },
 

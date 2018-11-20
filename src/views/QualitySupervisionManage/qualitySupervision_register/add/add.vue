@@ -23,7 +23,6 @@
         <template slot="right">
             <vProjectBaseInfo  v-show="activeName === '1'"
                                :key="'add'"
-                               :projectId="projectId"
                                @modal_addProject_callback="modal_addProject_callback"
                                class="six-modal-body-inner"></vProjectBaseInfo>
 

@@ -43,7 +43,8 @@
                       :processStepId="curentRow.processStepId"
                       @modal-submitAudit-callback="modal_submitAudit_callback"
                       @modal-auditPass-callback="modal_auditPass_callback"></vHandleAudit>
-        <!--分配监督小组-->
+
+        <!--分配监督小组  :isView="!!curentRow.auditProcessId"-->
         <Modal v-model="modal_superviseTeamManage"
                title="分配监督小组"
                :width="634"
@@ -51,7 +52,7 @@
             <vSuperviseTeamManage
                     class="six-modal-body-inner"
                     :projectId="curentRow.projectId"
-                    :isView="!!curentRow.auditProcessId"
+
                     @modal_callback="modal_callback_superviseTeamManage"></vSuperviseTeamManage>
         </Modal>
 
@@ -257,6 +258,9 @@
                 filesData: []
 
             };
+        },
+        computed: {
+
         },
         watch: {
             'searchParams.current'() {

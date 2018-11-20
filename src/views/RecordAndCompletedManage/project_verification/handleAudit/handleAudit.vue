@@ -79,7 +79,7 @@
 
                 auditInfo: {
                     fileId: '',
-                    fileRecordType: 'apply_handle_record'
+                    fileRecordType: 'handover_apply_audit'
                 },
 
                 // 审核内容
@@ -249,7 +249,7 @@
             // 通过审核
             auditPass(fileId) {
                 this.auditInfo.fileId = fileId || '';
-                this.auditInfo.fileRecordType = 'apply_handle_record';
+                this.auditInfo.fileRecordType = 'handover_apply_audit';
                 this.$http({
                     method: 'post',
                     url: '/projectAudit/audit',
@@ -278,7 +278,7 @@
                             url: '/file/uploadAuditFile',
                             data: JSON.stringify({
                                 base64Content: data,
-                                fileRecordType: 'apply_handle_record',
+                                fileRecordType: 'handover_apply_audit',
                             })
                         }).then(res => {
                             if (res.code === 'SUCCESS') {

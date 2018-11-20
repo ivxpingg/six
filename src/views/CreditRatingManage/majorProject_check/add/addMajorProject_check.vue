@@ -1,6 +1,8 @@
 <template>
     <div class="addMajorProject_check-container">
-        <Modal v-model="modalValue" title="重点项目考勤">
+        <Modal v-model="modalValue"
+               :width="800"
+               title="重点项目考勤">
             <Form ref="form"
                   class="form"
                   inline
@@ -14,6 +16,8 @@
                                 :value="item.projectId"
                                 :label="`${item.projectName} (标段：${item.part})`"></Option>
                     </Select>
+
+
                 </FormItem>
 
             </Form>
@@ -67,10 +71,11 @@
                     }
                 })
             },
-            // 获取项目列表
+            // 获取考勤项目列表
             getProjectList() {
                 this.$http({
                     method: 'get',
+                    // url: '/projectAttendance/projectList'
                     url: '/supervisionCheck/monitorProjectList'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
@@ -113,6 +118,12 @@
             // 根据不同单位类型获取不同的项目职务
             getProjectDuty_unitType(unitType) {
                 let obj;
+
+                obj = [
+                    {}
+                ];
+
+                return obj;
 
                 switch (unitType) {
                     // 监督单位

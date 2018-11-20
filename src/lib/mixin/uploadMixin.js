@@ -10,7 +10,7 @@ export default {
                 //name: '',               // 上传的文件字段名, 默认file
                 accept: '.jpg,.png,jpeg,.gif,.doc,.docx,.xls,.xlsx,.pdf,.ppt,.pptx',             // 接收上传的文件类型
                 format: [],             // 支持的文件类型
-                maxSize: 20480,                // 文件大小限制，单位 kb  4M
+                maxSize: 20480000,                // 文件大小限制，单位 kb  4000M
             }
         }
     },

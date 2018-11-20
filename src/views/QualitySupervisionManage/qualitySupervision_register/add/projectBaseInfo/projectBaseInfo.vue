@@ -17,6 +17,7 @@
             </FormItem>
             <FormItem label="地区:" prop="county">
                 <Select v-model="formData.province" :disabled="isView"
+                        @on-change="onChange_province"
                         style="min-width: 100px; width: auto; margin-right: 12px;">
                     <Option v-for="item in provinceList"
                             :key="item.regionCode"
@@ -24,13 +25,15 @@
                             :label="item.regionName"></Option>
                 </Select>
                 <Select v-model="formData.city" :disabled="isView"
+                        @on-change="onChange_city"
                         style="min-width: 100px; width: auto; margin-right: 12px;">
                     <Option v-for="item in cityList"
                             :key="item.regionCode"
                             :value="item.regionId"
                             :label="item.regionName"></Option>
                 </Select>
-                <Select v-model="formData.county" :disabled="isView"
+                <Select v-model="formData.county"
+                        :disabled="isView"
                         style="min-width: 100px; width: auto; margin-right: 20px;">
                     <Option v-for="item in countyList"
                             :key="item.regionCode"
@@ -180,7 +183,6 @@
                     province: 13,  // 省
                     city: null,      // 市
                     county: null,    // 区
-
                     address: '',
                     projectType: '',    // 项目类型
                     buildUnit: '',      // 建设单位
@@ -207,7 +209,7 @@
                     projectName: [{ required: true, message: '项目名称不能为空！', trigger: 'blur' }],
                     part: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
                     address: [{ required: true, message: '地址不能为空！', trigger: 'blur' }],
-                    county: [{ required: true, type: 'number', message: '请选择完整地区！', trigger: 'blur' }],
+                    county: [{ required: true, message: '请选择完整地区！', trigger: 'blur' }],
                     mileage: [{ required: true, type: 'number', message: '项目里程不能为空！', trigger: 'blur' }],
                     amount: [{ required: true, type: 'number', message: '投资额不能为空！', trigger: 'blur' }],
                     constructAmount: [{ required: true, type: 'number', message: '施工合同金额不能为空！', trigger: 'blur' }],
@@ -240,21 +242,7 @@
                         this.getData_detail();
                     }
                 }
-            },
-
-            'formData.province'(val) {
-                this.formData.city = null;
-                this.formData.county = null;
-                this.cityList = [];
-                this.countyList = [];
-                this.getAreaInfo(val, 'cityList');
-            },
-            'formData.city'(val) {
-                this.formData.county = null;
-                this.countyList = [];
-                this.getAreaInfo(val, 'countyList');
             }
-
         },
         mounted() {
             this.getDict(['projectType', 'technicalLevel', 'projectProperty', 'structureType']);
@@ -264,7 +252,7 @@
         methods: {
             // 获取地区选择信息
             //获取省、市、区
-            getAreaInfo(parentId, key) {
+            getAreaInfo(parentId, key, value) {
                 this.$http({
                     method: 'get',
                     url: '/region/regionList',
@@ -274,9 +262,30 @@
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
                         this[key] = res.data || [];
+
+                         // 防止被组件改掉原始值
+                        if (value && key === 'countyList') {
+                            setTimeout(() => {
+                                this.formData.county = value;
+                            }, 100);
+                        }
                     }
                 })
             },
+            //
+            onChange_province(val) {
+                this.formData.city = null;
+                this.formData.county = null;
+                this.cityList = [];
+                this.countyList = [];
+                this.getAreaInfo(val, 'cityList');
+            },
+            onChange_city(val) {
+                this.formData.county = null;
+                this.countyList = [];
+                this.getAreaInfo(val, 'countyList');
+            },
+
             getDict(list) {
                 this.$http({
                     method: 'get',
@@ -311,6 +320,14 @@
                             planBeginTime: res.data.planBeginTime ? MOMENT(res.data.planBeginTime).format('YYYY-MM-DD') : '',
                             planEndTime: res.data.planEndTime ? MOMENT(res.data.planEndTime).format('YYYY-MM-DD') : ''
                         });
+
+                        if (this.formData.province) {
+                            this.getAreaInfo(this.formData.province, 'cityList');
+                        }
+
+                        if(this.formData.city) {
+                            this.getAreaInfo(this.formData.city, 'countyList', res.data.county);
+                        }
                     }
                 })
             },

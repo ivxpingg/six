@@ -71,6 +71,28 @@
             </div>
 
         </template>
+
+        <!--材料受理,选择流程-->
+        <Modal v-model="modal_accept"
+               title="材料受理">
+            <h3 style="margin-bottom: 10px;">确定材料完整无遗漏？材料受理通过后会生成处理标签至后续流程人员处理。</h3>
+
+            <Form :label-width="88"
+                  ref="form_accept"
+                  :model="acceptData"
+                  :rules="rules_accept">
+                <FormItem label="请选择流程:" prop="auditProcessId">
+                    <Input :value="acceptData.auditProcessName" readonly @on-focus="modal_selectProcess_open" />
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="primary"
+                        size="large"
+                        @click="saveAccept">确定</Button>
+            </div>
+        </Modal>
+
+        <vModalAuditProcessSelect ref="modal_auditProcessSelect" @modal-callback="modal_selectProcess_callback"></vModalAuditProcessSelect>
     </vModalBothSides>
 
 </template>
@@ -80,9 +102,10 @@
     import vProjectBaseInfo from '../add/projectBaseInfo/projectBaseInfo';
     import vFileDetailLists from '../../../Common/fileDetailLists/fileDetailLists';
     import vUnitAndPerson from '../add/unitAndPerson/unitAndPerson';
+    import vModalAuditProcessSelect from '../../../Common/auditProcessSelect/modalAuditProcessSelect';
     export default {
         name: 'content-audit',  // 材料完整性审核
-        components: {vModalBothSides, vProjectBaseInfo, vFileDetailLists, vUnitAndPerson},
+        components: {vModalBothSides, vProjectBaseInfo, vFileDetailLists, vUnitAndPerson, vModalAuditProcessSelect},
         props: {
             isView: {
                 type: Boolean,
@@ -113,6 +136,16 @@
                 },
                 rules: {
                     noAcceptRemark: [{ required: true, message: '原因不能为空！', trigger: 'blur' }]
+                },
+
+                // 材料受理
+                modal_accept: false,
+                acceptData: {
+                    auditProcessId: '',
+                    auditProcessName: ''
+                },
+                rules_accept: {
+                    auditProcessId: [{ required: true, message: '流程不能为空！', trigger: 'blur' }]
                 }
             };
         },
@@ -164,24 +197,56 @@
                 });
             },
             onClick_accept() {
-                this.$Modal.confirm({
-                    title: '材料受理',
-                    content: '确定材料完整无遗漏？材料受理通过后会生成处理标签至后续流程人员处理。',
-                    onOk:() => {
+                this.modal_accept = true;
+                // this.$Modal.confirm({
+                //     title: '材料受理',
+                //     content: '确定材料完整无遗漏？材料受理通过后会生成处理标签至后续流程人员处理。',
+                //     onOk:() => {
+                //         this.$http({
+                //             method: 'get',
+                //             url: '/projectAudit/projectFileAccept',
+                //             params: {
+                //                 projectId: this.projectId
+                //             }
+                //         }).then(res => {
+                //             if (res.code === 'SUCCESS') {
+                //                 this.$Message.success('材料受理成功！');
+                //                 this.$emit('modal_callback');
+                //             }
+                //         })
+                //     }
+                // });
+            },
+
+            // 选择流程
+            modal_selectProcess_open() {
+                this.$refs.modal_auditProcessSelect.modalValue = true;
+            },
+            // 流程选择返回
+            modal_selectProcess_callback(selectValue, selectItems) {
+                this.acceptData.auditProcessId = selectItems.auditProcessId;
+                this.acceptData.auditProcessName = selectItems.name;
+            },
+            // 保存受理
+            saveAccept() {
+                this.$refs.form_accept.validate(valid => {
+                    if (valid) {
                         this.$http({
-                            method: 'get',
+                            method: 'post',
                             url: '/projectAudit/projectFileAccept',
-                            params: {
-                                projectId: this.projectId
-                            }
+                            data: JSON.stringify({
+                                projectId: this.projectId,
+                                auditProcessId: this.acceptData.auditProcessId
+                            })
                         }).then(res => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('材料受理成功！');
                                 this.$emit('modal_callback');
+                                this.modal_accept = false;
                             }
                         })
                     }
-                });
+                })
             }
         }
     }

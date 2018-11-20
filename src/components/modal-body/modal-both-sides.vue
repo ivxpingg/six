@@ -9,6 +9,7 @@
         <div class="right-panel">
             <slot name="right"></slot>
         </div>
+        <slot></slot>
     </div>
 </template>
 
