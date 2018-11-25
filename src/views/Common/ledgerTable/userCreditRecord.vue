@@ -1,5 +1,5 @@
 <template>
-    <div class="supervisionContentRecord-container">
+    <div class="userCreditRecord-container">
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
@@ -29,63 +29,53 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     export default {
-        name: 'supervisionContentRecord',   // 监督内容登记表台账
+        name: 'userCreditRecord',  // 人员信用台账
         components: {vIvxFilterBox},
-        props: {
-            // 监督内容登记表台账类型
-            checkType: {
-                type: String,
-                required: true
-            }
+        data() {
+            return {
+                searchParams: {
+                    projectName: '',      // 模糊查询参数
+                    year: ''
+                },
+                tableColumns: [
+                    { title: '序号', width: 60, align: 'center', type: 'index', },
+                    { title: '姓名', align: 'center', width: 180, key: 'name'},
+                    { title: '证书编号', align: 'center', width: 180, key: 'certificateNo'},
+                    { title: '资格证书', align: 'center', width: 120, key: 'certificate'},
+                    { title: '身份证号', align: 'center', width: 120, key: 'idNumber'},
+                    { title: '单位名称', align: 'center', width: 120, key: 'unitName'},
+                    { title: '在企业的登记时间', align: 'center', width: 160, key: 'registerTime',
+                        render: (h, params) => {
+                            return h('div', params.row.registerTime ? MOMENT(params.row.registerTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '项目名称', align: 'center', width: 160, key: 'projectName'},
+                    { title: '标段', align: 'center', width: 100, key: 'part'},
+                    { title: '职务', align: 'center', width: 120, key: 'job'},
+                    { title: '失信代码', align: 'center', width: 120, key: 'creditNo'},
+                    { title: '失信行为', align: 'center', width: 160, key: 'content'},
+                    { title: '扣分标准', align: 'center', width: 120, key: 'scoreStandard'},
+                    { title: '实际扣分', align: 'center', width: 120, key: 'deduct'},
+                    { title: '情况说明（扣分项）', align: 'center', width: 160, key: 'deductDetail'},
+                    { title: '采信依据', align: 'center', width: 120, key: 'creditAccording'},
+                    { title: '其他失信行为及扣分', align: 'center', width: 180, key: 'otherDeduct'},
+                    { title: '日期', align: 'center', width: 120, key: 'recordDate',
+                        render: (h, params) => {
+                            return h('div', params.row.recordDate ? MOMENT(params.row.recordDate).format('YYYY-MM-DD') : '');
+                        }
+                    }
+                ],
+                tableData: [],
+                tableLoading: false
+            };
         },
         watch: {
-            checkType: {
-                immediate: true,
-                handler(val) {
-                    this.searchParams.checkType = val;
-                }
-            },
             searchParams: {
                 deep: true,
                 handler() {
                     this.getData();
                 }
             }
-        },
-        data() {
-            return {
-                searchParams: {
-                    projectName: '',      // 模糊查询参数
-                    year: '',
-                    checkType: ''
-                },
-                tableColumns: [
-                    { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '时间', align: 'center', width: 120, key: 'recordDate',
-                        render(h, params) {
-                            return h('div', params.row.recordDate ? MOMENT(params.row.recordDate).format('YYYY-MM-DD') : '');
-                        }
-                    },
-                    { title: '编号', align: 'center', width: 120, key: 'recordNo'},
-                    { title: '项目名称', align: 'center', width: 120, key: 'projectName'},
-                    { title: '标段', align: 'center', width: 100, key: 'part'},
-                    { title: '责任单位', align: 'center', width: 120, key: 'dutyUnit'},
-                    { title: '发出单位', align: 'center', width: 120, key: 'sendUnit'},
-                    { title: '发出人员', align: 'center', width: 120, key: 'sendUser'},
-                    { title: '监督负责人', align: 'center', width: 120, key: 'supervisor'},
-                    { title: '整改回复状态', align: 'center', width: 120, key: 'changeStatus'},
-                    { title: '整改回复时间', align: 'center', width: 120, key: 'changeReplyDate',
-                        render(h, params) {
-                            return h('div', params.row.changeReplyDate ? MOMENT(params.row.changeReplyDate).format('YYYY-MM-DD') : '');
-                        }
-                    },
-                    { title: '内容', align: 'center', width: 120, key: 'content'},
-                    { title: '备注', align: 'center', width: 120, key: 'remark'},
-
-                ],
-                tableData: [],
-                tableLoading: false
-            };
         },
         mounted() {
             this.getData();
@@ -94,13 +84,12 @@
             onChage_daterange(value) {
                 this.searchParams.year = value;
             },
-
             // 获取表格数据
             getData() {
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/record/supervisionContentRecord',
+                    url: '/record/userCreditRecord',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
@@ -116,7 +105,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .supervisionContentRecord-container {
+    .userCreditRecord-container {
         padding-top: 10px;
     }
 </style>

@@ -138,12 +138,12 @@
                     { title: '监理合同金额(万元)', width: 180, align: 'center', key: 'supervisorAmount' },
                     { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime',
                         render(h, params) {
-                            return h('div', MOMENT(params.row.planBeginTime).format('YYYY-MM-DD'));
+                            return h('div', params.row.planBeginTime ? MOMENT(params.row.planBeginTime).format('YYYY-MM-DD') : '');
                         }
                     },
                     { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime',
                         render(h, params) {
-                            return h('div', MOMENT(params.row.planEndTime).format('YYYY-MM-DD'));
+                            return h('div', params.row.planEndTime ? MOMENT(params.row.planEndTime).format('YYYY-MM-DD') : '');
                         }
                     },
                     // { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },

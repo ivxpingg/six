@@ -130,5 +130,6 @@
 
 <style lang="scss" scoped>
     .supervisionCountRecord-container {
+        padding-top: 10px;
     }
 </style>

@@ -111,5 +111,6 @@
 
 <style lang="scss" scoped>
     .fileRegisterRecord-container {
+        padding-top: 10px;
     }
 </style>

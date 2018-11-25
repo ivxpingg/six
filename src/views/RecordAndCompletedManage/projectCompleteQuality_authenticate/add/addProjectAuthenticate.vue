@@ -18,28 +18,32 @@
                 </FormItem>
 
                 <FormItem label="工程质量鉴定报告:">
-                    <Upload :action="uploadParams.actionUrl"
+                    <Upload ref="upload_1"
+                            :action="uploadAction"
                             :showUploadList="uploadParams.showUploadList"
                             :multiple="uploadParams.multiple"
                             :accept="uploadParams.accept"
                             :maxSize="uploadParams.maxSize"
+                            :on-remove="fileRemove1"
                             :before-upload="fileBeforeUpload"
                             :on-exceeded-size="exceededSize"
                             :on-error="fileUploadError"
-                            :on-success="fileUploadSuccess">
+                            :on-success="fileUploadSuccess1">
                         <Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>
                     </Upload>
                 </FormItem>
                 <FormItem label="监督管理工作报告:">
-                    <Upload :action="uploadParams.actionUrl"
+                    <Upload ref="upload_2"
+                            :action="uploadAction"
                             :showUploadList="uploadParams.showUploadList"
                             :multiple="uploadParams.multiple"
                             :accept="uploadParams.accept"
                             :maxSize="uploadParams.maxSize"
+                            :on-remove="fileRemove2"
                             :before-upload="fileBeforeUpload"
                             :on-exceeded-size="exceededSize"
                             :on-error="fileUploadError"
-                            :on-success="fileUploadSuccess">
+                            :on-success="fileUploadSuccess2">
                         <Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>
                     </Upload>
                 </FormItem>
@@ -57,14 +61,27 @@
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import uploadMixin from '../../../../lib/mixin/uploadMixin';
+    import Config from '../../../../config';
     export default {
         name: 'addProjectAuthenticate',
         mixins: [modalMixin, uploadMixin],
+        computed: {
+            uploadAction() {
+                return Config[Config.env].actionUrl + '/complete';
+            }
+        },
         data() {
             return {
                 formData: {
-                    projectId: ''
+                    projectId: '',
+                    fileIds: [] // 项目文件内容合并
                 },
+                uploadParams: {
+                    multiple: true,
+                    showUploadList: true
+                },
+                fileIds1: [],   // 工程质量鉴定报告
+                fileIds2: [],   // 监督管理工作报告
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }]
                 },
@@ -94,21 +111,41 @@
                     }
                 })
             },
-            // 获取项目列表
+            // 获取用于太添加竣工项目列表
             getProjectList() {
                 this.$http({
-                    method: 'post',
-                    url: '/project/list',
-                    data: JSON.stringify({
-                        current: 1,      // 当前第几页
-                        size: 10000,      // 每页几行
-                    })
+                    method: 'get',
+                    url: '/projectAudit/chooseProjectListForHandover'
                 }).then((res) => {
-                    this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.projectList = res.data.records;
+                        this.projectList = res.data || [];
                     }
                 })
+            },
+
+            fileRemove1(file, fileList) {
+                let idx = this.fileIds1.indexOf(file.response.data.fileId);
+                if(idx > -1) {
+                    this.fileIds1.splice(idx, 1);
+                }
+                this.formData.fileIds = this.fileIds1.concat(this.fileIds2);
+            },
+            fileRemove2(file, fileList) {
+                let idx = this.fileIds2.indexOf(file.response.data.fileId);
+                if(idx > -1) {
+                    this.fileIds2.splice(idx, 1);
+                }
+                this.formData.fileIds = this.fileIds1.concat(this.fileIds2);
+            },
+            fileUploadSuccess1(response, file, fileList) {
+                this.fileIds1 = fileList.map(v => v.response.data.fileId);
+                this.formData.fileIds = this.fileIds1.concat(this.fileIds2);
+
+            },
+            fileUploadSuccess2(response, file, fileList) {
+                this.fileIds2 = fileList.map(v => v.response.data.fileId);
+                this.formData.fileIds = this.fileIds1.concat(this.fileIds2);
+
             },
 
             save() {
@@ -117,7 +154,7 @@
 
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/projectAudit/completeApply',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
@@ -125,6 +162,12 @@
                                     content: '添加成功！'
                                 });
                                 this.$emit('modal_callback');
+                                this.modalValue = false;
+                                this.fileIds1 = [];
+                                this.fileIds2 = [];
+                                this.formData.fileIds = [];
+                                this.$refs.upload_1.clearFiles();
+                                this.$refs.upload_2.clearFiles();
                             }
                         })
 

@@ -12,20 +12,27 @@
                   :label-width="80">
                 <FormItem label="项目名称:" prop="projectId">
                     <Select v-model="formData.projectId">
-                        <Option v-for="item in projectList"
-                                :key="item.projectId"
+                        <Option v-for="(item, idx) in projectList"
+                                :key="item.projectId + idx"
                                 :value="item.projectId"
                                 :label="`${item.projectName}(${item.part})`"></Option>
                     </Select>
                 </FormItem>
                 <FormItem label="单位名称:" prop="projectUnitId">
-                    <Select v-model="formData.projectUnitId">
+                    <Select v-model="formData.projectUnitId" clearable>
                         <Option v-for="item in projectUnitList"
                                 :key="item.projectUnitId"
                                 :value="item.projectUnitId"
                                 :label="item.unitName"></Option>
                     </Select>
-
+                </FormItem>
+                <FormItem label="用户:" v-show="formData.projectUnitId">
+                    <Select v-model="formData.projectUserId">
+                        <Option v-for="item in projectUserList"
+                                :key="item.projectUserId"
+                                :value="item.projectUserId"
+                                :label="item.name"></Option>
+                    </Select>
                 </FormItem>
                 <FormItem label="扣分代码:" prop="creditCodeId">
                     <Input v-model="formData.creditNo"
@@ -44,7 +51,7 @@
                         <div slot="content">{{formData.scoreStandard}}</div>
                     </Poptip>
                 </FormItem>
-
+                <FormItem  v-show="formData.projectUnitId"></FormItem>
                 <FormItem label="扣分项:" prop="content">
                     <Poptip trigger="focus"
                             width="570"
@@ -58,6 +65,13 @@
                         <div slot="content">{{formData.content}}</div>
                     </Poptip>
 
+                </FormItem>
+                <FormItem label="采信依据:" prop="content">
+                    <Input v-model="formData.creditAccording"
+                           style="width: 570px;"
+                           type="textarea"
+                           :rows="5"
+                           placeholder="请输入"/>
                 </FormItem>
             </Form>
 
@@ -94,7 +108,8 @@
                 formData: {
                     projectId: '',
                     part: '',
-                    projectUnitId: '12',
+                    projectUnitId: '',
+                    projectUserId: '',
                     unitName: '',
                     // unitType: '',
                     creditCodeId: '',
@@ -102,7 +117,8 @@
                     scoreStandard: '',  // 评分标准
                     deduct: null,      // 扣分
                     deductDetail: '',   // 扣分项
-                    content: ''
+                    content: '',
+                    creditAccording: ''
                 },
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
@@ -115,7 +131,9 @@
                 dict_unitType: [],
 
                 // 参建单位列表
-                projectUnitList: []
+                projectUnitList: [],
+                // 参建单位中的参建人员
+                projectUserList: []
             };
         },
         watch: {
@@ -128,6 +146,15 @@
                 }
 
                 this.get_projectUnitList();
+            },
+            'formData.projectUnitId'(val) {
+                if (val) {
+                    this.getProjectUserList_projectUnitId();
+                }
+                else{
+                    this.projectUserList = [];
+                    this.formData.projectUserId = '';
+                }
             }
         },
         mounted() {
@@ -161,6 +188,22 @@
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.projectUnitList = res.data || [];
+                    }
+                })
+            },
+
+            // 获取参建单位人员
+            getProjectUserList_projectUnitId() {
+                this.$http({
+                    method: 'get',
+                    url: '/project/viewProjectUser',
+                    params: {
+                        projectUnitId: this.formData.projectUnitId
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.formData.projectUserId = '';
+                        this.projectUserList = res.data || [];
                     }
                 })
             },

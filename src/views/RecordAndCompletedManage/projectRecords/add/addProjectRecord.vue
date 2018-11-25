@@ -11,8 +11,8 @@
                   :label-width="80">
                 <FormItem label="项目名称:" prop="projectId">
                     <Select v-model="formData.projectId" style="width: 510px;">
-                        <Option v-for="item in projectList"
-                                :key="item.projectId"
+                        <Option v-for="(item, idx) in projectList"
+                                :key="item.projectId + idx"
                                 :value="item.projectId"
                                 :label="`${item.projectName} (标段：${item.part})`"></Option>
                     </Select>
