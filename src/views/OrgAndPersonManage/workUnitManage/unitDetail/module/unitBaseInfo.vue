@@ -65,19 +65,19 @@
             <FormItem label="统计时间:" prop="countTime">
                 <Input v-model="formData.countTime" />
             </FormItem>
-            <FormItem label="资质类别:" prop="qualificationType">
-                <Select v-model="formData.qualificationType">
+            <FormItem label="资质类别:" prop="qualificationTypeList">
+                <Select v-model="formData.qualificationTypeList" multiple>
                     <Option v-for="item in dict_qualificationType"
                             :key="item.id"
-                            :value="item.value"
+                            :value="item.label"
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="资质许可证等级:" prop="qualification">
-                <Select v-model="formData.qualification">
+            <FormItem label="资质许可证等级:">
+                <Select v-model="formData.qualificationLevelList" multiple>
                     <Option v-for="item in dict_qualification"
                             :key="item.id"
-                            :value="item.value"
+                            :value="item.label"
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
@@ -123,6 +123,7 @@
                     companyAddress: '',
                     website: '',
                     qualificationType: '',
+                    qualificationTypeList: [],
                     qualificationTypeLabel: '',
                     parentUnitName: '',
                     parentUnitLeader: '',
@@ -136,7 +137,8 @@
                     highManage: 0,                    //经济管理高级职称人数
                     totalManage: 0,                   //'经济管理总人数'
                     countTime: '',            // 统计时间
-                    qualification: ''                 // 许可证等级
+                    qualificationLevel: '',                 // 许可证等级
+                    qualificationLevelList: []
                 },
                 rules: {
                     unitName: [{ required: true, message: '单位名称不能为空！', trigger: 'blur' }],
@@ -145,7 +147,7 @@
                     telephone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
                     email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
                     companyAddress: [{ required: true, message: '公司地址不能为空！', trigger: 'blur' }],
-                    qualification: [{ required: true, message: '资质许可证等级不能为空！', trigger: 'blur' }]
+                    // qualificationList: [{ required: true, message: '资质许可证等级不能为空！', trigger: 'blur' }]
                 },
 
                 dict_unitType: [],
@@ -193,7 +195,10 @@
                     }
                 }).then(res => {
                    if (res.code === 'SUCCESS') {
-                       Object.assign(this.formData, res.data);
+                       Object.assign(this.formData, res.data, {
+                           qualificationTypeList: res.data.qualificationType ? res.data.qualificationType.split(',') : [],
+                           qualificationLevelList: res.data.qualificationLevel ? res.data.qualificationLevel.split(',') : []
+                       });
                    }
                 });
             },
@@ -201,6 +206,9 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.formData.qualificationType = this.formData.qualificationTypeList.join(',');
+                        this.formData.qualificationLevel = this.formData.qualificationLevelList.join(',');
+
                         this.$http({
                             method: 'post',
                             url: '/unit/update',
@@ -210,6 +218,7 @@
                                 this.$Message.success({
                                     content: '更新成功！'
                                 });
+                                this.$emit('modal-callback');
                             }
                         })
                     } else {

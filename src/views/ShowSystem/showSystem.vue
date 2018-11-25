@@ -2,6 +2,14 @@
     <div class="showSystem-container">
         <div class="showSystem-container-innner">
             <div class="title">综合展示系统</div>
+            <Button class="btn-back"
+                    size="large"
+                    type="text"
+                    ghost
+                    to="/home"
+                    icon="md-arrow-round-back">
+                返回
+            </Button>
             <vMap class="v-map"> </vMap>
 
             <div class="card-box left-panel">
@@ -87,10 +95,18 @@
         overflow-x: hidden;
         overflow-y: auto;
         user-select: none;
+
         .showSystem-container-innner {
             position: relative;
             height: 100%;
             min-height: 810px;
+
+            .btn-back {
+                position: absolute;
+                top: 5px;
+                left: 30%;
+                z-index: 999;
+            }
 
             >.title {
                 position: absolute;

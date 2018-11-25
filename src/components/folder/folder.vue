@@ -1,7 +1,7 @@
 <template>
     <Badge :count="count" :type="type" :offset="offset">
         <div class="folder-container"
-             @click="onSelect"
+             @click.stop="onSelect"
              @mouseover="onMouseOver"
              @mouseleave="onMouseLeave">
             <Icon :type="iconType"

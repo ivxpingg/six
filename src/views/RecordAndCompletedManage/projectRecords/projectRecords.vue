@@ -71,48 +71,49 @@
                     { title: '序号', width: 60, type: 'index', },
                     { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
                     { title: '标段', width: 180, align: 'center', key: 'part' },
-                    { title: '备案单位', width: 180, align: 'center', key: '' },
-                    { title: '单位类型', width: 180, align: 'center', key: '' },
+                    { title: '备案单位', width: 180, align: 'center', key: 'unitName' },
+                    { title: '单位类型', width: 180, align: 'center', key: 'unitTypeLabel' },
                     { title: '备案类型', width: 180, align: 'center', key: 'recordTypeLabel' },
                     // { title: '项目状态', width: 180, align: 'center', key: '' },
                     // { title: '流程状态', width: 180, align: 'center', key: '' },
                     { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
                     // { title: '附件', width: 180, align: 'center', key: '' },
-                    { title: '负责人', width: 180, align: 'center', key: 'contacts' },
-                    { title: '联系方式', width: 180, align: 'center', key: 'contactPhone' },
+                    { title: '负责人', width: 180, align: 'center', key: 'name' },
+                    { title: '联系方式', width: 180, align: 'center', key: 'phone' },
                     {
                         title: '操作',
                         width: 200,
                         align: 'center',
-                        fixed: 'right',
                         render: (h, params) => {
                             let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-create-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.check(params.row);
+                            if (params.row.handleStatus === 'submitted') {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-create-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.check(params.row);
+                                        }
                                     }
-                                }
-                            }, '提交审核'));
+                                }, '提交审核'));
+                            }
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small',
-                                    icon: 'ios-trash-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.del(params.row);
-                                    }
-                                }
-                            }, '删除'));
+                            // list.push(h('Button', {
+                            //     props: {
+                            //         type: 'error',
+                            //         size: 'small',
+                            //         icon: 'ios-trash-outline'
+                            //     },
+                            //     on: {
+                            //         click: () => {
+                            //             this.del(params.row);
+                            //         }
+                            //     }
+                            // }, '删除'));
 
                             return h('div', {
                                 class: 'ivx-table-cell-handle'
@@ -122,17 +123,16 @@
                     }
                 ],
                 tableData: [
-                    {
-                        projectUnitId: '',
-                        unitType: '',
-                        recordContent: '',  // 备案内容
-                        userId: '',
-                        userName: '',
-                        recordType: '',      // 备案类别
-                        recordTypeLabel: '',
-                        phone: ''
-
-                    }
+                    // {
+                    //     projectUnitId: '',
+                    //     unitType: '',
+                    //     recordContent: '',  // 备案内容
+                    //     userId: '',
+                    //     userName: '',
+                    //     recordType: '',      // 备案类别
+                    //     recordTypeLabel: '',
+                    //     phone: ''
+                    // }
                 ],
                 tableLoading: true,
 
@@ -181,7 +181,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/project/list',
+                    url: '/projectRecord/projectRecordPage',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
@@ -199,13 +199,13 @@
                 this.$refs.add.modalValue = true;
             },
             modal_add_callback() {
-
+                this.getData();
             },
             // 备案删除
             del(row) {
                 this.$Modal.confirm({
                     title: '删除',
-                    content: `确认要删除<${row.name}>备案?`,
+                    content: `确认要删除<${row.projectName}>备案?`,
                     onOk: () => {
                         this.$http({
                             method: 'get',
@@ -224,18 +224,19 @@
             // 备案审核
             check(row) {
                 this.$Modal.confirm({
-                    title: '删除',
-                    content: `确认要<${row.name}>备案通过审核?`,
+                    title: '审核',
+                    content: `确认要< ${row.projectName} >项目备案通过审核?`,
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/projectRecord/submitAudit',
                             params: {
-                                // safeNoticeId: row.safeNoticeId
+                                projectRecordId: row.projectRecordId
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('审核成功!');
+                                this.getData();
                             }
                         });
                     }

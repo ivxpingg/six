@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import iView from 'iview';
 import routes from './routers';
 import { getToken } from '@/lib/util';
-
+import store from '../store/store';
 Vue.use(Router);
 const router = new Router({
     base: '/',

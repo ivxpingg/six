@@ -12,13 +12,14 @@
             <CellGroup @on-click="onClick_notice">
                 <Cell v-for="(item, idx) in list"
                       :name="item.noticeId"
+                      class="notice-cell"
                       :extra="getTime(item.insTime)"
                       :key="`notice${item.noticeId}`">
                     <Badge :count="getNoticeStatus(item.noticeStatus)"
                            type="error"
                            class="notice-badge-alone"
                            dot>
-                        {{item.noticeTitle}}
+                        <div class="badge-content">{{item.noticeTitle}}</div>
                     </Badge>
                 </Cell>
             </CellGroup>
@@ -160,6 +161,23 @@
             top: 3px;
             left: -3px;
             right: auto;
+        }
+    }
+
+    .notice-cell {
+        .ivu-cell-main {
+            width: 75%;
+
+            .notice-badge-alone{
+                width: 100%;
+
+                .badge-content {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    width: 100%;
+                }
+            }
         }
     }
 

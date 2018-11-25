@@ -33,7 +33,7 @@
             <Table border
                    :height="540"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
@@ -103,6 +103,143 @@
         name: 'qualitySupervision_register',  // 质量监督登记
         mixins: [authMixin],
         components: {vIvxFilterBox, vAdd, vEdit, vProjectAudit, vContentAudit},
+        computed: {
+            _tableColumns() {
+                return [
+                    { title: '序号', width: 60, align: 'center', type: 'index', },
+                    { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
+                    { title: '标段', width: 180, align: 'center', key: 'part' },
+                    { title: '地区', width: 180, align: 'center',
+                        render: (h, params) => {
+                            let str = '';
+                            str += params.row.provinceStr || '';
+                            str += params.row.cityStr || '';
+                            str += params.row.countyStr || '';
+
+                            return h('div', str);
+                        } },
+                    { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
+                    // { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
+                    { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
+                    { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
+                    { title: '路面类型', width: 180, align: 'center', key: 'structureTypeLabel' },
+                    { title: '工程性质', width: 180, align: 'center', key: 'projectPropertyLabel' },
+                    { title: '投资额(万元)', width: 180, align: 'center', key: 'amount' },
+                    { title: '施工合同金额(万元)', width: 180, align: 'center', key: 'constructAmount' },
+                    { title: '监理合同金额(万元)', width: 180, align: 'center', key: 'supervisorAmount' },
+                    { title: '计划开工时间', width: 180, align: 'center', key: 'planBeginTime',
+                        render(h, params) {
+                            return h('div', params.row.planBeginTime ? MOMENT(params.row.planBeginTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '计划交工时间', width: 180, align: 'center', key: 'planEndTime',
+                        render(h, params) {
+                            return h('div', params.row.planEndTime ? MOMENT(params.row.planEndTime).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    // { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
+                    // { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
+                    // TODO 收件日期
+                    // { title: '收件日期', width: 180, align: 'center', key: '' },
+                    { title: '联系人', width: 180, align: 'center', key: 'contacts' },
+                    { title: '联系方式', width: 180, align: 'center', key: 'contactPhone' },
+                    { title: '项目状态', width: 180, align: 'center', key: 'projectStatusLabel' },
+                    // TODO 流程状态
+                    // { title: '流程状态', width: 180, align: 'center', key: '' },
+                    { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
+                    { title: '受理通知书', width: 180, align: 'center', key: 'acceptNotice' },
+                    { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
+                    { title: '受理日期', width: 180, align: 'center', key: 'acceptDate',
+                        render(h, params) {
+                            return h('div', params.row.acceptDate ? MOMENT(params.row.acceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate',
+                        render(h, params) {
+                            return h('div', params.row.noAcceptDate ? MOMENT(params.row.noAcceptDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
+                    { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
+                    {
+                        title: '操作',
+                        width: 240,
+                        align: 'center',
+                        fixed: 'right',
+                        render: (h, params) => {
+                            let list = [];
+
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small',
+                                    icon: 'ios-eye-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.modal_edit_param.projectId = params.row.projectId;
+
+                                        if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
+                                            this.isView = false;
+                                        }
+                                        else {
+                                            this.isView = true;
+                                        }
+
+                                        this.modal_edit = true;
+                                    }
+                                }
+                            }, '查看'));
+
+                            if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'md-checkmark-circle'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.projectId = params.row.projectId;
+                                            this.modal_audit = true;
+                                        }
+                                    }
+                                }, '提交审核'));
+                            }
+
+                            // 受理材料待审核才能审核
+                            if (params.row.handleStatus === 'handle'
+                                && this.auth_audit
+                                && (params.row.projectStatus === 'register' || params.row.projectStatus === 'to_examine')) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-document'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.projectId = params.row.projectId;
+                                            this.processStepId = params.row.processStepId || '';
+                                            this.auditProcessId = params.row.auditProcessId || '';
+                                            this.modal_contentAudit = true;
+                                        }
+                                    }
+                                }, '材料完整性审核'));
+                            }
+
+                            // 设置列宽度
+                            return h('div',{
+                                style: {
+
+                                },
+                                class: 'ivx-table-cell-handle'
+                            },list);
+                        }
+                    }
+
+                ];
+            }
+        },
         data() {
             return {
                 searchParams: {

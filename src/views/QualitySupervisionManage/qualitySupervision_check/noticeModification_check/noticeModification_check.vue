@@ -27,14 +27,6 @@
                             @on-change="onChange_endTime"
                             placeholder="最迟整改时间"></DatePicker>
                 </FormItem>
-                <FormItem label="整改标题:" prop="changeTitle">
-                    <Input v-model="formData.changeTitle"
-                           placeholder="请输入整改标题"/>
-                </FormItem>
-                <FormItem label="整改内容:" prop="changeContent">
-                    <Input v-model="formData.changeContent"
-                           placeholder="请输入整改内容"/>
-                </FormItem>
                 <FormItem label="逾期未改:">
                     <Select v-model="formData.overdueHandle">
                         <Option v-for="item in dict_overdueHandle"
@@ -43,6 +35,21 @@
                                 :label="item.label"></Option>
                     </Select>
                 </FormItem>
+                <FormItem label="整改标题:" prop="changeTitle">
+                    <Input v-model="formData.changeTitle"
+                           placeholder="请输入整改标题"/>
+                </FormItem>
+                <FormItem label="整改内容:" prop="changeContent">
+                    <Input v-model="formData.changeContent"
+                           type="textarea"
+                           rows="5"
+                           style="width: 500px;"
+                           placeholder="请输入整改内容" />
+                </FormItem>
+                <FormItem :label-width="0">
+                    <Button type="primary" size="small" icon="md-add" @click="onClick_addLaws">引用法律法规</Button>
+                </FormItem>
+
                 <FormItem label="相关材料:">
                     <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect" multiple></vFilesSelectButton></div>
                 </FormItem>
@@ -67,15 +74,18 @@
                 <Button type="primary" size="large" @click="save">发送通知</Button>
             </div>
         </Modal>
+
+        <vModalLawsSelect ref="modal_lawsSelect" @modal-callback="modal_lawsSelect_callback"></vModalLawsSelect>
     </div>
 </template>
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import vFilesSelectButton from '../../../Common/filesSelect/filesSelectButton.vue';
+    import vModalLawsSelect from '../../../Common/lawsSelect/modalLawsSelect';
     export default {
         name: 'noticeModification_check',
         mixins: [modalMixin],
-        components: {vFilesSelectButton},
+        components: {vFilesSelectButton, vModalLawsSelect},
         props: {
             projectId: {
                 type: String,
@@ -223,6 +233,14 @@
             // 获取上传文件
             onSelect(fileList) {
                 this.formData.fileIds = fileList.map(v => v.fileId);
+            },
+
+            // 引用法律法规
+            onClick_addLaws() {
+                this.$refs.modal_lawsSelect.modalValue = true;
+            },
+            modal_lawsSelect_callback(selectItems) {
+                this.formData.changeContent += selectItems.lawContent;
             },
 
             // 保存整改通知

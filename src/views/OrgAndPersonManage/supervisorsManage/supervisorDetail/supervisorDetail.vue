@@ -24,10 +24,10 @@
                 </Select>
             </FormItem>
             <FormItem label="办公固话:">
-                <Input v-model="formData.telephone" :readonly="!editable"/>
+                <Input v-model="formData.supervisor.telephone" :readonly="!editable"/>
             </FormItem>
             <FormItem label="移动小号:">
-                <Input v-model="formData.mobileShortNum" :readonly="!editable"/>
+                <Input v-model="formData.supervisor.mobileShortNum" :readonly="!editable"/>
             </FormItem>
             <FormItem label="手机:">
                 <Input v-model="formData.phone" :readonly="!editable"/>
@@ -47,7 +47,7 @@
                 <Input v-model="formData.nation" :readonly="!editable"/>
             </FormItem>
             <FormItem label="籍贯:">
-                <Input v-model="formData.nativePlace" :readonly="!editable"/>
+                <Input v-model="formData.supervisor.nativePlace" :readonly="!editable"/>
             </FormItem>
             <!--<FormItem label="身份证号码:">-->
                 <!--<Input v-model="formData.idNumber"/>-->
@@ -61,10 +61,10 @@
                 </Select>
             </FormItem>
             <FormItem label="身份类别:">
-                <Input v-model="formData.identityType" :disabled="!editable"/>
+                <Input v-model="formData.supervisor.identityType" :disabled="!editable"/>
             </FormItem>
             <FormItem label="执法证类型:">
-                <Select v-model="formData.lawType" :disabled="!editable">
+                <Select v-model="formData.supervisor.lawType" :disabled="!editable">
                     <Option v-for="item in dict_lawType"
                             :key="item.id"
                             :value="item.value"
@@ -72,15 +72,15 @@
                 </Select>
             </FormItem>
             <FormItem label="执法号码:">
-                <Input v-model="formData.lawNumber" :readonly="!editable"/>
+                <Input v-model="formData.supervisor.lawNumber" :readonly="!editable"/>
             </FormItem>
             <FormItem label="分工:">
-                <Input v-model="formData.divideWork" :readonly="!editable"/>
+                <Input v-model="formData.supervisor.divideWork" :readonly="!editable"/>
             </FormItem>
             <FormItem label="任职时间:">
                 <DatePicker
-                        :value="formData.tenureTime"
-                        type="month"
+                        :value="formData.supervisor.tenureTime"
+                        type="date"
                         transfer
                         @on-change="onChange_tenureTime"
                         placeholder="选择时间"
@@ -88,8 +88,8 @@
             </FormItem>
             <FormItem label="工作时间:">
                 <DatePicker
-                        :value="formData.workDate"
-                        type="month"
+                        :value="formData.supervisor.workDate"
+                        type="date"
                         transfer
                         @on-change="onChange_workDate"
                         placeholder="选择时间"
@@ -97,8 +97,8 @@
             </FormItem>
             <FormItem label="入党时间:">
                 <DatePicker
-                        :value="formData.joinPartyDate"
-                        type="month"
+                        :value="formData.supervisor.joinPartyDate"
+                        type="date"
                         transfer
                         @on-change="onChange_joinPartyDate"
                         placeholder="选择时间"
@@ -120,7 +120,7 @@
             </FormItem>
             <FormItem label="出生年月:" prop="birthday">
                 <DatePicker
-                        :value="formData.birthday"
+                        :value="formData.supervisor.birthday"
                         type="date"
                         transfer
                         @on-change="onChange_birthday"
@@ -131,7 +131,7 @@
                 <!--<Input v-model="formData.belongStateLabel"/>-->
             <!--</FormItem>-->
             <FormItem label="备注:">
-                <Input v-model="formData.remark" :readonly="!editable"/>
+                <Input v-model="formData.supervisor.remark" :readonly="!editable"/>
             </FormItem>
         </Form>
 
@@ -165,32 +165,38 @@
                     department: '',
                     job: '',
                     titleLevel: '',
-                    telephone: '',         // 固定电话
-                    mobileShortNum: '',   // 移动小号
                     phone: '',         // 手机
-                    tenureTime: '',        // 任职时间
                     sex: '',
                     sexStr: '',
                     nation: '',
                     nationLabel: '',
-                    nativePlace: '',
                     age: 0,
                     idNumber: '',
-                    birthday: '',  //
-                    workDate: '',    // 工作年月
-                    joinPartyDate: '',
                     education: '',
                     graduateSchool: '',
                     profession: '',
                     graduateDate: '',
-                    identityType: '',
                     titleName: '',
-                    lawNumber: '',
-                    lawType: '',
                     lawTypeLabel: '',
-                    divideWork: '',
                     belongState: '',
-                    remark: ''
+
+                    supervisor: {
+                        birthday: '',
+                        divideWork: '',
+                        identityType: '',
+                        jobLevel: '',
+                        lawType: '',
+                        joinPartyDate: '',
+                        lawNumber: '',
+                        mobileShortNum: '', // 移动小号
+                        nativePlace: '',
+                        remark: '',
+                        telephone: '',       // 固定电话
+                        tenureTime: '',      // 任职时间
+                        userId: '',
+                        workDate: ''        // 工作年月
+                    }
+
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
@@ -214,6 +220,7 @@
                 handler(val) {
                     if (val) {
                         this.formData.userId = val;
+                        this.formData.supervisor.userId = val;
                         this.getUserInfo();
                     }
                 }
@@ -240,33 +247,40 @@
             },
 
             onChange_tenureTime(time) {
-                this.formData.tenureTime = time;
+                this.formData.supervisor.tenureTime = time;
             },
             onChange_workDate(time) {
-                this.formData.workDate = time;
+                this.formData.supervisor.workDate = time;
             },
             onChange_joinPartyDate(time) {
-                this.formData.joinPartyDate = time;
+                this.formData.supervisor.joinPartyDate = time;
             },
             onChange_birthday(time) {
-                this.formData.birthday = time;
+                this.formData.supervisor.birthday = time;
             },
 
             getUserInfo() {
                 this.$http({
                     method: 'get',
-                    url: '/user/detail',
+                    url: '/user/getDetail',
                     params: {
                         userId: this.userId
                     }
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
                         Object.assign(this.formData, res.data, {
-                            birthday: res.data.birthday ?  MOMENT(res.data.birthday).format('YYYY-MM-DD') : '',
-                            workDate: res.data.workDate ?  MOMENT(res.data.workDate).format('YYYY-MM-DD') : '',
-                            joinPartyDate: res.data.joinPartyDate ?  MOMENT(res.data.joinPartyDate).format('YYYY-MM-DD') : '',
+                            //birthday: res.data.birthday ?  MOMENT(res.data.birthday).format('YYYY-MM-DD') : '',
+                            //workDate: res.data.workDate ?  MOMENT(res.data.workDate).format('YYYY-MM-DD') : '',
+                            //joinPartyDate: res.data.joinPartyDate ?  MOMENT(res.data.joinPartyDate).format('YYYY-MM-DD') : '',
                             graduateDate: res.data.graduateDate ?  MOMENT(res.data.graduateDate).format('YYYY-MM-DD') : '',
                         });
+
+                        Object.assign(this.formData.supervisor,res.data.supervisor, {
+                            tenureTime: res.data.supervisor.tenureTime ?  MOMENT(res.data.supervisor.tenureTime).format('YYYY-MM-DD') : '',
+                            birthday: res.data.supervisor.birthday ?  MOMENT(res.data.supervisor.birthday).format('YYYY-MM-DD') : '',
+                            workDate: res.data.supervisor.workDate ?  MOMENT(res.data.supervisor.workDate).format('YYYY-MM-DD') : '',
+                            joinPartyDate: res.data.supervisor.joinPartyDate ?  MOMENT(res.data.supervisor.joinPartyDate).format('YYYY-MM-DD') : '',
+                        })
                     }
                 });
             },

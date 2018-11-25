@@ -25,14 +25,6 @@
                             type="date"
                             placeholder="最迟整改时间" readonly></DatePicker>
                 </FormItem>
-                <FormItem label="整改标题:">
-                    <Input v-model="formData.changeTitle"
-                           placeholder="请输入整改标题" readonly/>
-                </FormItem>
-                <FormItem label="整改内容:">
-                    <Input v-model="formData.changeContent"
-                           placeholder="请输入整改内容" readonly/>
-                </FormItem>
                 <FormItem label="逾期未改:">
                     <Select v-model="formData.overdueHandle" readonly disabled>
                         <Option v-for="item in dict_overdueHandle"
@@ -40,6 +32,18 @@
                                 :value="item.value"
                                 :label="item.label"></Option>
                     </Select>
+                </FormItem>
+                <FormItem label="整改标题:">
+                    <Input v-model="formData.changeTitle"
+                           placeholder="请输入整改标题" readonly/>
+                </FormItem>
+                <FormItem label="整改内容:">
+                    <Input v-model="formData.changeContent"
+                           placeholder="请输入整改内容"
+                           type="textarea"
+                           rows="5"
+                           style="width: 590px;"
+                           readonly/>
                 </FormItem>
 
                 <template v-for="item in formData.changeReplyList">

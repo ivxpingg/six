@@ -98,7 +98,7 @@
                         } },
                     { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
                     // { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
-                    { title: '技术等级', width: 180, align: 'center', key: 'levelLabel' },
+                    { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
                     { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
                     // { title: '路面类型', width: 180, align: 'center', key: '' },
                     { title: '工程性质', width: 180, align: 'center', key: 'projectPropertyLabel' },
@@ -145,6 +145,7 @@
                         fixed: 'right',
                         render: (h, params) => {
                             let list = [];
+
                             list.push(h('Button', {
                                 props: {
                                     type: 'primary',
@@ -174,22 +175,6 @@
                             }, '分配监督小组'));
 
 
-                            // list.push(h('Button', {
-                            //     props: {
-                            //         type: 'primary',
-                            //         size: 'small',
-                            //         icon: 'ios-eye-outline'
-                            //     },
-                            //     on: {
-                            //         click: () => {
-                            //             Object.assign(this.curentRow, params.row);
-                            //             this.getFilesData(params.row);
-                            //         }
-                            //     }
-                            // }, '查看附件'));
-
-
-
                             // 设置列宽度
                             return h('div',{
                                 style: {},
@@ -197,7 +182,6 @@
                             },list);
                         }
                     }
-
                 ],
                 tableData: [
                     // {
@@ -260,7 +244,6 @@
             };
         },
         computed: {
-
         },
         watch: {
             'searchParams.current'() {

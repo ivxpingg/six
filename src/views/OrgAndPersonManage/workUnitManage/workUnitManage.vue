@@ -60,7 +60,7 @@
                title="从业单位详情"
                :width="1200"
                footer-hide>
-            <vUnitDetail :unitId="unitId"></vUnitDetail>
+            <vUnitDetail :unitId="unitId" @modal-callback="modal_unitDetail_callback"></vUnitDetail>
         </Modal>
 
         <Modal v-model="modal_addUnit"
@@ -97,8 +97,8 @@
                     { title: '序号', width: 60, type: 'index', },
                     { title: '单位名称', width: 180, align: 'center', key: 'unitName' },
                     { title: '机构代码', width: 180, align: 'center', key: 'orgCode' },
-                    { title: '资质类别', width: 180, align: 'center', key: 'qualificationTypeLabel' },
-                    { title: '资质许可等级', width: 180, align: 'center', key: 'qualificationLabel' },
+                    { title: '资质类别', width: 180, align: 'center', key: 'qualificationType' },
+                    { title: '资质许可等级', width: 180, align: 'center', key: 'qualificationLevel' },
                     { title: '单位类型', width: 180, align: 'center', key: 'unitTypeLabel' },
                     { title: '负责人', width: 180, align: 'center', key: 'leader' },
                     { title: '联系方式', width: 180, align: 'center', key: 'telephone' },
@@ -241,8 +241,10 @@
                 })
             },
 
-            unitDetail(row) {
-
+            // 单位更新回调
+            modal_unitDetail_callback() {
+                this.modal_unitDetail = false;
+                this.getData();
             }
         }
     }

@@ -4,7 +4,8 @@ import {
     getTagNavListFromLocalstorage,
     getHomeRoute,
     transformMenu,
-    setMenuAuth} from '@/lib/util';
+    setMenuAuth,
+    getMenuListInLocalstorage} from '@/lib/util';
 import routers from '@/router/routers'
 import axios from '@/lib/axios';
 
@@ -102,20 +103,26 @@ export default {
     actions: {
         getMenuList({commit}) {
             return new Promise(((resolve, reject) => {
-                axios({
-                    method: 'get',
-                    // url: '/getMenuList'
-                    url: '/menu/userMenus'
-                }).then(res => {
-                    // commit('setMenuList', res.result);
-                    // resolve(res.result);
-                    if (res.code === 'SUCCESS') {
-                        commit('setMenuList', res.data);
-                    }
-                    resolve(res.data);
-                }).catch(err => {
-                    reject(err);
-                })
+                let menuList = getMenuListInLocalstorage();
+
+                if (!menuList) {
+                    axios({
+                        method: 'get',
+                        url: '/menu/userMenus'
+                    }).then(res => {
+                        if (res.code === 'SUCCESS') {
+                            commit('setMenuList', res.data);
+                        }
+                        resolve(res.data);
+                    }).catch(err => {
+                        reject(err);
+                    })
+                }
+                else{
+                    commit('setMenuList', menuList);
+                    resolve(menuList);
+                }
+
             }));
         }
     }

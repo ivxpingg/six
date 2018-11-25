@@ -419,7 +419,9 @@
 
             // 处理标签审核
             // 审核通过
-            modal_auditPass_callback() {},
+            modal_auditPass_callback() {
+                this.getData();
+            },
 
             // 审核通过
             pass(row) {

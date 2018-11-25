@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="myApp">
      <router-view/>
   </div>
 </template>
@@ -11,12 +11,15 @@
         data() {
             return {};
         },
+        created() {
+            this.getMenuList();
+        },
         mounted() {
             let that = this;
             window.onresize = function (e) {
                 that.onresize(e);
             }
-            this.getMenuList();
+            // this.getMenuList();
         },
         methods: {
             ...mapMutations([
@@ -30,7 +33,7 @@
 </script>
 
 <style>
-#app {
+#myApp {
     width: 100%;
     height: 100%;
 }

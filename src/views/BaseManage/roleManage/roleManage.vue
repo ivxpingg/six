@@ -59,7 +59,8 @@
     import vRoleInfo from './roleInfo/roleInfo';
     import vMenuTree from '../../Common/menuTree/menuTree';
     import vAddNode from './addNode/addNode';
-    import { mapMutations } from 'vuex'
+    import {setMenuListInLocalstorage} from '@/lib/util';
+    import { mapMutations, mapActions } from 'vuex'
     export default {
         name: 'roleManage',
         components: {
@@ -116,6 +117,9 @@
         methods: {
             ...mapMutations([
                 'setAuth'
+            ]),
+            ...mapActions([
+                'getMenuList'
             ]),
             // 角色树选择
             onSelectChange(item) {
@@ -200,7 +204,10 @@
                     if(res.code === 'SUCCESS') {
                         this.$Message.success({
                             content: '菜单权限保存成功！'
-                        })
+                        });
+
+                        setMenuListInLocalstorage(null);
+                        this.getMenuList();
                     }
                 })
             }

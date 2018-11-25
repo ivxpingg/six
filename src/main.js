@@ -9,8 +9,7 @@ import Ajax from '@/lib/axios';
 import '@/style/fonts/iconfont.css';
 import '@/style/app.scss';
 import 'animate.css';
-
-require('@/mock');
+// require('@/mock');
 // process.env.NODE_ENV === 'development' ? require('@/mock') : '';
 
 Vue.config.productionTip = false;
@@ -24,7 +23,5 @@ new Vue({
     router,
     store,
     render: h => h(App),
-    mounted() {
-
-    }
+    mounted() {}
 }).$mount('#app');

@@ -88,7 +88,7 @@
                     { title: '学历', width: 120, align: 'center', key: 'educationLabel' },
                     { title: '毕业院校', width: 120, align: 'center', key: 'graduateSchool' },
                     { title: '专业', width: 120, align: 'center', key: 'profession' },
-                    { title: '身份类别', width: 120, align: 'center', key: 'identityTypeLabel' },
+                    { title: '身份类别', width: 120, align: 'center', key: 'identityType' },
                     { title: '执法证类型', width: 120, align: 'center', key: 'lawTypeLabel' },
                     { title: '执法证号码', width: 120, align: 'center', key: 'lawNumber' },
                     { title: '领导分工及科室人员', width: 180, align: 'center', key: 'divideWork' },

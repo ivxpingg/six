@@ -96,6 +96,7 @@ module.exports = {
                 ws: true,
                 changeOrigin: true
             },
+
             // '/': {
             //     target: 'http://110.86.21.252:8880',
             //     ws: true,
@@ -103,7 +104,7 @@ module.exports = {
             // }
             //
             // '/': {
-            //     target: 'http://192.168.0.199:8080',
+            //     target: 'http://192.168.0.106:8080',
             //     ws: true,
             //     changeOrigin: true
             // }

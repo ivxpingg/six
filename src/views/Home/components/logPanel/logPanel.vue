@@ -46,9 +46,20 @@
                     },
                     {
                         title: '操作内容',
+                        minWidth: 120,
                         tooltip: true,
                         key: 'operateContent',
                         align: 'center'
+                    },
+                    {
+                        title: '操作时间',
+                        minWidth: 105,
+                        tooltip: true,
+                        key: 'operateTime',
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', params.row.operateTime ? this.$moment(params.row.operateTime).format('YYYY-MM-DD HH:mm') : '');
+                        }
                     }
                 ],
                 tableData: [

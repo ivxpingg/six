@@ -18,7 +18,7 @@
                 </Select>
             </FormItem>
             <FormItem label="UID:" prop="userNo">
-                <Input v-model="formData.userNo"/>
+                <Input v-model="formData.employee.userNo"/>
             </FormItem>
             <FormItem label="现任职务:" prop="job">
                 <Input v-model="formData.job"/>
@@ -61,7 +61,7 @@
             </FormItem>
             <FormItem label="毕业时间:" prop="graduateDate">
                 <DatePicker
-                        :value="formData.graduateDate"
+                        :value="formData.employee.graduateDate"
                         type="date"
                         transfer
                         @on-change="onChange_graduateDate"
@@ -74,13 +74,13 @@
                 <Input v-model="formData.email"/>
             </FormItem>
             <FormItem label="资格证书:">
-                <Input v-model="formData.certificate"/>
+                <Input v-model="formData.employee.certificate"/>
             </FormItem>
             <FormItem label="证书编号:">
-                <Input v-model="formData.certificateNo"/>
+                <Input v-model="formData.employee.certificateNo"/>
             </FormItem>
             <FormItem label="身份证号:" prop="idNumber">
-                <Input v-model="formData.idNumber"/>
+                <Input v-model="formData.employee.idNumber"/>
             </FormItem>
         </Form>
 
@@ -113,26 +113,30 @@
                 formData: {
                     userId: '',
                     name: '',
-                    userNo: '',
                     sex: '',
                     age: null,
                     nation: '',
                     nationStr: '',
                     titleLevel: '',
                     titleName: '',
-                    certificate: '',
-                    certificateNo: '',
                     education: '',
                     graduateSchool: '',
                     profession: '',
-                    graduateDate: '',
                     phone: '',
                     email: '',
-                    idNumber: '',
                     unitName: '',
                     unitType: '',
                     unitTypeLabel: '',
-                    job: ''
+                    job: '',
+                    employee: {
+                        certificate: '',
+                        certificateNo: '',
+                        graduateDate: '',
+                        idNumber: '',
+                        recordStatus: '',
+                        userId: '',
+                        userNo: ''
+                    }
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
@@ -160,31 +164,34 @@
                 immediate: true,
                 handler(val) {
                     if (val) {
-
                         Object.assign(this.formData, {
                             userId: '',
                             name: '',
-                            userNo: '',
                             sex: '',
                             age: null,
                             nation: '',
                             nationStr: '',
                             titleLevel: '',
                             titleName: '',
-                            certificate: '',
-                            certificateNo: '',
                             education: '',
                             graduateSchool: '',
                             profession: '',
-                            graduateDate: '',
                             phone: '',
                             email: '',
-                            idNumber: '',
                             unitName: '',
                             unitType: '',
                             unitTypeLabel: '',
                             job: '',
-                            fileIds: ''
+                            fileIds: '',
+                            employee: {
+                                certificate: '',
+                                certificateNo: '',
+                                graduateDate: '',
+                                idNumber: '',
+                                recordStatus: '',
+                                userId: '',
+                                userNo: ''
+                            }
                         });
                         this.getUserInfo();
                     }
@@ -217,14 +224,16 @@
             getUserInfo() {
                 this.$http({
                     method: 'get',
-                    url: '/user/detail',
+                    url: '/user/getDetail',
                     params: {
                         userId: this.userId
                     }
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
-                        Object.assign(this.formData, res.data, {
-                            graduateDate: res.data.graduateDate ? MOMENT(res.data.graduateDate).format('YYYY-MM-DD') : ''
+                        Object.assign(this.formData, res.data);
+
+                        Object.assign(this.formData.employee, res.data.employee, {
+                            graduateDate: res.data.employee.graduateDate ? MOMENT(res.data.employee.graduateDate).format('YYYY-MM-DD') : ''
                         });
                     }
                 });

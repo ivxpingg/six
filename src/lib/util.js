@@ -217,3 +217,18 @@ export const setMenuAuth = (menuList, authList) => {
         }
     });
 };
+
+// 本地存储菜单权限数据
+export const setMenuListInLocalstorage = list => {
+    if (list == null) {
+        localStorage.menuList_six = null;
+    }
+    else {
+        localStorage.menuList_six = JSON.stringify(list);
+    }
+};
+// 获取本地存储菜单权限数据
+export const getMenuListInLocalstorage = () => {
+    const list = localStorage.menuList_six;
+    return list ? JSON.parse(list) : null
+};

@@ -17,17 +17,24 @@
                                 :label="`${item.projectName} (标段：${item.part})`"></Option>
                     </Select>
                 </FormItem>
-                <FormItem label="参建单位:" prop="unitId">
-                    <Input v-model="formData.unitName"
-                           readonly
-                           @on-focus="modal_unitSelect_open" />
+                <FormItem label="参建单位:" prop="projectUnitId">
+                    <Select v-model="formData.projectUnitId">
+                        <Option v-for="item in projectUnitList"
+                                :key="item.projectUnitId"
+                                :value="item.projectUnitId"
+                                :label="item.unitName"></Option>
+                    </Select>
                 </FormItem>
-                <FormItem label="负责人:" prop="userId">
-                    <Input v-model="formData.userName"
-                           readonly @on-focus="modal_userSelect_open"/>
+                <FormItem label="负责人:" prop="projectUserId">
+                    <Select v-model="formData.projectUserId" @on-change="onChange_user">
+                        <Option v-for="item in projectUserList"
+                                :key="item.projectUserId"
+                                :value="item.projectUserId"
+                                :label="item.name"></Option>
+                    </Select>
                 </FormItem>
                 <FormItem label="联系方式:">
-                    <Input v-model="formData.phone" readonly/>
+                    <Input v-model="formData.phone"/>
                 </FormItem>
                 <FormItem label="备案内容:">
                     <Select v-model="formData.recordType">
@@ -45,11 +52,12 @@
                            placeholder="请输入"/>
                 </FormItem>
                 <FormItem label="相关材料:">
-                    <Upload :action="uploadParams.actionUrl"
+                    <Upload :action="uploadAction"
                             :showUploadList="uploadParams.showUploadList"
                             :multiple="uploadParams.multiple"
                             :accept="uploadParams.accept"
                             :maxSize="uploadParams.maxSize"
+                            :on-remove="fileRemove"
                             :before-upload="fileBeforeUpload"
                             :on-exceeded-size="exceededSize"
                             :on-error="fileUploadError"
@@ -66,49 +74,70 @@
             </div>
         </Modal>
 
-        <!--单位选择-->
-        <vModalUnitSelect ref="unitSelect"
-                          @modal-callback="modal_unitSelect_callback"></vModalUnitSelect>
-
-        <vModalEmployeeSelect ref="employeeSelect"
-                              userSourceType="hasUnit"
-                              :unitId="formData.unitId"
-                              @modal-callback="modal_employeeSelect_callback"></vModalEmployeeSelect>
     </div>
 </template>
 
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import uploadMixin from '../../../../lib/mixin/uploadMixin';
-    import vModalUnitSelect from '../../../Common/unitSelect/modalUnitSelect';
-    import vModalEmployeeSelect from '../../../Common/employeeSelect/modalEmployeeSelect';
     export default {
         name: 'addProjectRecord',
         mixins: [modalMixin, uploadMixin],
-        components: {vModalUnitSelect, vModalEmployeeSelect},
+        computed: {
+            uploadAction() {
+                return this.uploadParams.actionUrl + '/monitor_procedure'
+            }
+        },
         data() {
             return {
+                uploadParams: {
+                    multiple: true,
+                    showUploadList: true
+                },
                 formData: {
                     projectId: '',
-                    unitId: '',
+                    projectUnitId: '',
                     unitName: '',
-                    userId: '',
+                    projectUserId: '',
                     userName: '',
                     phone: '',
                     recordType: '',
-                    recordContent: ''
+                    recordContent: '',
+                    fileIds: []
                 },
                 rules: {
-                    unitId: [{ required: true, message: '参建单位不能为空！', trigger: 'blur' }],
-                    userId: [{ required: true, message: '负责人不能为空！', trigger: 'blur' }]
+                    projectUnitId: [{ required: true, message: '参建单位不能为空！', trigger: 'blur' }],
+                    projectUserId: [{ required: true, message: '负责人不能为空！', trigger: 'blur' }]
                 },
 
                 // 项目列表
                 projectList: [],
+                // 参建单位列表
+                projectUnitList: [],
+                // 参建单位用户列表
+                projectUserList: [],
 
                 //
                 dict_recordType: []
             };
+        },
+        watch: {
+            'formData.projectId'(val) {
+                if (val) {
+                    this.getProjectUnitList(val);
+                }
+                this.projectUserList = [];
+                this.formData.projectUnitId = '';
+                this.formData.projectUserId = '';
+                this.formData.phone = '';
+            },
+            'formData.projectUnitId'(val) {
+                if (val) {
+                    this.getProjectUser_unit(val);
+                }
+                this.formData.projectUserId = '';
+                this.formData.phone = '';
+            }
         },
         mounted() {
             this.getProjectList();
@@ -148,39 +177,55 @@
                 })
             },
 
-            // 单位选择
-            modal_unitSelect_open() {
-                this.$refs.unitSelect.modalValue = true;
-            },
-            modal_unitSelect_callback(selectValue, selectItems) {
-                this.formData.unitId = selectItems.unitId;
-                this.formData.unitName = selectItems.unitName;
-                this.formData.userId = '';
-                this.formData.userName = '';
-                this.$refs.form.validateField('unitId');
-                this.$refs.unitSelect.modalValue = false;
-            },
-            // 负责人选择
-            modal_userSelect_open() {
-                this.$refs.form.validateField('unitId', (msg) => {
-                    if (msg === '') {
-                        this.$refs.employeeSelect.modalValue = true;
+            // 获取参建单位列表
+            getProjectUnitList(projectId) {
+                this.$http({
+                    method: 'get',
+                    url: '/project/projectUnitList',
+                    params: {
+                        projectId: projectId
                     }
-                });
-            },
-            modal_employeeSelect_callback(selectValue, selectItems) {
-                this.formData.userId = selectItems.userId;
-                this.formData.userName = selectItems.userName || '';
-                this.formData.phone = selectItems.phone || '';
-                this.$refs.form.validateField('userId');
-                this.$refs.employeeSelect.modalValue = false;
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.projectUnitList = res.data || [];
+                    }
+                })
             },
 
+            // 获取参建单位用户列表
+            getProjectUser_unit(projectUnitId) {
+                this.$http({
+                    method: 'get',
+                    url: '/project/viewProjectUser',
+                    params: {
+                        projectUnitId: projectUnitId
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.projectUserList = res.data || [];
+                    }
+                })
+            },
+
+            //
+            onChange_user(value) {
+                this.projectUserList.forEach(v => {
+                    if(v.projectUserId === value) {
+                        this.formData.phone = v.phone;
+                    }
+                })
+            },
+
+            fileRemove(file, fileList) {
+                let idx = this.formData.fileIds.indexOf(file.response.data.fileId);
+                if(idx > -1) {
+                    this.formData.fileIds.splice(idx, 1);
+                }
+            },
             // 文件上传
             fileUploadSuccess(response, file, fileList) {
-                // TODO 文件上传
-                console.dir(response);
-                // this.$Loading.finish();
+                this.formData.fileIds = fileList.map(v => v.response.data.fileId);
+                this.$Loading.finish();
             },
 
             save() {
@@ -189,13 +234,14 @@
 
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/projectRecord/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
                                     content: '添加成功！'
                                 });
+                                this.modalValue = false;
                                 this.$emit('modal_callback');
                             }
                         })

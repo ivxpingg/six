@@ -1,4 +1,4 @@
-import { setToken, getToken } from '@/lib/util';
+import { setToken, getToken, setMenuListInLocalstorage } from '@/lib/util';
 import axios from '@/lib/axios';
 export default {
     state: {
@@ -53,6 +53,7 @@ export default {
                     url: '/logout'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
+                        setMenuListInLocalstorage(null);
                         commit('setToken', '');
                         resolve(res);
                     }

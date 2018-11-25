@@ -40,6 +40,7 @@
     import 'swiper/dist/css/swiper.min.css';
     import vLoginForm from './login-form';
     import { mapActions } from 'vuex';
+    import {setMenuListInLocalstorage} from '../../lib/util';
     export default {
         name: 'user',
         components: {vLoginForm},
@@ -52,7 +53,8 @@
         methods: {
             ...mapActions([
                 'handleLogin',
-                'getUserInfo'
+                'getUserInfo',
+                'getMenuList'
             ]),
             initSwiper() {
                 let mySwiper = new Swiper ('.swiper-container', {
@@ -67,17 +69,20 @@
                 })
             },
             handleSubmit({ loginName, password }) {
-                // this.$router.push({
-                //     name: 'home'
-                // });
 
                 this.handleLogin({ loginName, password }).then(res => {
-                    this.$router.push({
-                        name: 'home'
+                    this.$http({
+                        method: 'get',
+                        url: '/menu/userMenus'
+                    }).then(res => {
+                        if (res.code === 'SUCCESS') {
+                            setMenuListInLocalstorage(res.data || []);
+                            this.$router.push({
+                                name: 'home'
+                            });
+                        }
                     });
-                    // this.getUserInfo().then(res => {
-                    //
-                    // })
+
                 });
             }
         }
