@@ -34,7 +34,7 @@
                     </Select>
                 </FormItem>
                 <FormItem label="联系方式:">
-                    <Input v-model="formData.phone"/>
+                    <Input v-model="formData.phone" readonly disabled/>
                 </FormItem>
                 <FormItem label="备案内容:">
                     <Select v-model="formData.recordType">
@@ -163,16 +163,12 @@
             // 获取项目列表
             getProjectList() {
                 this.$http({
-                    method: 'post',
-                    url: '/project/list',
-                    data: JSON.stringify({
-                        current: 1,      // 当前第几页
-                        size: 10000,      // 每页几行
-                    })
+                    method: 'get',
+                    url: '/projectAudit/chooseProjectListForHandover'
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.projectList = res.data.records;
+                        this.projectList = res.data || [];
                     }
                 })
             },

@@ -72,8 +72,8 @@
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'post',
-                    url: '/projectAudit/listForDisclose'
+                    method: 'get',
+                    url: '/projectAudit/chooseProjectListForHandover'
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {

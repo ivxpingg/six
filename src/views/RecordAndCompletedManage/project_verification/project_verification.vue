@@ -225,6 +225,9 @@
                                                         if (res.code === 'SUCCESS') {
                                                             this.$Message.success('提交审核成功!');
                                                             this.getData();
+                                                            this.currentProject.projectId = '';
+                                                            this.currentProject.auditProcessId = '';
+                                                            this.currentProject.processStepId = '';
                                                         }
                                                     })
                                                 }

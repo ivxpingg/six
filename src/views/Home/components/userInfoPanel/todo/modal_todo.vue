@@ -32,6 +32,12 @@
                          :part="complaint.part"
                          :complaintId="complaint.complaintId"
                          @modal-callback="modal_complaintReply_callback"></vComplaintReply>
+
+        <vProjectRecordReply ref="modal_projectRecord"
+                             :projectRecordId="projectRecord.projectRecordId"
+                             :projectName="projectRecord.projectName"
+                             :part="projectRecord.part"
+                             @modal-callback="modal_projectRecord_callback"></vProjectRecordReply>
     </div>
 </template>
 
@@ -39,11 +45,12 @@
     import modalMixin from '../../../../../lib/mixin/modalMixin';
     import vTodoReply from './module/todoReply';
     import vComplaintReply from './module/complaintReply';
+    import vProjectRecordReply from './module/projectRecordReply';
     import MOMENT from 'moment';
     export default {
         name: 'modal_todo',   // 代办
         mixins: [modalMixin],
-        components: {vTodoReply, vComplaintReply},
+        components: {vTodoReply, vComplaintReply, vProjectRecordReply},
         data() {
             return {
                 searchParams: {
@@ -121,6 +128,13 @@
                     projectName: '',
                     part: '',
                     complaintId: ''
+                },
+
+                // 工程备案回复
+                projectRecord: {
+                    projectRecordId: '',
+                    projectName: '',
+                    part: ''
                 }
 
             };
@@ -189,9 +203,17 @@
                         this.$refs.modal_complaintReply.modalValue = true;
                         break;
                     case 'project_record_audit': // 工程备案审核
-                        this.$router.push({
-                            name: 'projectRecords'
-                        });
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.projectRecord, {
+                            projectRecordId: '',
+                            projectName: '',
+                            part: ''
+                        }, param[0]);
+                        this.$refs.modal_projectRecord.modalValue = true;
+                        //
+                        // this.$router.push({
+                        //     name: 'projectRecords'
+                        // });
                         break;
                     case 'sign_off_reply':       // 交工检测核验审核
                         this.$router.push({
@@ -215,6 +237,9 @@
                 this.getData();
             },
             modal_complaintReply_callback(){
+                this.getData();
+            },
+            modal_projectRecord_callback() {
                 this.getData();
             },
 
