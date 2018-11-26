@@ -8,7 +8,7 @@
                   inline
                   :model="formData"
                   :rules="rules"
-                  :label-width="80">
+                  :label-width="110">
                 <FormItem label="项目名称:" prop="projectId">
                     <Select v-model="formData.projectId" style="width: 510px;">
                         <Option v-for="item in projectList"
@@ -18,19 +18,26 @@
                     </Select>
                 </FormItem>
 
+                <FormItem label="考勤启动时间:">
+                    <DatePicker v-model="formData.beginAttendanceTime"
+                                type="date"
+                                @on-change="onChange_beginAttendanceTime"
+                                placeholder="请选择时间"></DatePicker>
+                </FormItem>
+
                 <template  v-for="item_1 in formData.projectAttendances_my">
                     <!--单位-->
                     <FormItem :label="`${item_1.unitTypeLabel}:`"
                               :key="item_1.unitId">
                         <Input v-model="item_1.unitName"
-                               style="width: 510px;"
+                               style="width: 310px;"
                                readonly />
+                        (请选择以下重点人员作为考勤对象)
                     </FormItem>
 
                     <!--职务-->
                     <FormItem v-for="(item_2, idx) in item_1.dutyList"
                               :key="item_2.projectUserId + idx"
-                              :label-width="110"
                               :label="`${item_2.projectDutyLabel}：`">
                         <!--用户选择-->
                         <Select v-model="item_2.projectUnitId" style="width: 200px;">
@@ -42,7 +49,6 @@
                     </FormItem>
 
                 </template>
-
 
             </Form>
         </Modal>
@@ -60,6 +66,7 @@
                 projectUnitList: [],
                 formData: {
                     projectId: '',
+                    beginAttendanceTime: '',
                     projectAttendances: [],
                     projectAttendances_my: []
                 },
@@ -80,6 +87,10 @@
             this.getDict(['projectDuty']);
         },
         methods: {
+            onChange_beginAttendanceTime(value) {
+                this.formData.beginAttendanceTime = value;
+            },
+
             getDict(list) {
                 this.$http({
                     method: 'get',
