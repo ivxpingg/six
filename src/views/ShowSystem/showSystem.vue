@@ -1,15 +1,16 @@
 <template>
     <div class="showSystem-container">
         <div class="showSystem-container-innner">
-            <div class="title">综合展示系统</div>
-            <Button class="btn-back"
-                    size="large"
-                    type="text"
-                    ghost
-                    to="/home"
-                    icon="md-arrow-round-back">
-                返回
-            </Button>
+            <!--<div class="title">综合展示系统</div>-->
+            <!--<Button class="btn-back"-->
+                    <!--size="large"-->
+                    <!--type="text"-->
+                    <!--ghost-->
+                    <!--to="/home"-->
+                    <!--icon="md-arrow-round-back">-->
+                <!--返回-->
+            <!--</Button>-->
+
             <vMap class="v-map"> </vMap>
 
             <div class="card-box left-panel">
@@ -99,7 +100,7 @@
         .showSystem-container-innner {
             position: relative;
             height: 100%;
-            min-height: 810px;
+            min-height: 860px;
 
             .btn-back {
                 position: absolute;
@@ -164,18 +165,18 @@
         }
 
         .chart-card {
-            background-color: rgba(45,140,240,0.1);
+            background-color: rgba(17,48,124,0.6);
             border: 1px solid rgba(255,255,255,0);
 
             .ivu-card-head {
                 padding: 6px;
-                background-color: rgba(45,140,240,0.1);
+                background-color: rgba(17,48,124,0.8);
                 border-bottom: 1px solid rgba(255,255,255,0);
                 p {
-                    color: #fff;
+                    color: #01b0ff;
                     font-size: 12px;
                     .ivu-icon {
-                        color: rgb(45,140,240);
+                        color: #01b0ff;
                         font-size: 20px;
                     }
                 }

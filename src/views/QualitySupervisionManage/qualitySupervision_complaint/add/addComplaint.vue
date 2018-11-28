@@ -1,7 +1,7 @@
 <template>
     <div class="addComplaint-container">
         <Modal v-model="modalValue"
-               title="添加监督记录"
+               title="添加安全投诉"
                :width="640"
                @on-visible-change="onVisibleChange">
             <Form ref="form"
@@ -41,7 +41,7 @@
                 <FormItem label="备注:">
                     <Input v-model="formData.remark" type="textarea" :rows="3" style="width: 490px;" placeholder="请输入" />
                 </FormItem>
-                <FormItem label="相关材料:">
+                <FormItem label="相关材料:" prop="fileIds">
                     <Upload :action="uploadAtion"
                             :showUploadList="uploadParams.showUploadList"
                             :multiple="uploadParams.multiple"
@@ -99,6 +99,7 @@
                     projectId: [{ required: true, message: '投诉项目不能为空！', trigger: 'blur' }],
                     phone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
                     complaintContent: [{ required: true, message: '投诉内容不能为空！', trigger: 'blur' }],
+                    fileIds: [{ required: true, type: 'array', message: '文件不能为空！', trigger: 'blur' }]
                 },
 
                 projectList: []

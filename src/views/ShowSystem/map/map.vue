@@ -1,5 +1,16 @@
 <template>
     <div class="baidu-map">
+        <div class="map-header">
+
+            <img class="title-logo" src="../../../assets/images/logo.png" alt="logo">
+            <div class="title"> 综合展示系统</div>
+            <ul class="map-btn">
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-bianji"> 编辑 </Button></li>
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-tianjia"> 添加 </Button> </li>
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-wancheng"> 完成 </Button></li>
+                <li> <Button size="large" type="text" ghost to="/home" custom-icon="iconfont icon-bianji"> 返回 </Button> </li>
+            </ul>
+        </div>
         <div class="map" id="baidu_map"></div>
 
         <div @mouseleave="onmouseleave"
@@ -21,8 +32,10 @@
 </template>
 <script>
     import initBMap from './initBMap';
+    import vCommonIcon from '@/components/commonIcon/commonIcon';
     export default {
         name: 'baiduMap',
+        components: {vCommonIcon},
         data() {
             return {
                 map: null,
@@ -66,7 +79,55 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
     .baidu-map {
+        position: relative;
         height: 100%;
+
+        .map-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background-color: rgba(17,48,124,0.9);
+            z-index: 111;
+
+            .title-logo {
+                float: left;
+                margin-top: 12px;
+                margin-left: 20px;
+                width: 45px;
+            }
+            .title {
+                float: left;
+                padding-left: 20px;
+                font-size: 30px;
+                color: #01b0ff;
+                font-weight: 700;
+                line-height: 70px;
+                letter-spacing: 8px;
+
+            }
+
+            .map-btn {
+                float: right;
+                padding-top: 18px;
+                padding-right: 60px;
+                li {
+                    float: left;
+                    margin-left: 18px;
+                    .ivu-btn {
+                        color: #01b0ff;
+                        font-weight: 700;
+                        border: none;
+                        box-shadow: none;
+                        &:hover, &:active {
+                            color: #FFF;
+                            border: none;
+                        }
+                    }
+                }
+            }
+        }
         .map {
             height: 100%;
         }
