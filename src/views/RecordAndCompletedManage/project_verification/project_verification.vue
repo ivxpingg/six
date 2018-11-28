@@ -94,6 +94,12 @@
                       :processStepId="currentProject.processStepId"
                       @modal-auditPass-callback="modal_auditPass_callback"></vHandleAudit>
 
+        <!--下发交工申请核查意见书-->
+        <vSendProjectFiles ref="modal_sendProjectFiles"
+                           :projectId="currentProject.projectId"
+                           @modal-callback="modal_sendProjectFiles_callback">
+
+        </vSendProjectFiles>
     </div>
 </template>
 
@@ -102,6 +108,7 @@
     import vProjectVerification_apply from './edit/projectVerification_apply';
     import vContentAudit from './content-audit/content-audit';
     import vHandleAudit from './handleAudit/handleAudit';
+    import vSendProjectFiles from './sendProjectfiles/sendProjectFiles';
     import authMixin from '../../../lib/mixin/authMixin'
     import MOMENT from 'moment';
     export default {
@@ -111,7 +118,8 @@
             vIvxFilterBox,
             vProjectVerification_apply,
             vContentAudit,
-            vHandleAudit
+            vHandleAudit,
+            vSendProjectFiles
         },
         data() {
             return {
@@ -200,7 +208,9 @@
                                 }
                             }, '查看'));
 
-                            if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
+                            if ((params.row.handleStatus === 'submitted'
+                                || params.row.handleStatus === 'replenish')
+                                && this.auth_add) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',
@@ -281,6 +291,29 @@
                                 }, '处理标签审核'));
                             }
 
+                            // 下发工程交工质量核验意见
+
+                            if (params.row.handleStatus === 'handle'
+                                && params.row.auditProcessId
+                                && !params.row.processStepId
+                                && params.row.projectStatus === 'handover_apply') {
+
+
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-create-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentProject.projectId = params.row.projectId;
+                                            this.$refs.modal_sendProjectFiles.modalValue = true;
+                                        }
+                                    }
+                                }, '下发工程交工质量核验意见'));
+                            }
+
                             return h('div', {
                                 class: 'ivx-table-cell-handle'
                             }, list);
@@ -311,8 +344,6 @@
 
                 // 材料完整性审核
                 modal_contentAudit: false,
-
-
             };
         },
         watch: {
@@ -423,6 +454,15 @@
             // 处理标签审核
             // 审核通过
             modal_auditPass_callback() {
+                this.currentProject.projectId = '';
+                this.currentProject.auditProcessId = '';
+                this.currentProject.processStepId = '';
+                this.getData();
+            },
+
+            // 下发交工申请核查意见书 回调
+            modal_sendProjectFiles_callback() {
+                this.currentProject.projectId = '';
                 this.getData();
             },
 

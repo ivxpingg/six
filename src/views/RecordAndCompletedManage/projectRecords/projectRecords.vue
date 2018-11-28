@@ -224,8 +224,8 @@
             // 备案审核
             check(row) {
                 this.$Modal.confirm({
-                    title: '审核',
-                    content: `确认要< ${row.projectName} >项目备案通过审核?`,
+                    title: '提交审核',
+                    content: `确认将《 ${row.projectName} 》工程备案提交审核?`,
                     onOk: () => {
                         this.$http({
                             method: 'get',
@@ -235,7 +235,7 @@
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
-                                this.$Message.success('审核成功!');
+                                this.$Message.success('提交审核成功!');
                                 this.getData();
                             }
                         });

@@ -271,7 +271,7 @@
             uploadFile() {
 
                 if (this.auditContent_obj.lastStep) {
-
+                    this.$Spin.show();
                     this.exportPDF(true).then(data => {
                         this.$http({
                             method: 'post',

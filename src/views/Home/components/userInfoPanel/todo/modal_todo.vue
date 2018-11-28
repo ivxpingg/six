@@ -82,18 +82,20 @@
                     { title: '状态', width: 100, align: 'center', key: 'waitHandleStatusLabel' },
                     { title: '操作', width: 100, align: 'center',
                         render:(h, params) => {
-                            return params.row.waitHandleStatus === 'complete_handle' ? '' :
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.todoHandle(params.row);
+                            if (params.row.waitHandleType !== 'handover_reply_audit') {
+                                return params.row.waitHandleStatus === 'complete_handle' ? '' :
+                                    h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.todoHandle(params.row);
+                                            }
                                         }
-                                    }
-                                }, '处理');
+                                    }, '处理');
+                            }
                         }
                     },
                 ],
@@ -216,6 +218,14 @@
                         // });
                         break;
                     case 'sign_off_reply':       // 交工检测核验审核
+
+                        // param = eval(`[${row.param}]`);
+                        // Object.assign(this.projectRecord, {
+                        //     projectRecordId: '',
+                        //     projectName: '',
+                        //     part: ''
+                        // }, param[0]);
+
                         this.$router.push({
                             name: 'project_verification'
                         });
@@ -229,6 +239,8 @@
                         this.$router.push({
                             name: 'projectFileManage'
                         });
+                        break;
+                    case 'handover_reply_audit':
                         break;
                 }
             },

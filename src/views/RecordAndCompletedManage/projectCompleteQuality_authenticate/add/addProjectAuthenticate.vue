@@ -1,7 +1,7 @@
 <template>
     <div class="addProjectAuthenticate-container">
         <Modal v-model="modalValue"
-               title="添加工程备案"
+               title="竣工质量鉴定"
                :width="540">
             <Form ref="form"
                   class="form"
@@ -115,7 +115,7 @@
             getProjectList() {
                 this.$http({
                     method: 'get',
-                    url: '/projectAudit/chooseProjectListForHandover'
+                    url: '/projectAudit/chooseProjectListForCompleted'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.projectList = res.data || [];

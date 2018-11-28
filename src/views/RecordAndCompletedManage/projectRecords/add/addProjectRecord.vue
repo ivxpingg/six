@@ -36,7 +36,7 @@
                 <FormItem label="联系方式:">
                     <Input v-model="formData.phone" readonly disabled/>
                 </FormItem>
-                <FormItem label="备案内容:">
+                <FormItem label="备案内容:" prop="recordType">
                     <Select v-model="formData.recordType">
                         <Option v-for="item in dict_recordType"
                                 :key="item.id"
@@ -107,7 +107,9 @@
                 },
                 rules: {
                     projectUnitId: [{ required: true, message: '参建单位不能为空！', trigger: 'blur' }],
-                    projectUserId: [{ required: true, message: '负责人不能为空！', trigger: 'blur' }]
+                    projectUserId: [{ required: true, message: '负责人不能为空！', trigger: 'blur' }],
+                    recordType: [{ required: true, message: '备案内容不能为空！', trigger: 'blur' }],
+                    recordContent: [{ required: true, message: '备案不能为空！', trigger: 'blur' }],
                 },
 
                 // 项目列表
