@@ -18,7 +18,7 @@
                     </Select>
                 </FormItem>
 
-                <FormItem label="考勤启动时间:">
+                <FormItem label="考勤启动时间:" prop="beginAttendanceTime">
                     <DatePicker v-model="formData.beginAttendanceTime"
                                 type="date"
                                 @on-change="onChange_beginAttendanceTime"
@@ -27,8 +27,7 @@
 
                 <template  v-for="item_1 in formData.projectAttendances_my">
                     <!--单位-->
-                    <FormItem :label="`${item_1.unitTypeLabel}:`"
-                              :key="item_1.unitId">
+                    <FormItem :label="`${item_1.unitTypeLabel}:`">
                         <Input v-model="item_1.unitName"
                                style="width: 310px;"
                                readonly />
@@ -37,13 +36,12 @@
 
                     <!--职务-->
                     <FormItem v-for="(item_2, idx) in item_1.dutyList"
-                              :key="item_2.projectUserId + idx"
                               :label="`${item_2.projectDutyLabel}：`">
                         <!--用户选择-->
-                        <Select v-model="item_2.projectUnitId" style="width: 200px;">
-                            <Option v-for="item_user in item_1.userList"
-                                    :key="item_user.userId"
-                                    :value="item_user.projectUnitId"
+                        <Select v-model="item_2.projectUserId" style="width: 200px;">
+                            <Option v-for="(item_user, uidx) in item_1.userList"
+                                    :key="item_1.unitId + item_user.userId + uidx"
+                                    :value="item_user.projectUserId"
                                     :label="item_user.name"></Option>
                         </Select>
                     </FormItem>
@@ -51,6 +49,11 @@
                 </template>
 
             </Form>
+
+            <div slot="footer">
+                <Button type="primary" size="large" @click="beforeSave">保存</Button>
+            </div>
+
         </Modal>
     </div>
 </template>
@@ -67,10 +70,13 @@
                 formData: {
                     projectId: '',
                     beginAttendanceTime: '',
-                    projectAttendances: [],
-                    projectAttendances_my: []
+                    projectAttendances: [],   // 提交的数据结构
+                    projectAttendances_my: [] // 自己的数据结构
                 },
-                rules: {},
+                rules: {
+                    projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
+                    beginAttendanceTime: [{ required: true, message: '考勤启动时间不能为空！', trigger: 'blur' }]
+                },
                 // 字典
                 dict_projectDuty: []  // 项目职务（项目重点考勤）
             };
@@ -109,10 +115,11 @@
             },
             // 获取考勤项目列表
             getProjectList() {
+
                 this.$http({
                     method: 'get',
-                    // url: '/projectAttendance/projectList'
-                    url: '/supervisionCheck/monitorProjectList'
+                    url: '/projectAudit/chooseProjectListForHandover',
+                    // url: '/supervisionCheck/monitorProjectList'
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         this.projectList = res.data || [];
@@ -272,6 +279,47 @@
                     }).catch(() =>{
                         reject([]);
                     })
+                })
+            },
+
+            // 保存
+            save() {
+                this.$http({
+                    method: 'post',
+                    url: '/projectAttendance/add?projectId=' + this.formData.projectId + '&beginAttendanceTime=' + this.formData.beginAttendanceTime,
+                    data: JSON.stringify(this.formData.projectAttendances)
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.$Message.success('添加成功！');
+                        this.modalValue = false;
+                        this.$emit('modal-callback');
+                    }
+                })
+
+            },
+            beforeSave() {
+                this.$refs.form.validate(valide => {
+                    if (valide) {
+                        this.formData.projectAttendances = [];
+                        this.formData.projectAttendances_my.forEach((val, idx) => {
+
+                            val.dutyList.forEach(val_duty => {
+                                if (val_duty.projectUserId) {
+                                    for (let i = 0; i < val.userList.length; i++) {
+                                        if (val.userList[i].projectUserId === val_duty.projectUserId) {
+                                            val_duty.userId = val.userList[i].userId;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                this.formData.projectAttendances.push(val_duty);
+                            })
+
+                        });
+
+                       this.save();
+                    }
                 })
             }
         }
