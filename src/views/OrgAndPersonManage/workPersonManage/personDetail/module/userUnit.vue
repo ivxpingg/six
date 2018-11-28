@@ -24,7 +24,7 @@
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '单位名称', width: 140, align: 'center', key: 'unitName' },
-                    { title: '部门名称', width: 120, align: 'center', key: 'department' },
+                    // { title: '部门名称', width: 120, align: 'center', key: 'department' },
                     { title: '职务', width: 120, align: 'center', key: 'job' },
                     { title: '技术职称', width: 120, align: 'center', key: 'titleNameLabel' },
                     { title: '级别', width: 120, align: 'center', key: 'titleLevelLabel' },

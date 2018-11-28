@@ -139,7 +139,6 @@
             // 保存修改
             onClick_edit() {
                 this.$refs.form.validate((valid) => {
-                    debugger
                     if (valid) {
                         this.$http({
                             method: 'post',
