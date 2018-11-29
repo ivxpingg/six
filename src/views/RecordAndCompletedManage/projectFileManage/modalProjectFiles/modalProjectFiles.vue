@@ -181,13 +181,13 @@
                         },
                         {
                             folderName: '信用评价记录材料',
-                            url: '/archive/',
+                            url: '/archive/creditEvaluateAttachList',
                             selectedFileList: [],
                             auth: this.auth_supervisionFile
                         },
                         {
                             folderName: '质量安全投诉材料',
-                            url: '/archive/',
+                            url: '/archive/complaintAttachList',
                             selectedFileList: [],
                             auth: this.auth_supervisionFile
                         },
@@ -195,7 +195,7 @@
                     projectFiles_2: [
                         {
                             folderName: '交工检测核验材料',
-                            url: '/archive/',
+                            url: '/archive/handoverOpinionAttachList',
                             selectedFileList: [],
                             auth: this.auth_projectFile
                         },
@@ -209,7 +209,7 @@
                     projectFiles_3: [
                         {
                             folderName: '竣工质量鉴定材料',
-                            url: '/archive/',
+                            url: '/archive/completeAttachList',
                             selectedFileList: [],
                             auth: this.auth_projectFile
                         },

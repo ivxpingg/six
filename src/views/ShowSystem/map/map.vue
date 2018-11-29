@@ -5,75 +5,116 @@
             <img class="title-logo" src="../../../assets/images/logo.png" alt="logo">
             <div class="title"> 综合展示系统</div>
             <ul class="map-btn">
-                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-bianji"> 编辑 </Button></li>
-                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-tianjia"> 添加 </Button> </li>
-                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-wancheng"> 完成 </Button></li>
-                <li> <Button size="large" type="text" ghost to="/home" custom-icon="iconfont icon-bianji"> 返回 </Button> </li>
+                <!--<li> <Button size="large" type="text" ghost custom-icon="iconfont icon-bianji"> 编辑 </Button></li>-->
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-tianjia"
+                             v-show="status === 'normal'"
+                             @click="onClick_add_modal"> 添加 </Button> </li>
+
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-tianjia"
+                             v-show="status === 'add'"
+                             @click="onClick_addMarker_modal"> 添加打卡点 </Button> </li>
+
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-wancheng"
+                             v-show="status === 'add'"
+                             @click="onClick_complete_draw"> 完成 </Button></li>
+
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-wancheng"
+                             v-show="status === 'edit'"
+                             @click="onClick_save"> 保存 </Button></li>
+
+                <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-wancheng"
+                             v-show="status === 'add' || status === 'edit'"
+                             @click="cancel_status"> 取消 </Button></li>
+
+                <li> <Button size="large" type="text" ghost to="/home" custom-icon="iconfont icon-bianji" v-show="status === 'normal'"> 返回 </Button> </li>
             </ul>
         </div>
         <div class="map" id="baidu_map"></div>
 
-        <div @mouseleave="onmouseleave"
-             class="modal-list-info ivu-card ivu-card-bordered"
-             v-show="cardInfo"
-              :style="{top: `${cardTop}px`, left: `${cardLeft}px`}">
-            <!--<div class="ivu-card-head"><p><span>项目情况</span></p></div>-->
-            <div class="ivu-card-body">
-                <Form >
-                    <FormItem label="项目名称:">某某路改建工程</FormItem>
-                    <FormItem label="建设里程:">12km</FormItem>
-                    <FormItem label="建设地点:">六安市</FormItem>
-                    <FormItem label="开工时间:">2018-09-06</FormItem>
-                </Form>
-                <div class="ivu-poptip-arrow"></div>
-            </div>
-        </div>
+        <!--选择添加项目-->
+        <Modal title="选择项目"
+               :width="450"
+               v-model="modal_projectSelect"
+               ok-text="绘制线路"
+               @on-ok="onOk_add_modal">
+            <Form>
+                <FormItem label="项目：" :label-width="60">
+                    <Select v-model="projectValue_select" @on-change="onChange_selectProject">
+                        <Option v-for="(item, idx) in projectList_select"
+                                :key="item.projectId + idx"
+                                :label="`${item.projectName}(${item.part})`"
+                                :value="item.projectId"></Option>
+                    </Select>
+                </FormItem>
+            </Form>
+        </Modal>
+
     </div>
 </template>
 <script>
     import initBMap from './initBMap';
     import vCommonIcon from '@/components/commonIcon/commonIcon';
+    import projectSelect_mixin from './mixin/projectSelect';
+    import mapDrawing_mixin from './mixin/mapDrawing';
+    import projectLine_mixin from './mixin/projectLine';
+
     export default {
         name: 'baiduMap',
+        mixins: [projectSelect_mixin, mapDrawing_mixin, projectLine_mixin],
         components: {vCommonIcon},
         data() {
             return {
                 map: null,
-                points: [
-                    [116.440175, 31.753489],
-                    [116.477544, 31.594179]
-                ],
-                cardInfo: false,
-                cardLeft: 0,
-                cardTop: 0
+
+                // 当前选择的项目
+                currentProject:{
+
+                },
+
+                // 当前状态： 编辑状态：edit; 添加状态： add; 默认状态： normal
+                status: 'normal'
             }
         },
         mounted() {
             initBMap('baidu_map').then((m) => {
                 this.map = m;
-                this.setPoint();
+                this.getProjectShowList();
             });
+
+            this.getProjectList_select();
         },
         methods: {
-            setPoint() {
-                this.points.forEach((v) => {
-                    let point = new BMap.Point(v[0], v[1]);
-                    let marker = new BMap.Marker(point);  // 创建标注
-                    this.map.addOverlay(marker);               // 将标注添加到地图中
-                    this.setPointEvent(marker);
-                });
+            // 取消添加或编辑
+            cancel_status() {
+                if (this.polyline) {
+                    this.map.removeOverlay(this.polyline);
+                }
+                if (this.marker) {
+                    this.map.removeOverlay(this.marker);
+                }
+
+                if (this.polyline_edit) {
+                    this.map.removeOverlay(this.polyline_edit);
+                }
+                if (this.marker_edit) {
+                    this.map.removeOverlay(this.marker_edit);
+                }
+
+                this.formData_add.projectId = '';
+                this.formData_add.projectPosition = '';
+                this.formData_add.lat = null;
+                this.formData_add.lon = null;
+
+                this.polyline = null;
+                this.marker = null;
+                this.status = 'normal';
+                if(this.drawingManager) {
+                    this.drawingManager.close();
+                }
+
+                this.getProjectShowList();
             },
-            setPointEvent(marker) {
-                let that = this;
-                marker.addEventListener('mouseover', function (e) {
-                    that.cardTop = e.clientY - 170;
-                    that.cardLeft = e.clientX - 125;
-                    that.cardInfo = true;
-                });
-            },
-            onmouseleave() {
-                this.cardInfo = false;
-            }
+
         }
     }
 </script>
