@@ -49,6 +49,16 @@
 
                 options = merge(true, baseOption, options);
                 this.chart.setOption(options);
+            },
+            getData() {
+                this.$http({
+                    method: 'get',
+                    url: ''
+                }).then(res => {
+                    if (res.code === 'SUCCESS') {
+
+                    }
+                })
             }
         }
     }

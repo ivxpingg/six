@@ -17,23 +17,23 @@
                 <Card class="chart-card lines-chart-card" icon="md-arrow-dropright">
                     <p slot="title">
                         <Icon type="md-arrow-dropright" />
-                        监督工作统计
+                        项目地区分布情况
                     </p>
                     <vLineCharts class="line-chart"></vLineCharts>
                 </Card>
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title"><Icon type="md-arrow-dropright" />监督工作统计</p>
+                    <p slot="title"><Icon type="md-arrow-dropright" />建设项目总里程</p>
                     <vDoughnutChart class="line-chart"></vDoughnutChart>
                 </Card>
             </div>
 
             <div class="card-box right-panel">
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title"><Icon type="md-arrow-dropright" />监督工作统计</p>
+                    <p slot="title"><Icon type="md-arrow-dropright" />从业人员增长情况</p>
                     <vBarCharts class="line-chart"></vBarCharts>
                 </Card>
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title"><Icon type="md-arrow-dropright" />监督工作统计</p>
+                    <p slot="title"><Icon type="md-arrow-dropright" />项目质量指标分析</p>
                     <vRadarChart class="line-chart"></vRadarChart>
                 </Card>
             </div>
@@ -41,13 +41,13 @@
             <div class="card-box bottom-panel">
                 <div class="bt-left">
                     <Card class="chart-card line-chart-card">
-                        <p slot="title"><Icon type="md-arrow-dropright" />用户活跃度统计</p>
+                        <p slot="title"><Icon type="md-arrow-dropright" />督查工作统计</p>
                         <vAreaChart class="line-chart"></vAreaChart>
                     </Card>
                 </div>
                 <div class="bt-right">
                     <Card class="chart-card line-chart-card">
-                        <p slot="title"><Icon type="md-arrow-dropright" />用户活跃度统计</p>
+                        <p slot="title"><Icon type="md-arrow-dropright" />督察类型分析</p>
                         <vPieChart class="line-chart"></vPieChart>
                     </Card>
                 </div>
