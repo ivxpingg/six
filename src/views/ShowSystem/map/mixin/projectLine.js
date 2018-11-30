@@ -74,7 +74,9 @@ export default {
 
                     let point = p.getPath()[0];
                     infoWindow = new BMap.InfoWindow(html, opts);  // 创建信息窗口对象
-                    that.map.openInfoWindow(infoWindow, point); //开启信息窗口
+                    if (!p.isEdit) {
+                        that.map.openInfoWindow(infoWindow, point); //开启信息窗口
+                    }
                 });
 
                 polyline.addEventListener('mouseout', function (e) {
@@ -100,6 +102,8 @@ export default {
 
         // 覆盖物右键菜单 - 编辑
         polylineEdit(e, r, polyline) {
+            polyline.isEdit = true;
+
             this.status = 'edit';
             this.removePolygonOverlay(polyline);
             this.polyline_edit = polyline;

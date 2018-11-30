@@ -10,8 +10,8 @@ export default {
 
             // 绘制线路样式
             styleOptions: {
-                strokeColor:"red",    //边线颜色。
-                fillColor:"red",      //填充颜色。当参数为空时，圆形将没有填充效果。
+                strokeColor:"yellow",    //边线颜色。
+                fillColor:"yellow",      //填充颜色。当参数为空时，圆形将没有填充效果。
                 strokeWeight: 5,       //边线的宽度，以像素为单位。
                 strokeOpacity: 0.8,    //边线透明度，取值范围0 - 1。
                 fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
