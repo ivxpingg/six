@@ -7,7 +7,8 @@
             <div class="ivx-table-box">
                 <Table ref="table"
                        border
-                       :height="400"
+                       :height="434"
+                       size="small"
                        :loading="tableLoading"
                        :columns="tableColumns"
                        :data="tableData"></Table>
@@ -81,7 +82,7 @@
                     },
                     {
                         title: '操作时间',
-                        minWidth: 105,
+                        width: 150,
                         tooltip: true,
                         key: 'operateTime',
                         align: 'center',

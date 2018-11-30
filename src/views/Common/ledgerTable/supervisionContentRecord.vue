@@ -13,6 +13,9 @@
                                 placeholder="选择时间"
                                 style="width: 200px"></DatePicker>
                 </FormItem>
+                <FormItem>
+                    <!--<Button type="primary" icon="md-download" @click="onClick_export" >导出</Button>-->
+                </FormItem>
             </Form>
         </vIvxFilterBox>
         <div class="ivx-table-box">
@@ -109,6 +112,16 @@
                     }
                 }).catch(() => {
                     this.tableLoading = false;
+                })
+            },
+            // 导出
+            onClick_export() {
+                this.$http({
+                    method: 'post',
+                    url: '/record/',
+                    data: JSON.stringify(this.searchParams)
+                }).then((res) => {
+
                 })
             }
         }
