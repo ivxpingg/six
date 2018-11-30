@@ -5,6 +5,9 @@
                     type="primary"
                     icon="md-add"
                     @click="modal_add_open">登记投诉</Button>
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('complaint')">查看日志</Button>
         </vIvxFilterBox>
         <vIvxFilterBox dashed>
             <Form inline>
@@ -57,6 +60,9 @@
         <!--查看附件-->
         <vViewFiles ref="viewFiles" :data="fileList"></vViewFiles>
 
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
+
     </div>
 </template>
 
@@ -67,9 +73,10 @@
     import MOMENT from 'moment';
     import vAddComplaint from './add/addComplaint';
     import vModalEmployeeSelect from '../../Common/employeeSelect/modalEmployeeSelect';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'qualitySupervision_complaint',
-        mixins: [authMixin, viewFilesMixin],
+        mixins: [authMixin, viewFilesMixin, logViewMixin],
         components: {vIvxFilterBox, vAddComplaint, vModalEmployeeSelect},
         data() {
             return {

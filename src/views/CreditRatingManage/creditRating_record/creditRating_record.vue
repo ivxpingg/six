@@ -4,7 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_record_open">添加信用评价记录</Button>
-
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('credit_evaluate')">查看日志</Button>
         </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
@@ -82,6 +84,9 @@
             </Form>
         </Modal>
 
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
+
     </div>
 </template>
 
@@ -92,8 +97,10 @@
     import vAddCreditRatingRecord from './add/addCreditRatingRecord';
     import vNoticeModification_check from './noticeModification_check/noticeModification_check';
     import vNoticeReply_check from './noticeReply_check/noticeReply_check';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'creditRating_record',   // 信用评价记录
+        mixins: [logViewMixin],
         components: {
             vIvxFilterBox,
             vViewFiles,

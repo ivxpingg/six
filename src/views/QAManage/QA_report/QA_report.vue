@@ -19,14 +19,17 @@
                   :total="searchParams.total"
                   @on-change="onPageChange"></Page>
         </div>
+
+        <vAddReport ref="modal_add" @modal-callback="modal_add_callback"></vAddReport>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
+    import vAddReport from './addReport/addReport';
     export default {
         name: 'QA_report',  // 质量检测报表
-        components: {vIvxFilterBox},
+        components: {vIvxFilterBox, vAddReport},
         data() {
             return {
                 searchParams: {
@@ -106,7 +109,9 @@
             // this.getData();
         },
         methods: {
-            modal_add_open() {},
+            modal_add_open() {
+                this.$refs.modal_add.modalValue = true;
+            },
             /**
              * 分页控件-切换页面
              * @param current
@@ -131,7 +136,7 @@
                     this.tableLoading = false;
                 })
             },
-            // 备案删除
+            // 删除
             del(row) {
                 this.$Modal.confirm({
                     title: '删除',
@@ -151,6 +156,10 @@
                     }
                 })
             },
+
+            modal_add_callback() {
+                this.getData();
+            }
         }
     }
 </script>

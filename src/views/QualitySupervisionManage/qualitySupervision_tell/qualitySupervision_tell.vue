@@ -1,13 +1,9 @@
 <template>
     <div class="qualitySupervision_tell-container">
         <vIvxFilterBox dashed>
-            <!--<Button type="primary"-->
-                    <!--icon="ios-notifications"-->
-                    <!--@click="modal_noticeModification_open">整改通知</Button>-->
-
-            <!--<Button type="primary"-->
-                    <!--icon="ios-undo"-->
-                    <!--@click="modal_seeReply_open">整改回复</Button>-->
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('advance_notice')">查看日志</Button>
         </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
@@ -57,6 +53,9 @@
                       :changeNoticeId="currentRow.changeNotice.changeNoticeId"
                       :changeStatus="currentRow.changeNotice.changeStatus"
                       @modal-callback="modal_noticeReply_callback"></vNoticeReply>
+
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
     </div>
 </template>
 
@@ -67,8 +66,10 @@
     import vNoticeModification from './noticeModification/noticeModification';
     import vNoticeReply from './noticeReply/noticeReply.vue';
     import MOMENT from 'moment';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'qualitySupervision_tell',
+        mixins: [logViewMixin],
         components: {
             vIvxFilterBox,
             vViewFiles,

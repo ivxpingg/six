@@ -5,6 +5,9 @@
                     icon="ios-list">移交处理清单</Button>
             <Button type="primary"
                     icon="ios-options">案件清单处理</Button>
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('archive')">查看日志</Button>
         </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
@@ -23,6 +26,9 @@
         </ul>
 
         <vModalProjectFiles ref="modal_projectFiles" :projectId="currentRow.projectId"></vModalProjectFiles>
+
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
     </Card>
 </template>
 
@@ -30,8 +36,10 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vIvxFolder from '../../../components/folder/folder';
     import vModalProjectFiles from './modalProjectFiles/modalProjectFiles';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'projectFileManage',   // 工程档案管理
+        mixins: [logViewMixin],
         components: {vIvxFilterBox, vIvxFolder, vModalProjectFiles},
         data() {
             return {

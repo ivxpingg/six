@@ -1,5 +1,10 @@
 <template>
     <div class="qualitySupervision_accept-container">
+        <vIvxFilterBox dashed>
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('acceptance')">查看日志</Button>
+        </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
@@ -59,6 +64,9 @@
         <!--查看附件-->
         <vViewFiles ref="modal_viewFiles" :data="filesData"></vViewFiles>
 
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
+
     </div>
 </template>
 
@@ -69,9 +77,10 @@
     import vHandleAudit from './handleAudit/handleAudit';
     import viewFilesMixin from '../../Common/viewFiles/mixin';
     import MOMENT from 'moment';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'qualitySupervision_accept',
-        mixins: [authMixin, viewFilesMixin],
+        mixins: [authMixin, viewFilesMixin, logViewMixin],
         components: {vIvxFilterBox, vSuperviseTeamManage, vHandleAudit},
         data() {
             return {

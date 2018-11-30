@@ -4,6 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">交工验收申请登记</Button>
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('handover')">查看日志</Button>
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>
@@ -100,6 +103,9 @@
                            @modal-callback="modal_sendProjectFiles_callback">
 
         </vSendProjectFiles>
+
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
     </div>
 </template>
 
@@ -111,9 +117,10 @@
     import vSendProjectFiles from './sendProjectfiles/sendProjectFiles';
     import authMixin from '../../../lib/mixin/authMixin'
     import MOMENT from 'moment';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'project_verification',   // 交工检测核验
-        mixins: [authMixin],
+        mixins: [authMixin, logViewMixin],
         components: {
             vIvxFilterBox,
             vProjectVerification_apply,

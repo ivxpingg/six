@@ -4,7 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_addSupervisionRecord_open">添加监督记录</Button>
-
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('safe_supervision')">查看日志</Button>
         </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
@@ -61,6 +63,9 @@
                             :changeStatus="currentRow.changeNotice.changeStatus"
                             @modal-callback="modal_noticeReply_check_callback"></vNoticeReply_check>
 
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
+
     </div>
 </template>
 
@@ -71,8 +76,10 @@
     import vAddSupervisionRecord from './add/addSafeSupervisionRecord';
     import vNoticeModification_check from './noticeModification_check/noticeModification_check';
     import vNoticeReply_check from './noticeReply_check/noticeReply_check';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'safetySupervision_check',  // 安全督查检查
+        mixins: [logViewMixin],
         components: {
             vIvxFilterBox,
             vViewFiles,

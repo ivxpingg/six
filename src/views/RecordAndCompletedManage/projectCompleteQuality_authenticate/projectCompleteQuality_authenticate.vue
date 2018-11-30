@@ -4,6 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">竣工质量鉴定</Button>
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('complete')">查看日志</Button>
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>
@@ -50,6 +53,9 @@
         <!--查看附件-->
         <vViewFiles ref="modal_viewFiles" :data="filesData"></vViewFiles>
 
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
+
     </div>
 </template>
 
@@ -58,9 +64,10 @@
     import vAddProjectAuthenticate from './add/addProjectAuthenticate';
     import viewFilesMixin from '../../Common/viewFiles/mixin';
     import MOMENT from 'moment';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'projectCompleteQuality_authenticate',  // 竣工质量鉴定
-        mixins: [viewFilesMixin],
+        mixins: [viewFilesMixin, logViewMixin],
         components: {vIvxFilterBox, vAddProjectAuthenticate},
         data() {
             return {

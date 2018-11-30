@@ -4,6 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">添加工程备案</Button>
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('project_record')">查看日志</Button>
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>
@@ -46,14 +49,19 @@
         <vAddProjectRecord ref="add"
                            @modal_callback="modal_add_callback"></vAddProjectRecord>
 
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
+
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAddProjectRecord from './add/addProjectRecord';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'projectRecords',  // 工程备案
+        mixins: [logViewMixin],
         components: {vIvxFilterBox, vAddProjectRecord},
         data() {
             return {
@@ -65,7 +73,6 @@
                         searchKey: '',      // 模糊查询参数
                         handleStatus: ''
                     }
-
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },

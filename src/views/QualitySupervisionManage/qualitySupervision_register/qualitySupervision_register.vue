@@ -1,5 +1,10 @@
 <template>
     <div class="qualitySupervision_register-container">
+        <vIvxFilterBox dashed>
+            <Button type="primary"
+                    icon="md-document"
+                    @click="modalLogView('register')">查看日志</Button>
+        </vIvxFilterBox>
         <vIvxFilterBox v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
@@ -87,7 +92,8 @@
                            @modal_callback="modal_callback_contentAudit"></vContentAudit>
         </Modal>
 
-
+        <!--查看日志-->
+        <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
     </div>
 </template>
 
@@ -99,9 +105,10 @@
     import vProjectAudit from './audit/project_audit';
     import vContentAudit from './content-audit/content-audit';
     import MOMENT from 'moment';
+    import logViewMixin from '../../Common/logView/mixin';
     export default {
         name: 'qualitySupervision_register',  // 质量监督登记
-        mixins: [authMixin],
+        mixins: [authMixin, logViewMixin],
         components: {vIvxFilterBox, vAdd, vEdit, vProjectAudit, vContentAudit},
         computed: {
             _tableColumns() {
