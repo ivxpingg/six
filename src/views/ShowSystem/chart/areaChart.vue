@@ -7,8 +7,15 @@
     import Echarts from 'echarts';
     import baseOption from './baseOption';
     import { merge } from '@/lib/tools';
+    import MOMENT from 'moment';
     export default {
         name: 'areaChart',
+        props: {
+            year: {
+                type: String,
+                default: MOMENT().format('YYYY')
+            }
+        },
         data() {
             return {
                 chart: null
@@ -17,6 +24,12 @@
         watch: {
             '$store.state.app.htmlClientWidth'() {
                 this.chart.resize();
+            },
+            year: {
+                immediate: true,
+                handler() {
+                    this.getData();
+                }
             }
         },
         mounted() {
@@ -48,6 +61,33 @@
 
                 options = merge(true, baseOption, options);
                 this.chart.setOption(options);
+            },
+            getData() {
+                this.$http({
+                    method: 'get',
+                    url: '/projectShow/checkWayCount',
+                    params: {
+                        year: this.year
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.resetOption(res.data);
+                    }
+                })
+            },
+            resetOption(list) {
+                let myOPtion = this.chart.getOption();
+
+                myOPtion.series[0].data = [];
+
+                list.forEach(val => {
+                    myOPtion.series[0].data.push({
+                        value: val.num,
+                        name: val.checkWay
+                    });
+                });
+
+                this.chart.setOption(myOPtion);
             }
         }
     }

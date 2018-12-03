@@ -6,12 +6,27 @@
     import Echarts from 'echarts';
     import baseOption from './baseOption';
     import { merge } from '@/lib/tools';
+    import MOMENT from 'moment';
     export default {
-        name: 'lineChart',
+        name: 'lineChart',     // 项目地区分布情况
+        props: {
+            year: {
+                type: String,
+                default: MOMENT().format('YYYY')
+            }
+        },
         data() {
             return {
                 chart: null
             };
+        },
+        watch: {
+            year: {
+                immediate: true,
+                handler() {
+                    this.getData();
+                }
+            }
         },
         mounted() {
             this.initChart();
@@ -23,27 +38,34 @@
                     tooltip: {
                         trigger: 'item',
                     },
+                    grid: {
+                        bottom: 45
+                    },
                     xAxis: {
+                        axisLine: {
+                            show: false
+                        },
                         name: '',
-                        boundaryGap: false,
+                        boundaryGap: true,
                         type: 'category',
-                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                        data: [],
+                        axisLabel: {
+                            rotate: 45
+                        }
+                        // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
                     },
                     yAxis: {
+                        axisLine: {
+                            show: false
+                        },
                         type: 'value',
-                        name: '蒸发量',
                     },
                     series: [
-                        {
-                            data: [820, 932, 901, 934, 1290, 1330, 1320],
-                            type: 'line',
-                            smooth: true
-                        },
-                        {
-                            data: [890, 1100, 1020, 1000, 1500, 1652, 1741],
-                            type: 'line',
-                            smooth: true
-                        }
+                        // {
+                        //     data: [820, 932, 901, 934, 1290, 1330, 1320],
+                        //     type: 'line',
+                        //     smooth: true
+                        // }
                     ]
                 };
 
@@ -53,13 +75,38 @@
             getData() {
                 this.$http({
                     method: 'get',
-                    url: ''
+                    url: '/projectShow/projectAreaCount',
+                    params: {
+                        year: this.year
+                    }
                 }).then(res => {
-                    if (res.code === 'SUCCESS') {
-
+                    if(res.code === 'SUCCESS') {
+                        this.resetOption(res.data);
                     }
                 })
             },
+            resetOption(list) {
+                let myOPtion = this.chart.getOption();
+
+                // myOPtion.xAxis[0].data = [];
+                myOPtion.series = [{
+                    data: [],
+                    type: 'pie',
+                    smooth: true
+                }];
+
+                list.forEach(val => {
+                    // myOPtion.xAxis[0].data.push(val.county);
+                    // myOPtion.series[0].data.push(val.num);
+
+                    myOPtion.series[0].data.push({
+                        value: val.num,
+                        name: val.county
+                    });
+                });
+
+                this.chart.setOption(myOPtion);
+            }
 
         }
     }

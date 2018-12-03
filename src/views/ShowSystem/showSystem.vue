@@ -29,8 +29,9 @@
 
             <div class="card-box right-panel">
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title"><Icon type="md-arrow-dropright" />从业人员增长情况</p>
-                    <vBarCharts class="line-chart"></vBarCharts>
+                    <p slot="title"><Icon type="md-arrow-dropright" />督查工作统计</p>
+                    <!--<vBarCharts class="line-chart"></vBarCharts>-->
+                    <vAreaChart class="line-chart"></vAreaChart>
                 </Card>
                 <Card class="chart-card lines-chart-card">
                     <p slot="title"><Icon type="md-arrow-dropright" />项目质量指标分析</p>
@@ -38,20 +39,20 @@
                 </Card>
             </div>
 
-            <div class="card-box bottom-panel">
-                <div class="bt-left">
-                    <Card class="chart-card line-chart-card">
-                        <p slot="title"><Icon type="md-arrow-dropright" />督查工作统计</p>
-                        <vAreaChart class="line-chart"></vAreaChart>
-                    </Card>
-                </div>
-                <div class="bt-right">
-                    <Card class="chart-card line-chart-card">
-                        <p slot="title"><Icon type="md-arrow-dropright" />督察类型分析</p>
-                        <vPieChart class="line-chart"></vPieChart>
-                    </Card>
-                </div>
-            </div>
+            <!--<div class="card-box bottom-panel">-->
+                <!--<div class="bt-left">-->
+                    <!--<Card class="chart-card line-chart-card">-->
+                        <!--<p slot="title"><Icon type="md-arrow-dropright" />督查工作统计</p>-->
+                        <!--<vAreaChart class="line-chart"></vAreaChart>-->
+                    <!--</Card>-->
+                <!--</div>-->
+                <!--<div class="bt-right">-->
+                    <!--<Card class="chart-card line-chart-card">-->
+                        <!--<p slot="title"><Icon type="md-arrow-dropright" />督察类型分析</p>-->
+                        <!--<vPieChart class="line-chart"></vPieChart>-->
+                    <!--</Card>-->
+                <!--</div>-->
+            <!--</div>-->
 
         </div>
 
@@ -100,8 +101,8 @@
         .showSystem-container-innner {
             position: relative;
             height: 100%;
-            min-height: 860px;
-
+            /*min-height: 860px;*/
+            min-height: 600px;
             .btn-back {
                 position: absolute;
                 top: 5px;
@@ -131,7 +132,8 @@
             position: absolute;
             &.left-panel {
                 left: 10px;
-                bottom: 270px;
+                /*bottom: 270px;*/
+                bottom: 10px;
                 .ivu-card {
                     margin-top: 10px;
                 }
@@ -139,7 +141,8 @@
 
             &.right-panel {
                 right: 10px;
-                bottom: 270px;
+                /*bottom: 270px;*/
+                bottom: 10px;
                 .ivu-card {
                     margin-top: 10px;
                 }
