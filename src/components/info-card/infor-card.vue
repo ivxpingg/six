@@ -1,7 +1,7 @@
 <template>
   <Card :shadow="shadow" class="info-card-wrapper" :padding="0">
     <div class="content-con">
-      <div class="left-area" :style="{background: color, width: leftWidth}">
+      <div class="left-area" v-show="!!icon" :style="{background: color, width: leftWidth}">
         <common-icon class="icon" :type="icon" :size="iconSize" color="#fff"/>
       </div>
       <div class="right-area" :style="{width: rightWidth}">

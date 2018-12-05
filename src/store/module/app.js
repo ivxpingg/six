@@ -85,7 +85,9 @@ export default {
             }
         },
         setMianLayoutWidth(state, width) {
-            state.mianLayoutWidth = width;
+            setTimeout(() => {
+                state.mianLayoutWidth = width;
+            }, 1000);
         },
         onresize(state) {
             state.htmlClientWidth = document.documentElement.clientWidth;

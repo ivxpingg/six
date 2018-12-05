@@ -5,6 +5,15 @@
             <img class="title-logo" src="../../../assets/images/logo.png" alt="logo">
             <div class="title"> 综合展示系统</div>
             <ul class="map-btn">
+                <li style="padding-top: 8px;">
+                    <DatePicker :value="searchParams.year"
+                                class="datapicker"
+                                size="small"
+                                type="year"
+                                placeholder="选择时间"
+                                style="width: 100px;"
+                                @on-change="onChange_dataYear"></DatePicker>
+                </li>
                 <!--<li> <Button size="large" type="text" ghost custom-icon="iconfont icon-bianji"> 编辑 </Button></li>-->
                 <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-tianjia"
                              v-show="status === 'normal'"
@@ -26,7 +35,7 @@
                              v-show="status === 'add' || status === 'edit'"
                              @click="cancel_status"> 取消 </Button></li>
 
-                <li> <Button size="large" type="text" ghost to="/home" custom-icon="iconfont icon-bianji" v-show="status === 'normal'"> 返回 </Button> </li>
+                <li> <Button size="large" type="text" ghost to="/home" custom-icon="iconfont icon-fanhuiyulan" v-show="status === 'normal'"> 返回 </Button> </li>
             </ul>
         </div>
         <div class="map" id="baidu_map"></div>
@@ -57,7 +66,7 @@
     import projectSelect_mixin from './mixin/projectSelect';
     import mapDrawing_mixin from './mixin/mapDrawing';
     import projectLine_mixin from './mixin/projectLine';
-
+    import MOMENT from 'moment';
     export default {
         name: 'baiduMap',
         mixins: [projectSelect_mixin, mapDrawing_mixin, projectLine_mixin],
@@ -66,6 +75,9 @@
             return {
                 map: null,
 
+                searchParams: {
+                    year: ''
+                },
                 // 当前选择的项目
                 currentProject:{
 
@@ -74,6 +86,10 @@
                 // 当前状态： 编辑状态：edit; 添加状态： add; 默认状态： normal
                 status: 'normal'
             }
+        },
+        created() {
+            this.searchParams.year = MOMENT().format('YYYY');
+            this.$parent.year = this.searchParams.year;
         },
         mounted() {
             initBMap('baidu_map').then((m) => {
@@ -84,6 +100,10 @@
             this.getProjectList_select();
         },
         methods: {
+            onChange_dataYear(value) {
+                this.searchParams.year = value;
+                this.$parent.year = value;
+            },
             // 取消添加或编辑
             cancel_status() {
                 if (this.polyline) {
@@ -204,5 +224,18 @@
             border-width: 7px 7px 0;
             border-top-color: rgba(255,255,255,1);
         }
+    }
+
+    .datapicker {
+        .ivu-icon {
+            color: #01b0ff;
+        }
+
+        .ivu-input {
+            color: #01b0ff;
+            border: 1px solid #01b0ff;
+            background-color: transparent;
+        }
+
     }
 </style>

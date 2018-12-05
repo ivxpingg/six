@@ -19,23 +19,25 @@
                         <Icon type="md-arrow-dropright" />
                         项目地区分布情况
                     </p>
-                    <vLineCharts class="line-chart"></vLineCharts>
+                    <vLineCharts class="line-chart" :year="year"></vLineCharts>
                 </Card>
                 <Card class="chart-card lines-chart-card">
-                    <p slot="title"><Icon type="md-arrow-dropright" />建设项目总里程</p>
-                    <vDoughnutChart class="line-chart"></vDoughnutChart>
+                    <p slot="title"><Icon type="md-arrow-dropright" />督察类型分析</p>
+                    <!--<vDoughnutChart class="line-chart"></vDoughnutChart>-->
+                    <vPieChart class="line-chart" :year="year"></vPieChart>
                 </Card>
+
             </div>
 
             <div class="card-box right-panel">
                 <Card class="chart-card lines-chart-card">
                     <p slot="title"><Icon type="md-arrow-dropright" />督查工作统计</p>
                     <!--<vBarCharts class="line-chart"></vBarCharts>-->
-                    <vAreaChart class="line-chart"></vAreaChart>
+                    <vAreaChart class="line-chart" :year="year"></vAreaChart>
                 </Card>
                 <Card class="chart-card lines-chart-card">
                     <p slot="title"><Icon type="md-arrow-dropright" />项目质量指标分析</p>
-                    <vRadarChart class="line-chart"></vRadarChart>
+                    <vRadarChart class="line-chart" :year="year"></vRadarChart>
                 </Card>
             </div>
 
@@ -79,7 +81,7 @@
         },
         data() {
             return {
-
+                year: ''
             }
         },
         methods: {
@@ -133,7 +135,7 @@
             &.left-panel {
                 left: 10px;
                 /*bottom: 270px;*/
-                bottom: 10px;
+                top: 70px;
                 .ivu-card {
                     margin-top: 10px;
                 }
@@ -142,7 +144,7 @@
             &.right-panel {
                 right: 10px;
                 /*bottom: 270px;*/
-                bottom: 10px;
+                top: 70px;
                 .ivu-card {
                     margin-top: 10px;
                 }

@@ -42,11 +42,14 @@
                     grid: {
                       bottom: 10
                     },
+                    tooltip: {
+                        trigger: 'axis',
+                    },
                     xAxis: {
                         show: false,
                         type: 'category',
                         boundaryGap: false,
-                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                        data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
                     },
                     yAxis: {
                         type: 'value'
@@ -65,7 +68,7 @@
             getData() {
                 this.$http({
                     method: 'get',
-                    url: '/projectShow/checkWayCount',
+                    url: '/projectShow/supervisorWorkCount',
                     params: {
                         year: this.year
                     }
@@ -75,18 +78,46 @@
                     }
                 })
             },
-            resetOption(list) {
+            resetOption(data) {
                 let myOPtion = this.chart.getOption();
 
-                myOPtion.series[0].data = [];
+                myOPtion.series = [];
 
-                list.forEach(val => {
-                    myOPtion.series[0].data.push({
-                        value: val.num,
-                        name: val.checkWay
+                for(let name in data.checkTypeList) {
+
+                }
+                data.checkTypeList.forEach(name => {
+                    myOPtion.series.push({
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        name: name,
+                        type:'line',
+                        areaStyle: {},
+                        smooth: true
                     });
                 });
 
+
+                for(let key in data.list) {
+                    let month = MOMENT(key).month();
+
+                    data.list[key].forEach(val => {
+                        let series_idx = data.checkTypeList.indexOf(val.checkType);
+
+                        myOPtion.series[series_idx].data[month -1] = val.num;
+                    })
+                }
+                //
+                // data.list.forEach(val => {
+                //     let month = MOMENT(val).month();
+                //
+                //
+                //
+                //     myOPtion.series[0].data.push({
+                //         value: val.num,
+                //         name: val.checkWay
+                //     });
+                // });
+                console.dir(myOPtion);
                 this.chart.setOption(myOPtion);
             }
         }

@@ -11,47 +11,38 @@
                    :loading="tableLoading"
                    :columns="tableColumns"
                    :data="tableData"></Table>
-            <Page prev-text="上一页"
-                  next-text="下一页"
-                  show-total
-                  :current="searchParams.current"
-                  :page-size="searchParams.size"
-                  :total="searchParams.total"
-                  @on-change="onPageChange"></Page>
         </div>
 
         <vAddReport ref="modal_add" @modal-callback="modal_add_callback"></vAddReport>
+
+        <vViewFiles ref="modal_viewFiles" :data="fileList"></vViewFiles>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAddReport from './addReport/addReport';
+    import viewFilesMixin from '../../Common/viewFiles/mixin';
     export default {
         name: 'QA_report',  // 质量检测报表
+        mixins: [viewFilesMixin],
         components: {vIvxFilterBox, vAddReport},
         data() {
             return {
-                searchParams: {
-                    current: 1,      // 当前第几页
-                    size: 10,        // 每页几行
-                    total: 0,        // 总行数
-                    condition: {
-                        searchKey: '',      // 模糊查询参数
-                        handleStatus: ''
-                    }
-
-                },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },
-                    { title: '报表名称', align: 'center', key: 'name' },
-                    { title: '年度报表', width: 180, align: 'center', key: '2' },
-                    { title: '上传时间', width: 180, align: 'center', key: '3' },
-                    { title: '操作人', width: 180, align: 'center', key: '4' },
-                    { title: '备注', width: 180, align: 'center', key: '5' },
+                    { title: '报表名称', align: 'center', key: 'reportName' },
+                    { title: '年度报表', width: 180, align: 'center', key: 'reportYear' },
+                    { title: '上传时间', width: 180, align: 'center', key: 'insTime',
+                        render: (h, params) => {
+                            return h('div', params.row.insTime ? this.$moment(params.row.insTime).format('YYYY-MM-DD HH:mm:ss') : '');
+                        }
+                    },
+                    { title: '操作人', width: 180, align: 'center', key: 'userName' },
+                    { title: '备注', width: 180, align: 'center', key: 'remark' },
                     {
                         title: '操作',
-                        width: 110,
+                        width: 170,
                         align: 'center',
                         // fixed: 'right',
                         render: (h, params) => {
@@ -70,28 +61,31 @@
                                 }
                             }, '删除'));
 
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-eye'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.getData_vViewFile(params.row.reportRecordId, 'report', 'fileList');
+                                        this.$refs.modal_viewFiles.modalValue = true;
+                                    }
+                                }
+                            }, '查看'));
+
                             return h('div', {
                                 class: 'ivx-table-cell-handle'
                             }, list);
-
                         }
                     }
                 ],
-                tableData: [
-                    {
-                        'name': '六安市2015年年度交通建设项目质量状况分析报告',
-                        '2': '2015年度',
-                        '3': '2016-3-1',
-                        '4': '陈亮'
-                    },
-                    {
-                        'name': '质量检测报告',
-                        '2': '2015年度',
-                        '3': '2016-3-1',
-                        '4': '陈亮'
-                    }
-                ],
-                tableLoading: false
+                tableData: [ ],
+                tableLoading: false,
+
+                // 附件
+                fileList: []
             };
         },
         watch: {
@@ -106,31 +100,22 @@
             }
         },
         mounted() {
-            // this.getData();
+            this.getData();
         },
         methods: {
             modal_add_open() {
                 this.$refs.modal_add.modalValue = true;
             },
-            /**
-             * 分页控件-切换页面
-             * @param current
-             */
-            onPageChange(current) {
-                this.searchParams.current = current;
-            },
             // 获取表格数据
             getData() {
                 this.tableLoading = true;
                 this.$http({
-                    method: 'post',
-                    url: '/',
-                    data: JSON.stringify(this.searchParams)
+                    method: 'get',
+                    url: '/report/list'
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
-                        this.tableData = res.data.records;
-                        this.searchParams.total = res.data.total;
+                        this.tableData = res.data;
                     }
                 }).catch(() => {
                     this.tableLoading = false;
@@ -140,17 +125,18 @@
             del(row) {
                 this.$Modal.confirm({
                     title: '删除',
-                    content: `确认要删除<${row.name}>报告?`,
+                    content: `确认要删除<${row.reportName}>报表?`,
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/',
+                            url: '/report/delete',
                             params: {
-                                // safeNoticeId: row.safeNoticeId
+                                reportRecordId: row.reportRecordId
                             }
                         }).then((res) => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('删除成功!');
+                                this.getData();
                             }
                         });
                     }

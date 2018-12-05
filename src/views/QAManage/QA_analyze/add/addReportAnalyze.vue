@@ -1,20 +1,25 @@
 <template>
-    <div class="addReport-container">
-        <Modal v-model="modalValue" title="上传报表">
+    <div class="addReportAnalyze-container">
+        <Modal v-model="modalValue" title="上传年度报表">
             <Form ref="form"
                   :model="formData"
                   :rules="rules"
                   :label-width="95">
-                <FormItem label="报表名称：" prop="reportName">
-                    <Input v-model="formData.reportName" placeholder="请输入" />
+                <FormItem label="项目名称：" prop="projectName">
+                    <Input v-model="formData.projectName" placeholder="请输入" />
                 </FormItem>
-                <FormItem label="报表年度" prop="reportYear">
-                    <DatePicker :value="formData.reportYear" type="year" placeholder="请选择年份" style="width: 200px" @on-change="onChange_year"></DatePicker>
+                <FormItem label="数据年度：" prop="dataYear">
+                    <DatePicker :value="formData.dataYear" type="year" placeholder="请选择年份" style="width: 200px" @on-change="onChange_year"></DatePicker>
                 </FormItem>
-                <FormItem label="备注：">
-                    <Input v-model="formData.remark" type="textarea" placeholder="请输入" />
+                <FormItem label="地区：" prop="county">
+                    <Select v-model="formData.county">
+                        <Option v-for="item in areaList"
+                                :key="item.regionId"
+                                :value="item.regionId"
+                                :label="item.regionName"></Option>
+                    </Select>
                 </FormItem>
-                <FormItem label="报表:" prop="fileId">
+                <FormItem label="报表：" prop="fileId">
                     <Upload ref="upload"
                             :action="uploadActive"
                             :showUploadList="uploadParams.showUploadList"
@@ -37,7 +42,6 @@
                         @click="save">保存</Button>
             </div>
         </Modal>
-
     </div>
 </template>
 
@@ -45,7 +49,7 @@
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import uploadMixin from '../../../../lib/mixin/uploadMixin';
     export default {
-        name: 'addReport',
+        name: 'addReportAnalyze',
         mixins: [modalMixin, uploadMixin],
         computed: {
             uploadActive() {
@@ -54,25 +58,31 @@
         },
         data() {
             return {
+                areaList: [],
+
                 uploadParams: {
                     showUploadList: true
                 },
                 formData: {
-                    reportName: '',
-                    reportYear: '',
-                    remark: '',
+                    projectName: '',
+                    dataYear: '',
+                    county: '',
                     fileId: ''
                 },
                 rules: {
-                    reportName: [{ required: true, message: '报表名称不能为空！', trigger: 'blur' }],
-                    reportYear: [{ required: true, message: '报表年度不能为空！', trigger: 'blur' }],
+                    projectName: [{ required: true, message: '项目名称不能为空！', trigger: 'blur' }],
+                    county: [{ required: true, message: '地区不能为空！', trigger: 'blur' }],
+                    dataYear: [{ required: true, message: '数据年度不能为空！', trigger: 'blur' }],
                     fileId: [{ required: true, message: '请上传报表！', trigger: 'blur' }]
                 }
             };
         },
+        mounted() {
+            this.getAreaInfo();
+        },
         methods: {
             onChange_year(value) {
-                this.formData.reportYear = value;
+                this.formData.dataYear = value;
             },
             // 文件移除
             onRemoveFile(file, fileList) {
@@ -91,18 +101,32 @@
                 }
                 this.$refs.form.validateField('fileId');
             },
+            //获取六安所有区
+            getAreaInfo() {
+                this.$http({
+                    method: 'get',
+                    url: '/region/regionList',
+                    params: {
+                        parentId: '146'
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.areaList = res.data || [];
+                    }
+                })
+            },
 
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/report/add',
+                            url: '/dataAnalysis/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
-                                    content: '上传报表成功！'
+                                    content: '上传成功！'
                                 });
                                 this.modalValue = false;
                                 this.$emit('modal-callback');
@@ -117,6 +141,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .addReport-container {
+    .addReportAnalyze-container {
     }
 </style>

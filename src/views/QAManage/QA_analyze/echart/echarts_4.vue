@@ -1,5 +1,5 @@
 <template>
-    <div class="radarChart-container" ref="chart">
+    <div class="echarts_4-container" ref="chart">
     </div>
 </template>
 
@@ -7,13 +7,12 @@
     import Echarts from 'echarts';
     import baseOption from './baseOption';
     import { merge } from '@/lib/tools';
-    import MOMENT from 'moment';
     export default {
-        name: 'radarChart',
+        name: 'echarts_4', // 分部工程合格率对比分析
         props: {
             year: {
                 type: String,
-                default: MOMENT().format('YYYY')
+                default: ''
             }
         },
         data() {
@@ -25,11 +24,11 @@
             '$store.state.app.htmlClientWidth'() {
                 this.chart.resize();
             },
-            year: {
-                immediate: true,
-                handler() {
-                    this.getData();
-                }
+            '$store.state.app.mianLayoutWidth'() {
+                this.chart.resize();
+            },
+            year(val) {
+                this.getData();
             }
         },
         mounted() {
@@ -41,7 +40,9 @@
                 this.chart = Echarts.init(this.$refs.chart);
                 let options = {
                     legend: {
-                        show: false
+                        top: 0,
+                        right: 0,
+                        data: []
                     },
                     tooltip: {},
                     xAxis: {
@@ -59,29 +60,29 @@
                         radius: '70%',
                         name: {
                             textStyle: {
-                                color: '#fff',
+                                // color: '#fff',
                                 // borderRadius: 3,
                                 // backgroundColor: '#999',
                                 // padding: [3, 5]
                             }
                         },
                         indicator: [
-                            { name: '指标一', max: 6500},
-                            { name: '指标二', max: 16000},
-                            { name: '指标三', max: 30000},
-                            { name: '指标四', max: 38000},
-                            { name: '指标五', max: 52000},
-                            { name: '指标六', max: 25000}
+                            // { name: '指标一', max: 6500},
+                            // { name: '指标二', max: 16000},
+                            // { name: '指标三', max: 30000},
+                            // { name: '指标四', max: 38000},
+                            // { name: '指标五', max: 52000},
+                            // { name: '指标六', max: 25000}
                         ]
                     },
                     series: [{
-                        name: '项目质量指标分析',
+                        name: '分部工程合格率对比分析',
                         type: 'radar',
                         data : [
-                            {
-                                value : [4300, 10000, 28000, 35000, 50000, 19000],
-                                name : '项目质量指标分析'
-                            }
+                            // {
+                            //     value : [4300, 10000, 28000, 35000, 50000, 19000],
+                            //     name : '项目质量指标分析'
+                            // }
                         ]
                     }]
                 };
@@ -92,7 +93,7 @@
             getData() {
                 this.$http({
                     method: 'get',
-                    url: '/projectShow/projectQualityCount',
+                    url: '/dataAnalysis/secondItemClassifyPassRate',
                     params: {
                         year: this.year
                     }
@@ -102,53 +103,54 @@
                     }
                 })
             },
+
             resetOption(data) {
                 let myOPtion = this.chart.getOption();
+
+                myOPtion.legend[0].data = [];
                 myOPtion.radar[0].indicator = [];
-
-                data.qualityIndexList.forEach(val => {
+                myOPtion.series[0].data = [];
+                data.secondItemClassify.forEach(key => {
                     myOPtion.radar[0].indicator.push({
-                        name: val,
-                        max: data.maxQualityIndex[val] ? data.maxQualityIndex[val] : 1
+                        name: key,
+                        max: 100
                     });
-
-
                 });
 
-                myOPtion.series = {
-                    name: '项目质量指标分析',
-                    type: 'radar',
-                    data: []
-                };
-                for(let key in data.list) {
-                    let da = {
-                        value: [],
-                        name: key
-                    };
+                for(let k in data) {
+                    if (k !== 'secondItemClassify') {
 
-                    data.qualityIndexList.forEach(i => {
-                        da.value.push(0);
-                    });
+                        myOPtion.legend[0].data.push(k);
 
-                    data.list[key].forEach(v => {
-                        let idx = data.qualityIndexList.indexOf(v.qualityIndex);
-                        if (idx > -1) {
-                            da.value[idx] = v.num;
-                        }
-                    });
+                        let series_da = {
+                            value: [],
+                            name: k
+                        };
 
-                    myOPtion.series.data.push(da);
+                        data.secondItemClassify.forEach((item, i) => {
+                            series_da.value[i] = 0;
+                        });
+
+
+                        data[k].forEach(v => {
+                            let idx_data = data.secondItemClassify.indexOf(v.secondItemClassify);
+
+                            series_da.value[idx_data] = v.passRate;
+                        });
+                        myOPtion.series[0].data.push(series_da);
+
+                    }
+
                 }
 
-
                 this.chart.setOption(myOPtion);
+                this.chart.resize();
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .radarChart-container {
-        height: 100%;
+    .echarts_4-container {
     }
 </style>
