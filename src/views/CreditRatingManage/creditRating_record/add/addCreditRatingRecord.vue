@@ -66,13 +66,21 @@
                     </Poptip>
 
                 </FormItem>
-                <FormItem label="采信依据:" prop="content">
-                    <Input v-model="formData.creditAccording"
-                           style="width: 570px;"
-                           type="textarea"
-                           :rows="5"
-                           placeholder="请输入"/>
+                <FormItem v-if="formData.projectId !== ''">
+                    <div style="width: 570px;">
+                        <Button type="primary"
+                                icon="md-add"
+                                @click="modal_safetySupervision_open">添加采信依据</Button>
+                    </div>
                 </FormItem>
+
+                <!--<FormItem label="采信依据:" prop="content">-->
+                    <!--<Input v-model="formData.creditAccording"-->
+                           <!--style="width: 570px;"-->
+                           <!--type="textarea"-->
+                           <!--:rows="5"-->
+                           <!--placeholder="请输入"/>-->
+                <!--</FormItem>-->
             </Form>
 
             <div slot="footer">
@@ -82,21 +90,25 @@
             </div>
         </Modal>
 
-
         <vModalCreditCodeSelect
                 ref="creditCodeSelect"
                 @modal-callback="modal_creditCodeSelect_callback"></vModalCreditCodeSelect>
 
+        <!--采信依据选择-->
+        <vModalSafetySupervisionSelect ref="modal_safetySupervision"
+                                       :projectId="formData.projectId"
+                                       @modal-callback="modal_safetySupervision_callback"></vModalSafetySupervisionSelect>
     </div>
 </template>
 
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import vModalCreditCodeSelect from '../../../Common/creditCodeSelect/modalCreditCodeSelect';
+    import vModalSafetySupervisionSelect from '../../../Common/safetySupervisionSelect/modalSafetySupervisionSelect';
     export default {
         name: 'addCreditRatingRecord',
         mixins: [modalMixin],
-        components: {vModalCreditCodeSelect},
+        components: {vModalCreditCodeSelect, vModalSafetySupervisionSelect},
         props: {
             projectList: {
                 type: Array,
@@ -118,7 +130,8 @@
                     deduct: null,      // 扣分
                     deductDetail: '',   // 扣分项
                     content: '',
-                    creditAccording: ''
+                    creditAccording: '',
+                    fileIds: []
                 },
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
@@ -219,6 +232,52 @@
                 this.formData.content = selectItems.content;
                 this.$refs.form.validateField('creditCodeId');
             },
+            // 采信依据选择
+            modal_safetySupervision_open() {
+                this.$refs.modal_safetySupervision.modalValue = true;
+            },
+            modal_safetySupervision_callback(selectItems) {
+                if (selectItems.changeNotice && selectItems.changeNotice.changeNoticeId){
+                    this.getReply(selectItems.projectId,selectItems.changeNotice.changeNoticeId);
+                    this.getFilesData(selectItems.changeNotice.changeNoticeId)
+                }
+
+
+
+            },
+            // 获取整改的内容
+            getReply(projectId, changeNoticeId) {
+                this.$http({
+                    method: 'get',
+                    url: '/changeNotice/viewChangeReply',
+                    params: {
+                        projectId: projectId,
+                        changeNoticeId: changeNoticeId
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.formData.deductDetail = res.data.changeContent
+                    }
+                })
+            },
+            // 获取采信依据附件
+            getFilesData(changeNoticeId) {
+                this.$http({
+                    method: 'get',
+                    url: '/file/attachList',
+                    params: {
+                        relationId: changeNoticeId,
+                        fileType: 'monitor_procedure'
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.filesData = res.data || [];
+                        this.formData.fileIds = this.filesData.map(v => v.fileId);
+                    }
+                })
+
+            },
+
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {

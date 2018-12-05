@@ -4,9 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_addSupervisionRecord_open">添加监督记录</Button>
-            <Button type="primary"
-                    icon="md-document"
-                    @click="modalLogView('safe_supervision')">查看日志</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="md-document"-->
+                    <!--@click="modalLogView('safe_supervision')">查看日志</Button>-->
         </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>

@@ -10,7 +10,7 @@
                     <Table :columns="tableColumns" :data="tableData_highway" :height="234"></Table>
                 </TabPane>
                 <TabPane name="waterway" label="水运">
-                    <Table :columns="tableColumns" :data="tableData_highway" :height="234"></Table>
+                    <Table :columns="tableColumns" :data="tableData_waterway" :height="234"></Table>
                 </TabPane>
             </Tabs>
         </div>
@@ -31,8 +31,8 @@
                     },
                     {
                         title: '项目',
-                        key: 'name',
-                        width: 150,
+                        key: 'projectName',
+                        width: 120,
                         align: 'center',
                     },
                     {
@@ -42,7 +42,7 @@
                         // <Progress :percent="25" />
                             return h('Progress', {
                                 props: {
-                                    percent: params.row.progress
+                                    percent: params.row.schedule > 100 ? 100 : params.row.schedule
                                 }
                             });
                         }
@@ -82,6 +82,38 @@
                     },
                 ],
                 tableData_waterway: [],
+            }
+        },
+        mounted() {
+            this.getData_highway();
+            this.getData_waterway();
+        },
+        methods: {
+            getData_highway() {
+                this.$http({
+                    method: 'get',
+                    url: '/index/underConstructionProject',
+                    params: {
+                        projectType: 'highway'
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.tableData_highway = res.data || [];
+                    }
+                })
+            },
+            getData_waterway() {
+                this.$http({
+                    method: 'get',
+                    url: '/index/underConstructionProject',
+                    params: {
+                        projectType: 'water_transport'
+                    }
+                }).then((res) => {
+                    if (res.code === 'SUCCESS') {
+                        this.tableData_waterway = res.data || [];
+                    }
+                })
             }
         }
     }

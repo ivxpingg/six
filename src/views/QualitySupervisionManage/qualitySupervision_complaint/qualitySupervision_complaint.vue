@@ -5,9 +5,9 @@
                     type="primary"
                     icon="md-add"
                     @click="modal_add_open">登记投诉</Button>
-            <Button type="primary"
-                    icon="md-document"
-                    @click="modalLogView('complaint')">查看日志</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="md-document"-->
+                    <!--@click="modalLogView('complaint')">查看日志</Button>-->
         </vIvxFilterBox>
         <vIvxFilterBox dashed>
             <Form inline>

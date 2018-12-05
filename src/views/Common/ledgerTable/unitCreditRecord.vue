@@ -73,7 +73,7 @@
                     { title: '情况说明（扣分项）', align: 'center', width: 160, key: 'deductDetail'},
                     { title: '项目建设期间信用综合评价得分', align: 'center', width: 210, key: 'projectCreditScore'},
                     { title: '企业在该合同(段)的信用评分(分)', align: 'center', width: 210, key: 'partCreditScore'},
-                    { title: '采信依据', align: 'center', width: 120, key: 'creditAccording'},
+                    // { title: '采信依据', align: 'center', width: 120, key: 'creditAccording'},
                     { title: '其他失信行为及扣分', align: 'center', width: 180, key: 'otherDeduct'},
                     { title: '日期', align: 'center', width: 120, key: 'recordDate',
                         render: (h, params) => {

@@ -42,7 +42,7 @@
                 <FormItem label="整改内容:" prop="changeContent">
                     <Input v-model="formData.changeContent"
                            type="textarea"
-                           rows="5"
+                           :rows="5"
                            style="width: 500px;"
                            placeholder="请输入整改内容"/>
                 </FormItem>

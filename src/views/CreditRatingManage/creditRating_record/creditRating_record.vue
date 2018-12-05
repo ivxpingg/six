@@ -4,9 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_record_open">添加信用评价记录</Button>
-            <Button type="primary"
-                    icon="md-document"
-                    @click="modalLogView('credit_evaluate')">查看日志</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="md-document"-->
+                    <!--@click="modalLogView('credit_evaluate')">查看日志</Button>-->
         </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
@@ -351,6 +351,7 @@
                     params: {
                         relationId: row.changeNotice.changeNoticeId,
                         fileType: 'monitor_procedure'
+                        // fileType: 'credit'
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {

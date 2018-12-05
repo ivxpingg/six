@@ -4,9 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">竣工质量鉴定</Button>
-            <Button type="primary"
-                    icon="md-document"
-                    @click="modalLogView('complete')">查看日志</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="md-document"-->
+                    <!--@click="modalLogView('complete')">查看日志</Button>-->
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>

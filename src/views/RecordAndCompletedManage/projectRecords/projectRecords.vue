@@ -4,9 +4,9 @@
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">添加工程备案</Button>
-            <Button type="primary"
-                    icon="md-document"
-                    @click="modalLogView('project_record')">查看日志</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="md-document"-->
+                    <!--@click="modalLogView('project_record')">查看日志</Button>-->
         </vIvxFilterBox>
 
         <vIvxFilterBox dashed>

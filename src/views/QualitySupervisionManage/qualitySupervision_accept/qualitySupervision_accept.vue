@@ -1,10 +1,10 @@
 <template>
     <div class="qualitySupervision_accept-container">
-        <vIvxFilterBox dashed>
-            <Button type="primary"
-                    icon="md-document"
-                    @click="modalLogView('acceptance')">查看日志</Button>
-        </vIvxFilterBox>
+        <!--<vIvxFilterBox dashed>-->
+            <!--<Button type="primary"-->
+                    <!--icon="md-document"-->
+                    <!--@click="modalLogView('acceptance')">查看日志</Button>-->
+        <!--</vIvxFilterBox>-->
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">

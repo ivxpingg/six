@@ -1,14 +1,14 @@
 <template>
     <div class="qualitySupervision_register-container">
-        <vIvxFilterBox dashed>
-            <Button type="primary"
-                    icon="md-document"
-                    @click="modalLogView('register')">查看日志</Button>
-        </vIvxFilterBox>
-        <vIvxFilterBox v-if="auth_add">
-            <Button type="primary"
+        <vIvxFilterBox>
+            <Button v-if="auth_add"
+                    type="primary"
                     icon="md-add"
                     @click="modal_add_open">登记项目</Button>
+
+            <!--<Button type="primary"-->
+                    <!--icon="md-document"-->
+                    <!--@click="modalLogView('register')">查看日志</Button>-->
 
         </vIvxFilterBox>
 
