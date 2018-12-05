@@ -154,60 +154,74 @@
                         render: (h, params) => {
                             let list = [];
 
-                            if (!params.row.changeNotice) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-notifications'
-                                    },
-                                    on: {
-                                        click: () => {
+                            // if (!params.row.changeNotice) {
+                            //     list.push(h('Button', {
+                            //         props: {
+                            //             type: 'primary',
+                            //             size: 'small',
+                            //             icon: 'ios-notifications'
+                            //         },
+                            //         on: {
+                            //             click: () => {
+                            //
+                            //                 this.currentRow.projectId = params.row.projectId;
+                            //                 this.currentRow.projectName = params.row.projectName;
+                            //                 this.currentRow.supervisionCheckId = params.row.evaluateId;
+                            //                 this.$refs.modal_noticeModification_check.modalValue = true;
+                            //             }
+                            //         }
+                            //     }, '整改通知'));
+                            // }
+                            //
+                            // if (params.row.changeNotice) {
+                            //     list.push(h('Button', {
+                            //         props: {
+                            //             type: 'primary',
+                            //             size: 'small',
+                            //             icon: 'ios-undo'
+                            //         },
+                            //         on: {
+                            //             click: () => {
+                            //                 this.currentRow.projectId = params.row.projectId;
+                            //                 this.currentRow.projectName = params.row.projectName;
+                            //                 this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                            //                 this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
+                            //                 this.$refs.modal_noticeReply_check.modalValue = true;
+                            //             }
+                            //         }
+                            //     }, '查看整改回复'));
+                            //
+                            // }
 
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.supervisionCheckId = params.row.evaluateId;
-                                            this.$refs.modal_noticeModification_check.modalValue = true;
-                                        }
+                            // if (params.row.changeNotice) {
+                            //     list.push(h('Button', {
+                            //         props: {
+                            //             type: 'primary',
+                            //             size: 'small',
+                            //             icon: 'ios-eye-outline'
+                            //         },
+                            //         on: {
+                            //             click: () => {
+                            //                 this.currentRow.projectId = params.row.projectId;
+                            //                 this.getFilesData(params.row);
+                            //             }
+                            //         }
+                            //     }, '查看附件'));
+                            // }
+
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-eye-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentRow.projectId = params.row.projectId;
+                                        this.getFilesData(params.row);
                                     }
-                                }, '整改通知'));
-                            }
-
-                            if (params.row.changeNotice) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-undo'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
-                                            this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
-                                            this.$refs.modal_noticeReply_check.modalValue = true;
-                                        }
-                                    }
-                                }, '查看整改回复'));
-
-                            }
-
-                            if (params.row.changeNotice) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-eye-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.getFilesData(params.row);
-                                        }
-                                    }
-                                }, '查看附件'));
-                            }
+                                }
+                            }, '查看附件'));
 
 
                             // 设置列宽度
@@ -349,9 +363,11 @@
                     method: 'get',
                     url: '/file/attachList',
                     params: {
-                        relationId: row.changeNotice.changeNoticeId,
-                        fileType: 'monitor_procedure'
-                        // fileType: 'credit'
+                        // relationId: row.changeNotice.changeNoticeId,
+                        // fileType: 'monitor_procedure'
+
+                        relationId: row.evaluateId,
+                        fileType: 'credit'
                     }
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
