@@ -91,8 +91,7 @@
             return {
                 showPanel: 'all', // 显示的内容  all, project, detail
                 searchParams: {
-                    dataYear: '',
-
+                    dataYear: ''
                 },
 
                 // 项目详情变量 project
@@ -127,7 +126,7 @@
                 this.$refs.modal_add.modalValue = true;
             },
             modal_add_callback() {
-
+                this.searchParams.dataYear = '';
             },
             // 获取项目详情
             getProjectList() {
