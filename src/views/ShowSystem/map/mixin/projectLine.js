@@ -61,7 +61,8 @@ export default {
 
                 //
                 let infoWindow;
-                polyline.addEventListener('mouseover', function (e) {
+                // polyline.addEventListener('mouseover', function (e) {
+                polyline.addEventListener('click', function (e) {
                     let p = e.target;
 
                     let time = that.$moment(p.info.planBeginTime).format('YYYY年MM月DD日')
@@ -79,9 +80,9 @@ export default {
                     }
                 });
 
-                polyline.addEventListener('mouseout', function (e) {
-                    that.map.closeInfoWindow(infoWindow); //开启信息窗口
-                });
+                // polyline.addEventListener('mouseout', function (e) {
+                //     that.map.closeInfoWindow(infoWindow); //开启信息窗口
+                // });
 
                 this.map.addOverlay(polyline);   //增加折线
 

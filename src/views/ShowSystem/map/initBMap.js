@@ -24,7 +24,7 @@ let setMapStyle = (Map) => {
         "elementType": "geometry",
         "stylers": {
             "visibility": "on",
-            "color": "#077bbeff"
+            "color": "#1b181be6"
         }
     }, {
         "featureType": "green",
@@ -77,7 +77,7 @@ let setMapStyle = (Map) => {
         "elementType": "geometry",
         "stylers": {
             "visibility": "on",
-            "color": "#e2efe5ff"
+            "color": "#12223dff"
         }
     }, {
         "featureType": "highway",
@@ -219,7 +219,7 @@ let setMapStyle = (Map) => {
         "featureType": "subway",
         "elementType": "geometry",
         "stylers": {
-            "visibility": "on",
+            "visibility": "off",
             "weight": 1
         }
     }, {
@@ -238,7 +238,7 @@ let setMapStyle = (Map) => {
         "featureType": "subway",
         "elementType": "labels",
         "stylers": {
-            "visibility": "on"
+            "visibility": "off"
         }
     }, {
         "featureType": "subway",
@@ -256,7 +256,7 @@ let setMapStyle = (Map) => {
         "featureType": "continent",
         "elementType": "labels",
         "stylers": {
-            "visibility": "on"
+            "visibility": "off"
         }
     }, {
         "featureType": "continent",
@@ -280,7 +280,7 @@ let setMapStyle = (Map) => {
         "featureType": "city",
         "elementType": "labels.icon",
         "stylers": {
-            "visibility": "on"
+            "visibility": "off"
         }
     }, {
         "featureType": "city",
@@ -328,7 +328,7 @@ let setMapStyle = (Map) => {
         "featureType": "road",
         "elementType": "geometry.fill",
         "stylers": {
-            "color": "#4a90e2cc"
+            "color": "#044590ff"
         }
     }, {
         "featureType": "poilabel",
@@ -347,25 +347,25 @@ let setMapStyle = (Map) => {
         "elementType": "geometry",
         "stylers": {
             "visibility": "on",
-            "weight": 3
+            "weight": 2
         }
     }, {
         "featureType": "road",
         "elementType": "labels",
         "stylers": {
-            "visibility": "on"
+            "visibility": "off"
         }
     }, {
         "featureType": "road",
         "elementType": "geometry.stroke",
         "stylers": {
-            "color": "#4a90e2ff"
+            "color": "#044590ff"
         }
     }, {
         "featureType": "district",
         "elementType": "labels",
         "stylers": {
-            "visibility": "off"
+            "visibility": "on"
         }
     }, {
         "featureType": "poilabel",
@@ -395,13 +395,13 @@ let setMapStyle = (Map) => {
         "featureType": "districtlabel",
         "elementType": "labels.text.stroke",
         "stylers": {
-            "color": "#4a90e2ff"
+            "color": "#ffffffff"
         }
     }, {
         "featureType": "entertainment",
         "elementType": "geometry",
         "stylers": {
-            "color": "#ffffffff"
+            "color": "#12223dff"
         }
     }, {
         "featureType": "shopping",
@@ -419,7 +419,7 @@ let setMapStyle = (Map) => {
         "featureType": "road",
         "elementType": "labels.text.stroke",
         "stylers": {
-            "color": "#4a90e2ff"
+            "color": "#ffffffff"
         }
     }, {
         "featureType": "districtlabel",
@@ -431,7 +431,25 @@ let setMapStyle = (Map) => {
         "featureType": "districtlabel",
         "elementType": "labels.text.fill",
         "stylers": {
-            "color": "#4a90e2ff"
+            "color": "#ffffffff"
+        }
+    }, {
+        "featureType": "country",
+        "elementType": "labels",
+        "stylers": {
+            "visibility": "off"
+        }
+    }, {
+        "featureType": "village",
+        "elementType": "labels",
+        "stylers": {
+            "visibility": "off"
+        }
+    }, {
+        "featureType": "estate",
+        "elementType": "geometry",
+        "stylers": {
+            "color": "#12223dff"
         }
     }];
     Map.setMapStyleV2({

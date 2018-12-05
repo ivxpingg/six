@@ -51,7 +51,7 @@
                     },
                     series: [
                         {
-                            name:'访问来源',
+                            name:'督察类型分析',
                             type:'pie',
                             avoidLabelOverlap: false,
                             radius : ['45%', '65%'],
