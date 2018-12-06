@@ -38,7 +38,8 @@ const Home = [
         children: [{
             path: '/home',
             name: 'home',
-            component: () => import('@/views/Home/home.vue'),
+            // component: () => import('@/views/Home/home.vue'),
+            component: (resolve) => require(['@/views/Home/home.vue'], resolve),
             meta: {
                 hideInMenu: true,
                 title: '首页',
@@ -69,7 +70,8 @@ const BaseManage = [
                     title: '组织结构管理',
                     requireAuth: true
                 },
-                component: () => import('@/views/BaseManage/organizetionManage/organizetionManage.vue')
+                component: (resolve) => require(['@/views/BaseManage/organizetionManage/organizetionManage.vue'], resolve),
+                // component: () => import('@/views/BaseManage/organizetionManage/organizetionManage.vue')
             },
             {
                 path: 'roleManage',

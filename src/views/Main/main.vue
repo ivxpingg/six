@@ -40,9 +40,10 @@
                         <vTagsNav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag"/>
                     </div>
                     <Content class="content-wrapper" ref="tabsContent">
-                        <keep-alive>
-                            <router-view/>
-                        </keep-alive>
+                        <router-view/>
+                        <!--<keep-alive>-->
+                            <!---->
+                        <!--</keep-alive>-->
                     </Content>
                 </Layout>
             </Content>
