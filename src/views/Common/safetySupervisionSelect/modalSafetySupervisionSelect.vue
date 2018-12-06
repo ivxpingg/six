@@ -71,7 +71,7 @@
                     condition: {
                         searchKey: '',      // 模糊查询参数
                         projectId: '',
-                        moduleType: 'security'  // 安全监督
+                        // moduleType: 'security'  // 安全监督
                     }
                 },
                 tableColumns: [

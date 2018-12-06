@@ -85,9 +85,6 @@
             }
         },
         methods: {
-            ddd () {
-                alert();
-            }
         }
     }
 </script>

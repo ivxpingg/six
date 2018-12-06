@@ -121,16 +121,16 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '记录时间', width: 180, align: 'center',
+                    { title: '记录时间', width: 120, align: 'center',
                         render: (h, params) => {
                             return h('div', MOMENT(params.row.insTime).format('YYYY-MM-DD'));
                         }},
-                    { title: '记录单号', width: 180, align: 'center', key: 'recordNo' },
-                    { title: '单位', width: 180, align: 'center', key: 'unitName' },
-                    { title: '单位类型', width: 180, align: 'center', key: 'unitTypeLabel' },
-                    { title: '扣分项', width: 100, align: 'center', key: 'deductDetail' },
-                    { title: '扣分', width: 100, align: 'center', key: 'deduct' },
-                    { title: '扣分代码', width: 130, align: 'center', key: 'creditNo' },
+                    { title: '记录单号', width: 120, align: 'center', key: 'recordNo' },
+                    { title: '单位', width: 140, align: 'center', key: 'unitName' },
+                    { title: '单位类型', width: 120, align: 'center', key: 'unitTypeLabel' },
+                    { title: '扣分项', minWidth: 100, align: 'center', key: 'deductDetail', tooltip: true },
+                    { title: '扣分', width: 70, align: 'center', key: 'deduct' },
+                    { title: '扣分代码', width: 120, align: 'center', key: 'creditNo' },
                     { title: '扣分依据', width: 100, align: 'center', key: 'content',
                         render: (h, params) => {
                             return h('a', {
@@ -145,10 +145,10 @@
                             }, '查看');
                         }
                     },
-                    { title: '整改情况', width: 120, align: 'center', key: '' },
+                    // { title: '整改情况', width: 120, align: 'center', key: '' },
                     {
                         title: '操作',
-                        width: 240,
+                        width: 120,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {

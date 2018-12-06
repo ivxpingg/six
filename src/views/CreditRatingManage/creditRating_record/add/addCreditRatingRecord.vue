@@ -239,7 +239,10 @@
             modal_safetySupervision_callback(selectItems) {
                 if (selectItems.changeNotice && selectItems.changeNotice.changeNoticeId){
                     this.getReply(selectItems.projectId,selectItems.changeNotice.changeNoticeId);
-                    this.getFilesData(selectItems.changeNotice.changeNoticeId)
+                    this.getFilesData(selectItems.changeNotice.changeNoticeId);
+                }
+                else {
+                    this.$Message.info('改督察检查未添加整改通知!');
                 }
 
 

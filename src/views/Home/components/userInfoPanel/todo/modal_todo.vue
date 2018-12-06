@@ -38,6 +38,18 @@
                              :projectName="projectRecord.projectName"
                              :part="projectRecord.part"
                              @modal-callback="modal_projectRecord_callback"></vProjectRecordReply>
+
+
+        <!--交工审核处理  - 材料完整性审核-->
+        <Modal v-model="modal_contentAudit_verification"
+               class-name="modal-body-padding0"
+               title="材料完整性审核"
+               :width="1200"
+               footer-hide>
+            <vContentAudit :projectId="project_verification.projectId"
+                           @modal_callback="modal_common_callback"></vContentAudit>
+        </Modal>
+
     </div>
 </template>
 
@@ -47,10 +59,17 @@
     import vComplaintReply from './module/complaintReply';
     import vProjectRecordReply from './module/projectRecordReply';
     import MOMENT from 'moment';
+
+    import vContentAudit from '../../../../RecordAndCompletedManage/project_verification/content-audit/content-audit';
+
     export default {
         name: 'modal_todo',   // 代办
         mixins: [modalMixin],
-        components: {vTodoReply, vComplaintReply, vProjectRecordReply},
+        components: {
+            vTodoReply,
+            vComplaintReply,
+            vProjectRecordReply,
+            vContentAudit},
         data() {
             return {
                 searchParams: {
@@ -82,6 +101,9 @@
                     { title: '状态', width: 100, align: 'center', key: 'waitHandleStatusLabel' },
                     { title: '操作', width: 100, align: 'center',
                         render:(h, params) => {
+
+
+                            // todo 暂时隐藏交工审核处理按钮
                             if (params.row.waitHandleType !== 'handover_reply_audit') {
                                 return params.row.waitHandleStatus === 'complete_handle' ? '' :
                                     h('Button', {
@@ -96,25 +118,12 @@
                                         }
                                     }, '处理');
                             }
+
+
                         }
                     },
                 ],
-                tableData: [
-                    // {
-                    //     waitHandleId: '',
-                    //     waitHandleName: '',    // 待办事项名称
-                    //     waitHandleType: '',    // 待办事项类别
-                    //     waitHandleTypeLabel: '',
-                    //     param: '',             // 需要的参数
-                    //     source: '',            // 来源
-                    //     userId: '',            // 处理人
-                    //     stopHandleTime: '',    // 截止处理时间
-                    //     waitHandleStatus: '',  // 处理状态
-                    //     waitHandleStatusLabel: '',
-                    //     projectId: '',          // 项目ID
-                    //     projectName: ''
-                    // }
-                ],
+                tableData: [],
 
                 // 整改通知回复参数
                 currentRow: {
@@ -135,6 +144,14 @@
                 // 工程备案回复
                 projectRecord: {
                     projectRecordId: '',
+                    projectName: '',
+                    part: ''
+                },
+
+                // 交工检测核验审核
+                modal_contentAudit_verification: false,
+                project_verification: {
+                    projectId: '',
                     projectName: '',
                     part: ''
                 }
@@ -240,19 +257,39 @@
                             name: 'projectFileManage'
                         });
                         break;
-                    case 'handover_reply_audit':
+                    case 'handover_reply_audit':   // 交工检测核验审核
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.project_verification, {
+                            projectId: '',
+                            projectName: '',
+                            part: ''
+                        }, param[0]);
+
+                        this.modal_contentAudit_verification = true;
+
                         break;
                 }
             },
 
             modal_todoReply_callback() {
                 this.getData();
+                this.$emit('modal-callback');
             },
             modal_complaintReply_callback(){
                 this.getData();
+                this.$emit('modal-callback');
             },
             modal_projectRecord_callback() {
                 this.getData();
+                this.$emit('modal-callback');
+            },
+
+            // 公共关闭弹出框后重新获取待办事项表格
+            modal_common_callback() {
+                this.modal_contentAudit_verification = false;
+
+                this.getData();
+                this.$emit('modal-callback');
             },
 
             getData() {
