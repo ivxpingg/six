@@ -18,19 +18,7 @@
         },
         data() {
             return {
-                chart: null,
-
-                myOPtion: {
-                    xAxis: [{
-                        name: '',
-                        type: 'category',
-                        data: [],
-                        axisLabel: {
-                            rotate: 45
-                        }
-                    }],
-                    series: []
-                }
+                chart: null
             };
         },
         watch: {
@@ -148,7 +136,7 @@
                     })
                 }
 
-                this.chart.setOption(myOPtion);
+                this.chart.setOption(myOPtion, true);
                 this.chart.resize();
             }
         }

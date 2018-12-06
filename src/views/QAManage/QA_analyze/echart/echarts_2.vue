@@ -44,7 +44,9 @@
                         right: 0,
                         data: []
                     },
-                    tooltip: {},
+                    tooltip: {
+                        trigger: 'axis'
+                    },
                     xAxis: {
                         name: '',
                         type: 'category',

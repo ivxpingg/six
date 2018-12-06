@@ -11,7 +11,18 @@
                            :left="0"
                            :icon="infor.icon"
                            :icon-size="36">
-                    <vCountTo :end="infor.count" class="six-count-style" count-class="count-style"/>
+                    <vCountTo :end="infor.count"
+                              :decimals="infor.decimals"
+                              class="six-count-style"
+                              count-class="count-style">
+                        <span v-if="!!infor.numIcon" slot="left" >
+                            <Icon :type="infor.numIcon"
+                                  style="vertical-align: sub;"
+                                  class="count-style" />
+                        </span>
+
+                        <span slot="right" class="count-style">{{infor.unit}}</span>
+                    </vCountTo>
                     <p style="color: #FFF;">{{ infor.title }}</p>
                 </vInfoCard>
                 <div class="click-dom"
@@ -94,44 +105,59 @@
                     {
                         color: 'red',
                         icon: '',
-                        count: 10,
+                        count: 0,
                         title: '质量检测项目数量',
-                        bgColor: 'rgb(45, 140, 240)'
+                        bgColor: 'rgb(45, 140, 240)',
+                        decimals: 0,
+                        unit: ''
                     },
                     {
                         color: 'red',
                         icon: '',
-                        count: 10,
+                        count: 0,
                         title: '平均质量合格率',
-                        bgColor: 'rgb(45, 140, 240)'
+                        bgColor: 'rgb(45, 140, 240)',
+                        decimals: 1,
+                        unit: '%',
+                        numIcon: ''
                     },
                     {
                         color: 'red',
                         icon: '',
-                        count: 10,
+                        count: 0,
                         title: '抽检数据组',
-                        bgColor: 'rgb(25, 190, 107)'
+                        bgColor: 'rgb(25, 190, 107)',
+                        decimals: 0,
+                        unit: ''
                     },
                     {
                         color: 'red',
                         icon: '',
-                        count: 10,
+                        count: 0,
                         title: '质量检测公里数',
-                        bgColor: 'rgb(25, 190, 107)'
+                        bgColor: 'rgb(25, 190, 107)',
+                        decimals: 0,
+                        unit: ''
                     },
                     {
                         color: 'red',
                         icon: '',
-                        count: 10,
+                        count: 0,
                         title: '合格率上期同比',
-                        bgColor: 'rgb(154, 102, 228)'
+                        bgColor: 'rgb(154, 102, 228)',
+                        decimals: 1,
+                        unit: '%',
+                        numIcon: ''
                     },
                     {
                         color: 'red',
                         icon: '',
-                        count: 10,
+                        count: 0,
                         title: '数据组样本同比',
-                        bgColor: 'rgb(154, 102, 228)'
+                        bgColor: 'rgb(154, 102, 228)',
+                        decimals: 1,
+                        unit: '%',
+                        numIcon: '1'
                     },
                 ]
             };
@@ -159,11 +185,32 @@
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
                         this.inforCardData[0].count = res.data.projectNum || 0;
-                        this.inforCardData[1].count = res.data.averagePassRate || 0;
+                        this.inforCardData[1].count = Math.abs(res.data.averagePassRate) || 0;
                         this.inforCardData[2].count = res.data.spotCheckNum || 0;
 
-                        this.inforCardData[4].count = res.data.passRateYearOnYear || 0;
-                        this.inforCardData[5].count = res.data.numYearOnYear || 0;
+                        this.inforCardData[4].count = Math.abs(res.data.passRateYearOnYear) || 0;
+                        this.inforCardData[5].count = Math.abs(res.data.numYearOnYear) || 0;
+
+
+                        if (res.data.passRateYearOnYear > 0) {
+                            this.inforCardData[4].numIcon = 'md-arrow-up';
+                        }
+                        else if (res.data.passRateYearOnYear < 0) {
+                            this.inforCardData[4].numIcon = 'md-arrow-down';
+                        }
+                        else {
+                            this.inforCardData[4].numIcon = '';
+                        }
+
+                        if (res.data.numYearOnYear > 0) {
+                            this.inforCardData[5].numIcon = 'md-arrow-up';
+                        }
+                        else if (res.data.numYearOnYear < 0) {
+                            this.inforCardData[5].numIcon = 'md-arrow-down';
+                        }
+                        else {
+                            this.inforCardData[5].numIcon = '';
+                        }
                     }
                 });
 

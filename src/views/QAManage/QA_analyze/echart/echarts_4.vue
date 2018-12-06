@@ -78,6 +78,7 @@
                     series: [{
                         name: '分部工程合格率对比分析',
                         type: 'radar',
+                        areaStyle: {normal: {}},
                         data : [
                             // {
                             //     value : [4300, 10000, 28000, 35000, 50000, 19000],

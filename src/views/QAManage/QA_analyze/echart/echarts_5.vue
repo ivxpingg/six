@@ -37,7 +37,7 @@
                     { title: '抽查项目', minWidth: 100, align: 'center', key: 'itemType' },
                     { title: '上年度', width: 75, align: 'center', key: 'lastPassRate' },
                     { title: '本年度', width: 75, align: 'center', key: 'passRate' },
-                    { title: '-', width: 70, align: 'center', key: 'yearOnYear',
+                    { title: '-', width: 80, align: 'center', key: 'yearOnYear',
                         render: (h, params) => {
 
                             if (params.row.yearOnYear) {
@@ -113,7 +113,9 @@
                         bottom: 40,
                         right: 60,
                     },
-                    tooltip: {},
+                    tooltip: {
+                        trigger: 'axis'
+                    },
                     xAxis: {
                         type: 'value',
                         name: '合格率',
@@ -123,7 +125,13 @@
                         name: '',
                         type: 'category',
                         // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                        data: []
+                        data: [],
+                        interval: 0,
+                        axisLabel:{
+
+                            interval:0
+
+                        }
                     },
                     series: [
                         // {
