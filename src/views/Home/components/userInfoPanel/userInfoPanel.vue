@@ -19,7 +19,7 @@
                     <FormItem label="职务：">{{userInfo.job}}</FormItem>
                     <FormItem label="电话号码：">{{userInfo.phone}}</FormItem>
                 </Form>
-                <img class="user-img" :src="userInfo.img" alt="">
+                <img class="user-img" :src="_headPortrait" alt="">
             </div>
             <div class="btn-list">
                 <Row>
@@ -45,9 +45,15 @@
 <script>
     import imgUrl from '@/assets/images/user.jpg';
     import vModalTodo from './todo/modal_todo';
+    import Config from '../../../../config';
     export default {
         name: 'userInfoPanel',
         components: {vModalTodo},
+        computed: {
+            _headPortrait() {
+                return this.userInfo.headPortraitUrl ? Config[Config.env].filePath + this.userInfo.headPortraitUrl : imgUrl;
+            }
+        },
         data() {
             return {
                 userInfo: {
@@ -59,7 +65,8 @@
                     loginName: '',
                     phone: '',
                     img: imgUrl,
-                    headPortrait: ''
+                    headPortrait: '',
+                    headPortraitUrl: ''
                 },
 
                 unReadNoticeNum: 0,

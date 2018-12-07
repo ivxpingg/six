@@ -9,6 +9,22 @@
             <FormItem label="姓名:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
+            <FormItem label="头像：" style="margin-bottom: 0px;">
+                <Upload ref="upload"
+                        :action="uploadAtion"
+                        :showUploadList="uploadParams.showUploadList"
+                        :multiple="uploadParams.multiple"
+                        :accept="uploadParams.accept"
+                        :maxSize="uploadParams.maxSize"
+                        :before-upload="fileBeforeUpload"
+                        :on-exceeded-size="exceededSize"
+                        :on-error="fileUploadError"
+                        :on-success="fileUploadSuccess">
+                    <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
+                    <img :src="userImgUrl"
+                         style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
+                </Upload>
+            </FormItem>
             <FormItem label="性别:">
                 <Select v-model="formData.sex">
                     <Option v-for="item in dict_sex"
@@ -17,8 +33,8 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="UID:" prop="uId">
-                <Input v-model="formData.uId"/>
+            <FormItem label="UID:" prop="employee.userNo">
+                <Input v-model="formData.employee.userNo"/>
             </FormItem>
             <FormItem label="现任职务:" prop="job">
                 <Input v-model="formData.job"/>
@@ -26,8 +42,8 @@
             <FormItem label="年龄:" prop="age">
                 <Input v-model="formData.age" number/>
             </FormItem>
-            <FormItem label="民族:">
-                <Input v-model="formData.nation"/>
+            <FormItem label="民族:" prop="nation">
+                <Input v-model="formData.nation" placeholder="请输入民族，如：汉族"/>
             </FormItem>
             <FormItem label="技术职称:" prop="titleName">
                 <Select v-model="formData.titleName">
@@ -59,9 +75,9 @@
             <FormItem label="专业名称:" prop="profession">
                 <Input v-model="formData.profession"/>
             </FormItem>
-            <FormItem label="毕业时间:" prop="graduateDate">
+            <FormItem label="毕业时间:" prop="employee.graduateDate">
                 <DatePicker
-                        :value="formData.graduateDate"
+                        :value="formData.employee.graduateDate"
                         type="date"
                         transfer
                         @on-change="onChange_graduateDate"
@@ -74,13 +90,13 @@
                 <Input v-model="formData.email"/>
             </FormItem>
             <FormItem label="资格证书:">
-                <Input v-model="formData.certificate"/>
+                <Input v-model="formData.employee.certificate"/>
             </FormItem>
             <FormItem label="证书编号:">
-                <Input v-model="formData.certificateNo"/>
+                <Input v-model="formData.employee.certificateNo" />
             </FormItem>
-            <FormItem label="身份证号:" prop="IdNumber">
-                <Input v-model="formData.IdNumber"/>
+            <FormItem label="身份证号:" prop="employee.idNumber">
+                <Input v-model="formData.employee.idNumber" />
             </FormItem>
         </Form>
 
@@ -93,54 +109,65 @@
 </template>
 
 <script>
+    import uploadMixin from '../../../../lib/mixin/uploadMixin';
     import Config from '../../../../config';
+    import userImg from '../images/User.png';
     export default {
         name: 'addPerson',
+        mixins: [uploadMixin],
+        computed: {
+            uploadAtion() {
+                return this.uploadParams.actionUrl + '/head_portrait';  // 个人附件
+            },
+            userImgUrl() {
+                return this.formData.headPortraitUrl ? Config[Config.env].filePath + this.formData.headPortraitUrl : userImg;
+            }
+        },
         data() {
             return {
+                uploadParams: {
+                    accept: '.jpg,.png,.jpeg,.gif',
+                    format: ['.jpg', '.png', '.jpeg', '.gif']
+                },
                 formData: {
                     name: '',
+                    headPortrait: '',  // 头像，存放fileId
+                    headPortraitUrl: '',
                     uId: '',
-                    sex: '0',
-                    age: 0,
-                    nation: '0',
-                    nationStr: '汉族',
-                    titleLevel: '职称级别',
+                    sex: 'man',
+                    age: null,
+                    nation: '汉族',
+                    titleLevel: '',
                     titleName: '',
-                    certificate: '',
-                    certificateNo: '',
                     education: '',
                     graduateSchool: '',
                     profession: '',
-                    graduateDate: '2018-01-01',
                     phone: '',
                     email: '',
-                    IdNumber: '',
                     job: '',
-                    fileIds: ''
+                    employee: {
+                        certificate: '',
+                        certificateNo: '',
+                        graduateDate: '',
+                        idNumber: '',
+                        recordStatus: '',
+                        userId: '',
+                        userNo: ''
+                    }
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
-                    uId: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
+                    'employee.userNo': [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
                     age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
+                    nation: [{ required: true,  message: '民族不能为空！', trigger: 'blur' }],
                     titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
                     titleLevel: [{ required: true, message: '职称级别不能为空！', trigger: 'blur' }],
                     graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
                     profession: [{ required: true, message: '专业名称不能为空！', trigger: 'blur' }],
-                    graduateDate: [{ required: true, message: '毕业时间不能为空！', trigger: 'blur' }],
+                    'employee.graduateDate': [{ required: true, message: '毕业时间不能为空！', trigger: 'blur' }],
                     phone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
                     email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
-                    IdNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
-                },
-
-                uploadParams: {
-                    actionUrl: Config[Config.env].origin + Config[Config.env].ajaxUrl + '',
-                    showUploadList: false,  // 显示已上传列表
-                    multiple: false,        // 是否支持多选
-                    data: {},               // 上传附带参数
-                    //name: '',               // 上传的文件字段名, 默认file
-                    accept: '.png,.jpg,.gif,.jpeg',             // 接收上传的文件类型
-                    maxSize: 4096,                // 文件大小限制，单位 kb
+                    'employee.idNumber': [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
                 },
 
                 // 字典
@@ -171,27 +198,14 @@
                 });
             },
             onChange_graduateDate(time) {
-                this.formData.graduateDate = time;
+                this.formData.employee.graduateDate = time;
             },
-
-            // 图片上传
-            fileBeforeUpload() {
-                this.$Loading.start();
-            },
-            exceededSize(file, fileList) {
-                this.$Notice.warning({
-                    title: '超过文件大小限制',
-                    desc: `文件   ${file.name} 太大, 不能超过 ${this.maxSize / 1024}M.`
-                });
-            },
-            fileUploadError(error, file, fileList) {
-                this.$Loading.error();
-                this.$Notice.error({
-                    title: '文件上传失败',
-                    desc: `${error.message}`
-                });
-            },
+            // 头像
             fileUploadSuccess(response, file, fileList) {
+                if (response.code === 'SUCCESS') {
+                    this.formData.headPortrait = response.data.fileId;
+                    this.formData.headPortraitUrl = response.data.url;
+                }
                 this.$Loading.finish();
             },
             // 添加从业人员
@@ -200,14 +214,14 @@
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/addUserInfo',
+                            url: '/user/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
-                                    content: '更新成功！'
+                                    content: '添加成功！'
                                 });
-                                this.$emit('modal_addUser_callback');
+                                this.$emit('modal-callback');
                             }
                         })
                     } else {

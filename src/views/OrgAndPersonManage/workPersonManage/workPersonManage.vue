@@ -1,6 +1,6 @@
 <template>
     <Card class="workPersonManage-container">
-        <!--<vIvxFilterBox dashed>-->
+        <vIvxFilterBox dashed>
             <!--<Upload :action="uploadParams.actionUrl"-->
                     <!--:showUploadList="uploadParams.showUploadList"-->
                     <!--:multiple="uploadParams.multiple"-->
@@ -12,10 +12,10 @@
                     <!--:on-success="fileUploadSuccess">-->
                 <!--<Button type="primary" icon="ios-cloud-upload-outline">导入人员</Button>-->
             <!--</Upload>-->
-            <!--<Button type="primary"-->
-                    <!--icon="md-add"-->
-                    <!--@click="modal_addUser_open">添加人员</Button>-->
-        <!--</vIvxFilterBox>-->
+            <Button type="primary"
+                    icon="md-add"
+                    @click="modal_addUser_open">添加人员</Button>
+        </vIvxFilterBox>
         <vIvxFilterBox dashed>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
@@ -65,7 +65,7 @@
                title="添加从业人员"
                :width="1000"
                footer-hide>
-            <vAddUser @addUnitCallback="modal_addUser_callback"></vAddUser>
+            <vAddUser v-if="modal_addUser" @modal-callback="modal_addUser_callback"></vAddUser>
         </Modal>
     </Card>
 </template>

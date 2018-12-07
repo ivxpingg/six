@@ -9,6 +9,21 @@
             <FormItem label="姓名:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
+            <FormItem label="头像：" style="margin-bottom: 0px;">
+                <Upload ref="upload"
+                        :action="uploadAtion"
+                        :showUploadList="uploadParams.showUploadList"
+                        :multiple="uploadParams.multiple"
+                        :accept="uploadParams.accept"
+                        :maxSize="uploadParams.maxSize"
+                        :before-upload="fileBeforeUpload"
+                        :on-exceeded-size="exceededSize"
+                        :on-error="fileUploadError"
+                        :on-success="fileUploadSuccess">
+                    <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
+                    <img :src="userImgUrl" style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
+                </Upload>
+            </FormItem>
             <FormItem label="性别:">
                 <Select v-model="formData.sex">
                     <Option v-for="item in dict_sex"
@@ -17,7 +32,7 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="UID:" prop="userNo">
+            <FormItem label="UID:" prop="employee.userNo">
                 <Input v-model="formData.employee.userNo"/>
             </FormItem>
             <FormItem label="现任职务:" prop="job">
@@ -59,7 +74,7 @@
             <FormItem label="专业名称:" prop="profession">
                 <Input v-model="formData.profession"/>
             </FormItem>
-            <FormItem label="毕业时间:" prop="graduateDate">
+            <FormItem label="毕业时间:" prop="employee.graduateDate">
                 <DatePicker
                         :value="formData.employee.graduateDate"
                         type="date"
@@ -79,7 +94,7 @@
             <FormItem label="证书编号:">
                 <Input v-model="formData.employee.certificateNo"/>
             </FormItem>
-            <FormItem label="身份证号:" prop="idNumber">
+            <FormItem label="身份证号:" prop="employee.idNumber">
                 <Input v-model="formData.employee.idNumber"/>
             </FormItem>
         </Form>
@@ -93,10 +108,13 @@
 </template>
 
 <script>
+    import uploadMixin from '../../.././../../lib/mixin/uploadMixin';
+    import userImg from '../../images/User.png';
     import Config from '../../../../../config';
     import MOMENT from 'moment';
     export default {
         name: 'userBaseInfo',
+        mixins: [uploadMixin],
         props: {
             userId: {
                 type: String,
@@ -108,10 +126,24 @@
                 default: false
             }
         },
+        computed: {
+            uploadAtion() {
+                return this.uploadParams.actionUrl + '/head_portrait';  // 个人附件
+            },
+            userImgUrl() {
+                return this.formData.headPortraitUrl ? Config[Config.env].filePath + this.formData.headPortraitUrl : userImg;
+            }
+        },
         data() {
             return {
+                uploadParams: {
+                    accept: '.jpg,.png,.jpeg,.gif',
+                    format: ['.jpg', '.png', '.jpeg', '.gif']
+                },
                 formData: {
                     userId: '',
+                    headPortrait: '',  // 头像，存放fileId
+                    headPortraitUrl: '',
                     name: '',
                     sex: '',
                     age: null,
@@ -140,17 +172,17 @@
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
-                    userNo: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
+                    'employee.userNo': [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
                     age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
                     nation: [{ required: true,  message: '民族不能为空！', trigger: 'blur' }],
                     titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
                     titleLevel: [{ required: true, message: '职称级别不能为空！', trigger: 'blur' }],
                     graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
                     profession: [{ required: true, message: '专业名称不能为空！', trigger: 'blur' }],
-                    graduateDate: [{ required: true, message: '毕业时间不能为空！', trigger: 'blur' }],
+                    'employee.graduateDate': [{ required: true, message: '毕业时间不能为空！', trigger: 'blur' }],
                     phone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
                     email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
-                    idNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
+                    'employee.idNumber': [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
                 },
 
                 dict_sex: [],         // 性别
@@ -166,6 +198,8 @@
                     if (val) {
                         Object.assign(this.formData, {
                             userId: '',
+                            headPortrait: '',  // 头像，存放fileId
+                            headPortraitUrl: '',
                             name: '',
                             sex: '',
                             age: null,
@@ -237,6 +271,14 @@
                         });
                     }
                 });
+            },
+            // 头像
+            fileUploadSuccess(response, file, fileList) {
+                if (response.code === 'SUCCESS') {
+                    this.formData.headPortrait = response.data.fileId;
+                    this.formData.headPortraitUrl = response.data.url;
+                }
+                this.$Loading.finish();
             },
             save() {
                 this.$refs.form.validate((valid) => {

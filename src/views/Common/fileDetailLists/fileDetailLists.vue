@@ -151,7 +151,7 @@
                         { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
                         { title: '份数', width: 80, align: 'center', key: 'num'},
                         { title: '上传状态', width: 100, align: 'center', key: 'fileStatus', render: (h, params) =>{
-                                return h('div', params.row.fileStatus ? '已上传' : '未上传');
+                                return h('div', params.row.fileStatus === '1' ? '已上传' : '未上传');
                             }},
                         { title: '备注', width: 80, align: 'center', key: 'remark'},
                         {
@@ -181,23 +181,21 @@
                                     }
                                 }, '附件管理'));
 
-                                if (params.row.projectFileId) {
-                                    list.push(h('Button', {
-                                        props: {
-                                            type: 'primary',
-                                            size: 'small',
-                                            icon: 'ios-create-outline'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.formData.fileTemplateId = params.row.fileTemplateId;
-                                                this.formData.projectFileId = params.row.projectFileId || '';
-                                                this.formData.remark = params.row.remark;
-                                                this.modal_remark = true;
-                                            }
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-create-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.formData.fileTemplateId = params.row.fileTemplateId;
+                                            this.formData.projectFileId = params.row.projectFileId || '';
+                                            this.formData.remark = params.row.remark;
+                                            this.modal_remark = true;
                                         }
-                                    }, '备注'));
-                                }
+                                    }
+                                }, '备注'));
 
                                 return h('div', list);
                             }

@@ -1,5 +1,6 @@
 import { setToken, getToken, setMenuListInLocalstorage } from '@/lib/util';
 import axios from '@/lib/axios';
+import Config from '../../config';
 export default {
     state: {
         userName: '',
@@ -76,12 +77,13 @@ export default {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
-                    url: '/getUserInfo'
+                    url: '/user/query'
                 }).then((res) => {
-                    const data = res.data
-                    commit('setAvator', data.avator)
-                    commit('setUserName', data.user_name)
-                    commit('setUserId', data.user_id)
+                    const data = res.data;
+                    let img = data.headPortraitUrl ? Config[Config.env].filePath + data.headPortraitUrl : '';
+                    commit('setAvator', img);
+                    commit('setUserName', data.name);
+                    // commit('setUserId', data.user_id)
                     // commit('setAccess', data.access)
                     resolve(data)
                 }).catch(err => {

@@ -1,10 +1,10 @@
 <template>
     <Card class="supervisorsManage-container">
-        <!--<vIvxFilterBox dashed>-->
-            <!--<Button type="primary"-->
-                    <!--icon="md-add"-->
-                    <!--@click="modal_addSupervisor_open">新增人员</Button>-->
-        <!--</vIvxFilterBox>-->
+        <vIvxFilterBox dashed>
+            <Button type="primary"
+                    icon="md-add"
+                    @click="modal_addSupervisor_open">新增人员</Button>
+        </vIvxFilterBox>
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
@@ -34,14 +34,14 @@
                title="新增监督单位人员"
                :width="1200"
                footer-hide>
-            <vAddSupervisor @modal_addSupervisor_callback="modal_addSupervisor_callback"></vAddSupervisor>
+            <vAddSupervisor @modal-callback="modal_addSupervisor_callback"></vAddSupervisor>
         </Modal>
 
         <Modal v-model="modal_supervisorDetail"
                title="监督单位人员详情"
                :width="1200"
                footer-hide>
-            <vSupervisorDetail :userId="userId" @modal-callback="modal_supervisorDetail_callback" editable></vSupervisorDetail>
+            <vSupervisorDetail v-if="modal_supervisorDetail" :userId="userId" @modal-callback="modal_supervisorDetail_callback" editable></vSupervisorDetail>
         </Modal>
 
     </Card>

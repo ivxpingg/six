@@ -35,10 +35,9 @@
     import { mapActions } from 'vuex'
     export default {
         name: 'user',
-        props: {
-            userAvator: {
-                type: String,
-                default: ''
+        computed: {
+            userAvator() {
+                return this.$store.state.user.avatorImgPath ? this.$store.state.user.avatorImgPath : './user.jpg';
             }
         },
         data() {

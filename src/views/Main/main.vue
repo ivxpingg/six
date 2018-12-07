@@ -26,7 +26,7 @@
             <Header class="header-con">
                 <vHeaderBar :collapsed="collapsed"
                             @on-coll-change="handleCollapsedChange">
-                    <vUser :user-avator="userAvator"></vUser>
+                    <vUser></vUser>
                     <vFullscreen  v-model="isFullscreen" style="margin-right: 10px;"></vFullscreen>
                 </vHeaderBar>
                 <!--<Icon @on-coll-change="handleCollapsedChange"-->
@@ -76,8 +76,7 @@
                 collapsed: false,
                 minLogo,
                 maxLogo,
-                isFullscreen: false,
-                userAvator: '/user.jpg'
+                isFullscreen: false
             };
         },
         computed: {
@@ -96,7 +95,8 @@
                 'setMianLayoutWidth'
             ]),
             ...mapActions([
-                'getMenuList'
+                'getMenuList',
+                'getUserInfo'
             ]),
             turnToPage (route) {
                 let { name, params, query } = {}
@@ -158,6 +158,7 @@
                 this.setBreadCrumb(this.$route.matched);
             });
 
+            this.getUserInfo();
         }
     }
 </script>

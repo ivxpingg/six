@@ -1,6 +1,6 @@
 <template>
     <Card class="workUnitManage-container">
-        <!--<vIvxFilterBox dashed>-->
+        <vIvxFilterBox dashed>
             <!--<Upload :action="uploadParams.actionUrl"-->
                     <!--:showUploadList="uploadParams.showUploadList"-->
                     <!--:multiple="uploadParams.multiple"-->
@@ -12,11 +12,11 @@
                     <!--:on-success="fileUploadSuccess">-->
                 <!--<Button type="primary" icon="ios-cloud-upload-outline">导入单位</Button>-->
             <!--</Upload>-->
-            <!--<Button-->
-                    <!--type="primary"-->
-                    <!--icon="md-add"-->
-                    <!--@click="modal_addUnit_open">添加单位</Button>-->
-        <!--</vIvxFilterBox>-->
+            <Button
+                    type="primary"
+                    icon="md-add"
+                    @click="modal_addUnit_open">添加单位</Button>
+        </vIvxFilterBox>
 
         <vIvxFilterBox dashed>
             <Form inline>
@@ -67,7 +67,7 @@
                title="添加从业单位"
                :width="1000"
                footer-hide>
-            <vAddUnit @addUnitCallback="modal_addUnit_callback"></vAddUnit>
+            <vAddUnit @modal-callback="modal_addUnit_callback"></vAddUnit>
         </Modal>
     </Card>
 </template>

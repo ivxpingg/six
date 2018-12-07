@@ -12,6 +12,21 @@
             <FormItem label="科室:">
                 <Input v-model="formData.department" :readonly="!editable"/>
             </FormItem>
+            <FormItem label="头像：" style="margin-bottom: 0px;">
+                <Upload ref="upload"
+                        :action="uploadAtion"
+                        :showUploadList="uploadParams.showUploadList"
+                        :multiple="uploadParams.multiple"
+                        :accept="uploadParams.accept"
+                        :maxSize="uploadParams.maxSize"
+                        :before-upload="fileBeforeUpload"
+                        :on-exceeded-size="exceededSize"
+                        :on-error="fileUploadError"
+                        :on-success="fileUploadSuccess">
+                    <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
+                    <img :src="userImgUrl" style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
+                </Upload>
+            </FormItem>
             <FormItem label="现任职务:">
                 <Input v-model="formData.job" :readonly="!editable"/>
             </FormItem>
@@ -144,9 +159,13 @@
 </template>
 
 <script>
+    import uploadMixin from '../../../../lib/mixin/uploadMixin';
+    import userImg from '../images/User.png';
+    import Config from '../../../../config';
     import MOMENT from 'moment';
     export default {
         name: 'supervisorDetail',
+        mixins: [uploadMixin],
         props: {
             userId: {
                 type: String,
@@ -157,11 +176,25 @@
                 default: true
             }
         },
+        computed: {
+            uploadAtion() {
+                return this.uploadParams.actionUrl + '/head_portrait';  // 个人附件
+            },
+            userImgUrl() {
+                return this.formData.headPortraitUrl ? Config[Config.env].filePath + this.formData.headPortraitUrl : userImg;
+            }
+        },
         data() {
             return {
+                uploadParams: {
+                    accept: '.jpg,.png,.jpeg,.gif',
+                    format: ['.jpg', '.png', '.jpeg', '.gif']
+                },
                 formData: {
                     userId: '',
                     name: '',
+                    headPortrait: '',  // 头像，存放fileId
+                    headPortraitUrl: '',
                     department: '',
                     job: '',
                     titleLevel: '',
@@ -221,6 +254,7 @@
                     if (val) {
                         this.formData.userId = val;
                         this.formData.supervisor.userId = val;
+                        this.userImgUrl = userImg;
                         this.getUserInfo();
                     }
                 }
@@ -259,6 +293,15 @@
                 this.formData.supervisor.birthday = time;
             },
 
+            // 头像
+            fileUploadSuccess(response, file, fileList) {
+                if (response.code === 'SUCCESS') {
+                    this.formData.headPortrait = response.data.fileId;
+                    this.formData.headPortraitUrl = response.data.url;
+                }
+                this.$Loading.finish();
+            },
+
             getUserInfo() {
                 this.$http({
                     method: 'get',
@@ -269,9 +312,6 @@
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
                         Object.assign(this.formData, res.data, {
-                            //birthday: res.data.birthday ?  MOMENT(res.data.birthday).format('YYYY-MM-DD') : '',
-                            //workDate: res.data.workDate ?  MOMENT(res.data.workDate).format('YYYY-MM-DD') : '',
-                            //joinPartyDate: res.data.joinPartyDate ?  MOMENT(res.data.joinPartyDate).format('YYYY-MM-DD') : '',
                             graduateDate: res.data.graduateDate ?  MOMENT(res.data.graduateDate).format('YYYY-MM-DD') : '',
                         });
 

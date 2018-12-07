@@ -9,11 +9,24 @@
             <FormItem label="姓名:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
-            <!--<FormItem label="UID:" prop="uId">-->
-                <!--<Input v-model="formData.uId"/>-->
-            <!--</FormItem>-->
-            <FormItem label="科室:">
+            <FormItem label="科室:" prop="department">
                 <Input v-model="formData.department"/>
+            </FormItem>
+            <FormItem label="头像：" style="margin-bottom: 0px;">
+                <Upload ref="upload"
+                        :action="uploadAtion"
+                        :showUploadList="uploadParams.showUploadList"
+                        :multiple="uploadParams.multiple"
+                        :accept="uploadParams.accept"
+                        :maxSize="uploadParams.maxSize"
+                        :before-upload="fileBeforeUpload"
+                        :on-exceeded-size="exceededSize"
+                        :on-error="fileUploadError"
+                        :on-success="fileUploadSuccess">
+                    <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
+                    <img :src="userImgUrl"
+                         style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
+                </Upload>
             </FormItem>
             <FormItem label="现任职务:" prop="job">
                 <Input v-model="formData.job"/>
@@ -26,16 +39,16 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="办公固话:" prop="telephone">
-                <Input v-model="formData.telephone"/>
+            <FormItem label="办公固话:" prop="supervisor.telephone">
+                <Input v-model="formData.supervisor.telephone"/>
             </FormItem>
-            <FormItem label="移动小号:" prop="mobileShortNum">
-                <Input v-model="formData.mobileShortNum"/>
+            <FormItem label="移动小号:" prop="supervisor.mobileShortNum">
+                <Input v-model="formData.supervisor.mobileShortNum"/>
             </FormItem>
             <FormItem label="手机:" prop="phone">
                 <Input v-model="formData.phone"/>
             </FormItem>
-            <FormItem label="性别:">
+            <FormItem label="性别:" prop="sex">
                 <Select v-model="formData.sex">
                     <Option v-for="item in dict_sex"
                             :key="item.id"
@@ -43,18 +56,15 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="年龄:" prop="age">
+            <FormItem label="年龄:">
                 <Input v-model="formData.age" number/>
             </FormItem>
-            <FormItem label="民族:">
+            <FormItem label="民族:" prop="nation">
                 <Input v-model="formData.nation"/>
             </FormItem>
-            <FormItem label="籍贯:" prop="nativePlace">
-                <Input v-model="formData.nativePlace"/>
+            <FormItem label="籍贯:"  prop="supervisor.nativePlace">
+                <Input v-model="formData.supervisor.nativePlace"/>
             </FormItem>
-            <!--<FormItem label="身份证号码:" prop="IdNumber">-->
-                <!--<Input v-model="formData.IdNumber"/>-->
-            <!--</FormItem>-->
             <FormItem label="技术职称:" prop="titleName">
                 <Select v-model="formData.titleName">
                     <Option v-for="item in dict_titleName"
@@ -64,7 +74,7 @@
                 </Select>
             </FormItem>
             <FormItem label="身份类别:">
-                <Select v-model="formData.identityType">
+                <Select v-model="formData.supervisor.identityType">
                     <Option v-for="item in dict_identityType"
                             :key="item.id"
                             :value="item.value"
@@ -72,7 +82,7 @@
                 </Select>
             </FormItem>
             <FormItem label="执法证类型:">
-                <Select v-model="formData.lawType">
+                <Select v-model="formData.supervisor.lawType">
                     <Option v-for="item in dict_lawType"
                             :key="item.id"
                             :value="item.value"
@@ -80,14 +90,14 @@
                 </Select>
             </FormItem>
             <FormItem label="执法号码:">
-                <Input v-model="formData.lawNumber"/>
+                <Input v-model="formData.supervisor.lawNumber"/>
             </FormItem>
             <FormItem label="分工:">
-                <Input v-model="formData.divideWork"/>
+                <Input v-model="formData.supervisor.divideWork"/>
             </FormItem>
             <FormItem label="任职时间:">
                 <DatePicker
-                        :value="formData.tenureTime"
+                        :value="formData.supervisor.tenureTime"
                         type="month"
                         transfer
                         @on-change="onChange_tenureTime"
@@ -95,7 +105,7 @@
             </FormItem>
             <FormItem label="工作时间:">
                 <DatePicker
-                        :value="formData.workDate"
+                        :value="formData.supervisor.workDate"
                         type="month"
                         transfer
                         @on-change="onChange_workDate"
@@ -103,13 +113,13 @@
             </FormItem>
             <FormItem label="入党时间:">
                 <DatePicker
-                        :value="formData.joinPartyDate"
+                        :value="formData.supervisor.joinPartyDate"
                         type="month"
                         transfer
                         @on-change="onChange_joinPartyDate"
                         placeholder="选择时间"></DatePicker>
             </FormItem>
-            <FormItem label="学历:">
+            <FormItem label="学历:" prop="education">
                 <Select v-model="formData.education">
                     <Option v-for="item in dict_education"
                             :key="item.id"
@@ -117,28 +127,28 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="毕业院校:">
+            <FormItem label="毕业院校:" prop="graduateSchool">
                 <Input v-model="formData.graduateSchool"/>
             </FormItem>
-            <FormItem label="专业:">
+            <FormItem label="专业:" prop="profession">
                 <Input v-model="formData.profession"/>
             </FormItem>
-            <FormItem label="出生年月:" prop="birthday">
+            <FormItem label="出生年月:" prop="supervisor.birthday">
                 <DatePicker
-                        :value="formData.birthday"
+                        :value="formData.supervisor.birthday"
                         type="date"
                         transfer
                         @on-change="onChange_birthday"
                         placeholder="选择时间"></DatePicker>
             </FormItem>
-            <FormItem label="编制状态:">
-                <Select v-model="formData.belongState">
-                    <Option value="0">编制</Option>
-                    <Option value="1">外聘</Option>
-                </Select>
-            </FormItem>
+            <!--<FormItem label="编制状态:">-->
+                <!--<Select v-model="formData.belongState">-->
+                    <!--<Option value="0">编制</Option>-->
+                    <!--<Option value="1">外聘</Option>-->
+                <!--</Select>-->
+            <!--</FormItem>-->
             <FormItem label="备注:">
-                <Input v-model="formData.remark"/>
+                <Input v-model="formData.supervisor.remark"/>
             </FormItem>
         </Form>
 
@@ -151,46 +161,80 @@
 </template>
 
 <script>
+    import uploadMixin from '../../../../lib/mixin/uploadMixin';
+    import Config from '../../../../config';
+    import userImg from '../images/User.png';
     export default {
         name: 'addSupervisor',
+        mixins: [uploadMixin],
+        computed: {
+            uploadAtion() {
+                return this.uploadParams.actionUrl + '/head_portrait';  // 个人附件
+            },
+            userImgUrl() {
+                return this.formData.headPortraitUrl ? Config[Config.env].filePath + this.formData.headPortraitUrl : userImg;
+            }
+        },
         data() {
             return {
+                uploadParams: {
+                    accept: '.jpg,.png,.jpeg,.gif',
+                    format: ['.jpg', '.png', '.jpeg', '.gif']
+                },
                 formData: {
-                    name: '姓名',
-                    uId: 'uid',
-                    department: '科室',
-                    job: '职务',
-                    titleLevel: '职称级别',
-                    telephone: '3952581',         // 固定电话
-                    mobileShortNum: '25811111',   // 移动小号
-                    phone: '15332112141',         // 手机
-                    tenureTime: '2006-06',        // 任职时间
-                    sex: '1',
-                    nation: '0',
-                    nativePlace: '祖籍六安',
-                    age: 26,
-                    IdNumber: '362521236521233632',
-                    birthday: '1992-06-06',  //
-                    workDate: '2010-09',    // 工作年月
-                    joinPartyDate: '2006-01',
-                    education: '学历',
-                    graduateSchool: '毕业院校',
-                    profession: '专业',
-                    graduateDate: '2018-01-01',
-                    identityType: '',
-                    titleName: '技术职称',
-                    lawNumber: '3450008',
-                    lawType: '0',
-                    divideWork: '领导分工及科室人员',
-                    belongState: '0',
-                    remark: ''
+                    name: '',
+                    headPortrait: '',  // 头像，存放fileId
+                    headPortraitUrl: '',
+                    department: '',
+                    job: '',
+                    titleLevel: '',
+                    phone: '',         // 手机
+                    sex: 'man',
+                    sexStr: '',
+                    nation: '',
+                    nationLabel: '',
+                    age: null,
+                    idNumber: '',
+                    education: '',
+                    graduateSchool: '',
+                    profession: '',
+                    graduateDate: '',
+                    titleName: '',
+                    lawTypeLabel: '',
+                    belongState: '',
+
+                    supervisor: {
+                        birthday: '',
+                        divideWork: '',
+                        identityType: '',
+                        jobLevel: '',
+                        lawType: '',
+                        joinPartyDate: '',
+                        lawNumber: '',
+                        mobileShortNum: '', // 移动小号
+                        nativePlace: '',
+                        remark: '',
+                        telephone: '',       // 固定电话
+                        tenureTime: '',      // 任职时间
+                        userId: '',
+                        workDate: ''        // 工作年月
+                    }
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
-                    uId: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
-                    titleLevel: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
-                    age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
+                    department: [{ required: true, message: '科室不能为空！', trigger: 'blur' }],
+                    job: [{ required: true, message: '现任职务不能为空！', trigger: 'blur' }],
+                    titleLevel: [{ required: true, message: '职位级别不能为空！', trigger: 'blur' }],
+                    'supervisor.telephone': [{ required: true, message: '办公固话不能为空！', trigger: 'blur' }],
+                    'supervisor.mobileShortNum': [{ required: true, message: '移动小号不能为空！', trigger: 'blur' }],
+                    phone: [{ required: true, message: '手机不能为空！', trigger: 'blur' }],
+                    nation: [{ required: true, message: '民族不能为空！', trigger: 'blur' }],
+                    'supervisor.nativePlace': [{ required: true, message: '籍贯不能为空！', trigger: 'blur' }],
                     titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
+                    education: [{ required: true, message: '学历不能为空！', trigger: 'blur' }],
+                    graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
+                    profession: [{ required: true, message: '专业不能为空！', trigger: 'blur' }],
+                    'supervisor.birthday': [{ required: true, message: '出生年月不能为空！', trigger: 'blur' }],
                 },
 
                 // 字典
@@ -223,32 +267,40 @@
                 });
             },
             onChange_tenureTime(time) {
-                this.formData.tenureTime = time;
+                this.formData.supervisor.tenureTime = time;
             },
             onChange_workDate(time) {
-                this.formData.workDate = time;
+                this.formData.supervisor.workDate = time;
             },
             onChange_joinPartyDate(time) {
-                this.formData.joinPartyDate = time;
+                this.formData.supervisor.joinPartyDate = time;
             },
             onChange_birthday(time) {
-                this.formData.birthday = time;
+                this.formData.supervisor.birthday = time;
             },
 
+            // 头像
+            fileUploadSuccess(response, file, fileList) {
+                if (response.code === 'SUCCESS') {
+                    this.formData.headPortrait = response.data.fileId;
+                    this.formData.headPortraitUrl = response.data.url;
+                }
+                this.$Loading.finish();
+            },
             // 添加从业人员
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         this.$http({
                             method: 'post',
-                            url: '/addUserInfo',
+                            url: '/user/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
-                                    content: '更新成功！'
+                                    content: '添加成功！'
                                 });
-                                this.$emit('modal_addSupervisor_callback');
+                                this.$emit('modal-callback');
                             }
                         })
                     } else {

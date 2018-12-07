@@ -104,22 +104,18 @@
 
 
                             // todo 暂时隐藏交工审核处理按钮
-                            if (params.row.waitHandleType !== 'handover_reply_audit') {
-                                return params.row.waitHandleStatus === 'complete_handle' ? '' :
-                                    h('Button', {
-                                        props: {
-                                            type: 'primary',
-                                            size: 'small'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.todoHandle(params.row);
-                                            }
+                            return params.row.waitHandleStatus === 'complete_handle' ? '' :
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.todoHandle(params.row);
                                         }
-                                    }, '处理');
-                            }
-
-
+                                    }
+                                }, '处理');
                         }
                     },
                 ],
@@ -267,6 +263,11 @@
 
                         this.modal_contentAudit_verification = true;
 
+                        break;
+                    case 'handover_handle_audit':
+                        this.$router.push({
+                            name: 'project_verification'
+                        });
                         break;
                 }
             },
