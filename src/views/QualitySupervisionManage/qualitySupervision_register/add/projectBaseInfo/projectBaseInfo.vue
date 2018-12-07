@@ -236,6 +236,7 @@
         },
         watch: {
             projectId: {
+                immediate: true,
                 handler(val) {
                     this.formData.projectId = val;
                     if (val !== '') {
@@ -362,6 +363,7 @@
                     if (valid) {
 
                         if(this.projectId === '') {
+                            this.$emit('modal_updateProject_callback');
                             this.$http({
                                 method: 'post',
                                 url: '/project/add',
@@ -371,7 +373,7 @@
                                     this.$Message.success({
                                         content: '添加成功！'
                                     });
-                                    this.$emit('modal_addProject_callback');
+                                    // this.$emit('modal_addProject_callback');
                                 }
                             })
                         }
@@ -386,7 +388,7 @@
                                     this.$Message.success({
                                         content: '保存成功！'
                                     });
-                                    this.$emit('modal_updateProject_callback');
+
                                 }
                             })
                         }

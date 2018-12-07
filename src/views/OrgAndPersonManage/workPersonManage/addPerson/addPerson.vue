@@ -111,7 +111,6 @@
 <script>
     import uploadMixin from '../../../../lib/mixin/uploadMixin';
     import Config from '../../../../config';
-    import userImg from '../images/User.png';
     export default {
         name: 'addPerson',
         mixins: [uploadMixin],
@@ -120,7 +119,8 @@
                 return this.uploadParams.actionUrl + '/head_portrait';  // 个人附件
             },
             userImgUrl() {
-                return this.formData.headPortraitUrl ? Config[Config.env].filePath + this.formData.headPortraitUrl : userImg;
+                let default_img = this.formData.sex === 'woman' ? './user-woman.png' : './user-man.png';
+                return this.formData.headPortraitUrl ? Config[Config.env].filePath + this.formData.headPortraitUrl : default_img;
             }
         },
         data() {

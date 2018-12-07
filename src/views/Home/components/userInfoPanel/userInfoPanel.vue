@@ -51,7 +51,8 @@
         components: {vModalTodo},
         computed: {
             _headPortrait() {
-                return this.userInfo.headPortraitUrl ? Config[Config.env].filePath + this.userInfo.headPortraitUrl : imgUrl;
+                let default_img = this.$store.state.user.sex === 'woman' ? './user-woman.png' : './user-man.png';
+                return this.userInfo.headPortraitUrl ? Config[Config.env].filePath + this.userInfo.headPortraitUrl : default_img;
             }
         },
         data() {

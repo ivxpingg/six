@@ -71,10 +71,13 @@
                     this.setTableColumns();
                 }
             },
-            projectId(val) {
-                if (val !== '') {
-                    this.formData.projectId = val;
-                    this.getData();
+            projectId: {
+                immediate: true,
+                handler(val) {
+                    if (val !== '') {
+                        this.formData.projectId = val;
+                        this.getData();
+                    }
                 }
             }
         },

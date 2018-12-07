@@ -56,10 +56,10 @@
                @on-visible-change="onVisibleChange_add"
                footer-hide>
             <div style="height: 650px;">
-                <vAdd @modal_callback="modal_addProject_callback"></vAdd>
+                <vAdd v-if="modal_add" @modal_callback="modal_addProject_callback"></vAdd>
             </div>
         </Modal>
-        <!--质量监督登记-->
+        <!--质量监督登记编辑-->
         <Modal v-model="modal_edit"
                class-name="modal-body-padding0"
                title="质量监督登记"
@@ -67,7 +67,8 @@
                @on-visible-change="onVisibleChange_edit"
                footer-hide>
             <div style="height: 650px;">
-                <vEdit @modal_callback="modal_updateProject_callback"
+                <vEdit v-if="modal_edit"
+                       @modal_callback="modal_updateProject_callback"
                        :isView="isView"
                        :projectId="modal_edit_param.projectId"></vEdit>
             </div>

@@ -6,6 +6,7 @@ export default {
         userName: '',
         userId: '',
         avatorImgPath: '',
+        sex: '',
         token: getToken()
     },
     mutations: {
@@ -17,6 +18,9 @@ export default {
         },
         setUserName (state, name) {
             state.userName = name
+        },
+        setUserSex(state, sex) {
+            state.userSex = sex;
         },
         setToken (state, token) {
             state.token = token
@@ -83,6 +87,7 @@ export default {
                     let img = data.headPortraitUrl ? Config[Config.env].filePath + data.headPortraitUrl : '';
                     commit('setAvator', img);
                     commit('setUserName', data.name);
+                    commit('setUserSex', data.sex);
                     // commit('setUserId', data.user_id)
                     // commit('setAccess', data.access)
                     resolve(data)

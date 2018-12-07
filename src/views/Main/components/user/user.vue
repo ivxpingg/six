@@ -37,7 +37,8 @@
         name: 'user',
         computed: {
             userAvator() {
-                return this.$store.state.user.avatorImgPath ? this.$store.state.user.avatorImgPath : './user.jpg';
+                let default_img = this.$store.state.user.sex === 'woman' ? './user-woman.png' : './user-man.png';
+                return this.$store.state.user.avatorImgPath ? this.$store.state.user.avatorImgPath : default_img;
             }
         },
         data() {
