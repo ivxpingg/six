@@ -72,9 +72,9 @@
                     },
                     toolbox: {},
                     grid: {
-                        left: '3%',
-                        right: '3%',
-                        bottom: '3%'
+                        left: 40,
+                        right: 20,
+                        bottom: 30
                     },
                     xAxis : [
                         {
@@ -118,13 +118,13 @@
                 list.forEach(v => {
                     let week = '';
                     switch (MOMENT(v.date).day()) {
+                        case 0: week = '周日'; break;
                         case 1: week = '周一'; break;
                         case 2: week = '周二'; break;
                         case 3: week = '周三'; break;
                         case 4: week = '周四'; break;
                         case 5: week = '周五'; break;
                         case 6: week = '周六'; break;
-                        case 7: week = '周日'; break;
                     }
                     this.options.xAxis[0].data.push(week);
                     this.options.series[0].data.push(v.supervisionNum);

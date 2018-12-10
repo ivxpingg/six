@@ -157,6 +157,7 @@
                             unitName: val.unitName,
                             unitId: val.unitId,
                             userList: userList,
+                            projectUnitId: val.projectUnitId,
                             dutyList: []
                         };
 
@@ -308,6 +309,7 @@
                                     for (let i = 0; i < val.userList.length; i++) {
                                         if (val.userList[i].projectUserId === val_duty.projectUserId) {
                                             val_duty.userId = val.userList[i].userId;
+                                            val_duty.projectUnitId = val.userList[i].projectUnitId;
                                             break;
                                         }
                                     }
@@ -318,7 +320,7 @@
 
                         });
 
-                       this.save();
+                        this.save();
                     }
                 })
             }
