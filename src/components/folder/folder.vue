@@ -12,6 +12,7 @@
                v-show="title!== ''">{{omitTitle}}</p>
             <p class="title hover-title"
                v-show="hover"
+               :title="title"
                :style="{width: `${size}px`, fontSize: `${fontSize}px`, top: `${size}px`}">{{title}}</p>
         </div>
     </Badge>

@@ -327,7 +327,9 @@
                                  this.textObj.name_0 = this.auditContent[0].name_0;
                                  this.textObj.name_1 = this.auditContent[0].name_1;
                                  this.textObj.name_2 = this.auditContent[0].name_2;
-
+                                 this.textObj.readonly_0 = !(this.textObj.textarea_0 === '');
+                                 this.textObj.readonly_1 = !(this.textObj.textarea_1 === '');
+                                 this.textObj.readonly_2 = !(this.textObj.textarea_2 === '');
                              }
                              catch (e) {
 

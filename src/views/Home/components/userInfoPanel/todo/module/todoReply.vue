@@ -21,6 +21,20 @@
                            :rows="5"
                            placeholder="请输入整改回复"/>
                 </FormItem>
+                <FormItem label="回复材料:">
+                    <Upload :action="uploadAction"
+                            :showUploadList="uploadParams.showUploadList"
+                            :multiple="uploadParams.multiple"
+                            :accept="uploadParams.accept"
+                            :maxSize="uploadParams.maxSize"
+                            :on-remove="onRemoveFile"
+                            :before-upload="fileBeforeUpload"
+                            :on-exceeded-size="exceededSize"
+                            :on-error="fileUploadError"
+                            :on-success="fileUploadSuccess">
+                        <Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>
+                    </Upload>
+                </FormItem>
                 <FormItem label="相关材料:">
                     <Button type="primary" icon="md-images" @click="onClick_viewFile_open">查看附件</Button>
                 </FormItem>
@@ -39,9 +53,10 @@
     import modalMixin from '../../../../../../lib/mixin/modalMixin';
     import MOMENT from 'moment';
     import viewFilesMixin from '../../../../../Common/viewFiles/mixin';
+    import uploadMixin from '../../../../../../lib/mixin/uploadMixin';
     export default {
         name: 'todoReply',   // 整改回复
-        mixins: [modalMixin, viewFilesMixin],
+        mixins: [modalMixin, viewFilesMixin, uploadMixin],
         props: {
             projectId: {
                 type: String,
@@ -60,14 +75,24 @@
                 default: ''
             }
         },
+        computed:{
+            uploadAction() {
+                return this.uploadParams.actionUrl + '/monitor_procedure';
+            }
+        },
         data() {
             return {
+                uploadParams: {
+                    showUploadList: true,
+                    multiple: true
+                },
                 formData: {
                     changeTitle: '',
                     changeContent: '',
                     fileList: [],
                     changeReplyList: [],
-                    reply: ''
+                    reply: '',
+                    fileIds: []
                 },
                 rules: {
                     reply: [{ required: true, message: '回复内容不能为空！', trigger: 'blur' }]
@@ -82,6 +107,16 @@
             }
         },
         methods: {
+
+            // 文件移除
+            onRemoveFile(file, fileList) {
+                this.formData.fileIds = fileList.map(v => v.response.data.fileId);
+            },
+
+            fileUploadSuccess(response, file, fileList) {
+                this.formData.fileIds = fileList.map(v => v.response.data.fileId);
+            },
+
             // 获取整改回复的信息
             getReply() {
                 this.$http({
@@ -114,7 +149,8 @@
                             data: JSON.stringify({
                                 projectId: this.projectId,
                                 changeNoticeId: this.changeNoticeId,
-                                reply: this.formData.reply
+                                reply: this.formData.reply,
+                                fileIds: this.formData.fileIds
                             })
                         }).then(res => {
                             if (res.code === 'SUCCESS') {

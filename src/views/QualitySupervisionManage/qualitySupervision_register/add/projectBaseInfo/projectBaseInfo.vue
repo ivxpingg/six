@@ -12,7 +12,7 @@
             <FormItem label="标段:" prop="part">
                 <Input v-model="formData.part" :readonly="isView"/>
             </FormItem>
-            <FormItem label="详细地址:" prop="address">
+            <FormItem label="详细地址:">
                 <Input v-model="formData.address" :readonly="isView"/>
             </FormItem>
             <FormItem label="地区:" prop="county">
@@ -75,7 +75,7 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="工程性质:" prop="level">
+            <FormItem label="工程性质:" prop="projectProperty">
                 <Select v-model="formData.projectProperty" :disabled="isView">
                     <Option v-for="item in dict_projectProperty"
                             :value="item.value"
@@ -88,12 +88,12 @@
                     <span slot="append">km</span>
                 </Input>
             </FormItem>
-            <FormItem label="设计时速(km/h):" prop="designSpeed">
+            <FormItem label="设计时速(km/h):">
                 <Input v-model="formData.designSpeed" number :readonly="isView">
                     <span slot="append">km/h</span>
                 </Input>
             </FormItem>
-            <FormItem label="路基宽度(米):" prop="subgradeWidth">
+            <FormItem label="路基宽度(米):">
                 <Input v-model="formData.subgradeWidth" number :readonly="isView">
                      <span slot="append">米</span>
                 </Input>
@@ -108,10 +108,8 @@
                     <span slot="append">万元</span>
                 </Input>
             </FormItem>
-            <FormItem label="监理合同金额(万元):" prop="supervisorAmount">
-                <Input v-model="formData.supervisorAmount" number :readonly="isView">
-                    <span slot="append">万元</span>
-                </Input>
+            <FormItem label="监理合同金额:">
+                <Input v-model="formData.supervisorAmount" :readonly="isView"></Input>
             </FormItem>
             <FormItem label="计划开工时间:" prop="planBeginTime">
                 <DatePicker
@@ -210,14 +208,19 @@
                     part: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
                     address: [{ required: true, message: '地址不能为空！', trigger: 'blur' }],
                     county: [{ required: true, message: '请选择完整地区！', trigger: 'blur' }],
+                    projectType: [{ required: true, message: '项目类型不能为空！', trigger: 'blur' }],
+                    technicalLevel: [{ required: true, message: '技术等级不能为空！', trigger: 'blur' }],
+                    projectProperty: [{ required: true, message: '工程性质不能为空！', trigger: 'blur' }],
                     mileage: [{ required: true, type: 'number', message: '项目里程不能为空！', trigger: 'blur' }],
                     amount: [{ required: true, type: 'number', message: '投资额不能为空！', trigger: 'blur' }],
                     constructAmount: [{ required: true, type: 'number', message: '施工合同金额不能为空！', trigger: 'blur' }],
-                    supervisorAmount: [{ required: true, type: 'number', message: '监理合同金额不能为空！', trigger: 'blur' }],
-                    designSpeed: [{ required: true, type: 'number', message: '设计时速不能为空！', trigger: 'blur' }],
-                    subgradeWidth: [{ required: true, type: 'number', message: '路基宽度不能为空！', trigger: 'blur' }],
-                    planBeginTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }],
-                    planEndTime: [{ required: true, message: '标段不能为空！', trigger: 'blur' }]
+                    // supervisorAmount: [{ required: true, type: 'number', message: '监理合同金额不能为空！', trigger: 'blur' }],
+                    // designSpeed: [{ required: true, type: 'number', message: '设计时速不能为空！', trigger: 'blur' }],
+                    // subgradeWidth: [{ required: true, type: 'number', message: '路基宽度不能为空！', trigger: 'blur' }],
+                    planBeginTime: [{ required: true, message: '计划开工时间不能为空！', trigger: 'blur' }],
+                    planEndTime: [{ required: true, message: '计划交工时间不能为空！', trigger: 'blur' }],
+                    contacts: [{ required: true, message: '联系人不能为空！', trigger: 'blur' }],
+                    contactPhone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }]
                 },
 
                 //
@@ -363,7 +366,7 @@
                     if (valid) {
 
                         if(this.projectId === '') {
-                            this.$emit('modal_updateProject_callback');
+                            this.$emit('modal_addProject_callback');
                             this.$http({
                                 method: 'post',
                                 url: '/project/add',
@@ -373,7 +376,6 @@
                                     this.$Message.success({
                                         content: '添加成功！'
                                     });
-                                    // this.$emit('modal_addProject_callback');
                                 }
                             })
                         }

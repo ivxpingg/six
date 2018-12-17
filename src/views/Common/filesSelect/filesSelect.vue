@@ -51,9 +51,15 @@
         name: 'filesSelect',
         mixins: [modalMixin, uploadMixin],
         components: {vIvxFilterBox,vViewFile},
+        props: {
+            fileType: {
+                type: String,
+                default: 'monitor_procedure'
+            }
+        },
         computed: {
             uploadAtion() {
-                return this.uploadParams.actionUrl + '/user_attach';  // 个人附件
+                return this.uploadParams.actionUrl + '/' + this.fileType;  // 个人附件
             }
         },
         data() {

@@ -95,7 +95,7 @@
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', },
                     { title: '姓名', width: 120, align: 'center', key: 'name' },
-                    { title: 'UID', width: 80, align: 'center', key: 'userNo' },
+                    // { title: 'UID', width: 80, align: 'center', key: 'userNo' },
                     { title: '性别', width: 70, align: 'center', key: 'sexLabel' },
                     { title: '年龄', width: 70, align: 'center', key: 'age' },
                     { title: '民族', width: 100, align: 'center', key: 'nation' },

@@ -1,7 +1,7 @@
 <template>
     <div class="file-container"
          :class="{active}"
-         @click="onSelect"
+         @click.stop="onSelect"
          @mouseover="onMouseOver"
          @mouseleave="onMouseLeave">
         <Icon :type="iconType"
@@ -15,8 +15,8 @@
            :style="{width: `${size}px`, fontSize: `${fontSize}px`, top: `${size}px`}">{{title}}</p>
 
         <div class="cover" :class="{'cover-show': hover}">
-            <Icon type="ios-eye" size="20" color="#FFF" title="预览" @click.stop="onClick_view"/>
-            <Icon type="md-download" size="20" color="#FFF" title="下载" @click.stop="onClick_download" />
+            <Icon type="ios-eye" size="20" color="#FFF" title="预览" @click.self.stop="onClick_view"/>
+            <Icon type="md-download" size="20" color="#FFF" title="下载" @click.self.stop="onClick_download" />
         </div>
 
         <vViewFile ref="viewFile" :title="data.fileName" :src="data.url" :format="data.fileFormat"></vViewFile>

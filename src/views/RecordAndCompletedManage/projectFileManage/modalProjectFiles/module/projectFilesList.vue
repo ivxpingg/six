@@ -43,6 +43,7 @@
         },
         watch: {
             folderType: {
+                immediate: true,
                 deep: true,
                 handler(val) {
                     if (val.url) {

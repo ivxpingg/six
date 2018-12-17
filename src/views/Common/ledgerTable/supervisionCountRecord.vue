@@ -37,6 +37,7 @@
         components: {vIvxFilterBox},
         computed: {
             _joinColumns() {
+                let defaultCol = ['项目名称', '标段', '监督负责人','监督成员','累计监督次数'];   // 默认已有字段
                 let columns = [];
                 let keys = [];
                 let widths = {
@@ -45,16 +46,25 @@
                 };
 
                 columns.push({ title: '序号', width: 60, align: 'center', type: 'index', });
+                columns.push({ title: '项目名称', width: 160, align: 'center', key: '项目名称' });
+                columns.push({ title: '标段', width: 80, align: 'center', key: '标段' });
+                columns.push({ title: '监督负责人', width: 100, align: 'center', key: '监督负责人' });
+                columns.push({ title: '监督成员', width: 160, align: 'center', key: '监督成员' });
+                columns.push({ title: '累计监督次数', width: 140, align: 'center', key: '累计监督次数' });
 
                 this.tableData.forEach(v => {
                     for (let key in v) {
-                        let _key = key.replace(/'/g, '');
+                        let _key = key;//.replace(/'/g, '');
+
+                        if (defaultCol.indexOf(_key) >= 0) {
+                            continue;
+                        }
 
                         if (keys.indexOf(_key) === -1) {
                             keys.push(_key);
 
                             let col = {
-                                title: _key,
+                                title: _key.replace(/'/g, ''),
                                 align: 'center',
                                 minWidth: 80,
                                 width: widths[_key] ||_key.length * 12 + 40,

@@ -145,78 +145,81 @@
                         fixed: 'right',
                         render: (h, params) => {
                             let list = [];
-                            if (!params.row.advanceNotice) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'md-add'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.currentRow.projectName = params.row.projectName;
-                                            this.$refs.modal_addSupervisionTell.modalValue = true;
-                                        }
-                                    }
-                                }, '添加监督交底'));
-                            }
-                            else{
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'md-done-all'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.tellComplete(params.row);
-                                        }
-                                    }
-                                }, '交底完成'));
-                            }
 
-                            // 出现条件
-                            // 1.监督交底添加完，只能添加一次整改通知
-                            if ((params.row.advanceNotice && !params.row.changeNotice) || (params.row.changeNotice && params.row.changeNotice.changeStatus === 'pass')) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-notifications'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.advanceNotice.advanceNoticeId = params.row.advanceNotice.advanceNoticeId;
-
-                                            this.$refs.modal_noticeModification.modalValue = true;
+                            if ( params.row.chargeFlag) {
+                                if (!params.row.advanceNotice) {
+                                    list.push(h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'md-add'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.currentRow.projectId = params.row.projectId;
+                                                this.currentRow.projectName = params.row.projectName;
+                                                this.$refs.modal_addSupervisionTell.modalValue = true;
+                                            }
                                         }
-                                    }
-                                }, '整改通知'));
-                            }
-
-                            if (params.row.changeNotice) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-undo'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
-                                            this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
-                                            this.$refs.modal_noticeReply.modalValue = true;
+                                    }, '添加监督交底'));
+                                }
+                                else {
+                                    list.push(h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'md-done-all'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.currentRow.projectId = params.row.projectId;
+                                                this.tellComplete(params.row);
+                                            }
                                         }
-                                    }
-                                }, '查看整改回复'));
-                            }
+                                    }, '交底完成'));
+                                }
 
+                                // 出现条件
+                                // 1.监督交底添加完，只能添加一次整改通知
+                                if ((params.row.advanceNotice && !params.row.changeNotice) || (params.row.changeNotice && params.row.changeNotice.changeStatus === 'pass')) {
+                                    list.push(h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'ios-notifications'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.currentRow.projectId = params.row.projectId;
+                                                this.currentRow.projectName = params.row.projectName;
+                                                this.currentRow.advanceNotice.advanceNoticeId = params.row.advanceNotice.advanceNoticeId;
+
+                                                this.$refs.modal_noticeModification.modalValue = true;
+                                            }
+                                        }
+                                    }, '整改通知'));
+                                }
+
+                                if (params.row.changeNotice) {
+                                    list.push(h('Button', {
+                                        props: {
+                                            type: 'primary',
+                                            size: 'small',
+                                            icon: 'ios-undo'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.currentRow.projectId = params.row.projectId;
+                                                this.currentRow.projectName = params.row.projectName;
+                                                this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                                this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
+                                                this.$refs.modal_noticeReply.modalValue = true;
+                                            }
+                                        }
+                                    }, '查看整改回复'));
+                                }
+
+                            }
 
                             if (params.row.advanceNotice && params.row.advanceNotice.advanceNoticeId) {
                                 list.push(h('Button', {

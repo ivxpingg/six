@@ -38,18 +38,20 @@
                            placeholder="请输入整改标题" readonly/>
                 </FormItem>
                 <FormItem label="整改内容:">
-                    <Input v-model="formData.changeContent"
+                    <Input v-model="formData.changeCont                           type="textarea"
+                    rows="5"ent"
                            placeholder="请输入整改内容"
-                           type="textarea"
-                           rows="5"
+
                            style="width: 590px;"
                            readonly/>
                 </FormItem>
 
                 <template v-for="item in formData.changeReplyList">
                     <FormItem :label="`${item.unitName}回复：`" :key="`${item.changeReplyId}1`">
-                        <Input :value="item.reply" type="textarea" style="width: 590px;" :rows="5" readonly/>
+                        <Input :value="item.reply" type="textarea" style="width: 460px; margin-right: 10px;" :rows="5" readonly/>
+                        <Button type="primary" icon="md-images" @click="onClick_viewFile_open(item.changeReplyId)">查看附件</Button>
                     </FormItem>
+
                     <FormItem :label="`处理人：`"  :key="`${item.changeReplyId}2`">
                         <Input :value="item.userName" style="width: 135px;" readonly/>
                     </FormItem>
@@ -65,15 +67,18 @@
             <div slot="footer">
                 <Button type="primary" size="large" @click="savePass" v-show="changeStatus === 'reply'">整改通过</Button>
             </div>
+
+            <vViewFiles ref="viewFile" :data="viewFilesData"></vViewFiles>
         </Modal>
     </div>
 </template>
 <script>
     import modalMixin from '../../../../lib/mixin/modalMixin';
     import MOMENT from 'moment';
+    import viewFilesMixin from '../../../Common/viewFiles/mixin';
     export default {
         name: 'noticeReply_check',  // 整改回复
-        mixins: [modalMixin],
+        mixins: [modalMixin, viewFilesMixin],
         props: {
             projectId: {
                 type: String,
@@ -108,7 +113,9 @@
                     createId: '',
                     changeReplyList: []
                 },
-                dict_overdueHandle: []
+                dict_overdueHandle: [],
+
+                viewFilesData: []
             }
         },
         watch: {
@@ -182,6 +189,11 @@
             // 转化日期
             transformTime(time) {
                 return time ? MOMENT(time).format('YYYY-MM-DD') : '';
+            },
+
+            onClick_viewFile_open(changeReplyId) {
+                this.getData_vViewFile(changeReplyId, 'monitor_procedure', 'viewFilesData');
+                this.$refs.viewFile.modalValue = true;
             }
         }
     }

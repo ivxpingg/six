@@ -9,8 +9,8 @@
             <FormItem label="姓名:" prop="name">
                 <Input v-model="formData.name"/>
             </FormItem>
-            <FormItem label="科室:" prop="department">
-                <Input v-model="formData.department"/>
+            <FormItem label="登录名:" prop="loginName">
+                <Input v-model="formData.loginName"/>
             </FormItem>
             <FormItem label="头像：" style="margin-bottom: 0px;">
                 <Upload ref="upload"
@@ -27,6 +27,9 @@
                     <img :src="userImgUrl"
                          style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
                 </Upload>
+            </FormItem>
+            <FormItem label="科室:" prop="department">
+                <Input v-model="formData.department"/>
             </FormItem>
             <FormItem label="现任职务:" prop="job">
                 <Input v-model="formData.job"/>
@@ -74,12 +77,13 @@
                 </Select>
             </FormItem>
             <FormItem label="身份类别:">
-                <Select v-model="formData.supervisor.identityType">
-                    <Option v-for="item in dict_identityType"
-                            :key="item.id"
-                            :value="item.value"
-                            :label="item.label"></Option>
-                </Select>
+                <Input v-model="formData.supervisor.identityType"/>
+                <!--<Select v-model="formData.supervisor.identityType">-->
+                    <!--<Option v-for="item in dict_identityType"-->
+                            <!--:key="item.id"-->
+                            <!--:value="item.value"-->
+                            <!--:label="item.label"></Option>-->
+                <!--</Select>-->
             </FormItem>
             <FormItem label="执法证类型:">
                 <Select v-model="formData.supervisor.lawType">
@@ -98,7 +102,7 @@
             <FormItem label="任职时间:">
                 <DatePicker
                         :value="formData.supervisor.tenureTime"
-                        type="month"
+                        type="date"
                         transfer
                         @on-change="onChange_tenureTime"
                         placeholder="选择时间"></DatePicker>
@@ -106,7 +110,7 @@
             <FormItem label="工作时间:">
                 <DatePicker
                         :value="formData.supervisor.workDate"
-                        type="month"
+                        type="date"
                         transfer
                         @on-change="onChange_workDate"
                         placeholder="选择时间"></DatePicker>
@@ -114,7 +118,7 @@
             <FormItem label="入党时间:">
                 <DatePicker
                         :value="formData.supervisor.joinPartyDate"
-                        type="month"
+                        type="date"
                         transfer
                         @on-change="onChange_joinPartyDate"
                         placeholder="选择时间"></DatePicker>
@@ -140,6 +144,9 @@
                         transfer
                         @on-change="onChange_birthday"
                         placeholder="选择时间"></DatePicker>
+            </FormItem>
+            <FormItem label="身份证号:" prop="idNumber">
+                <Input v-model="formData.idNumber" />
             </FormItem>
             <!--<FormItem label="编制状态:">-->
                 <!--<Select v-model="formData.belongState">-->
@@ -183,6 +190,7 @@
                 },
                 formData: {
                     name: '',
+                    loginName: '',
                     headPortrait: '',  // 头像，存放fileId
                     headPortraitUrl: '',
                     department: '',
@@ -202,7 +210,6 @@
                     titleName: '',
                     lawTypeLabel: '',
                     belongState: '',
-
                     supervisor: {
                         birthday: '',
                         divideWork: '',
@@ -222,6 +229,8 @@
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
+                    loginName: [{ required: true, message: '登录名不能为空！', trigger: 'blur' },
+                        { validator: this.validate_loginName,  trigger: 'blur' }],
                     department: [{ required: true, message: '科室不能为空！', trigger: 'blur' }],
                     job: [{ required: true, message: '现任职务不能为空！', trigger: 'blur' }],
                     titleLevel: [{ required: true, message: '职位级别不能为空！', trigger: 'blur' }],
@@ -235,6 +244,7 @@
                     graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
                     profession: [{ required: true, message: '专业不能为空！', trigger: 'blur' }],
                     'supervisor.birthday': [{ required: true, message: '出生年月不能为空！', trigger: 'blur' }],
+                    idNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
                 },
 
                 // 字典
@@ -250,6 +260,15 @@
             this.getDict(['sex', 'titleName', 'titleLevel', 'lawType', 'education', 'identityType']);
         },
         methods: {
+            validate_loginName(rule, value, callback) {
+                let re =  /^[0-9a-zA-Z]*$/;  //判断字符串是否为数字和字母组合
+                if (!re.test(value)) {
+                    callback(new Error('登录名必须是数字和字母组合！'));
+                }else{
+                    callback();
+                }
+
+            },
             // 获取字典
             getDict(list) {
                 this.$http({

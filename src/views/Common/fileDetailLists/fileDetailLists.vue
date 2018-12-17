@@ -127,22 +127,28 @@
                         { title: '序号', width: 60, align: 'center', type: 'index', },
                         { title: '项目', width: 120, align: 'center', key: 'item'},
                         { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
+                        { title: '备注', width: 160, align: 'center', key: 'remark'},
                         { title: '份数', width: 80, align: 'center', key: 'num',
                             render: (h, params) => {
-                                return h('span',{
-                                    style: {
-                                        cursor: 'pointer',
-                                        'text-decoration': 'underline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.fileTemplateId = params.row.fileTemplateId || '';
-                                            this.currentRow.projectFileId = params.row.projectFileId || '';
-                                            this.currentRow.templateType = params.row.templateType || '';
-                                            this.modal_uploadFileManage = true;
+                                if (params.row.num && params.row.num > 0) {
+                                    return h('span', {
+                                        style: {
+                                            cursor: 'pointer',
+                                            'text-decoration': 'underline'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.currentRow.fileTemplateId = params.row.fileTemplateId || '';
+                                                this.currentRow.projectFileId = params.row.projectFileId || '';
+                                                this.currentRow.templateType = params.row.templateType || '';
+                                                this.modal_uploadFileManage = true;
+                                            }
                                         }
-                                    }
-                                }, params.row.num)
+                                    }, params.row.num)
+                                }
+                                else {
+                                    return h('span', '0');
+                                }
                             }
                         }
                     ]
@@ -152,7 +158,16 @@
                         { title: '序号', width: 60, align: 'center', type: 'index', },
                         { title: '项目', width: 80, align: 'center', key: 'item'},
                         { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
-                        { title: '份数', width: 80, align: 'center', key: 'num'},
+                        { title: '份数', width: 80, align: 'center', key: 'num',
+                            render: (h, params) => {
+                                if (params.row.num && params.row.num > 0) {
+                                    return h('span', params.row.num)
+                                }
+                                else {
+                                    return h('span', '0');
+                                }
+                            }
+                        },
                         { title: '上传状态', width: 100, align: 'center', key: 'fileStatus', render: (h, params) =>{
                                 return h('div', params.row.fileStatus === '1' ? '已上传' : '未上传');
                             }},

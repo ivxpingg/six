@@ -262,6 +262,10 @@
                 })
             },
             uploadFile() {
+                if (!this.ifESignature()) {
+                    this.$Message.error('您尚未电子签名，请确认签名后通过！');
+                    return;
+                }
 
                 if (this.auditContent_obj.lastStep) {
 
@@ -282,6 +286,22 @@
                 }
                 else{
                     this.auditPass();
+                }
+            },
+            // 判断当前用户通过审核的时候是否已经盖章
+            ifESignature() {
+                if (this.auditInfo.auditContent && this.auditInfo.auditContent !== '') {
+                    let eSignatureList = eval(this.auditInfo.auditContent)[0].eSignature || [];
+
+                    for (let i = 0; i < eSignatureList.length; i++) {
+                        if (eSignatureList[i].userId === this.$store.state.user.userId) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                else {
+                    return false;
                 }
             }
         }

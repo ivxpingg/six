@@ -9,8 +9,8 @@
             <FormItem label="姓名:" prop="name">
                 <Input v-model="formData.name" :readonly="!editable"/>
             </FormItem>
-            <FormItem label="科室:">
-                <Input v-model="formData.department" :readonly="!editable"/>
+            <FormItem label="登录名:" prop="loginName">
+                <Input v-model="formData.loginName" readonly/>
             </FormItem>
             <FormItem label="头像：" style="margin-bottom: 0px;">
                 <Upload ref="upload"
@@ -26,6 +26,9 @@
                     <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
                     <img :src="userImgUrl" style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
                 </Upload>
+            </FormItem>
+            <FormItem label="科室:">
+                <Input v-model="formData.department" :readonly="!editable"/>
             </FormItem>
             <FormItem label="现任职务:">
                 <Input v-model="formData.job" :readonly="!editable"/>
@@ -142,6 +145,9 @@
                         placeholder="选择时间"
                         :readonly="!editable"></DatePicker>
             </FormItem>
+            <FormItem label="身份证号:" prop="idNumber">
+                <Input v-model="formData.idNumber" />
+            </FormItem>
             <!--<FormItem label="编制状态:">-->
                 <!--<Input v-model="formData.belongStateLabel"/>-->
             <!--</FormItem>-->
@@ -193,6 +199,7 @@
                 formData: {
                     userId: '',
                     name: '',
+                    loginName:'',
                     headPortrait: '',  // 头像，存放fileId
                     headPortraitUrl: '',
                     department: '',
@@ -233,10 +240,22 @@
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
-                    // uId: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
-                    // titleLevel: [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
-                    // age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
-                    // titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
+                    loginName: [{ required: true, message: '登录名不能为空！', trigger: 'blur' },
+                        { validator: this.validate_loginName,  trigger: 'blur' }],
+                    department: [{ required: true, message: '科室不能为空！', trigger: 'blur' }],
+                    job: [{ required: true, message: '现任职务不能为空！', trigger: 'blur' }],
+                    titleLevel: [{ required: true, message: '职位级别不能为空！', trigger: 'blur' }],
+                    'supervisor.telephone': [{ required: true, message: '办公固话不能为空！', trigger: 'blur' }],
+                    'supervisor.mobileShortNum': [{ required: true, message: '移动小号不能为空！', trigger: 'blur' }],
+                    phone: [{ required: true, message: '手机不能为空！', trigger: 'blur' }],
+                    nation: [{ required: true, message: '民族不能为空！', trigger: 'blur' }],
+                    'supervisor.nativePlace': [{ required: true, message: '籍贯不能为空！', trigger: 'blur' }],
+                    titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
+                    education: [{ required: true, message: '学历不能为空！', trigger: 'blur' }],
+                    graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
+                    profession: [{ required: true, message: '专业不能为空！', trigger: 'blur' }],
+                    'supervisor.birthday': [{ required: true, message: '出生年月不能为空！', trigger: 'blur' }],
+                    idNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
                 },
 
                 dict_sex: [],         // 性别

@@ -88,6 +88,7 @@ export default {
                     commit('setAvator', img);
                     commit('setUserName', data.name);
                     commit('setUserSex', data.sex);
+                    commit('setUserId', data.userId);
                     // commit('setUserId', data.user_id)
                     // commit('setAccess', data.access)
                     resolve(data)

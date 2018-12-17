@@ -30,7 +30,7 @@
                         </Button>
                     </i-col>
                     <i-col span="12">
-                        <Button type="info" size="large">
+                        <Button type="info" size="large" @click="modal_more_open">
                             <Badge type="info" :count="unReadNoticeNum" show-zero></Badge>
                             消息通知
                         </Button>
@@ -126,6 +126,9 @@
 
             modal_todo_open() {
                 this.$refs.modaltodo.modalValue = true;
+            },
+            modal_more_open() {
+                this.$parent.$parent.$parent.$refs.noticePanel.modal_more = true;
             },
             modal_todo_callback() {
                 this.getWaitHandleNum();

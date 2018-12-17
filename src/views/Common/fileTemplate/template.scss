@@ -1,0 +1,227 @@
+$scale: 1;
+
+$page-width: 595.28px * $scale;  // A4 纸宽度
+$page-height: 841.89px * $scale; // A4 纸高度
+
+$font-size_default: 14px * $scale;  // 默认字体大小
+$line-Height: 32px * $scale;        // 默认行高
+$letter-spacing: 4px * $scale;      // 默认字体间距
+$color: #000;
+
+.six-template-content-#{$scale}x {
+  position: relative;
+  box-sizing: border-box;
+  color: $color;
+  width: $page-width;
+  min-height: $page-height;
+  background-color: #FFF;
+  font-size: $font-size_default;
+  line-height: 1.5;
+
+  // 盖章图层样式
+  .stamp-layer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: rgba(33,33,33,0.2);
+    overflow: hidden;
+    .signature-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 100px;
+      box-shadow:3px 3px 5px #7d7d7d;
+      transition: all 0.05s;
+    }
+  }
+  .stamp-layer-mouse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 101;
+    cursor: url("./images/cursor-stamp.png"), pointer;
+  }
+
+  .signature-box {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100px * $scale;
+    height: 100px * $scale;
+    img {
+      width: 100px * $scale;
+      height: 100px * $scale;
+      border-image: none;
+      border: none;
+    }
+  }
+
+  // 一页 A4 纸宽高
+  .page {
+    position: relative;
+    padding: 65px * $scale;
+    width: $page-width;
+    height: $page-height;
+    background-color: #FFF;
+    background-size: contain;
+    box-shadow: 0 -1px 0px #dcdee2;
+    //overflow: hidden;
+  }
+  // 一页 A4 宽度 高度自适应
+  .page-auto {
+    position: relative;
+    padding: 65px  * $scale;
+    width: $page-width;
+    min-height: $page-height;
+    overflow: hidden;
+  }
+
+
+  // ***********  文本设置
+  .main-text {
+    line-height: $line-Height;
+    letter-spacing: $letter-spacing;
+  }
+
+  // 首行文本缩进
+  .text-indent-28 {
+    text-indent: 28px * $scale;;
+  }
+
+  // 位置设置
+  .box-bottom {
+    position: absolute;
+    left: 65px * $scale;
+    right: 65px * $scale;
+    bottom: 65px * $scale;
+  }
+
+  // input输入框的样式
+  .input-text-under-line {
+    text-indent: 0;
+    .ivu-input {
+      padding: 0 7px;
+      border-width: 0;
+      border-bottom: 1px solid #333;
+      border-radius: 0;
+      box-shadow: none;
+      color: $color;
+    }
+  }
+  .input-text-under-none {
+    text-indent: 0;
+    .ivu-input {
+      padding: 0 7px;
+      border-width: 0;
+      border-radius: 0;
+      box-shadow: none;
+      color: $color;
+    }
+  }
+
+  h1 {
+    font-size: 26px  * $scale;
+    letter-spacing: 2px * $scale;
+    text-align: center;
+  }
+
+  // 对齐
+  .text-align-left {
+    text-align: left;
+  }
+  .text-align-right {
+    text-align: right;
+  }
+  .text-align-center {
+    text-align: center;
+  }
+
+}
+
+// ****************************************
+// 设置字体 text
+.six-template-content-#{$scale}x {
+  @for $i from 12 through 30 {
+    .text-#{$i} {
+      font-size: ($i * $scale) + px;
+      .ivu-input {
+        height: (($i + 4) * $scale) + px;
+        font-size: ($i * $scale) + px;
+      }
+    }
+  }
+}
+
+// 设置字体间距
+.six-template-content-#{$scale}x {
+  @for $i from 1 through 10 {
+    .letter-spacing-#{$i} {
+      letter-spacing: ($i * $scale) + px;
+      .ivu-input {
+        letter-spacing: ($i * $scale) + px;
+      }
+    }
+  }
+}
+
+// 字体行高
+.six-template-content-#{$scale}x {
+  @for $i from 12 through 80 {
+    .line-height-#{$i} {
+      line-height: ($i * $scale) + px;
+      .ivu-input {
+        height: ($i * $scale) + px;
+        line-height: ($i * $scale) + px;
+      }
+    }
+  }
+}
+
+// 左边距 padding-left
+.six-template-content-#{$scale}x {
+  @for $i from 10 through 200 {
+    .p-l-#{$i} {
+      padding-left: ($i * $scale) + px;
+    }
+  }
+}
+
+// 设置 margin-botton
+.six-template-content-#{$scale}x {
+  @for $i from 1 through 200 {
+    .m-b-#{$i} { margin-bottom: ($i * $scale) + px ; }
+  }
+}
+
+// 宽度样式  width-10 表示宽度10px
+.six-template-content-#{$scale}x {
+  @for $i from 1 through 400 {
+    .width-#{$i} { width: ($i * $scale) + px ; }
+  }
+}
+
+// 最小宽度样式  width-10 表示宽度10px
+.six-template-content-#{$scale}x {
+  @for $i from 1 through 400 {
+    .min-width-#{$i} { min-width: ($i * $scale) + px ; }
+  }
+}
+
+// *****************************************
+// 字体 font-family
+.font-sim-hei {
+  font-family: "黑体", "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
+}
+.font-sim-sun {
+  font-family: "SinSun", "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
+}
+.font-fang-song {
+  font-family: "FangSong", "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
+}

@@ -24,6 +24,9 @@
                     <img :src="userImgUrl" style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
                 </Upload>
             </FormItem>
+            <FormItem label="登录名:" prop="loginName">
+                <Input v-model="formData.loginName" readonly/>
+            </FormItem>
             <FormItem label="性别:">
                 <Select v-model="formData.sex">
                     <Option v-for="item in dict_sex"
@@ -32,9 +35,9 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="UID:" prop="employee.userNo">
-                <Input v-model="formData.employee.userNo"/>
-            </FormItem>
+            <!--<FormItem label="UID:" prop="employee.userNo">-->
+                <!--<Input v-model="formData.employee.userNo"/>-->
+            <!--</FormItem>-->
             <FormItem label="现任职务:" prop="job">
                 <Input v-model="formData.job"/>
             </FormItem>
@@ -60,7 +63,7 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="学历:">
+            <FormItem label="学历:" prop="education">
                 <Select v-model="formData.education">
                     <Option v-for="item in dict_education"
                             :key="item.id"
@@ -94,8 +97,8 @@
             <FormItem label="证书编号:">
                 <Input v-model="formData.employee.certificateNo"/>
             </FormItem>
-            <FormItem label="身份证号:" prop="employee.idNumber">
-                <Input v-model="formData.employee.idNumber"/>
+            <FormItem label="身份证号:" prop="idNumber">
+                <Input v-model="formData.idNumber"/>
             </FormItem>
         </Form>
 
@@ -145,6 +148,7 @@
                     headPortrait: '',  // 头像，存放fileId
                     headPortraitUrl: '',
                     name: '',
+                    loginName:'',
                     sex: '',
                     age: null,
                     nation: '',
@@ -160,6 +164,7 @@
                     unitType: '',
                     unitTypeLabel: '',
                     job: '',
+                    idNumber: '',
                     employee: {
                         certificate: '',
                         certificateNo: '',
@@ -167,22 +172,22 @@
                         idNumber: '',
                         recordStatus: '',
                         userId: '',
-                        userNo: ''
+                        // userNo: ''
                     }
                 },
                 rules: {
                     name: [{ required: true, message: '姓名不能为空！', trigger: 'blur' }],
-                    'employee.userNo': [{ required: true, message: 'UID不能为空！', trigger: 'blur' }],
-                    age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
-                    nation: [{ required: true,  message: '民族不能为空！', trigger: 'blur' }],
+                    // age: [{ required: true, type: 'number', message: '年龄不能为空！', trigger: 'blur' }],
+                    // nation: [{ required: true,  message: '民族不能为空！', trigger: 'blur' }],
                     titleName: [{ required: true, message: '技术职称不能为空！', trigger: 'blur' }],
-                    titleLevel: [{ required: true, message: '职称级别不能为空！', trigger: 'blur' }],
-                    graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
-                    profession: [{ required: true, message: '专业名称不能为空！', trigger: 'blur' }],
-                    'employee.graduateDate': [{ required: true, message: '毕业时间不能为空！', trigger: 'blur' }],
+                    // titleLevel: [{ required: true, message: '职称级别不能为空！', trigger: 'blur' }],
+                    education: [{ required: true, message: '学历不能为空！', trigger: 'blur' }],
+                    // graduateSchool: [{ required: true, message: '毕业院校不能为空！', trigger: 'blur' }],
+                    // profession: [{ required: true, message: '专业名称不能为空！', trigger: 'blur' }],
+                    // 'employee.graduateDate': [{ required: true, message: '毕业时间不能为空！', trigger: 'blur' }],
                     phone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
-                    email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
-                    'employee.idNumber': [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
+                    // email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
+                    idNumber: [{ required: true, message: '身份证号不能为空！', trigger: 'blur' }]
                 },
 
                 dict_sex: [],         // 性别
@@ -217,6 +222,7 @@
                             unitTypeLabel: '',
                             job: '',
                             fileIds: '',
+                            idNumber: '',
                             employee: {
                                 certificate: '',
                                 certificateNo: '',

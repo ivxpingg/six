@@ -54,7 +54,7 @@
                 </FormItem>
 
                 <FormItem label="相关材料:">
-                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect" multiple></vFilesSelectButton></div>
+                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect" :fileType="'monitor_procedure'" multiple></vFilesSelectButton></div>
                 </FormItem>
 
                 <template v-for="item in formData.projectUnitUsers">

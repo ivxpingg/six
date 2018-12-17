@@ -44,7 +44,7 @@
                                 :label="item.label"></Option>
                     </Select>
                 </FormItem>
-                <FormItem label="备案:" prop="recordContent">
+                <FormItem label="备案说明:" prop="recordContent">
                     <Input v-model="formData.recordContent"
                            type="textarea"
                            style="width: 510px;"

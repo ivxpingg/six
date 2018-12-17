@@ -76,10 +76,10 @@
                     { title: '发出单位', align: 'center', width: 120, key: 'sendUnit'},
                     { title: '发出人员', align: 'center', width: 120, key: 'sendUser'},
                     { title: '监督负责人', align: 'center', width: 120, key: 'supervisor'},
-                    { title: '整改回复状态', align: 'center', width: 120, key: 'changeStatus'},
-                    { title: '整改回复时间', align: 'center', width: 120, key: 'changeReplyDate',
+                    { title: '整改回复状态', align: 'center', width: 120, key: 'changeStatusLabel'},
+                    { title: '整改回复时间', align: 'center', width: 120, key: 'completeTime',
                         render(h, params) {
-                            return h('div', params.row.changeReplyDate ? MOMENT(params.row.changeReplyDate).format('YYYY-MM-DD') : '');
+                            return h('div', params.row.completeTime ? MOMENT(params.row.completeTime).format('YYYY-MM-DD') : '');
                         }
                     },
                     { title: '内容', align: 'center', width: 120, key: 'content'},

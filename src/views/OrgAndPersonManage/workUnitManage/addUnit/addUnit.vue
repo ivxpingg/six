@@ -9,19 +9,19 @@
             <FormItem label="单位名称:" prop="unitName">
                 <Input v-model="formData.unitName"/>
             </FormItem>
-            <FormItem label="工程技术初级职称人数:" prop="primaryTechnology">
+            <FormItem label="工程技术初级职称人数:" >
                 <Input v-model="formData.primaryTechnology" number />
             </FormItem>
-            <FormItem label="机构代码:" prop="orgCode">
+            <FormItem label="机构代码:">
                 <Input v-model="formData.orgCode" />
             </FormItem>
-            <FormItem label="工程技术中级职称人数:" prop="mediumTechnology">
+            <FormItem label="工程技术中级职称人数:">
                 <Input v-model="formData.mediumTechnology" number />
             </FormItem>
-            <FormItem label="注册地址:" prop="registerAddress">
+            <FormItem label="注册地址:">
                 <Input v-model="formData.registerAddress" />
             </FormItem>
-            <FormItem label="工程技术高级职称人数:" prop="highTechnology">
+            <FormItem label="工程技术高级职称人数:">
                 <Input v-model="formData.highTechnology" number />
             </FormItem>
             <FormItem label="单位类型:" prop="unitType">
@@ -32,37 +32,37 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="技术总人数:" prop="totalTechnology">
+            <FormItem label="技术总人数:">
                 <Input v-model="formData.totalTechnology" number />
             </FormItem>
-            <FormItem label="单位负责人:" prop="leader">
+            <FormItem label="项目/业主负责人:" prop="leader">
                 <Input v-model="formData.leader" />
             </FormItem>
-            <FormItem label="经济管理初级职称人数:" prop="primaryManage">
+            <FormItem label="经济管理初级职称人数:">
                 <Input v-model="formData.primaryManage" number />
             </FormItem>
             <FormItem label="联系电话:" prop="telephone">
                 <Input v-model="formData.telephone" />
             </FormItem>
-            <FormItem label="经济管理中级职称人数:" prop="mediumManage">
+            <FormItem label="经济管理中级职称人数:">
                 <Input v-model="formData.mediumManage" number />
             </FormItem>
-            <FormItem label="电子邮箱:" prop="email">
+            <FormItem label="电子邮箱:">
                 <Input v-model="formData.email" />
             </FormItem>
-            <FormItem label="经济管理高级职称人数:" prop="highManage">
+            <FormItem label="经济管理高级职称人数:">
                 <Input v-model="formData.highManage" number />
             </FormItem>
-            <FormItem label="公司地址:" prop="companyAddress">
+            <FormItem label="公司地址:" >
                 <Input v-model="formData.companyAddress" />
             </FormItem>
-            <FormItem label="经济管理总人数:" prop="totalManage">
+            <FormItem label="经济管理总人数:">
                 <Input v-model="formData.totalManage" number />
             </FormItem>
-            <FormItem label="单位网站:" prop="website">
+            <FormItem label="单位网站:">
                 <Input v-model="formData.website" />
             </FormItem>
-            <FormItem label="统计时间:" prop="countTime">
+            <FormItem label="统计时间:">
                 <Input v-model="formData.countTime" />
             </FormItem>
             <!--<FormItem label="资质类别:" prop="qualificationType">-->
@@ -73,7 +73,7 @@
                             <!--:label="item.label"></Option>-->
                 <!--</Select>-->
             <!--</FormItem>-->
-            <FormItem label="资质类别:" prop="qualificationTypeList">
+            <FormItem label="资质类别:">
                 <Select v-model="formData.qualificationTypeList" multiple>
                     <Option v-for="item in dict_qualificationType"
                             :key="item.id"
@@ -97,13 +97,13 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="母体机构单位名称:" prop="parentUnitName">
+            <FormItem label="母体机构单位名称:">
                 <Input v-model="formData.parentUnitName" />
             </FormItem>
-            <FormItem label="母体机构负责人:" prop="parentUnitLeader">
+            <FormItem label="母体机构负责人:" >
                 <Input v-model="formData.parentUnitLeader" />
             </FormItem>
-            <FormItem label="负责人联系方式:" prop="parentUnitTelephone">
+            <FormItem label="负责人联系方式:">
                 <Input v-model="formData.parentUnitTelephone" />
             </FormItem>
         </Form>
@@ -149,12 +149,14 @@
                 },
                 rules: {
                     unitName: [{ required: true, message: '单位名称不能为空！', trigger: 'blur' }],
-                    orgCode: [{ required: true, message: '单位机构代码不能为空！', trigger: 'blur' }],
-                    registerAddress: [{ required: true, message: '注册地址不能为空！', trigger: 'blur' }],
+                    leader: [{ required: true, message: '项目/业主负责人不能为空！', trigger: 'blur' }],
+                    unitType: [{ required: true, message: '单位类型不能为空！', trigger: 'blur' }],
+                    // orgCode: [{ required: true, message: '单位机构代码不能为空！', trigger: 'blur' }],
+                    // registerAddress: [{ required: true, message: '注册地址不能为空！', trigger: 'blur' }],
                     telephone: [{ required: true, message: '联系电话不能为空！', trigger: 'blur' }],
-                    email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
-                    companyAddress: [{ required: true, message: '公司地址不能为空！', trigger: 'blur' }],
-                    qualificationLevel: [{ required: true, message: '资质许可证等级不能为空！', trigger: 'blur' }]
+                    // email: [{ required: true, message: '电子邮箱不能为空！', trigger: 'blur' }],
+                    // companyAddress: [{ required: true, message: '公司地址不能为空！', trigger: 'blur' }],
+                    // qualificationLevel: [{ required: true, message: '资质许可证等级不能为空！', trigger: 'blur' }]
                 },
 
                 // 字典

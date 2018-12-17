@@ -14,7 +14,7 @@
             </template>
         </ul>
 
-        <vFilesSelect ref="modal_filesSelect" :multiple="multiple" @handleSelect="onSelected"></vFilesSelect>
+        <vFilesSelect ref="modal_filesSelect" :multiple="multiple" :fileType="fileType" @handleSelect="onSelected"></vFilesSelect>
     </div>
 </template>
 <script>
@@ -28,6 +28,11 @@
                 default() {
                     return false;
                 }
+            },
+            // 上传的文件类型
+            fileType: {
+                type: String,
+                default: 'monitor_procedure'
             }
         },
         data() {

@@ -5,7 +5,7 @@
         <Row class="row-box" :gutter="20">
             <i-col span="8"><vUserInfoPanel></vUserInfoPanel></i-col>
             <i-col span="16" v-if="auth_home_supervisionCount"><vSupervisionCount></vSupervisionCount></i-col>
-            <i-col span="8"><vNoticePanel></vNoticePanel></i-col>
+            <i-col span="8"><vNoticePanel ref="noticePanel"></vNoticePanel></i-col>
             <i-col span="8"><vInfoCollectionPanel></vInfoCollectionPanel></i-col>
             <i-col span="8" v-if="auth_home_projectPanel"><vProjectPanel></vProjectPanel></i-col>
             <i-col span="16"><vFilesManage></vFilesManage></i-col>

@@ -50,6 +50,53 @@ const Home = [
     }
 ];
 
+// 公文办理
+const DocumentHandler = [
+    {
+        path: '/document',
+        name: 'document',
+        component: Main,
+        meta: {
+            title: '公文办理',
+            icon: 'md-document',
+            requireAuth: true
+        },
+        children: [
+            {
+                path: 'documentList',
+                name: 'documentList',
+                meta: {
+                    icon: 'md-document',
+                    title: '公文办理',
+                    requireAuth: true
+                },
+                component: () => import('@/views/Document/documentList.vue'),
+            },
+            // {
+            //     path: 'documentHandler',
+            //     name: 'documentHandler',
+            //     meta: {
+            //         icon: 'md-document',
+            //         title: '公文办理',
+            //         requireAuth: true
+            //     },
+            //     component: () => import('@/views/Document/documentHandler/documentHandler.vue'),
+            // },
+            {
+                path: 'documentHandler',
+                name: 'documentHandler',
+                meta: {
+                    icon: 'md-document',
+                    title: '公文办理',
+                    requireAuth: true
+                },
+                component: () => import('@/views/Common/fileTemplate/template_test.vue'),
+            }
+        ]
+
+    }
+];
+
 // 基础信息管理
 const BaseManage = [
     {
@@ -454,14 +501,27 @@ const SystemManage = [
                     requireAuth: true
                 },
                 component: () => import('@/views/SystemManage/dataDict/dataDict.vue')
+            },
+            {
+                path: 'template',
+                name: 'template',
+                meta: {
+                    icon: '_data-dict',
+                    title: '模板测试',
+                    requireAuth: true
+                },
+                component: () => import('@/views/Common/fileTemplate/template_test.vue')
             }
         ]
     }
 ]
 
+//
+
 export default [
     ...Login,
     ...Home,
+    ...DocumentHandler,
     ...ShowSystem,
     ...BaseManage,
     ...OrgAndPersonManage,
