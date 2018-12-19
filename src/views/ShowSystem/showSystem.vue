@@ -68,6 +68,7 @@
     import vDoughnutChart from  './chart/doughnutChart';
     import vPieChart from './chart/pieChart';
     import vAreaChart from './chart/areaChart';
+    import MOMENT from 'moment';
     export default {
         name: 'showSystem',
         components: {
@@ -81,7 +82,7 @@
         },
         data() {
             return {
-                year: ''
+                year: MOMENT().format('YYYY')
             }
         },
         methods: {

@@ -117,7 +117,6 @@
                 //         name: val.checkWay
                 //     });
                 // });
-                console.dir(myOPtion);
                 this.chart.setOption(myOPtion);
             }
         }

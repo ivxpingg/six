@@ -16,10 +16,20 @@
         <div style="text-align: center;">
             <div style="display: inline-block; border: 1px solid #dcdee2; margin: 10px 0;" ref="canvas">
 
-                <vTemplate_word_file_0 ref="template_word_file_0"
+                <!--<vTemplate_word_file_0 ref="template_word_file_0"-->
+                                       <!--:print2x="print2x"-->
+                                       <!--:eSignature="eSignature"-->
+                                       <!--@callback="modal_eSignature"></vTemplate_word_file_0>-->
+
+                <!--<vTemplate_word_file_1 ref="template_word_file_0"-->
+                                       <!--:print2x="print2x"-->
+                                       <!--:eSignature="eSignature"-->
+                                       <!--@callback="modal_eSignature"></vTemplate_word_file_1>-->
+
+                <vTemplate_word_file_2 ref="template_word_file_0"
                                        :print2x="print2x"
                                        :eSignature="eSignature"
-                                       @callback="modal_eSignature"></vTemplate_word_file_0>
+                                       @callback="modal_eSignature"></vTemplate_word_file_2>
 
                 <!--<vTemplate_word_file_3 ref="template_word_file_0"-->
                                        <!--:print2x="print2x"-->
@@ -90,7 +100,7 @@
                 this.$Spin.show();
                 setTimeout(() => {
                     this.exportPDF(false);
-                },1000);
+                },1500);
 
             },
             exportPDF(isUpload) {
@@ -117,7 +127,7 @@
                             context.msImageSmoothingEnabled = false;
                             context.imageSmoothingEnabled = false;
 
-                            this.$refs.canvas.appendChild(canvas);
+                            // this.$refs.canvas.appendChild(canvas);
 
                             let moveHight = [841, 841, 841];
                             let idx = 0;
@@ -140,13 +150,15 @@
 
                             //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
                             //当内容未超过pdf一页显示的范围，无需分页
+
+
                             if (leftHeight < pageHeight) {
                                 pdf.addImage(pageData, 'png', 0, 0, imgWidth, imgHeight );
                             } else {
                                 while(leftHeight > 0) {
-                                    pdf.addImage(pageData, 'png', 0, position, imgWidth, imgHeight);
+                                    pdf.addImage(pageData, 'png', 0, position, imgWidth, imgHeight, '', 'FAST');
                                     leftHeight -= pageHeight;
-                                    position -= moveHight[idx++];
+                                    position -= moveHight[0];
                                     //避免添加空白页
                                     if(leftHeight > 0) {
                                         pdf.addPage();

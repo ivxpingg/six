@@ -20,7 +20,7 @@
         computed:{
             inputSpanStyle() {
                 return {
-                    'padding-left': this.currentValue.trim() === ''? '40px': '0',
+                    'padding-left': this.currentValue.trim() === ''? this.width + 'px': '0',
                     'border-bottom': this.underLine ? '1px solid #000' : 'none'
                 }
             },
@@ -45,6 +45,10 @@
                 type: Boolean,
                 default: true
             },
+            width: {
+                type: Number,
+                default: 40
+            },
             inputWidth: {
                 type: Number,
                 default: 200
@@ -52,12 +56,19 @@
             inputTop: {
                 type: Number,
                 default: -32
+            },
+            // 是否失去焦点触发更新数据
+            updateBlur: {
+                type: Boolean,
+                default: false
             }
         },
         watch: {
             currentValue(val) {
-                if (val === this.value)  return;
-                this.$emit('input', this.currentValue);
+                if (!this.updateBlur) {
+                    if (val === this.value) return;
+                    this.$emit('input', this.currentValue);
+                }
             }
         },
         mounted() {
@@ -66,7 +77,6 @@
         data() {
             return {
                 currentValue: this.value,
-
                 showInput: false
             };
         },
@@ -89,7 +99,11 @@
 
                 }
             },
-            onBlur() {
+            onBlur(e) {
+
+                if (this.updateBlur) {
+                    this.$emit('input', e.target.value);
+                }
                 this.showInput = false;
             }
         }
@@ -101,10 +115,11 @@
         position: relative;
         word-wrap: break-word;
         word-break: break-all;
+        cursor: text;
         .input {
             position: absolute;
             left: 0;
-            z-index: 99;
+            z-index: 999;
         }
     }
 </style>

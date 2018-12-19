@@ -42,7 +42,7 @@
             <div class="page">
                 <h1 class="m-b-32">质量监督申请材料核查意见书</h1>
 
-                <div class="text-14 text-align-left line-height-28   m-b-10">
+                <div class="text-14 text-align-left line-height-28 m-b-10">
                     <vInputSpan v-model="temData.page_2.value_1"></vInputSpan>：
                 </div>
                 <div class="text-14 text-align-left line-height-28 letter-spacing-2 text-indent-28">
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="box-bottom">
-                    <div class="text-16 text-align-right m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
                     <div class="text-14 line-height-28 text-align-right">
                         <vInputSpan v-model="temData.page_2.value_5" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_2.value_6" :inputWidth="60" :underLine="false"></vInputSpan>月
@@ -75,10 +75,13 @@
 </template>
 
 <script>
+    import template_word_fileMixin from './mixin/template_word_fileMixin';
+    import classMixin from './mixin/classMixin';
     import Config from '../../../config';
     import vInputSpan from './inputSpan/inputSpan';
     export default {
         name: 'template_word_file_3',  // 质量监督申请材料核查意见书
+        mixins: [classMixin, template_word_fileMixin],
         components: {vInputSpan},
         props: {
             print2x: {
@@ -95,14 +98,6 @@
                         signatureId: ''
                     }
                 }
-            }
-        },
-        computed: {
-            scale() {
-                return this.print2x ? 2 : 1;
-            },
-            classNamePri() {
-                return this.print2x ? 'six-template-content-2x' : 'six-template-content-1x'
             }
         },
         data() {
@@ -128,54 +123,9 @@
                     },
                     stamp: []
                 },
-
-                // 盖章计算
-                stampState: false,
-                offsetX: 0,
-                offsetY: 0
             };
         },
-        watch:{
-            eSignature: {
-                deep: true,
-                handler(val) {
-                    this.stampState = val.url !== '';
-                }
-            }
-        },
-        methods: {
-            // 拼接图片地址
-            joinUrl(url) {
-
-                return Config[Config.env].filePath + url;
-            },
-            onMousemove(e){
-                if (this.stampState) {
-                    this.offsetX = e.offsetX;
-                    this.offsetY = e.offsetY;
-                }
-            },
-            onClick_stamp() {
-                this.stampState = false;
-
-                let stamp_current = {
-                    name: this.eSignature.name || '',
-                    url: this.eSignature.url || '',
-                    userId: this.eSignature.userId || '',
-                    signatureId: this.eSignature.signatureId || '',
-                    offsetX: this.offsetX,
-                    offsetY: this.offsetY
-                };
-
-                this.temData.stamp = this.temData.stamp.filter(v => v.userId !== this.eSignature.userId);
-
-                this.temData.stamp.push(stamp_current);
-
-                console.dir(this.temData);
-
-                this.$emit('callback');
-            }
-        }
+        methods: {}
     }
 </script>
 <style lang="scss" src="./template.scss"></style>

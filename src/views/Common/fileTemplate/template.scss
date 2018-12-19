@@ -66,21 +66,27 @@ $color: #000;
   // 一页 A4 纸宽高
   .page {
     position: relative;
-    padding: 65px * $scale;
+    padding: 58px * $scale;
     width: $page-width;
     height: $page-height;
     background-color: #FFF;
     background-size: contain;
-    box-shadow: 0 -1px 0px #dcdee2;
+    box-shadow: 0 0 1px #dcdee2;
     //overflow: hidden;
   }
   // 一页 A4 宽度 高度自适应
   .page-auto {
     position: relative;
-    padding: 65px  * $scale;
+    padding: 58px  * $scale;
     width: $page-width;
     min-height: $page-height;
     overflow: hidden;
+  }
+  // 带边框内容
+  .page-inner-box {
+    position: relative;
+    padding: 10px * $scale;
+    box-shadow: 0 0 1px #dcdee2;
   }
 
 
@@ -125,9 +131,23 @@ $color: #000;
       color: $color;
     }
   }
+  .input-textarea-under-none {
+    text-indent: 0;
+    .ivu-input {
+      padding: 0 7px;
+      border-width: 0;
+      border-radius: 0;
+      color: $color;
+    }
+  }
 
   h1 {
     font-size: 26px  * $scale;
+    letter-spacing: 2px * $scale;
+    text-align: center;
+  }
+  h2 {
+    font-size: 24px  * $scale;
     letter-spacing: 2px * $scale;
     text-align: center;
   }
@@ -151,8 +171,11 @@ $color: #000;
   @for $i from 12 through 30 {
     .text-#{$i} {
       font-size: ($i * $scale) + px;
-      .ivu-input {
+      input.ivu-input {
         height: (($i + 4) * $scale) + px;
+        font-size: ($i * $scale) + px;
+      }
+      textarea.ivu-input {
         font-size: ($i * $scale) + px;
       }
     }
@@ -176,8 +199,11 @@ $color: #000;
   @for $i from 12 through 80 {
     .line-height-#{$i} {
       line-height: ($i * $scale) + px;
-      .ivu-input {
+      input.ivu-input {
         height: ($i * $scale) + px;
+        line-height: ($i * $scale) + px;
+      }
+      textarea.ivu-input {
         line-height: ($i * $scale) + px;
       }
     }
@@ -187,15 +213,27 @@ $color: #000;
 // 左边距 padding-left
 .six-template-content-#{$scale}x {
   @for $i from 10 through 200 {
+    .p-t-#{$i} {
+      padding-top: ($i * $scale) + px;
+    }
     .p-l-#{$i} {
       padding-left: ($i * $scale) + px;
+    }
+    .p-r-#{$i} {
+      padding-right: ($i * $scale) + px;
+    }
+    .p-b-#{$i} {
+      padding-bottom: ($i * $scale) + px;
     }
   }
 }
 
-// 设置 margin-botton
+// 设置 margin
 .six-template-content-#{$scale}x {
   @for $i from 1 through 200 {
+    .m-t-#{$i} { margin-top: ($i * $scale) + px ; }
+    .m-l-#{$i} { margin-left: ($i * $scale) + px ; }
+    .m-r-#{$i} { margin-right: ($i * $scale) + px ; }
     .m-b-#{$i} { margin-bottom: ($i * $scale) + px ; }
   }
 }
@@ -224,4 +262,23 @@ $color: #000;
 }
 .font-fang-song {
   font-family: "FangSong", "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
+}
+
+
+// 表格
+.six-template-content-#{$scale}x {
+  .custom-table {
+
+    .ivu-table-cell{
+      overflow: initial;
+      padding: 0;
+    }
+
+    .ivu-table-small th {
+      height: 32px * $scale;
+    }
+    .ivu-table-small td{
+      height: 40px * $scale;
+    }
+  }
 }
