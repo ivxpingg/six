@@ -105,6 +105,7 @@
         <div class="ivu-modal-footer" v-if="editable">
             <Button type="primary"
                     size="large"
+                    :loading="saveBtnLoading"
                     @click="save">保存</Button>
         </div>
     </div>
@@ -193,7 +194,9 @@
                 dict_sex: [],         // 性别
                 dict_titleName: [],   // 技术职称
                 dict_titleLevel: [],  // 职称级别
-                dict_education: []    // 学历
+                dict_education: [],   // 学历
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         watch: {
@@ -289,6 +292,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.saveBtnLoading = true;
                         this.$http({
                             method: 'post',
                             url: '/user/update',
@@ -299,7 +303,10 @@
                                     content: '更新成功！'
                                 });
                                 this.$emit('callback');
+                                this.saveBtnLoading = false;
                             }
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
                     } else {
 

@@ -86,6 +86,7 @@
             <div slot="footer">
                 <Button type="primary"
                         size="large"
+                        :loading="saveBtnLoading"
                         @click="save">保存</Button>
             </div>
         </Modal>
@@ -146,7 +147,9 @@
                 // 参建单位列表
                 projectUnitList: [],
                 // 参建单位中的参建人员
-                projectUserList: []
+                projectUserList: [],
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         watch: {
@@ -284,6 +287,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.saveBtnLoading = true;
                         this.$http({
                             method: 'post',
                             url: '/creditEvaluate/add',
@@ -294,7 +298,10 @@
                                     content: '添加成功！'
                                 });
                                 this.$emit('modal_callback');
+                                this.saveBtnLoading = false;
                             }
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
                     } else {
 

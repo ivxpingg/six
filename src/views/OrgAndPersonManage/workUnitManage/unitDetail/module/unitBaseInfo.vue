@@ -94,6 +94,7 @@
         <div class="ivu-modal-footer">
             <Button type="primary"
                     size="large"
+                    :loading="saveBtnLoading"
                     @click="save">保存</Button>
         </div>
     </div>
@@ -154,7 +155,9 @@
 
                 dict_unitType: [],
                 dict_qualificationType: [],
-                dict_qualification: []
+                dict_qualification: [],
+                // 保存按钮状态
+                saveBtnLoading: false
              };
         },
         watch: {
@@ -208,6 +211,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.saveBtnLoading = true;
                         this.formData.qualificationType = this.formData.qualificationTypeList.join(',');
                         this.formData.qualificationLevel = this.formData.qualificationLevelList.join(',');
 
@@ -221,7 +225,10 @@
                                     content: '更新成功！'
                                 });
                                 this.$emit('modal-callback');
+                                this.saveBtnLoading = false;
                             }
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
                     } else {
 

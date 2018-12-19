@@ -70,6 +70,7 @@
             <div slot="footer">
                 <Button type="primary"
                         size="large"
+                        :loading="saveBtnLoading"
                         @click="save">保存</Button>
             </div>
         </Modal>
@@ -120,7 +121,9 @@
                 projectUserList: [],
 
                 //
-                dict_recordType: []
+                dict_recordType: [],
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         watch: {
@@ -229,7 +232,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
-
+                        this.saveBtnLoading = true;
                         this.$http({
                             method: 'post',
                             url: '/projectRecord/add',
@@ -242,6 +245,9 @@
                                 this.modalValue = false;
                                 this.$emit('modal_callback');
                             }
+                            this.saveBtnLoading = false;
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
 
                     }

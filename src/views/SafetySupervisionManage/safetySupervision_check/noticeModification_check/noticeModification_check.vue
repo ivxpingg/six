@@ -70,7 +70,10 @@
                 </template>
             </Form>
             <div slot="footer">
-                <Button type="primary" size="large" @click="save">发送通知</Button>
+                <Button type="primary"
+                        size="large"
+                        :loading="saveBtnLoading"
+                        @click="save">发送通知</Button>
             </div>
         </Modal>
 
@@ -131,7 +134,9 @@
                     changeContent: [{ required: true, message: '整改内容不能为空！', trigger: 'blur' }]
                 },
 
-                dict_overdueHandle: []
+                dict_overdueHandle: [],
+                // 保存按钮状态
+                saveBtnLoading: false
             }
         },
         watch: {
@@ -243,6 +248,7 @@
 
             // 保存整改通知
             save() {
+                this.saveBtnLoading = true;
                 this.$http({
                     method: 'post',
                     url: '/changeNotice/addChangeNotice',
@@ -253,6 +259,9 @@
                         this.modalValue = false;
                         this.$emit('modal-callback');
                     }
+                    this.saveBtnLoading = false;
+                }).catch(e => {
+                    this.saveBtnLoading = false;
                 })
             }
         }

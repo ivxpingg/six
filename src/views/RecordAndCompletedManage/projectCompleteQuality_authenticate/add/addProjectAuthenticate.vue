@@ -52,6 +52,7 @@
             <div slot="footer">
                 <Button type="primary"
                         size="large"
+                        :loading="saveBtnLoading"
                         @click="save">保存</Button>
             </div>
         </Modal>
@@ -87,7 +88,9 @@
                 },
 
                 // 项目列表
-                projectList: []
+                projectList: [],
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         mounted() {
@@ -151,12 +154,13 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
-
+                        this.saveBtnLoading = true;
                         this.$http({
                             method: 'post',
                             url: '/projectAudit/completeApply',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
+                            this.saveBtnLoading = false;
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
                                     content: '添加成功！'
@@ -169,6 +173,8 @@
                                 this.$refs.upload_1.clearFiles();
                                 this.$refs.upload_2.clearFiles();
                             }
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
 
                     }

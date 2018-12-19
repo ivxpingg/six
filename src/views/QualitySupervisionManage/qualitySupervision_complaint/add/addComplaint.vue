@@ -60,6 +60,7 @@
             <div slot="footer">
                 <Button type="primary"
                         size="large"
+                        :loading="saveBtnLoading"
                         @click="save">保存</Button>
             </div>
         </Modal>
@@ -102,7 +103,10 @@
                     fileIds: [{ required: true, type: 'array', message: '文件不能为空！', trigger: 'blur' }]
                 },
 
-                projectList: []
+                projectList: [],
+
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         mounted() {
@@ -136,6 +140,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.saveBtnLoading = true;
                         this.$http({
                             method: 'post',
                             url: '/complaint/add',
@@ -147,7 +152,10 @@
                                 });
                                 this.$emit('modal-callback');
                                 this.modalValue = false;
+                                this.saveBtnLoading = false;
                             }
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
 
                     }

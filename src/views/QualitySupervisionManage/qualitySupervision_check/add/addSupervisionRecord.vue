@@ -48,6 +48,7 @@
             <div slot="footer">
                 <Button type="primary"
                         size="large"
+                        :loading="saveBtnLoading"
                         @click="save">保存</Button>
             </div>
         </Modal>
@@ -83,7 +84,9 @@
                 },
 
                 dict_checkWay: [],  // 督查方式
-                dict_checkType: []  // 督查类型
+                dict_checkType: [],  // 督查类型
+                // 保存按钮状态
+                saveBtnLoading: false
 
             };
         },
@@ -118,6 +121,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.saveBtnLoading = true;
                         this.$http({
                             method: 'post',
                             url: '/supervisionCheck/add',
@@ -128,7 +132,10 @@
                                     content: '添加监督成功！'
                                 });
                                 this.$emit('modal-callback');
+                                this.saveBtnLoading = false;
                             }
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
                     } else {
 

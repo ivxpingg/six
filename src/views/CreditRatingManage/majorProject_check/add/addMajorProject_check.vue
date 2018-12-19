@@ -51,7 +51,10 @@
             </Form>
 
             <div slot="footer">
-                <Button type="primary" size="large" @click="beforeSave">保存</Button>
+                <Button type="primary"
+                        size="large"
+                        :loading="saveBtnLoading"
+                        @click="beforeSave">保存</Button>
             </div>
 
         </Modal>
@@ -78,7 +81,9 @@
                     beginAttendanceTime: [{ required: true, message: '考勤启动时间不能为空！', trigger: 'blur' }]
                 },
                 // 字典
-                dict_projectDuty: []  // 项目职务（项目重点考勤）
+                dict_projectDuty: [],  // 项目职务（项目重点考勤）
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         watch: {
@@ -294,13 +299,17 @@
                         this.$Message.success('添加成功！');
                         this.modalValue = false;
                         this.$emit('modal-callback');
+                        this.saveBtnLoading = false;
                     }
+                }).catch(e => {
+                    this.saveBtnLoading = false;
                 })
 
             },
             beforeSave() {
                 this.$refs.form.validate(valide => {
                     if (valide) {
+                        this.saveBtnLoading = true;
                         this.formData.projectAttendances = [];
                         this.formData.projectAttendances_my.forEach((val, idx) => {
 

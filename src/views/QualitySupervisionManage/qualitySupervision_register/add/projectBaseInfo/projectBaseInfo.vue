@@ -143,6 +143,7 @@
         <div class="ivu-modal-footer" v-if="!isView">
             <Button type="primary"
                     size="large"
+                    :loading="saveBtnLoading"
                     @click="save">保存</Button>
         </div>
 
@@ -234,7 +235,10 @@
 
                 provinceList: [],
                 cityList: [],
-                countyList: []
+                countyList: [],
+
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         watch: {
@@ -242,6 +246,7 @@
                 immediate: true,
                 handler(val) {
                     this.formData.projectId = val;
+                    this.saveBtnLoading = false;
                     if (val !== '') {
                         this.getData_detail();
                     }
@@ -366,32 +371,39 @@
                     if (valid) {
 
                         if(this.projectId === '') {
-                            this.$emit('modal_addProject_callback');
+                            this.saveBtnLoading = true;
                             this.$http({
                                 method: 'post',
                                 url: '/project/add',
                                 data: JSON.stringify(this.formData)
                             }).then(res => {
+                                this.saveBtnLoading = false;
                                 if(res.code === 'SUCCESS') {
                                     this.$Message.success({
                                         content: '添加成功！'
                                     });
+                                    this.$emit('modal_addProject_callback');
                                 }
+                            }).catch(e => {
+                                this.saveBtnLoading = false;
                             })
                         }
 
                         else {
+                            this.saveBtnLoading = true;
                             this.$http({
                                 method: 'post',
                                 url: '/project/update',
                                 data: JSON.stringify(this.formData)
                             }).then(res => {
+                                this.saveBtnLoading = false;
                                 if(res.code === 'SUCCESS') {
                                     this.$Message.success({
                                         content: '保存成功！'
                                     });
-
                                 }
+                            }).catch(e => {
+                                this.saveBtnLoading = false;
                             })
                         }
 

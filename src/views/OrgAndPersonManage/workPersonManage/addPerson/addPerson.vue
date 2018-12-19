@@ -106,6 +106,7 @@
         <div class="ivu-modal-footer">
             <Button type="primary"
                     size="large"
+                    :loading="saveBtnLoading"
                     @click="save">保存</Button>
         </div>
     </div>
@@ -182,6 +183,8 @@
                 dict_education: [],  // 学历
                 dict_titleName: [],  // 技术职称
                 dict_titleLevel: [], // 职称级别
+                // 保存按钮状态
+                saveBtnLoading: false
             };
         },
         mounted() {
@@ -228,6 +231,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.saveBtnLoading = true;
                         this.$http({
                             method: 'post',
                             url: '/user/add',
@@ -238,7 +242,10 @@
                                     content: '添加成功！'
                                 });
                                 this.$emit('modal-callback');
+                                this.saveBtnLoading = false;
                             }
+                        }).catch(e => {
+                            this.saveBtnLoading = false;
                         })
                     } else {
 
