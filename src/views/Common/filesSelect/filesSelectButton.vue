@@ -15,13 +15,18 @@
         </ul>
 
         <vFilesSelect ref="modal_filesSelect" :multiple="multiple" :fileType="fileType" @handleSelect="onSelected"></vFilesSelect>
+
+        <!--<vFilesSelect2 ref="modal_filesSelect" :multiple="multiple" :fileType="fileType" @handleSelect="onSelected"></vFilesSelect2>-->
+
     </div>
 </template>
 <script>
     import vFilesSelect from './filesSelect.vue';
+    // import vFilesSelect2 from './filesSelect2.vue';
     export default {
         name: 'filesSelectButton',   // 用于选择文件
         components: {vFilesSelect},
+        // components: {vFilesSelect, vFilesSelect2},
         props: {
             multiple: {
                 type: Boolean,
