@@ -98,7 +98,31 @@
                 this.folderList.projectFiles_3.forEach(v => {
                     v.selectedFileList = [];
                 });
-            }
+            },
+            auth_projectFile: {
+                immediate: true,
+                handler(val) {
+                    this.folderList.projectFiles_0[0].auth = val;
+                    this.folderList.projectFiles_1[0].auth = val;
+                    this.folderList.projectFiles_2[0].auth = val;
+                    this.folderList.projectFiles_3[0].auth = val;
+                }
+            },
+            auth_supervisionFile: {
+                immediate: true,
+                handler(val) {
+                    this.folderList.projectFiles_0[1].auth = val;
+                    this.folderList.projectFiles_1[1].auth = val;
+                    this.folderList.projectFiles_1[2].auth = val;
+                    this.folderList.projectFiles_1[3].auth = val;
+                    this.folderList.projectFiles_1[4].auth = val;
+                    this.folderList.projectFiles_1[5].auth = val;
+                    this.folderList.projectFiles_1[6].auth = val;
+                    this.folderList.projectFiles_2[1].auth = val;
+                    this.folderList.projectFiles_3[1].auth = val;
+                }
+            },
+
         },
         computed: {
             menuCount_0() {
@@ -132,10 +156,23 @@
                 });
 
                 return count;
-            },
+            }
+        },
+        data() {
+            return {
+                activeName: '1',
+                openFilesList: false,
+                offset: [-3, -3],
 
-            folderList() {
-                return {
+                folderType: {
+                    parentId: '',
+                    index: 0,
+                    folderName: '',
+                    url: '',
+                    selectedFileList: []
+                },
+
+                folderList: {
                     projectFiles_0: [
                         {
                             parentId: 'projectFiles_0',
@@ -226,21 +263,6 @@
                             auth: this.auth_supervisionFile
                         }
                     ]
-                };
-            }
-        },
-        data() {
-            return {
-                activeName: '1',
-                openFilesList: false,
-                offset: [-3, -3],
-
-                folderType: {
-                    parentId: '',
-                    index: 0,
-                    folderName: '',
-                    url: '',
-                    selectedFileList: []
                 }
             };
         },

@@ -226,6 +226,8 @@
 
                 this.backData.auditProcessId = selectItems.auditProcessId;
                 this.backData.auditProcessName = selectItems.name;
+
+                this.$refs.form_accept.validateField('auditProcessId');
             },
             // 保存受理
             saveAccept() {

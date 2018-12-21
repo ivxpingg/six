@@ -72,7 +72,8 @@
 
                 auditInfo: {
                     fileId: '',
-                    fileRecordType: 'apply_handle_record'
+                    fileRecordType: 'apply_handle_record',
+                    waitHandleType: 'handle_label_audit'      //  待办事项类型  - 受理处理标签审核
                 },
 
                 // 审核内容
@@ -243,6 +244,7 @@
             auditPass(fileId) {
                 this.auditInfo.fileId = fileId || '';
                 this.auditInfo.fileRecordType = 'apply_handle_record';
+                this.auditInfo.waitHandleType = 'handle_label_audit';      //  待办事项类型  - 受理处理标签审核
                 this.$http({
                     method: 'post',
                     url: '/projectAudit/audit',

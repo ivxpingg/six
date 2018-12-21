@@ -58,6 +58,19 @@
                               @callback="modal_document_handle_callback"></vDocumentHandler>
         </Modal>
 
+        <vHandleAuditAccept ref="modal_handle_label_audit"
+                            :projectId="params_handle_label_audit.projectId"
+                            :auditProcessId="params_handle_label_audit.auditProcessId"
+                            :processStepId="params_handle_label_audit.processStepId"
+                            @modal-auditPass-callback="modal_common_callback"></vHandleAuditAccept>
+
+        <!--交工处理标签审核-->
+        <vHandleAuditHandover ref="modal_handover_handle_audit"
+                              :projectId="params_handover_handle_audit.projectId"
+                              :auditProcessId="params_handover_handle_audit.auditProcessId"
+                              :processStepId="params_handover_handle_audit.processStepId"
+                              @modal-auditPass-callback="modal_common_callback"></vHandleAuditHandover>
+
     </div>
 </template>
 
@@ -70,7 +83,8 @@
 
     import vContentAudit from '../../../../RecordAndCompletedManage/project_verification/content-audit/content-audit';
     import vDocumentHandler from '../../../../Document/documentHandler/documentHandler';
-
+    import vHandleAuditAccept from '../../../../QualitySupervisionManage/qualitySupervision_accept/handleAudit/handleAudit';
+    import vHandleAuditHandover from  '../../../../RecordAndCompletedManage/project_verification/handleAudit/handleAudit';
     export default {
         name: 'modal_todo',   // 代办
         mixins: [modalMixin],
@@ -79,7 +93,9 @@
             vComplaintReply,
             vProjectRecordReply,
             vContentAudit,
-            vDocumentHandler},
+            vDocumentHandler,
+            vHandleAuditAccept,
+            vHandleAuditHandover},
         data() {
             return {
                 searchParams: {
@@ -166,6 +182,21 @@
                 modal_document_handle: false,
                 param_document_handle: {
                     documentHandleId: ''
+                },
+
+                // 受理处理标签审核
+                params_handle_label_audit: {
+                    projectId: '',
+                    auditProcessId: '',
+                    processStepId: '',
+                    step: ''
+                },
+
+                // 交工处理标签审核
+                params_handover_handle_audit: {
+                    projectId: '',
+                    auditProcessId: '',
+                    processStepId: ''
                 }
 
             };
@@ -220,9 +251,23 @@
                         });
                         break;
                     case 'handle_label_audit':   // 受理处理标签审核
-                        this.$router.push({
-                            name: 'qualitySupervision_accept'
-                        });
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.params_handle_label_audit, {
+                            projectId: '',
+                            auditProcessId: '',
+                            processStepId: '',
+                            step: ''
+                        }, param[0]);
+
+                        if (param[0].step === 1) {
+                            this.$router.push({
+                                name: 'qualitySupervision_accept'
+                            });
+                        }
+                        else {
+                            this.$refs.modal_handle_label_audit.modalValue = true;
+                        }
+
                         break;
                     case 'complaint_reply':      // 质量安全投诉处理
                         param = eval(`[${row.param}]`);
@@ -264,11 +309,6 @@
                             name: 'projectCompleteQuality_authenticate'
                         });
                         break;
-                    case 'case':                 // 案件受理处理
-                        this.$router.push({
-                            name: 'projectFileManage'
-                        });
-                        break;
                     case 'handover_reply_audit':   // 交工检测核验审核
                         param = eval(`[${row.param}]`);
                         Object.assign(this.project_verification, {
@@ -287,10 +327,19 @@
                         }, param[0]);
                         this.modal_document_handle = true;
                         break;
-                    case 'handover_handle_audit':
-                        this.$router.push({
-                            name: 'project_verification'
-                        });
+                    case 'handover_handle_audit':     // 交工处理标签审核
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.params_handover_handle_audit, {
+                            projectId: '',
+                            auditProcessId: '',
+                            processStepId: ''
+                        }, param[0]);
+
+                        this.$refs.modal_handover_handle_audit.modalValue = true;
+
+                        // this.$router.push({
+                        //     name: 'project_verification'
+                        // });
                         break;
                 }
             },

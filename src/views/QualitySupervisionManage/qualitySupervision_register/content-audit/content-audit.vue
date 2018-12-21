@@ -226,6 +226,7 @@
             modal_selectProcess_callback(selectValue, selectItems) {
                 this.acceptData.auditProcessId = selectItems.auditProcessId;
                 this.acceptData.auditProcessName = selectItems.name;
+                this.$refs.form_accept.validateField('auditProcessId');
             },
             // 保存受理
             saveAccept() {

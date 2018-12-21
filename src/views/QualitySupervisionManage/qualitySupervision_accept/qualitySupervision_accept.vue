@@ -57,7 +57,6 @@
             <vSuperviseTeamManage
                     class="six-modal-body-inner"
                     :projectId="curentRow.projectId"
-
                     @modal_callback="modal_callback_superviseTeamManage"></vSuperviseTeamManage>
         </Modal>
 
@@ -169,7 +168,7 @@
                                 }
                             }, '处理标签审核'));
 
-                            if (this.auth.auth_addgroup) {
+                            if (this.auth_addgroup) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',

@@ -250,6 +250,7 @@
             auditPass(fileId) {
                 this.auditInfo.fileId = fileId || '';
                 this.auditInfo.fileRecordType = 'handover_apply_audit';
+                this.auditInfo.waitHandleType = 'handover_handle_audit';      //  待办事项类型  - 交工处理标签审核
                 this.$http({
                     method: 'post',
                     url: '/projectAudit/audit',

@@ -90,6 +90,7 @@
             save() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
+                        this.$emit('modal-callback');
                         this.$http({
                             method: 'post',
                             url: '/monitorGroup/add',
