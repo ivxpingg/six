@@ -58,6 +58,15 @@
                               @callback="modal_document_handle_callback"></vDocumentHandler>
         </Modal>
 
+
+        <Modal v-model="modal_file_completeness"
+               class-name="modal-body-padding0"
+               title="材料完整性审核"
+               :width="1200"
+               footer-hide>
+            <vContentAudit_register :projectId="params_file_completeness.projectId"
+                           @modal_callback="modal_file_completeness_callback"></vContentAudit_register>
+        </Modal>
         <vHandleAuditAccept ref="modal_handle_label_audit"
                             :projectId="params_handle_label_audit.projectId"
                             :auditProcessId="params_handle_label_audit.auditProcessId"
@@ -83,6 +92,7 @@
 
     import vContentAudit from '../../../../RecordAndCompletedManage/project_verification/content-audit/content-audit';
     import vDocumentHandler from '../../../../Document/documentHandler/documentHandler';
+    import vContentAudit_register from '../../../../QualitySupervisionManage/qualitySupervision_register/content-audit/content-audit';
     import vHandleAuditAccept from '../../../../QualitySupervisionManage/qualitySupervision_accept/handleAudit/handleAudit';
     import vHandleAuditHandover from  '../../../../RecordAndCompletedManage/project_verification/handleAudit/handleAudit';
     export default {
@@ -94,6 +104,7 @@
             vProjectRecordReply,
             vContentAudit,
             vDocumentHandler,
+            vContentAudit_register,
             vHandleAuditAccept,
             vHandleAuditHandover},
         data() {
@@ -184,6 +195,11 @@
                     documentHandleId: ''
                 },
 
+                // 质量监督 材料完整性审核
+                modal_file_completeness: false,
+                params_file_completeness: {
+                    projectId: ''
+                },
                 // 受理处理标签审核
                 params_handle_label_audit: {
                     projectId: '',
@@ -249,6 +265,16 @@
                         this.$router.push({
                             name: 'qualitySupervision_register'
                         });
+                        break;
+                        // 质量监督 材料完整性审核
+                    case 'file_completeness':
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.params_file_completeness, {
+                            projectId: ''
+                        }, param[0]);
+
+                        this.modal_file_completeness = true;
+
                         break;
                     case 'handle_label_audit':   // 受理处理标签审核
                         param = eval(`[${row.param}]`);
@@ -353,6 +379,11 @@
                 this.$emit('modal-callback');
             },
             modal_projectRecord_callback() {
+                this.getData();
+                this.$emit('modal-callback');
+            },
+            modal_file_completeness_callback() {
+                this.modal_file_completeness = false;
                 this.getData();
                 this.$emit('modal-callback');
             },
