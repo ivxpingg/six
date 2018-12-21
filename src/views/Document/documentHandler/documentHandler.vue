@@ -2,43 +2,64 @@
     <div class="documentHandler-container">
         <vIvxFilterBox>
             <Button type="primary"
-                    icon="md-add">提交审核</Button>
+                    v-if="documentHandle.handleStatus === 'submitted'"
+                    icon="md-add" @click="submitAudit">提交审核</Button>
+
             <Button type="primary"
+                    v-if="documentAudit.permission"
+                    @click="uploadFile"
+                    :loading="btnLoading_auditPass"
                     icon="md-add">审核通过</Button>
+
             <Button type="primary"
+                    v-if="documentAudit.permission"
                     icon="md-add" @click="onClick_selectSignature">电子签名</Button>
             <Button type="primary"
-                    icon="md-add">保存</Button>
+                    v-if="documentHandle.handleStatus === 'submitted'"
+                    icon="md-add" @click="saveContent">保存</Button>
+
             <Button type="primary"
-                    icon="md-add" @click="onPrint">打印</Button>
+                    icon="md-add" @click="onPrint">导出</Button>
         </vIvxFilterBox>
 
-        <div style="text-align: center;">
+        <div style="text-align: center;" @click="modal_eSignature">
             <div style="display: inline-block; border: 1px solid #dcdee2; margin: 10px 0;" ref="canvas">
 
-                <!--<vTemplate_word_file_0 ref="template_word_file_0"-->
-                                       <!--:print2x="print2x"-->
-                                       <!--:eSignature="eSignature"-->
-                                       <!--@callback="modal_eSignature"></vTemplate_word_file_0>-->
-
-                <!--<vTemplate_word_file_1 ref="template_word_file_0"-->
-                                       <!--:print2x="print2x"-->
-                                       <!--:eSignature="eSignature"-->
-                                       <!--@callback="modal_eSignature"></vTemplate_word_file_1>-->
-
-                <vTemplate_word_file_2 ref="template_word_file_0"
+                <vTemplate_word_file_0 ref="accept_notice"
+                                       v-if="documentHandle.fileRecordType === 'accept_notice'"
                                        :print2x="print2x"
                                        :eSignature="eSignature"
+                                       :data="temData"
+                                       @callback="modal_eSignature"></vTemplate_word_file_0>
+
+                <vTemplate_word_file_1 ref="spot_check"
+                                       v-if="documentHandle.fileRecordType === 'spot_check'"
+                                       :print2x="print2x"
+                                       :eSignature="eSignature"
+                                       :data="temData"
+                                       @callback="modal_eSignature"></vTemplate_word_file_1>
+
+                <vTemplate_word_file_2 ref="com_check_notice"
+                                       v-if="documentHandle.fileRecordType === 'com_check_notice'"
+                                       :print2x="print2x"
+                                       :eSignature="eSignature"
+                                       :data="temData"
                                        @callback="modal_eSignature"></vTemplate_word_file_2>
 
-                <!--<vTemplate_word_file_3 ref="template_word_file_0"-->
-                                       <!--:print2x="print2x"-->
-                                       <!--:eSignature="eSignature"-->
-                                       <!--@callback="modal_eSignature"></vTemplate_word_file_3>-->
+                <vTemplate_word_file_3 ref="apply_file_check"
+                                       v-if="documentHandle.fileRecordType === 'apply_file_check'"
+                                       :print2x="print2x"
+                                       :eSignature="eSignature"
+                                       :data="temData"
+                                       @callback="modal_eSignature"></vTemplate_word_file_3>
             </div>
         </div>
 
         <vModalUserSignatureSelect ref="modal_userSignatureSelect" @modal-callback="modal_signatureSelect_callback"></vModalUserSignatureSelect>
+
+        <!--审核流程选择-->
+        <vModalAuditProcessSelect ref="modal_auditProcessSelect" @modal-callback="modal_auditProcessSelect_callback"></vModalAuditProcessSelect>
+
     </div>
 </template>
 
@@ -49,20 +70,29 @@
     import vTemplate_word_file_2 from '../../Common/fileTemplate/template_word_file_2';
     import vTemplate_word_file_3 from '../../Common/fileTemplate/template_word_file_3';
     import vModalUserSignatureSelect from '../../Common/userSignatureSelect/modalUserSignatureSelect';
+    import dataMixin from '../mixin/dataMixin';
+    import vModalAuditProcessSelect from '../../Common/auditProcessSelect/modalAuditProcessSelect';
     import html2canvas from 'html2canvas';
     import jspdf from 'jspdf/dist/jspdf.debug';
     export default {
         name: 'documentHandler',
+        mixins: [dataMixin],
         components: {
             vIvxFilterBox,
             vTemplate_word_file_0,
             vTemplate_word_file_1,
             vTemplate_word_file_2,
             vTemplate_word_file_3,
-            vModalUserSignatureSelect
+            vModalUserSignatureSelect,
+            vModalAuditProcessSelect
         },
         props: {
-
+            documentHandleId: {
+                type: String,
+                default: ''
+            }
+        },
+        computed: {
         },
         data() {
             return {
@@ -72,10 +102,59 @@
                     url: '',
                     userId: '',
                     signatureId: ''
-                }
+                },
+
+                // 详情信息
+                documentHandle: {
+                    fileRecordType: '',
+                    handleStatus: ''
+                },
+                // 文档信息信息
+                documentAudit: {
+                    auditContent: '',
+                    auditResult: '',
+                    documentAuditId: '',
+                    documentHandleId: '',
+                    lastStep: false,
+                    permission: false,
+                    userId: ''
+                },
+                temData: {},
+
+                // 提交审核对象
+                auditForm: {
+                    documentHandleId: '',
+                    auditProcessId: '',
+                    auditContent: ''
+                },
+
+                // 通过审核对象
+                auditPassForm: {
+                    documentHandleId: '',
+                    auditProcessId: '',
+                    processStepId: '',
+                    auditContent: '',
+                    fileId: ''
+                },
+
+                // 按钮加载状态
+                btnLoading_auditPass: false, // 通过审核
             };
         },
+        watch: {
+            documentHandleId: {
+                immediate: true,
+                handler(val) {
+                    this.auditForm.documentHandleId = val;
+                    this.auditPassForm.documentHandleId = val;
+                    if(val !== '') {
+                        this.getDataDetail();
+                    }
+                }
+            }
+        },
         methods: {
+            // 调起盖章签名选择
             onClick_selectSignature() {
                 this.$refs.modal_userSignatureSelect.getSignature();
             },
@@ -92,7 +171,6 @@
                     signatureId: '',
                     fileId: ''
                 });
-
             },
 
             onPrint() {
@@ -104,15 +182,13 @@
 
             },
             exportPDF(isUpload) {
-                let that = this;
-
                 let scale = 2;
 
                 // let page_a4 = [595.28, 841.89]; // 宽 / 高
 
                 return new Promise(((resolve, reject) => {
                     try {
-                        html2canvas(this.$refs.template_word_file_0.$el, {
+                        html2canvas(this.$refs[this.documentHandle.fileRecordType].$el, {
                             scale: scale, // 添加的scale 参数
                             // canvas: canvas, //自定义 canvas
                             // logging: true, //日志开关，便于查看html2canvas的内部执行流程
@@ -127,10 +203,10 @@
                             context.msImageSmoothingEnabled = false;
                             context.imageSmoothingEnabled = false;
 
-                            // this.$refs.canvas.appendChild(canvas);
+                           // this.$refs.canvas.appendChild(canvas);
 
                             let moveHight = [841, 841, 841];
-                            let idx = 0;
+                            // let idx = 0;
 
                             let pageData = canvas.toDataURL('image/png', 1.0);
                             let pdf = new jspdf("", "pt", 'a4');
@@ -153,10 +229,10 @@
 
 
                             if (leftHeight < pageHeight) {
-                                pdf.addImage(pageData, 'png', 0, 0, imgWidth, imgHeight );
+                                pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
                             } else {
                                 while(leftHeight > 0) {
-                                    pdf.addImage(pageData, 'png', 0, position, imgWidth, imgHeight, '', 'FAST');
+                                    pdf.addImage(canvas, 'png', 0, position, imgWidth, imgHeight, 'mybgimg', 'FAST' );
                                     leftHeight -= pageHeight;
                                     position -= moveHight[0];
                                     //避免添加空白页
@@ -178,12 +254,142 @@
                     }
                     catch (e) {
                         this.print2x = false;
-                        resolve();
+                        reject();
                         this.$Spin.hide();
                         this.$Notice.warning('生成PDF失败！');
                     }
                 }));
             },
+
+            // 获取文档详情(内容、进度)
+            getDataDetail() {
+                this.$http({
+                    method: 'get',
+                    url: '/documentHandle/detail',
+                    params: {
+                        documentHandleId: this.documentHandleId
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        Object.assign(this.documentHandle, res.data.documentHandle);
+                        if (res.data.documentAudit) {
+                            Object.assign(this.documentAudit, res.data.documentAudit);
+                        }
+
+                        if (res.data.documentHandle.auditContent) {
+                            this.temData = eval(`[${res.data.documentHandle.auditContent}]`)[0];
+                        }
+
+                        this.auditPassForm.auditProcessId = res.data.documentHandle.auditProcessId || '';
+                        this.auditPassForm.processStepId = res.data.documentHandle.processStepId || '';
+
+                    }
+                })
+            },
+
+            // 保存内容
+            saveContent() {
+                let temData = JSON.stringify(this.$refs[this.documentHandle.fileRecordType].temData);
+                this.$http({
+                    method: 'post',
+                    url: '/documentHandle/save',
+                    data: JSON.stringify({
+                        auditContent: temData,
+                        documentHandleId: this.documentHandleId
+                    })
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.$Message.success('保存成功！');
+                        this.getDataDetail();
+                    }
+                });
+            },
+
+            // 提交审核
+            submitAudit() {
+                if (this.$refs[this.documentHandle.fileRecordType].validateContent()) {
+                    this.auditForm.auditContent = JSON.stringify(this.$refs[this.documentHandle.fileRecordType].temData);
+                    this.$refs.modal_auditProcessSelect.modalValue = true;
+                }
+                else {
+                    this.$Modal.confirm({
+                        title: '提示',
+                        content: `您所填写文件内容不完整,是否继续`,
+                        onOk: () => {
+                            this.auditForm.auditContent = JSON.stringify(this.$refs[this.documentHandle.fileRecordType].temData);
+                            this.$refs.modal_auditProcessSelect.modalValue = true;
+                        }
+                    })
+                }
+
+            },
+            // 选择审核流程回调
+            modal_auditProcessSelect_callback(selectValue, selectItems) {
+                this.auditForm.auditProcessId = selectItems.auditProcessId;
+                this.$Modal.confirm({
+                    title: '提示',
+                    content: `确定要提交审核？`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'post',
+                            url: '/documentHandle/submitAudit',
+                            data: JSON.stringify(this.auditForm)
+                        }).then(res => {
+                            if(res.code === 'SUCCESS') {
+                                this.$Message.success('提交审核成功！');
+                                this.$emit('callback');
+                            }
+                        })
+                    }
+                })
+            },
+
+            // 审核通过
+            auditPass(fileId) {
+                this.auditPassForm.fileId = fileId || '';
+                this.auditPassForm.auditContent = JSON.stringify(this.$refs[this.documentHandle.fileRecordType].temData);
+                this.$http({
+                    method: 'post',
+                    url: '/documentHandle/audit',
+                    data: JSON.stringify(this.auditPassForm)
+                }).then(res => {
+                    this.btnLoading_auditPass = false;
+                    if(res.code === 'SUCCESS') {
+                        this.$Message.success('审核通过');
+                        this.$emit('callback');
+                    }
+                }).catch(e => {
+                    this.btnLoading_auditPass = false;
+                })
+            },
+            uploadFile() {
+                this.btnLoading_auditPass = true;
+                if (this.documentAudit.lastStep) {
+                    this.print2x = true;
+                    this.$Spin.show();
+                    setTimeout(() => {
+                        this.exportPDF(true).then(data => {
+                            this.$http({
+                                method: 'post',
+                                url: '/file/uploadAuditFile',
+                                data: JSON.stringify({
+                                    base64Content: data,
+                                    fileRecordType: this.documentHandle.fileRecordType,
+                                })
+                            }).then(res => {
+                                if (res.code === 'SUCCESS') {
+                                    this.auditPass(res.data.fileId);
+                                }
+                            })
+                        });
+                    },1500);
+
+                }
+                else {
+                    this.auditPass();
+                }
+
+            }
         }
     }
 </script>

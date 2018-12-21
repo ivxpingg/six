@@ -50,6 +50,14 @@
                            @modal_callback="modal_common_callback"></vContentAudit>
         </Modal>
 
+        <Modal v-model="modal_document_handle"
+               :width="1300"
+               title="公文处理"
+               footer-hide>
+            <vDocumentHandler :documentHandleId="param_document_handle.documentHandleId"
+                              @callback="modal_document_handle_callback"></vDocumentHandler>
+        </Modal>
+
     </div>
 </template>
 
@@ -61,6 +69,7 @@
     import MOMENT from 'moment';
 
     import vContentAudit from '../../../../RecordAndCompletedManage/project_verification/content-audit/content-audit';
+    import vDocumentHandler from '../../../../Document/documentHandler/documentHandler';
 
     export default {
         name: 'modal_todo',   // 代办
@@ -69,7 +78,8 @@
             vTodoReply,
             vComplaintReply,
             vProjectRecordReply,
-            vContentAudit},
+            vContentAudit,
+            vDocumentHandler},
         data() {
             return {
                 searchParams: {
@@ -150,6 +160,12 @@
                     projectId: '',
                     projectName: '',
                     part: ''
+                },
+
+                // 公文办理
+                modal_document_handle: false,
+                param_document_handle: {
+                    documentHandleId: ''
                 }
 
             };
@@ -264,6 +280,13 @@
                         this.modal_contentAudit_verification = true;
 
                         break;
+                    case 'document_handle':    // 公文办理
+                        param = eval(`[${row.param}]`);
+                        Object.assign(this.param_document_handle, {
+                            documentHandleId: ''
+                        }, param[0]);
+                        this.modal_document_handle = true;
+                        break;
                     case 'handover_handle_audit':
                         this.$router.push({
                             name: 'project_verification'
@@ -284,11 +307,15 @@
                 this.getData();
                 this.$emit('modal-callback');
             },
+            modal_document_handle_callback() {
+                this.modal_document_handle = false;
+                this.getData();
+                this.$emit('modal-callback');
+            },
 
             // 公共关闭弹出框后重新获取待办事项表格
             modal_common_callback() {
                 this.modal_contentAudit_verification = false;
-
                 this.getData();
                 this.$emit('modal-callback');
             },

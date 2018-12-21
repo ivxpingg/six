@@ -5,7 +5,7 @@
                  class="signature-box"
                  :key="item.userId + idx"
                  :style="{
-                     transform: `translate(${item.offsetX * scale - 50}px, ${item.offsetY * scale -50}px)`}">
+                     transform: `translate(${item.offsetX * scale - (50 * scale)}px, ${item.offsetY * scale - (50 * scale)}px)`}">
                 <img :src="joinUrl(item.url)" alt=""/>
             </div>
 
@@ -15,7 +15,7 @@
                      :src="joinUrl(eSignature.url)"
                      :alt="eSignature.name"
                      :style="{
-                     transform: `translate(${offsetX * scale -50}px, ${offsetY * scale -50}px)`}">
+                     transform: `translate(${offsetX * scale -(50 * scale)}px, ${offsetY * scale -(50 * scale)}px)`}">
             </div>
             <div class="stamp-layer-mouse"
                  v-show="stampState"
@@ -139,6 +139,24 @@
                     }
                 }
             };
+        },
+        methods: {
+            // 判断是否全部填写
+            // @return Boolean
+            validateContent() {
+                for (let key in this.temData) {
+                    if (key !== 'stamp') {
+
+                        for (let k in this.temData[key]) {
+                            if (this.temData[key][k] === '') {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
+                return true;
+            }
         }
     }
 </script>

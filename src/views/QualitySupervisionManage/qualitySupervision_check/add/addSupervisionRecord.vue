@@ -13,7 +13,7 @@
                         <Option v-for="item in projectList"
                                 :key="item.projectId"
                                 :value="item.projectId"
-                                :label="item.projectName"></Option>
+                                :label="getProjectOpionLabel(item)"></Option>
                     </Select>
                 </FormItem>
                 <FormItem label="督察时间:" prop="checkTime">
@@ -99,6 +99,9 @@
             this.getDict(['checkWay', 'checkType']);
         },
         methods: {
+            getProjectOpionLabel(item) {
+                return (item.projectName + (!item.part ? '' : `(${item.part})`));
+            },
             getDict(list) {
                 this.$http({
                     method: 'get',

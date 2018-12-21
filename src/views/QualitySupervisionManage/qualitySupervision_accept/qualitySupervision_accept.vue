@@ -169,19 +169,21 @@
                                 }
                             }, '处理标签审核'));
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-eye-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        Object.assign(this.curentRow, params.row);
-                                        this.modal_superviseTeamManage = true;
+                            if (this.auth.auth_addgroup) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-eye-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            Object.assign(this.curentRow, params.row);
+                                            this.modal_superviseTeamManage = true;
+                                        }
                                     }
-                                }
-                            }, '分配监督小组'));
+                                }, '分配监督小组'));
+                            }
 
 
                             // 设置列宽度

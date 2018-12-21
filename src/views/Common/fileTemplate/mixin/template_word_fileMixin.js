@@ -18,6 +18,12 @@ export default {
                     signatureId: ''
                 }
             }
+        },
+        data: {
+            type: Object,
+            default() {
+                return {};
+            }
         }
     },
     computed: {
@@ -37,6 +43,15 @@ export default {
         }
     },
     watch:{
+        data: {
+            immediate: true,
+            deep: true,
+            handler(val) {
+                if (val) {
+                    Object.assign(this.temData, val);
+                }
+            }
+        },
         eSignature: {
             deep: true,
             handler(val) {
@@ -71,8 +86,6 @@ export default {
             this.temData.stamp = this.temData.stamp.filter(v => v.userId !== this.eSignature.userId);
 
             this.temData.stamp.push(stamp_current);
-
-            console.dir(this.temData);
 
             this.$emit('callback');
         }

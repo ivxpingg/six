@@ -13,7 +13,7 @@
                         <Option v-for="item in projectList"
                                 :key="item.projectId"
                                 :value="item.projectId"
-                                :label="`${item.projectName} (标段：${item.part})`"></Option>
+                                :label="getProjectOpionLabel(item)"></Option>
                     </Select>
                 </FormItem>
 
@@ -98,6 +98,9 @@
             this.getDict(['recordType']);
         },
         methods: {
+            getProjectOpionLabel(item) {
+                return (item.projectName + (!item.part ? '' : `(${item.part})`));
+            },
             getDict(list) {
                 this.$http({
                     method: 'get',

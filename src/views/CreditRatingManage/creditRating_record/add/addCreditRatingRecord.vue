@@ -15,7 +15,7 @@
                         <Option v-for="(item, idx) in projectList"
                                 :key="item.projectId + idx"
                                 :value="item.projectId"
-                                :label="`${item.projectName}(${item.part})`"></Option>
+                                :label="getProjectOpionLabel(item)"></Option>
                     </Select>
                 </FormItem>
                 <FormItem label="单位名称:" prop="projectUnitId">
@@ -177,6 +177,9 @@
             this.getDict(['unitType']);
         },
         methods: {
+            getProjectOpionLabel(item) {
+                return (item.projectName + (!item.part ? '' : `(${item.part})`));
+            },
             getDict(list) {
                 this.$http({
                     method: 'get',

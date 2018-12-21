@@ -2,7 +2,7 @@
     <div class="addDocument-container">
         <Modal v-model="modalValue"
                title="创建公文"
-               :width="600"
+               :width="500"
                @on-visible-change="onVisibleChange">
             <Form ref="form"
                   class="user-form"
@@ -22,7 +22,7 @@
                         <Option v-for="(item, index) in projectList"
                                 :value="item.projectId"
                                 :key="item.projectId"
-                                :label="`${item.projectName} (${item.part})`"></Option>
+                                :label="getProjectOpionLabel(item)"></Option>
                     </Select>
                 </FormItem>
                 <FormItem label="文件名称:" prop="fileName">
@@ -45,9 +45,10 @@
 
 <script>
     import modalMixin from '../../../lib/mixin/modalMixin';
+    import dataMixin from '../mixin/dataMixin';
     export default {
         name: 'addDocument',  // 添加公文
-        mixins: [modalMixin],
+        mixins: [modalMixin, dataMixin],
         data() {
             return {
                 searchParams: {
@@ -71,14 +72,6 @@
                     fileName: [{ required: true, message: '文件名称不能为空！', trigger: 'blur' }]
                 },
 
-                // 固定几种文件类型选择，与 fileRecordType字典 数据对应
-                dict_fileRecordType: [
-                    { fileRecordType: 'accept_notice', templateName: '质量监督管理受理通知书' },
-                    { fileRecordType: 'apply_file_check', templateName: '质量监督申请材料核查意见书'},
-                    { fileRecordType: 'com_check_notice', templateName: '综合督查通报' },
-                    { fileRecordType: 'spot_check', templateName: '质量安全监督抽查意见通知书' }
-                ],
-
                 btn_loading: false
             };
         },
@@ -86,6 +79,9 @@
             this.getProjectData();
         },
         methods: {
+            getProjectOpionLabel(item) {
+                return (item.projectName + (!item.part ? '' : `(${item.part})`));
+            },
             // 获取项目列表
             getProjectData() {
                 this.$http({
@@ -105,7 +101,7 @@
                         this.btn_loading = true;
                         this.$http({
                             method: 'post',
-                            url: '/',
+                            url: '/documentHandle/add',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
                             if(res.code === 'SUCCESS') {
@@ -117,7 +113,6 @@
                                 this.$emit('modal-callback');
                             }
                         }).catch(error => {
-                            console.dir(error);
                             this.$Message.error(error.message);
                             this.btn_loading = false;
                         })

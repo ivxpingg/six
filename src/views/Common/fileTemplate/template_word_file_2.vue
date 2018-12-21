@@ -73,7 +73,7 @@
                 <Table class="custom-table"
                        :width="tableWidth"
                        :columns="columns"
-                       :data="tableData"
+                       :data="temData.tableData"
                        border size="small"></Table>
 
             </div>
@@ -145,7 +145,7 @@
     import classMixin from './mixin/classMixin';
     import vInputSpan from './inputSpan/inputSpan';
     export default {
-        name: 'template_word_file_2',
+        name: 'template_word_file_2',  // 综合督查通报
         mixins: [classMixin, template_word_fileMixin],
         computed: {
             scale() {
@@ -188,9 +188,6 @@
                     },
                     page_2: {
                         value_1: '',
-                        value_2: '',
-                        value_3: '',
-                        value_4: '',
                     },
                     page_3: {
                         value_1: '（一）建设单位\n\n' +
@@ -211,36 +208,23 @@
                         value_10: '',
                         value_11: '',
                         value_12: '',
-                    }
-                },
-                tableData: [
-                    {
-                        name1: '路基工程',
-                        name2: '路基土石方',
-                        name3: '压实度',
-                        val_1: '100',
-                        val_2: '80',
-                        val_3: '80%',
                     },
-                    {
-                        name1: '路面工程',
-                        name2: '路面面层',
-                        name3: '砼路面相邻板高差差差',
-                        val_1: '100',
-                        val_2: '80',
-                        val_3: '80%',
-                    },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                    { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
-                ]
+                    tableData: [
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
+                        { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', }
+                    ]
+                }
             };
         },
         methods: {
@@ -264,10 +248,28 @@
                     },
                     on: {
                         input: (value) => {
-                            this.tableData[params.index][params.column.key] = value;
+                            this.temData.tableData[params.index][params.column.key] = value;
                         }
                     }
                 });
+            },
+
+            // 判断是否全部填写
+            // @return Boolean
+            validateContent() {
+                console.dir(this.temData);
+                for (let key in this.temData) {
+                    if (key !== 'stamp' && key !== 'tableData') {
+
+                        for (let k in this.temData[key]) {
+                            if (this.temData[key][k] === '') {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
+                return true;
             }
         }
     }

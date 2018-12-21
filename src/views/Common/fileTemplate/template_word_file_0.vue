@@ -378,7 +378,7 @@
     import template_word_fileMixin from './mixin/template_word_fileMixin';
     import classMixin from './mixin/classMixin';
     export default {
-        name: 'template_word_file_0', // 公路工程质量监督受理通知书版本（附件三）
+        name: 'template_word_file_0', // 质量监督管理受理通知书
         mixins: [classMixin, template_word_fileMixin],
         data() {
             return {
@@ -409,6 +409,24 @@
                     stamp: []
                 }
             };
+        },
+        methods: {
+            // 判断是否全部填写
+            // @return Boolean
+            validateContent() {
+                for (let key in this.temData) {
+                    if (key !== 'stamp') {
+
+                        for (let k in this.temData[key]) {
+                            if (this.temData[key][k] === '') {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
+                return true;
+            }
         }
     }
 </script>

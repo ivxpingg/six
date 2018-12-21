@@ -42,14 +42,19 @@
         </div>
 
         <!--添加公文-->
-        <vAddDocument ref="modal_addDocument" @modal-callback="modal_add_callback"></vAddDocument>
+        <vAddDocument ref="modal_addDocument"
+                      @modal-callback="modal_add_callback"></vAddDocument>
 
         <!--查看公文-->
         <Modal v-model="modal_handler"
                :width="1300"
                title="公文处理"
                footer-hide>
-            <vDocumentHandler v-if="modal_handler"></vDocumentHandler>
+            <div style="min-height: 800px;">
+                <vDocumentHandler v-if="modal_handler"
+                                  :documentHandleId="currentRow.documentHandleId"
+                                  @callback="callback_submitAudit"></vDocumentHandler>
+            </div>
         </Modal>
 
     </div>
@@ -75,12 +80,16 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '文件名称', minWidth: 180, align: 'center', key: '1' },
-                    { title: '文件类型', width: 180, align: 'center', key: '1' },
-                    { title: '项目名称', width: 180, align: 'center', key: '1' },
-                    { title: '标段', width: 100, align: 'center', key: '1' },
-                    { title: '创建时间', width: 120, align: 'center', key: '1' },
-                    { title: '状态', width: 80, align: 'center', key: '1' },
+                    { title: '文件名称', minWidth: 180, align: 'center', key: 'fileName' },
+                    { title: '文件类型', width: 180, align: 'center', key: 'fileRecordTypeLabel' },
+                    { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
+                    { title: '标段', width: 100, align: 'center', key: 'part' },
+                    { title: '创建时间', width: 140, align: 'center', key: 'insTime',
+                        render: (h, params) => {
+                            return h('span', params.row.insTime ? this.$moment(params.row.insTime).format('YYYY-MM-DD HH:mm') : '');
+                        }
+                    },
+                    { title: '状态', width: 80, align: 'center', key: 'handleStatusLabel' },
                     {
                         title: '操作',
                         width: 180,
@@ -95,20 +104,46 @@
                                     icon: 'ios-eye-outline'
                                 },
                                 on: {
-                                    click: () => {}
+                                    click: () => {
+                                        this.currentRow.documentHandleId = params.row.documentHandleId || '';
+                                        this.currentRow.fileRecordType = params.row.fileRecordType || '';
+                                        this.currentRow.handleStatus = params.row.handleStatus || '';
+                                        this.modal_handler = true;
+                                    }
                                 }
                             }, '查看'));
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small',
-                                    icon: 'ios-trash-outline'
-                                },
-                                on: {
-                                    click: () => {}
-                                }
-                            }, '删除'));
+                            if (params.row.handleStatus === 'submitted') {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small',
+                                        icon: 'ios-trash-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$Modal.confirm({
+                                                title: '提示',
+                                                content: `确定要删除《${params.row.fileName}》？`,
+                                                onOk: () => {
+                                                    this.$http({
+                                                        method: 'get',
+                                                        url: '/documentHandle/delete',
+                                                        params: {
+                                                            documentHandleId: params.row.documentHandleId
+                                                        }
+                                                    }).then(res => {
+                                                        if (res.code === 'SUCCESS') {
+                                                            this.$Message.success('删除成功!');
+                                                            this.getData();
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        }
+                                    }
+                                }, '删除'));
+                            }
 
                             // 设置列宽度
                             return h('div',{
@@ -121,9 +156,19 @@
                     }
                 ],
                 tableData: [
-                    {
-                        '1': 't二四'
-                    }
+                    // {
+                    //     documentHandleId: "1",
+                    //     fileName: "文件名称",
+                    //     fileRecordType: 'com_check_notice',
+                    //     fileRecordTypeLabel: "综合督查通报",
+                    //     handleStatus: "submitted",
+                    //     handleStatusLabel: "待提交",
+                    //     insTime: 1545242491000,
+                    //     part: "111",
+                    //     projectId: "7455ad3c6e104261888e169dc098a49c",
+                    //     projectName: "我是名字很长的项目名长到你看不见只是为了测试名字太长会怎么样",
+                    //     userName: "超级管理员"
+                    // }
                 ],
                 tableLoading: false,
 
@@ -131,7 +176,12 @@
                 dict_handleStatus: [],
 
                 //公文处理
-                modal_handler: true
+                modal_handler: false,
+                currentRow: {
+                    documentHandleId: '',
+                    fileRecordType: '',
+                    handleStatus: ''
+                }
             };
         },
         watch: {
@@ -146,7 +196,7 @@
             }
         },
         mounted() {
-            // this.getData();
+            this.getData();
             this.getDict_handleStatus();
         },
         methods: {
@@ -160,7 +210,7 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.dict_handleStatus = res.data;
+                        this.dict_handleStatus = res.data || [];
                     }
                 })
             },
@@ -177,7 +227,7 @@
                 this.tableLoading = true;
                 this.$http({
                     method: 'post',
-                    url: '/',
+                    url: '/documentHandle/list',
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
@@ -194,7 +244,13 @@
             },
             modal_add_callback() {
                 this.getData();
-            }
+            },
+
+            // 提交审核回调
+            callback_submitAudit() {
+                this.getData();
+                this.modal_handler = false;
+            },
         }
     }
 </script>

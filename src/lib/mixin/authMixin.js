@@ -38,6 +38,13 @@ export default {
         },
 
 
+        // 质量监督受理
+        // 添加监督小组成员权限
+        auth_addgroup() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('addgroup') > -1);
+        },
+
+
         //#START 工程档案管理
         auth_projectFile() {
             return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('projectFile') > -1);

@@ -77,29 +77,11 @@
 <script>
     import template_word_fileMixin from './mixin/template_word_fileMixin';
     import classMixin from './mixin/classMixin';
-    import Config from '../../../config';
     import vInputSpan from './inputSpan/inputSpan';
     export default {
         name: 'template_word_file_3',  // 质量监督申请材料核查意见书
         mixins: [classMixin, template_word_fileMixin],
         components: {vInputSpan},
-        props: {
-            print2x: {
-                type: Boolean,
-                default: false
-            },
-            eSignature: {
-                type: Object,
-                default() {
-                    return {
-                        name: '',
-                        url: '',
-                        userId: '',
-                        signatureId: ''
-                    }
-                }
-            }
-        },
         data() {
             return {
                 // 模板输入数据
@@ -125,7 +107,24 @@
                 },
             };
         },
-        methods: {}
+        methods: {
+            // 判断是否全部填写
+            // @return Boolean
+            validateContent() {
+                for (let key in this.temData) {
+                    if (key !== 'stamp') {
+
+                        for (let k in this.temData[key]) {
+                            if (this.temData[key][k] === '') {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
+                return true;
+            }
+        }
     }
 </script>
 <style lang="scss" src="./template.scss"></style>

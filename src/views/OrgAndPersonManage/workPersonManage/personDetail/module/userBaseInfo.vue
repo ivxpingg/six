@@ -261,7 +261,7 @@
                 })
             },
             onChange_graduateDate(time) {
-                this.formData.graduateDate = time;
+                this.formData.employee.graduateDate = time;
             },
 
             getUserInfo() {

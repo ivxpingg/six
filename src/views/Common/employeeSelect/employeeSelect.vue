@@ -128,7 +128,13 @@
             selectedValue: {
                 immediate: true,
                 handler(val) {
-                    this.selectValue = val.map(v => v);
+                    if (!this.filterSelected){
+                        this.selectValue = val.map(v => v);
+                    }
+                    else {
+                        this.selectValue = [];
+                    }
+
                     this.selectItems = [];
                     this.getData();
                     // this.tableData.forEach((v, idx) => {
@@ -159,7 +165,7 @@
             },
             tableData(val) {
                 if (this.filterSelected) {
-                    this.tableDataFilterSelected = val.filter(v => this.selectValue.indexOf(v.userId) === -1);
+                    this.tableDataFilterSelected = val.filter(v => this.selectedValue.indexOf(v.userId) === -1);
                 }
                 else {
                     setTimeout(() => {

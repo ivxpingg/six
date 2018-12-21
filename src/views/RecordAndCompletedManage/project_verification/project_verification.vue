@@ -56,7 +56,7 @@
                     <Select v-model="currentProject.projectId" filterable>
                         <Option v-for="item in projectList"
                                 :value="item.projectId"
-                                :key="item.projectId" :label="`${item.projectName}(${item.part})`"></Option>
+                                :key="item.projectId" :label="getProjectOpionLabel(item)"></Option>
                     </Select>
                 </FormItem>
             </Form>
@@ -370,6 +370,9 @@
             this.getDict();
         },
         methods: {
+            getProjectOpionLabel(item) {
+                return (item.projectName + (!item.part ? '' : `(${item.part})`));
+            },
             getDict() {
                 this.$http({
                     method: 'get',

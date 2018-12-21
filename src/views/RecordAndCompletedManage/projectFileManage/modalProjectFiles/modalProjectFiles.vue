@@ -191,6 +191,12 @@
                             selectedFileList: [],
                             auth: this.auth_supervisionFile
                         },
+                        {
+                            folderName: '公文办理材料',
+                            url: '/archive/documentHandleList',
+                            selectedFileList: [],
+                            auth: this.auth_supervisionFile
+                        },
                     ],
                     projectFiles_2: [
                         {
