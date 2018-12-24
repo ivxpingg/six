@@ -50,7 +50,10 @@
                     <Button type="primary" size="small" icon="md-add" @click="onClick_addLaws">引用法律法规</Button>
                 </FormItem>
                 <FormItem label="相关材料:">
-                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect" multiple></vFilesSelectButton></div>
+                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect"
+                                                                   :fileType="'monitor_procedure'"
+                                                                   :projectId="projectId"
+                                                                   multiple></vFilesSelectButton></div>
                 </FormItem>
 
                 <template v-for="item in formData.projectUnitUsers">

@@ -27,18 +27,21 @@
                     </Select>
                 </FormItem>
                 <FormItem label="文件:">
-                    <Upload :action="uploadActive"
-                            :showUploadList="uploadParams.showUploadList"
-                            :multiple="uploadParams.multiple"
-                            :accept="uploadParams.accept"
-                            :maxSize="uploadParams.maxSize"
-                            :on-remove="onRemoveFile"
-                            :before-upload="fileBeforeUpload"
-                            :on-exceeded-size="exceededSize"
-                            :on-error="fileUploadError"
-                            :on-success="fileUploadSuccess">
-                        <Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>
-                    </Upload>
+                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect"
+                                                                   fileType="user_attach"
+                                                                   multiple></vFilesSelectButton></div>
+                    <!--<Upload :action="uploadActive"-->
+                            <!--:showUploadList="uploadParams.showUploadList"-->
+                            <!--:multiple="uploadParams.multiple"-->
+                            <!--:accept="uploadParams.accept"-->
+                            <!--:maxSize="uploadParams.maxSize"-->
+                            <!--:on-remove="onRemoveFile"-->
+                            <!--:before-upload="fileBeforeUpload"-->
+                            <!--:on-exceeded-size="exceededSize"-->
+                            <!--:on-error="fileUploadError"-->
+                            <!--:on-success="fileUploadSuccess">-->
+                        <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
+                    <!--</Upload>-->
                 </FormItem>
 
             </Form>
@@ -66,10 +69,11 @@
     import modalMixin from '../../../../../lib/mixin/modalMixin';
     import uploadMixin from '../../../../../lib/mixin/uploadMixin';
     import vModalEmployeeSelect from '../../../../Common/employeeSelect/modalEmployeeSelect';
+    import vFilesSelectButton from '../../../../Common/filesSelect/filesSelectButton.vue';
     export default {
         name: 'modalSendFile',
         mixins: [modalMixin, uploadMixin],
-        components: {vModalEmployeeSelect},
+        components: {vModalEmployeeSelect, vFilesSelectButton},
         computed: {
             uploadActive() {
                 return this.uploadParams.actionUrl + '/receive_send';
@@ -97,13 +101,16 @@
             };
         },
         methods: {
-            // 文件移除
-            onRemoveFile(file, fileList) {
-                this.formData.fileIds = fileList.map(v => v.response.data.fileId);
-            },
-
-            fileUploadSuccess(response, file, fileList) {
-                this.formData.fileIds = fileList.map(v => v.response.data.fileId);
+            // // 文件移除
+            // onRemoveFile(file, fileList) {
+            //     this.formData.fileIds = fileList.map(v => v.response.data.fileId);
+            // },
+            //
+            // fileUploadSuccess(response, file, fileList) {
+            //     this.formData.fileIds = fileList.map(v => v.response.data.fileId);
+            // },
+            onSelect(fileList) {
+                this.formData.fileIds = fileList.map(v => v.fileId);
             },
             // 选择用户
             auditUser_onFocus(value) {

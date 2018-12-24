@@ -24,7 +24,7 @@
             <!--第一页-->
             <div class="page">
                 <div class="text-14 text-align-right m-b-10" >编号：<Input v-model="temData.page_1.value_1" class="input-text-under-line"  style="width: 120px;" /></div>
-                <h1>公路工程质量监督管理受理通知书</h1>
+                <h1>六安市交通工程质量安全监督抽查意见通知书</h1>
                 <div class="box-bottom">
                     <div class="text-16 letter-spacing-2 m-b-30">工程名称：
                         <Input  v-model="temData.page_1.value_5" class="input-text-under-line width-320" />

@@ -6,7 +6,6 @@
                :z-index="zIndex"
                footer-hide>
             <vEmployeeSelect :multiple="multiple"
-                             v-if="modalValue"
                              :userSourceType="userSourceType"
                              :unitId="unitId"
                              :selectedValue="selectedValue"

@@ -6,6 +6,7 @@ export default {
         userName: '',
         userId: '',
         avatorImgPath: '',
+        userType: '',
         sex: '',
         token: getToken()
     },
@@ -20,7 +21,10 @@ export default {
             state.userName = name
         },
         setUserSex(state, sex) {
-            state.userSex = sex;
+            state.sex = sex;
+        },
+        setUserType(state, userType) {
+            state.userType = userType;
         },
         setToken (state, token) {
             state.token = token
@@ -89,7 +93,7 @@ export default {
                     commit('setUserName', data.name);
                     commit('setUserSex', data.sex);
                     commit('setUserId', data.userId);
-                    // commit('setUserId', data.user_id)
+                    commit('setUserType', data.userType);
                     // commit('setAccess', data.access)
                     resolve(data)
                 }).catch(err => {

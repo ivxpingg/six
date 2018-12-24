@@ -220,8 +220,9 @@
                     onOk: () => {
                         this.$http({
                             method: 'get',
-                            url: '/project/',
+                            url: '/project/deleteProjectUser',
                             params: {
+                                projectId: this.projectId,
                                 projectUserId: row.projectUserId
                             }
                         }).then(res => {
@@ -229,6 +230,7 @@
                                 this.$Message.success({
                                     content: '移除成功！'
                                 });
+                                this.getData();
                             }
                         })
                     }

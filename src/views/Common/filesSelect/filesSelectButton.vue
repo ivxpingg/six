@@ -14,19 +14,23 @@
             </template>
         </ul>
 
-        <vFilesSelect ref="modal_filesSelect" :multiple="multiple" :fileType="fileType" @handleSelect="onSelected"></vFilesSelect>
+        <!--<vFilesSelect ref="modal_filesSelect" :multiple="multiple" :fileType="fileType" @handleSelect="onSelected"></vFilesSelect>-->
 
-        <!--<vFilesSelect2 ref="modal_filesSelect" :multiple="multiple" :fileType="fileType" @handleSelect="onSelected"></vFilesSelect2>-->
+        <vFilesSelect2 ref="modal_filesSelect"
+                       :multiple="multiple"
+                       :fileType="fileType"
+                       :projectId="projectId"
+                       @handleSelect="onSelected"></vFilesSelect2>
 
     </div>
 </template>
 <script>
     import vFilesSelect from './filesSelect.vue';
-    // import vFilesSelect2 from './filesSelect2.vue';
+    import vFilesSelect2 from './filesSelect2.vue';
     export default {
         name: 'filesSelectButton',   // 用于选择文件
-        components: {vFilesSelect},
-        // components: {vFilesSelect, vFilesSelect2},
+        // components: {vFilesSelect},
+        components: {vFilesSelect, vFilesSelect2},
         props: {
             multiple: {
                 type: Boolean,
@@ -38,6 +42,10 @@
             fileType: {
                 type: String,
                 default: 'monitor_procedure'
+            },
+            projectId: {
+                type: String,
+                default: ''
             }
         },
         data() {
@@ -51,17 +59,25 @@
             },
             remove(idx) {
                 this.fileList.splice(idx, 1);
+                this.$emit('modal-callback', this.fileList);
             },
             onSelected(selectValue, selectItems) {
+
                 if (selectValue) {
                     if (this.multiple) {
-                        let arr = this.fileList.find(v => selectValue === v.fileId);
-                        if (arr === undefined) {
-                            this.fileList.push(selectItems);
-                        }
+                        let filterList = [];
+                        filterList = selectItems.filter(v => {
+                            for (let i = 0; i < this.fileList.length; i++) {
+                                if (this.fileList[i].fileId === v.fileId) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        });
+                        this.fileList = this.fileList.concat(filterList);
                     }
                     else {
-                        this.fileList = [selectItems];
+                        this.fileList = selectItems[0] || [];
                     }
                     this.$emit('modal-callback', this.fileList);
                 }
