@@ -23,16 +23,19 @@
 
             <!--第一页-->
             <div class="page">
-                <div class="text-14 text-align-right m-b-10" >编号：<Input v-model="temData.page_1.value_1" class="input-text-under-line"  style="width: 120px;" /></div>
                 <h1>公路工程质量监督管理受理通知书</h1>
+                <div class="text-14 text-align-right line-height-28 m-t-10" >
+                    编号：
+                    <vInputSpan v-model="temData.page_1.value_1" :scale="scale"></vInputSpan>
+                </div>
                 <div class="box-bottom">
                     <div class="text-16 letter-spacing-2 m-b-30">工程名称：<Input  v-model="temData.page_1.value_2" class="input-text-under-line width-320" /></div>
                     <div class="text-16 letter-spacing-2 m-b-30">监督单位：<Input  v-model="temData.page_1.value_3" class="input-text-under-line width-320"  /></div>
 
                     <div class="text-14 line-height-28 text-align-center">
-                        <vInputSpan v-model="temData.page_1.value_4" :underLine="false"></vInputSpan>年
-                        <vInputSpan v-model="temData.page_1.value_5" :underLine="false"></vInputSpan>月
-                        <vInputSpan v-model="temData.page_1.value_6" :underLine="false"></vInputSpan>日
+                        <vInputSpan v-model="temData.page_1.value_4" :scale="scale" :underLine="false"></vInputSpan>年
+                        <vInputSpan v-model="temData.page_1.value_5" :scale="scale" :underLine="false"></vInputSpan>月
+                        <vInputSpan v-model="temData.page_1.value_6" :scale="scale" :underLine="false"></vInputSpan>日
                     </div>
                 </div>
             </div>
@@ -40,16 +43,16 @@
             <!--第二页-->
             <div class="page">
                 <div class="text-14 text-align-left line-height-28   m-b-10">
-                    <vInputSpan v-model="temData.page_2.value_1"></vInputSpan>：
+                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale"></vInputSpan>：
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     根据《建设工程质量管理条例》、《建设工程安全生产管理条
                     例》、《公路水运工程安全生产监督管理办法》、《公路水运工程质量监督管理规定》和《六安市公路水运工程质量监督实施细则》等规定，我局受理
-                    <vInputSpan v-model="temData.page_2.value_2"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_2" :scale="scale"></vInputSpan>
                     的质量监督，并将按下述计划由
-                    <vInputSpan v-model="temData.page_2.value_3"></vInputSpan>
-                    等组成监督小组对该工程进行质量监督。本项目的监督负责人为
-                    <vInputSpan v-model="temData.page_2.value_4"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_3" :scale="scale"></vInputSpan>
+                    等组成监督小组对该工程进行质量监督。
+                    <vInputSpan v-model="temData.page_2.value_4" :scale="scale"></vInputSpan>
                 </div>
 
                 <div :class="classNameType.mainClass_list1">
@@ -90,18 +93,20 @@
                 <div :class="classNameType.mainClass">
                     一、项目概况
                 </div>
-                <div :class="classNameType.mainClass_list1">
-                    1、项目地点、里程、工程建设内容；
-                </div>
-                <div :class="classNameType.mainClass_list1">
-                    2、设计标准、路面结构层（结构物结构形式）布置；
-                </div>
-                <div :class="classNameType.mainClass_list1">
-                    3、计划开竣工日期、项目造价；
-                </div>
-                <div :class="classNameType.mainClass_list1">
-                    4、从业单位名称。
-                </div>
+
+                <Input v-model="temData.page_3.value_1" type="textarea" class="input-boder-none"  :rows="8" placeholder="请输入整改意见"/>
+                <!--<div :class="classNameType.mainClass_list1">-->
+                    <!--1、项目地点、里程、工程建设内容；-->
+                <!--</div>-->
+                <!--<div :class="classNameType.mainClass_list1">-->
+                    <!--2、设计标准、路面结构层（结构物结构形式）布置；-->
+                <!--</div>-->
+                <!--<div :class="classNameType.mainClass_list1">-->
+                    <!--3、计划开竣工日期、项目造价；-->
+                <!--</div>-->
+                <!--<div :class="classNameType.mainClass_list1">-->
+                    <!--4、从业单位名称。-->
+                <!--</div>-->
 
 
                 <div :class="classNameType.mainClass">
@@ -141,6 +146,10 @@
                     11.项目内容涉及的国家标准或行业标准和安徽省颁布现行法规、标准、规范等。
                 </div>
 
+            </div>
+
+            <!--第四页-->
+            <div class="page">
                 <div :class="classNameType.mainClass">
                     三、监督范围、期限、内容和方式
                 </div>
@@ -148,13 +157,10 @@
                     （一）监督范围
                 </div>
                 <div :class="classNameType.mainClass_list1">
-                    <vInputSpan v-model="temData.page_3.value_1" :inputWidth="400"></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_1" :scale="scale" :inputWidth="400"></vInputSpan>
                     <!--××路××段××级公路新建（改建）工程（除机电工程和绿化工程）。-->
                 </div>
-            </div>
 
-            <!--第四页-->
-            <div class="page">
                 <div :class="classNameType.mainClass">
                     （二）监督期限
                 </div>
@@ -192,17 +198,17 @@
                 <div :class="classNameType.mainClass_list1">
                     2.专项督查：根据项目建设特点，掌握工程薄弱环节、关键工序、重要部位质量安全状况，通过查验资料或抽样检测等方式，对程序、行为和实体等方面进行有针对性地督查。督查提前1天通知项目建设单位。
                 </div>
+
+            </div>
+
+            <!--第五页-->
+            <div class="page">
                 <div :class="classNameType.mainClass_list1">
                     3.备案督查:工地试验室和工程质量安全责任登记等进行备案管理。
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     4.随机抽查：掌握工程质量安全管理的动态，通过查看施工现场等方式，了解工艺及实体外观、内业资料和质量通病治理等情况。
                 </div>
-
-            </div>
-
-            <!--第五页-->
-            <div class="page">
                 <div :class="classNameType.mainClass">
                     四、监督主要工作
                 </div>
@@ -233,6 +239,12 @@
                 <div :class="classNameType.mainClass_list1">
                     9.对公路工程质量情况进行抽检，分析主要质量指标的变化情况，评估总体质量状况和存在的主要问题，提出加强质量管理的政策措施和指导性意见，定期发布质量动态信息。
                 </div>
+
+
+            </div>
+
+            <!--第六页-->
+            <div class="page">
                 <div :class="classNameType.mainClass_list1">
                     10.按规定开展对监理、试验检测单位信用评价工作。
                 </div>
@@ -245,11 +257,6 @@
                 <div :class="classNameType.mainClass">
                     五、监督计划
                 </div>
-
-            </div>
-
-            <!--第六页-->
-            <div class="page">
                 <div :class="classNameType.mainClass">
                     （一）工程准备阶段
                 </div>
@@ -289,17 +296,18 @@
                 <div :class="classNameType.mainClass_list1">
                     4．对工程使用的原材料、砼构件、半成品、成品和产品质量进行监督检查，对工程质量进行随机抽检。
                 </div>
+
+
+            </div>
+
+            <!--第七页-->
+            <div class="page">
                 <div :class="classNameType.mainClass_list1">
                     5．对施工过程中的原始记录、技术资料、试验检测资料、监理签认资料进行抽查。
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     6．对质量薄弱环节与涉及结构强度和安全性的重要指标进行督查。
                 </div>
-
-            </div>
-
-            <!--第七页-->
-            <div class="page">
                 <div :class="classNameType.mainClass_list1">
                     7．结合工艺标准化要求，对质量通病的治理等情况进行监督检查。
                 </div>
@@ -331,6 +339,12 @@
                 <div :class="classNameType.mainClass_list1">
                     2.建设、设计、施工、监理单位应认真贯彻落实上级交通主管部门有关项目管理的重要文件，按照要求开展相关的活动。
                 </div>
+
+
+            </div>
+
+            <!--第八页-->
+            <div class="page">
                 <div :class="classNameType.mainClass_list1">
                     3.建设单位应督促施工、监理单位对监督检查发现的问题及时整改、并按规定期限将处理结果书面报我局备案。
                 </div>
@@ -340,11 +354,6 @@
                 <div :class="classNameType.mainClass">
                     质量举报电话：0564-3952580、3952097
                 </div>
-
-            </div>
-
-            <!--第八页-->
-            <div class="page">
                 <div :class="classNameType.mainClass">
                     廉 政 举 报：0564-3952099
                 </div>
@@ -359,11 +368,12 @@
                 </div>
 
                 <div class="box-bottom">
+                    <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
                     <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
                     <div class="text-14 line-height-28 text-align-right">
-                        <vInputSpan v-model="temData.page_8.value_1" :inputWidth="60" :underLine="false"></vInputSpan>年
-                        <vInputSpan v-model="temData.page_8.value_2" :inputWidth="60" :underLine="false"></vInputSpan>月
-                        <vInputSpan v-model="temData.page_8.value_3" :inputWidth="60" :underLine="false"></vInputSpan>日
+                        <vInputSpan v-model="temData.page_8.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
+                        <vInputSpan v-model="temData.page_8.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
+                        <vInputSpan v-model="temData.page_8.value_3" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
                     </div>
                 </div>
 
@@ -401,6 +411,9 @@
                     page_3: {
                         value_1: '',
                     },
+                    page_4: {
+                        value_1: '',
+                    },
                     page_8: {
                         value_1: '',
                         value_2: '',
@@ -433,6 +446,7 @@
 
 <style lang="scss" src="./template.scss"></style>
 <style lang="scss" src="./template2x.scss"></style>
+<style lang="scss" src="./template2x_extra.scss"></style>
 <style lang="scss" scoped>
     .template_word_file_0-container {
         display: inline-block;

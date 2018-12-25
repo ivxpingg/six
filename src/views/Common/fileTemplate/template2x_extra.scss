@@ -1,0 +1,18 @@
+// 用于打印的时候样式设置
+$scale: 2;
+
+// textarea 隐藏控件右下角拖拉样式
+.six-template-content-#{$scale}x {
+  textarea {
+    resize:none
+  }
+}
+
+// textarea 边框透明化
+.six-template-content-#{$scale}x {
+  .input-boder-none {
+    textarea {
+      border-color: transparent;
+    }
+  }
+}

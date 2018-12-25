@@ -20,18 +20,24 @@
         computed:{
             inputSpanStyle() {
                 return {
-                    'padding-left': this.currentValue.trim() === ''? this.width + 'px': '0',
-                    'border-bottom': this.underLine ? '1px solid #000' : 'none'
+                    'padding-left': this.currentValue.trim() === ''? this.width * this.scale + 'px': '0',
+                    'border-bottom': this.underLine ? `${this.scale}px solid #000` : 'none',
+                    'border-left': this.marginLeft * this.scale + 'px solid transparent' ,
+                    'border-right': this.marginRight * this.scale + 'px solid transparent',
                 }
             },
             inputStyle() {
                 return {
-                    width: this.inputWidth + 'px',
-                    top: this.inputTop + 'px'
+                    width: this.inputWidth * this.scale + 'px',
+                    top: this.inputTop * this.scale + 'px'
                 }
             }
         },
         props: {
+            scale: {
+                type: Number,
+                default: 1
+            },
             value: {
                 type: [String, Number],
                 default: ''
@@ -61,6 +67,14 @@
             updateBlur: {
                 type: Boolean,
                 default: false
+            },
+            marginLeft: {
+                type: Number,
+                default: 0
+            },
+            marginRight: {
+                type: Number,
+                default: 0
             }
         },
         watch: {

@@ -26,6 +26,7 @@
             <div style="display: inline-block; border: 1px solid #dcdee2; margin: 10px 0;" ref="canvas">
 
                 <vTemplate_word_file_0 ref="accept_notice"
+                                       class="set-bg-color"
                                        v-if="documentHandle.fileRecordType === 'accept_notice'"
                                        :print2x="print2x"
                                        :eSignature="eSignature"
@@ -33,6 +34,7 @@
                                        @callback="modal_eSignature"></vTemplate_word_file_0>
 
                 <vTemplate_word_file_1 ref="spot_check"
+                                       class="set-bg-color"
                                        v-if="documentHandle.fileRecordType === 'spot_check'"
                                        :print2x="print2x"
                                        :eSignature="eSignature"
@@ -40,6 +42,7 @@
                                        @callback="modal_eSignature"></vTemplate_word_file_1>
 
                 <vTemplate_word_file_2 ref="com_check_notice"
+                                       class="set-bg-color"
                                        v-if="documentHandle.fileRecordType === 'com_check_notice'"
                                        :print2x="print2x"
                                        :eSignature="eSignature"
@@ -47,11 +50,13 @@
                                        @callback="modal_eSignature"></vTemplate_word_file_2>
 
                 <vTemplate_word_file_3 ref="apply_file_check"
+                                       class="set-bg-color"
                                        v-if="documentHandle.fileRecordType === 'apply_file_check'"
                                        :print2x="print2x"
                                        :eSignature="eSignature"
                                        :data="temData"
                                        @callback="modal_eSignature"></vTemplate_word_file_3>
+
             </div>
         </div>
 
@@ -93,6 +98,7 @@
             }
         },
         computed: {
+
         },
         data() {
             return {
@@ -107,7 +113,8 @@
                 // 详情信息
                 documentHandle: {
                     fileRecordType: '',
-                    handleStatus: ''
+                    handleStatus: '',
+                    fileName: ''
                 },
                 // 文档信息信息
                 documentAudit: {
@@ -139,6 +146,7 @@
 
                 // 按钮加载状态
                 btnLoading_auditPass: false, // 通过审核
+
             };
         },
         watch: {
@@ -182,7 +190,7 @@
 
             },
             exportPDF(isUpload) {
-                let scale = 2;
+                let scale = 1;
 
                 // let page_a4 = [595.28, 841.89]; // 宽 / 高
 
@@ -208,7 +216,9 @@
                             let moveHight = [841, 841, 841];
                             // let idx = 0;
 
-                            let pageData = canvas.toDataURL('image/png', 1.0);
+                            let pageData = canvas.toDataURL('image/JPEG', 1);
+                            // this.imgSrc = pageData;
+
                             let pdf = new jspdf("", "pt", 'a4');
 
                             let contentWidth = canvas.width;
@@ -232,7 +242,7 @@
                                 pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
                             } else {
                                 while(leftHeight > 0) {
-                                    pdf.addImage(canvas, 'png', 0, position, imgWidth, imgHeight, 'mybgimg', 'FAST' );
+                                    pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight, 'mybgimg' );
                                     leftHeight -= pageHeight;
                                     position -= moveHight[0];
                                     //避免添加空白页
@@ -247,7 +257,7 @@
                                 resolve(pdf.output('datauristring').substr(28));
                             }
                             else {
-                                pdf.save('content.pdf');
+                                pdf.save(`${this.documentHandle.fileName}.pdf`);
                                 resolve();
                             }
                         });
@@ -396,5 +406,8 @@
 
 <style lang="scss" scoped>
     .documentHandler-container {
+        .set-bg-color {
+            background-color: #FFF;
+        }
     }
 </style>

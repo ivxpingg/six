@@ -24,30 +24,36 @@
 
             <!--第一页-->
             <div class="page">
-                <div class="text-14 line-height-28 text-align-right m-b-10" >交工监函[
-                    <vInputSpan v-model="temData.page_1.value_1" :inputWidth="80" :underLine="false">] </vInputSpan>
+                <div class="letter-header">
+                    <div class="text-inner">
+                        六安市交通建设工程质量监督局
+                    </div>
+                </div>
+                <div class="text-14 line-height-28 text-align-right m-t-10 m-b-28" >交工监函[
+                    <vInputSpan v-model="temData.page_1.value_1" :scale="scale" :inputWidth="80" :underLine="false">] </vInputSpan>
                     号
                 </div>
                 <h1 class="text-align-center ">
                     市交通质监局关于
-                    <vInputSpan v-model="temData.page_1.value_2" :width="180" :inputWidth="180"></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_2" :scale="scale" :width="180" :inputWidth="180"></vInputSpan>
                     工程综合督查情况的通报
                 </h1>
 
+
                 <div :class="classNameType.mainClass">
-                    <vInputSpan v-model="temData.page_1.value_3" :width="100"></vInputSpan>：
+                    <vInputSpan v-model="temData.page_1.value_3" :scale="scale" :width="100"></vInputSpan>：
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     根据六安市交通质监局
-                    <vInputSpan v-model="temData.page_1.value_4" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_4" :scale="scale" ></vInputSpan>
                     年度质量监督工作计划，
-                    <vInputSpan v-model="temData.page_1.value_5" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_5" :scale="scale" ></vInputSpan>
                     年
-                    <vInputSpan v-model="temData.page_1.value_6" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_6" :scale="scale" ></vInputSpan>
                     月
-                    <vInputSpan v-model="temData.page_1.value_7" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_7" :scale="scale" ></vInputSpan>
                     日，市交通质监局对
-                    <vInputSpan v-model="temData.page_1.value_8" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_8" :scale="scale" ></vInputSpan>
                     工程进行了综合督查。督查组通过听取汇报、查阅资料、查看现场、检查实体等方式对该项目各参建单位的质量安全管理行为、实体工程质量及质量保证资料等进行了检查。现将综合督查情况通报如下:
                 </div>
 
@@ -66,7 +72,7 @@
                     （二）检测结果
                 </div>
                 <div class="text-14 text-align-center line-height-28 letter-spacing-2">
-                    <vInputSpan v-model="temData.page_2.value_1" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale" ></vInputSpan>
                     工程实体检测统计表
                 </div>
 
@@ -93,11 +99,11 @@
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     详见我局
-                    <vInputSpan v-model="temData.page_4.value_1" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_1" :scale="scale" ></vInputSpan>
                     月
-                    <vInputSpan v-model="temData.page_4.value_2" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_2" :scale="scale" ></vInputSpan>
                     日现场下发的《安全生产
-                    <vInputSpan v-model="temData.page_4.value_3" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_3" :scale="scale" ></vInputSpan>
                     》。
                 </div>
 
@@ -106,29 +112,32 @@
                     <Input v-model="temData.page_4.value_4" type="textarea" :rows="8" placeholder="请输入整改意见"/>
                 </div>
                 <div :class="classNameType.mainClass_list1">
-                    针对本次督查发现的问题，业主单位应督促相关单位及时逐条整改落实，并将整改落实情况在10个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
+                    针对本次督查发现的问题，业主单位应督促相关单位及时逐条整改落实，并将整改落实情况在
+                    <vInputSpan v-model="temData.page_4.value_5" :scale="scale" ></vInputSpan>
+                    个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
                 </div>
 
                 <div class="box-bottom">
+                    <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
                     <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
                     <div class="text-16 line-height-28 text-align-right"  style="border-bottom: 1px solid #333;">
-                        <vInputSpan v-model="temData.page_4.value_5" :inputWidth="60" :underLine="false"></vInputSpan>年
-                        <vInputSpan v-model="temData.page_4.value_6" :inputWidth="60" :underLine="false"></vInputSpan>月
-                        <vInputSpan v-model="temData.page_4.value_7" :inputWidth="60" :underLine="false"></vInputSpan>日
+                        <vInputSpan v-model="temData.page_4.value_6" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
+                        <vInputSpan v-model="temData.page_4.value_7" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
+                        <vInputSpan v-model="temData.page_4.value_8" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
                     </div>
 
                     <div class="text-14 line-height-28 letter-spacing-2"  style="border-bottom: 1px solid #333;">抄报：
-                        <Input  v-model="temData.page_4.value_8" class="input-text-under-none width-360 " />
+                        <Input  v-model="temData.page_4.value_9" class="input-text-under-none width-360 " />
                     </div>
                     <div class="text-14 line-height-28 letter-spacing-2 "  style="border-bottom: 1px solid #333;">抄送：
-                        <Input  v-model="temData.page_4.value_9" class="input-text-under-none width-360"  />
+                        <Input  v-model="temData.page_4.value_10" class="input-text-under-none width-360"  />
                     </div>
                     <div class="text-14 line-height-28 letter-spacing-2 m-t-10" style="border-bottom: 1px solid #333;">
                         六安市交通建设工程质量监督局
                         <span>
-                            <vInputSpan v-model="temData.page_4.value_10" :inputWidth="60" :underLine="false"></vInputSpan>年
-                            <vInputSpan v-model="temData.page_4.value_11" :inputWidth="50" :underLine="false"></vInputSpan>月
-                            <vInputSpan v-model="temData.page_4.value_12" :inputWidth="50" :underLine="false"></vInputSpan>日
+                            <vInputSpan v-model="temData.page_4.value_11" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
+                            <vInputSpan v-model="temData.page_4.value_12" :scale="scale" :inputWidth="50" :underLine="false"></vInputSpan>月
+                            <vInputSpan v-model="temData.page_4.value_13" :scale="scale" :inputWidth="50" :underLine="false"></vInputSpan>日
                         </span>
                         印发
                     </div>
@@ -148,9 +157,6 @@
         name: 'template_word_file_2',  // 综合督查通报
         mixins: [classMixin, template_word_fileMixin],
         computed: {
-            scale() {
-                return this.print2x ? 2 : 1;
-            },
             tableWidth() {
                 return 479 * this.scale
             },
@@ -208,6 +214,7 @@
                         value_10: '',
                         value_11: '',
                         value_12: '',
+                        value_13: ''
                     },
                     tableData: [
                         { name1: '', name2: '', name3: '',val_1: '', val_2: '', val_3: '', },
@@ -276,6 +283,7 @@
 </script>
 <style lang="scss" src="./template.scss"></style>
 <style lang="scss" src="./template2x.scss"></style>
+<style lang="scss" src="./template2x_extra.scss"></style>
 <style lang="scss">
     .template_word_file_2-container {
         display: inline-block;

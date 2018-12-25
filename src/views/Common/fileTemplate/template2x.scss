@@ -86,7 +86,7 @@ $color: #000;
   .page-inner-box {
     position: relative;
     padding: 10px * $scale;
-    box-shadow: 0 0 1px #dcdee2;
+    box-shadow: 0 0 1px * $scale #dcdee2;
   }
 
 
@@ -113,9 +113,9 @@ $color: #000;
   .input-text-under-line {
     text-indent: 0;
     .ivu-input {
-      padding: 0 7px;
-      border-width: 0;
-      border-bottom: 1px solid #333;
+      padding: 0 7px * $scale;
+      border-width: 0 0 1px 0;
+      border-bottom: 1px * $scale solid #333;
       border-radius: 0;
       box-shadow: none;
       color: $color;
@@ -124,7 +124,7 @@ $color: #000;
   .input-text-under-none {
     text-indent: 0;
     .ivu-input {
-      padding: 0 7px;
+      padding: 0 7px * $scale;
       border-width: 0;
       border-radius: 0;
       box-shadow: none;
@@ -134,7 +134,7 @@ $color: #000;
   .input-textarea-under-none {
     text-indent: 0;
     .ivu-input {
-      padding: 0 7px;
+      padding: 0 7px * $scale;
       border-width: 0;
       border-radius: 0;
       color: $color;
@@ -163,6 +163,22 @@ $color: #000;
     text-align: center;
   }
 
+}
+
+// **********  公文函头设置 **************
+.six-template-content-#{$scale}x {
+  .letter-header {
+    text-align: center;
+    padding-bottom: 1px * $scale;
+    border-bottom: 1px * $scale solid rgb(255,51,0);
+    .text-inner {
+      font-size: 32px * $scale;
+      font-weight: 700;
+      color: rgb(255,51,0);
+      border-bottom: 2px * $scale solid rgb(255,51,0);
+    }
+
+  }
 }
 
 // ****************************************
@@ -206,6 +222,15 @@ $color: #000;
       textarea.ivu-input {
         line-height: ($i * $scale) + px;
       }
+    }
+  }
+}
+
+// 字体间距
+.six-template-content-#{$scale}x {
+  @for $i from 1 through 50 {
+    .letter-spacing-#{$i} {
+      letter-spacing: ($i * $scale) + px;
     }
   }
 }
@@ -268,6 +293,14 @@ $color: #000;
 // 表格
 .six-template-content-#{$scale}x {
   .custom-table {
+    border-width: 1px * $scale;
+
+    .ivu-table-border td, .ivu-table-border th {
+      border-right-width: 1px * $scale;
+    }
+    .ivu-table td, .ivu-table th {
+      border-bottom-width: 1px * $scale;
+    }
 
     .ivu-table-cell{
       overflow: initial;
@@ -280,5 +313,12 @@ $color: #000;
     .ivu-table-small td{
       height: 40px * $scale;
     }
+  }
+}
+
+// 表单格式
+.six-template-content-#{$scale}x {
+  .ivu-input {
+    border-width: 1px * $scale;
   }
 }

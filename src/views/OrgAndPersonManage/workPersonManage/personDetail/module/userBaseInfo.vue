@@ -205,7 +205,6 @@
                 handler(val) {
                     if (val) {
                         Object.assign(this.formData, {
-                            userId: '',
                             headPortrait: '',  // 头像，存放fileId
                             headPortraitUrl: '',
                             name: '',
@@ -275,7 +274,28 @@
                     if (res.code === 'SUCCESS') {
                         Object.assign(this.formData, res.data);
 
-                        Object.assign(this.formData.employee, res.data.employee, {
+                        Object.assign(this.formData.employee, {
+                            headPortrait: '',  // 头像，存放fileId
+                            headPortraitUrl: '',
+                            name: '',
+                            sex: '',
+                            age: null,
+                            nation: '',
+                            nationStr: '',
+                            titleLevel: '',
+                            titleName: '',
+                            education: '',
+                            graduateSchool: '',
+                            profession: '',
+                            phone: '',
+                            email: '',
+                            unitName: '',
+                            unitType: '',
+                            unitTypeLabel: '',
+                            job: '',
+                            fileIds: '',
+                            idNumber: '',
+                        }, res.data.employee, {
                             graduateDate: res.data.employee.graduateDate ? MOMENT(res.data.employee.graduateDate).format('YYYY-MM-DD') : ''
                         });
                     }

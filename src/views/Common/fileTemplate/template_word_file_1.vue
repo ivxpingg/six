@@ -23,8 +23,11 @@
 
             <!--第一页-->
             <div class="page">
-                <div class="text-14 text-align-right m-b-10" >编号：<Input v-model="temData.page_1.value_1" class="input-text-under-line"  style="width: 120px;" /></div>
                 <h1>六安市交通工程质量安全监督抽查意见通知书</h1>
+                <div class="text-14 text-align-right line-height-28 m-t-10" >
+                    编号：
+                    <vInputSpan v-model="temData.page_1.value_1" :scale="scale"></vInputSpan>
+                </div>
                 <div class="box-bottom">
                     <div class="text-16 letter-spacing-2 m-b-30">工程名称：
                         <Input  v-model="temData.page_1.value_5" class="input-text-under-line width-320" />
@@ -40,9 +43,9 @@
                     </div>
 
                     <div class="text-14 line-height-28 text-align-center">
-                        <vInputSpan v-model="temData.page_1.value_2" :underLine="false"></vInputSpan>年
-                        <vInputSpan v-model="temData.page_1.value_3" :underLine="false"></vInputSpan>月
-                        <vInputSpan v-model="temData.page_1.value_4" :underLine="false"></vInputSpan>日
+                        <vInputSpan v-model="temData.page_1.value_2" :scale="scale" :underLine="false"></vInputSpan>年
+                        <vInputSpan v-model="temData.page_1.value_3" :scale="scale" :underLine="false"></vInputSpan>月
+                        <vInputSpan v-model="temData.page_1.value_4" :scale="scale" :underLine="false"></vInputSpan>日
                     </div>
                 </div>
             </div>
@@ -53,23 +56,23 @@
                     <div class="text-22 letter-spacing-2 p-t-30">存在问题及整改意见</div>
 
                     <div :class="classNameType.mainClass">
-                        <vInputSpan v-model="temData.page_2.value_1" :width="100"></vInputSpan>：
+                        <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :width="100"></vInputSpan>：
                     </div>
                     <div :class="classNameType.mainClass_list1">
-                        <vInputSpan v-model="temData.page_2.value_2" :width="400" :inputWidth="400"></vInputSpan>
-                        ,存在问题及整改意见如下:
+                        <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :width="400" :inputWidth="400"></vInputSpan>
+                        ,检查情况如下:
                     </div>
                     <div :class="classNameType.mainClass_list1">
                         一、存在问题
                     </div>
                     <div :class="classNameType.mainClass">
-                        <Input v-model="temData.page_2.value_3" type="textarea" :rows="8" placeholder="请输入存在的问题"/>
+                        <Input v-model="temData.page_2.value_3" class="input-boder-none" type="textarea" :rows="8" placeholder="请输入存在的问题"/>
                     </div>
                     <div :class="classNameType.mainClass_list1">
                         二、整改意见
                     </div>
                     <div :class="classNameType.mainClass">
-                        <Input v-model="temData.page_2.value_4" type="textarea"  :rows="8" placeholder="请输入整改意见"/>
+                        <Input v-model="temData.page_2.value_4" class="input-boder-none" type="textarea"  :rows="8" placeholder="请输入整改意见"/>
                     </div>
 
                 </div>
@@ -79,14 +82,17 @@
             <div class="page">
                 <div class="page-inner-box" style="height: 70%;">
                     <div :class="classNameType.mainClass_list1">
-                        针对本次督查发现的问题，各相关责任单位应逐条整改落实到位，并将整改落实情况在10个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
+                        针对本次督查发现的问题，各相关责任单位应逐条整改落实到位，并将整改落实情况在
+                        <vInputSpan v-model="temData.page_3.value_6" :scale="scale" ></vInputSpan>
+                        个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
                     </div>
                     <div class="box-bottom">
+                        <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
                         <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
                         <div class="text-14 line-height-28 text-align-right">
-                            <vInputSpan v-model="temData.page_3.value_1" :inputWidth="60" :underLine="false"></vInputSpan>年
-                            <vInputSpan v-model="temData.page_3.value_2" :inputWidth="60" :underLine="false"></vInputSpan>月
-                            <vInputSpan v-model="temData.page_3.value_3" :inputWidth="60" :underLine="false"></vInputSpan>日
+                            <vInputSpan v-model="temData.page_3.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
+                            <vInputSpan v-model="temData.page_3.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
+                            <vInputSpan v-model="temData.page_3.value_3" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
                         </div>
                     </div>
                 </div>
@@ -96,6 +102,46 @@
                 </div>
                 <div class="text-16 letter-spacing-2 m-b-30">抄送：
                     <Input  v-model="temData.page_3.value_5" class="input-text-under-line width-340"  />
+                </div>
+
+            </div>
+
+            <!--第四页-->
+            <div class="page">
+                <h3 class="text-20">交通建设工程质量监督抽查意见反馈单</h3>
+                <div class="text-16 letter-spacing-2 m-t-30">编 <span class="p-l-30"></span> 号：
+                    <Input  v-model="temData.page_4.value_1"  class="input-text-under-none letter-spacing-2 width-320" />
+                </div>
+                <div class="text-16 letter-spacing-2 m-t-30">工程名称：
+                    <Input  v-model="temData.page_4.value_2" class="input-text-under-none width-320" />
+                </div>
+                <div class="text-14 line-height-28 m-t-30 border-1">
+                    <Input v-model="temData.page_4.value_3" class="input-boder-none" type="textarea" :rows="16"/>
+
+                    <div class="text-align-left m-t-10 m-l-5 m-r-5" style="display: flex">
+                        <div>业主负责人：（盖章）</div>
+                        <div class="text-align-right" style="flex: 1">
+                            <vInputSpan v-model="temData.page_3.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
+                            <vInputSpan v-model="temData.page_3.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
+                            <vInputSpan v-model="temData.page_3.value_3" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
+                        </div>
+                    </div>
+                    <div class="text-align-left m-t-10 m-l-5 m-r-5" style="display: flex">
+                        <div>施工负责人：（盖章）</div>
+                        <div class="text-align-right" style="flex: 1">
+                            <vInputSpan v-model="temData.page_3.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
+                            <vInputSpan v-model="temData.page_3.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
+                            <vInputSpan v-model="temData.page_3.value_3" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
+                        </div>
+                    </div>
+                    <div class="text-align-left m-t-10 m-l-5 m-r-5" style="display: flex">
+                        <div>监理负责人：（盖章）</div>
+                        <div class="text-align-right" style="flex: 1">
+                            <vInputSpan v-model="temData.page_3.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
+                            <vInputSpan v-model="temData.page_3.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
+                            <vInputSpan v-model="temData.page_3.value_3" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -135,7 +181,16 @@
                         value_2: '',
                         value_3: '',
                         value_4: '',
-                        value_5: ''
+                        value_5: '',
+                        value_6: '',
+                    },
+                    page_4: {
+                        value_1: '',
+                        value_2: '',
+                        value_3: '',
+                        value_4: '',
+                        value_5: '',
+                        value_6: '',
                     }
                 }
             };
@@ -163,6 +218,7 @@
 
 <style lang="scss" src="./template.scss"></style>
 <style lang="scss" src="./template2x.scss"></style>
+<style lang="scss" src="./template2x_extra.scss"></style>
 <style lang="scss" scoped>
     .template_word_file_1-container {
         display: inline-block;

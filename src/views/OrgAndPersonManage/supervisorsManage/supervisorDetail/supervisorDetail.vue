@@ -332,7 +332,29 @@
                     }
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
-                        Object.assign(this.formData, res.data, {
+                        Object.assign(this.formData, {
+                            name: '',
+                            loginName:'',
+                            headPortrait: '',  // 头像，存放fileId
+                            headPortraitUrl: '',
+                            department: '',
+                            job: '',
+                            titleLevel: '',
+                            phone: '',         // 手机
+                            sex: '',
+                            sexStr: '',
+                            nation: '',
+                            nationLabel: '',
+                            age: 0,
+                            idNumber: '',
+                            education: '',
+                            graduateSchool: '',
+                            profession: '',
+                            graduateDate: '',
+                            titleName: '',
+                            lawTypeLabel: '',
+                            belongState: '',
+                        }, res.data, {
                             graduateDate: res.data.graduateDate ?  MOMENT(res.data.graduateDate).format('YYYY-MM-DD') : '',
                         });
 
