@@ -31,8 +31,8 @@
                :title="userType === 'employee' ? '从业人员详情' : '监督人员详情'"
                :width="1200"
                footer-hide>
-            <vPersonDetail v-show="userType === 'employee'" :userId="userId" :editable="false"></vPersonDetail>
-            <vSupervisorDetail v-show="userType === 'supervisor'" :userId="userId" :editable="false"></vSupervisorDetail>
+            <vPersonDetail v-if="userType === 'employee'" :userId="userId" :editable="false"></vPersonDetail>
+            <vSupervisorDetail v-if="userType === 'supervisor'" :userId="userId" :editable="false"></vSupervisorDetail>
         </Modal>
 
         <vModalEmployeeSelect
@@ -115,7 +115,8 @@
                                     props: {
                                         type: 'info',
                                         size: 'small',
-                                        icon: 'ios-eye-outline'
+                                        icon: 'ios-eye-outline',
+                                        disabled: params.row.userType === 'super_admin'
                                     },
                                     on: {
                                         click: () => {
@@ -195,6 +196,8 @@
                 this.$refs.modalEmployeeSelect.modalValue = true;
             },
             modal_addSelectedPerson_callback(selectValue, selectItems) {
+                if (selectItems.length === 0) return;
+
                 let datas = [];
                 selectItems.forEach(val => {
                     datas.push({
