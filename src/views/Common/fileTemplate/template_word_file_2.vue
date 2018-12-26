@@ -31,6 +31,7 @@
                 </div>
                 <div class="text-14 line-height-28 text-align-right m-t-10 m-b-28" >交工监函[
                     <vInputSpan v-model="temData.page_1.value_1" :scale="scale" :inputWidth="80" :underLine="false">] </vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_10" :scale="scale" :inputWidth="80" :underLine="false"></vInputSpan>
                     号
                 </div>
                 <h1 class="text-align-center ">
@@ -190,7 +191,9 @@
                         value_5: '',
                         value_6: '',
                         value_7: '',
-                        value_8: ''
+                        value_8: '',
+                        value_9: '',
+                        value_10: ''
                     },
                     page_2: {
                         value_1: '',

@@ -1,6 +1,6 @@
 <template>
     <div class="documentHandler-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox class="ivx-filter-box" :border="false">
             <Button type="primary"
                     v-if="documentHandle.handleStatus === 'submitted'"
                     icon="md-add" @click="submitAudit">提交审核</Button>
@@ -21,6 +21,8 @@
             <Button type="primary"
                     icon="md-add" @click="onPrint">导出</Button>
         </vIvxFilterBox>
+
+        <vPrcessSteps class="process-steps" :processStepList="processStepList" :processData="documentAuditList"></vPrcessSteps>
 
         <div style="text-align: center;" @click="modal_eSignature">
             <div style="display: inline-block; border: 1px solid #dcdee2; margin: 10px 0;" ref="canvas">
@@ -77,6 +79,7 @@
     import vModalUserSignatureSelect from '../../Common/userSignatureSelect/modalUserSignatureSelect';
     import dataMixin from '../mixin/dataMixin';
     import vModalAuditProcessSelect from '../../Common/auditProcessSelect/modalAuditProcessSelect';
+    import vPrcessSteps from '../processSteps/processSteps';
     import html2canvas from 'html2canvas';
     import jspdf from 'jspdf/dist/jspdf.debug';
     export default {
@@ -89,7 +92,8 @@
             vTemplate_word_file_2,
             vTemplate_word_file_3,
             vModalUserSignatureSelect,
-            vModalAuditProcessSelect
+            vModalAuditProcessSelect,
+            vPrcessSteps
         },
         props: {
             documentHandleId: {
@@ -146,6 +150,11 @@
 
                 // 按钮加载状态
                 btnLoading_auditPass: false, // 通过审核
+
+                // 流程步骤
+                processStepList: [],
+                // 步骤审核内容
+                documentAuditList: {},
 
                 // 是否开启测试
                 openTest: false,
@@ -291,6 +300,10 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
+
+                        this.processStepList = res.data.processStepList || [];
+                        this.documentAuditList = res.data.documentAuditList || {};
+
                         Object.assign(this.documentHandle, res.data.documentHandle);
                         if (res.data.documentAudit) {
                             Object.assign(this.documentAudit, res.data.documentAudit);
@@ -416,6 +429,17 @@
 
 <style lang="scss" scoped>
     .documentHandler-container {
+        .ivx-filter-box {
+            position: fixed;
+            top: 240px;
+            z-index: 100;
+        }
+
+        .process-steps {
+            margin: 0 50px 0 180px;
+            margin-bottom: 10px;
+        }
+
         .set-bg-color {
             background-color: #FFF;
         }

@@ -64,6 +64,10 @@
                     请你单位尽快督促各参建单位在
                     <vInputSpan v-model="temData.page_2.value_8" :scale="scale" ></vInputSpan>
                     个工作日内补充完善下列资料，以便及时办理监督手续。
+
+                </div>
+                <div :class="classNameType.mainClass" class="m-t-10">
+                    <Input v-model="temData.page_2.value_9" type="textarea" :rows="9" placeholder="请输入"/>
                 </div>
 
                 <div class="box-bottom">
@@ -112,7 +116,8 @@
                         value_5: '',
                         value_6: '',
                         value_7: '',
-                        value_8: ''
+                        value_8: '',
+                        value_9: ''
                     },
                     stamp: []
                 },

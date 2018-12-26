@@ -233,8 +233,7 @@
                                 graduateDate: '',
                                 idNumber: '',
                                 recordStatus: '',
-                                userId: '',
-                                userNo: ''
+                                userId: ''
                             }
                         });
                         this.getUserInfo();
@@ -277,26 +276,12 @@
                         Object.assign(this.formData, res.data);
 
                         Object.assign(this.formData.employee, {
-                            headPortrait: '',  // 头像，存放fileId
-                            headPortraitUrl: '',
-                            name: '',
-                            sex: '',
-                            age: null,
-                            nation: '',
-                            nationStr: '',
-                            titleLevel: '',
-                            titleName: '',
-                            education: '',
-                            graduateSchool: '',
-                            profession: '',
-                            phone: '',
-                            email: '',
-                            unitName: '',
-                            unitType: '',
-                            unitTypeLabel: '',
-                            job: '',
-                            fileIds: '',
+                            certificate: '',
+                            certificateNo: '',
+                            graduateDate: '',
                             idNumber: '',
+                            recordStatus: '',
+                            userId: ''
                         }, res.data.employee, {
                             graduateDate: res.data.employee.graduateDate ? MOMENT(res.data.employee.graduateDate).format('YYYY-MM-DD') : ''
                         });
