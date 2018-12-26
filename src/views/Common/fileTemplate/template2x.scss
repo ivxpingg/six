@@ -112,10 +112,12 @@ $color: #000;
   // input输入框的样式
   .input-text-under-line {
     text-indent: 0;
+    border-bottom: 1px * $scale solid #333;
     .ivu-input {
       padding: 0 7px * $scale;
-      border-width: 0 0 1px 0;
-      border-bottom: 1px * $scale solid #333;
+      //border-width: 0 0 1px 0;
+      //border-bottom: 1px * $scale solid #333;
+      border: 0 solid #FFF;
       border-radius: 0;
       box-shadow: none;
       color: $color;

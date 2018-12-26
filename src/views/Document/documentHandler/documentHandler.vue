@@ -24,7 +24,7 @@
 
         <div style="text-align: center;" @click="modal_eSignature">
             <div style="display: inline-block; border: 1px solid #dcdee2; margin: 10px 0;" ref="canvas">
-
+                <img v-if="openTest" :src="imgSrc" alt="">
                 <vTemplate_word_file_0 ref="accept_notice"
                                        class="set-bg-color"
                                        v-if="documentHandle.fileRecordType === 'accept_notice'"
@@ -147,6 +147,10 @@
                 // 按钮加载状态
                 btnLoading_auditPass: false, // 通过审核
 
+                // 是否开启测试
+                openTest: false,
+                imgSrc: ''
+
             };
         },
         watch: {
@@ -217,7 +221,13 @@
                             // let idx = 0;
 
                             let pageData = canvas.toDataURL('image/JPEG', 1);
-                            // this.imgSrc = pageData;
+                            if (this.openTest) {
+                                this.imgSrc = pageData;
+                                this.print2x = false;
+                                this.$Spin.hide();
+                                return;
+                            }
+
 
                             let pdf = new jspdf("", "pt", 'a4');
 

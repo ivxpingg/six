@@ -127,10 +127,10 @@
                     </div>
 
                     <div class="text-14 line-height-28 letter-spacing-2"  style="border-bottom: 1px solid #333;">抄报：
-                        <Input  v-model="temData.page_4.value_9" class="input-text-under-none width-360 " />
+                        <vInputSpan v-model="temData.page_4.value_9" :scale="scale" display="inline-block" :underLine="false" :width="360" :inputWidth="360"></vInputSpan>
                     </div>
                     <div class="text-14 line-height-28 letter-spacing-2 "  style="border-bottom: 1px solid #333;">抄送：
-                        <Input  v-model="temData.page_4.value_10" class="input-text-under-none width-360"  />
+                        <vInputSpan v-model="temData.page_4.value_10" :scale="scale" display="inline-block" :underLine="false" :width="360" :inputWidth="360"></vInputSpan>
                     </div>
                     <div class="text-14 line-height-28 letter-spacing-2 m-t-10" style="border-bottom: 1px solid #333;">
                         六安市交通建设工程质量监督局
@@ -251,7 +251,8 @@
                     props: {
                         value: params.row[params.column.key],
                         underLine: false,
-                        updateBlur: true
+                        updateBlur: true,
+                        scale: this.scale
                     },
                     on: {
                         input: (value) => {

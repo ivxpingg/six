@@ -97,7 +97,13 @@
                     { title: '姓名', width: 120, align: 'center', key: 'name' },
                     // { title: 'UID', width: 80, align: 'center', key: 'userNo' },
                     { title: '性别', width: 70, align: 'center', key: 'sexLabel' },
-                    { title: '年龄', width: 70, align: 'center', key: 'age' },
+                    // { title: '年龄', width: 70, align: 'center', key: 'age',
+                    //     render: (h, params) => {
+                    //         let age = this.$moment().format('YYYY') - this.$moment(params.row.birthday).format('YYYY');
+                    //         age = age > 0 ? age : 0;
+                    //         return h('span', age);
+                    //     }
+                    // },
                     { title: '民族', width: 100, align: 'center', key: 'nation' },
                     { title: '职称级别', width: 120, align: 'center', key: 'titleLevelLabel' },
                     { title: '技术职称', width: 120, align: 'center', key: 'titleNameLabel' },

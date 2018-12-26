@@ -81,7 +81,13 @@
                     { title: '性别', width: 80, align: 'center', key: 'sexLabel' },
                     { title: '民族', width: 120, align: 'center', key: 'nation' },
                     { title: '祖籍', width: 120, align: 'center', key: 'nativePlace' },
-                    { title: '年龄', width: 80, align: 'center', key: 'age' },
+                    { title: '年龄', width: 80, align: 'center', key: 'age',
+                        render: (h, params) => {
+                        let age = this.$moment().format('YYYY') - this.$moment(params.row.birthday).format('YYYY');
+                            age = age > 0 ? age : '';
+                            return h('span', age);
+                        }
+                    },
                     { title: '出生年月', width: 120, align: 'center', key: 'birthday' },
                     { title: '工作年月', width: 120, align: 'center', key: 'workDate' },
                     { title: '入党年月', width: 120, align: 'center', key: 'joinPartyDate' },

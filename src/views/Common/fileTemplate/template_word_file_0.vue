@@ -29,8 +29,12 @@
                     <vInputSpan v-model="temData.page_1.value_1" :scale="scale"></vInputSpan>
                 </div>
                 <div class="box-bottom">
-                    <div class="text-16 letter-spacing-2 m-b-30">工程名称：<Input  v-model="temData.page_1.value_2" class="input-text-under-line width-320" /></div>
-                    <div class="text-16 letter-spacing-2 m-b-30">监督单位：<Input  v-model="temData.page_1.value_3" class="input-text-under-line width-320"  /></div>
+                    <div class="text-16 letter-spacing-2 m-b-30">工程名称：
+                        <vInputSpan v-model="temData.page_1.value_2" display="inline-block" :scale="scale" :width="320" :inputWidth="320"></vInputSpan>
+                    </div>
+                    <div class="text-16 letter-spacing-2 m-b-30">监督单位：
+                        <vInputSpan v-model="temData.page_1.value_3" display="inline-block" :scale="scale" :width="320" :inputWidth="320"></vInputSpan>
+                    </div>
 
                     <div class="text-14 line-height-28 text-align-center">
                         <vInputSpan v-model="temData.page_1.value_4" :scale="scale" :underLine="false"></vInputSpan>年

@@ -10,19 +10,21 @@
                 <Input v-model="formData.name"/>
             </FormItem>
             <FormItem label="头像：" style="margin-bottom: 0px;">
-                <Upload ref="upload"
-                        :action="uploadAtion"
-                        :showUploadList="uploadParams.showUploadList"
-                        :multiple="uploadParams.multiple"
-                        :accept="uploadParams.accept"
-                        :maxSize="uploadParams.maxSize"
-                        :before-upload="fileBeforeUpload"
-                        :on-exceeded-size="exceededSize"
-                        :on-error="fileUploadError"
-                        :on-success="fileUploadSuccess">
-                    <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
-                    <img :src="userImgUrl" style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
-                </Upload>
+                <div style="width: 250px;">
+                    <Upload ref="upload"
+                            :action="uploadAtion"
+                            :showUploadList="uploadParams.showUploadList"
+                            :multiple="uploadParams.multiple"
+                            :accept="uploadParams.accept"
+                            :maxSize="uploadParams.maxSize"
+                            :before-upload="fileBeforeUpload"
+                            :on-exceeded-size="exceededSize"
+                            :on-error="fileUploadError"
+                            :on-success="fileUploadSuccess">
+                        <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
+                        <img :src="userImgUrl" style="margin-left: 20px; width: 70px; height: 70px; cursor: pointer" />
+                    </Upload>
+                </div>
             </FormItem>
             <FormItem label="登录名:" prop="loginName">
                 <Input v-model="formData.loginName" readonly/>
@@ -41,9 +43,9 @@
             <FormItem label="现任职务:" prop="job">
                 <Input v-model="formData.job"/>
             </FormItem>
-            <FormItem label="年龄:" prop="age">
-                <Input v-model="formData.age" number/>
-            </FormItem>
+            <!--<FormItem label="年龄:" prop="age">-->
+                <!--<Input v-model="formData.age" number/>-->
+            <!--</FormItem>-->
             <FormItem label="民族:" prop="nation">
                 <Input v-model="formData.nation" placeholder="请输入民族，如：汉族"/>
             </FormItem>
@@ -318,12 +320,12 @@
                             url: '/user/update',
                             data: JSON.stringify(this.formData)
                         }).then(res => {
+                            this.saveBtnLoading = false;
                             if(res.code === 'SUCCESS') {
                                 this.$Message.success({
                                     content: '更新成功！'
                                 });
                                 this.$emit('callback');
-                                this.saveBtnLoading = false;
                             }
                         }).catch(e => {
                             this.saveBtnLoading = false;

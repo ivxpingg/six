@@ -58,9 +58,9 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="年龄:">
-                <Input v-model="formData.age" number :readonly="!editable"/>
-            </FormItem>
+            <!--<FormItem label="年龄:">-->
+                <!--<Input v-model="formData.age" number :readonly="!editable"/>-->
+            <!--</FormItem>-->
             <FormItem label="民族:">
                 <Input v-model="formData.nation" :readonly="!editable"/>
             </FormItem>

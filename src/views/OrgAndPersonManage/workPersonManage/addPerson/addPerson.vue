@@ -42,9 +42,9 @@
             <FormItem label="现任职务:" prop="job">
                 <Input v-model="formData.job"/>
             </FormItem>
-            <FormItem label="年龄:" prop="age">
-                <Input v-model="formData.age" number/>
-            </FormItem>
+            <!--<FormItem label="年龄:" prop="age">-->
+                <!--<Input v-model="formData.age" number/>-->
+            <!--</FormItem>-->
             <FormItem label="民族:" prop="nation">
                 <Input v-model="formData.nation" placeholder="请输入民族，如：汉族"/>
             </FormItem>

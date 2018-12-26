@@ -59,9 +59,9 @@
                             :label="item.label"></Option>
                 </Select>
             </FormItem>
-            <FormItem label="年龄:">
-                <Input v-model="formData.age" number/>
-            </FormItem>
+            <!--<FormItem label="年龄:">-->
+                <!--<Input v-model="formData.age" number/>-->
+            <!--</FormItem>-->
             <FormItem label="民族:" prop="nation">
                 <Input v-model="formData.nation"/>
             </FormItem>

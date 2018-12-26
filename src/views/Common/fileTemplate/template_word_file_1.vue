@@ -30,16 +30,16 @@
                 </div>
                 <div class="box-bottom">
                     <div class="text-16 letter-spacing-2 m-b-30">工程名称：
-                        <Input  v-model="temData.page_1.value_5" class="input-text-under-line width-320" />
+                        <vInputSpan v-model="temData.page_1.value_5" :scale="scale" display="inline-block" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
                     <div class="text-16 letter-spacing-2 m-b-30">建设单位：
-                        <Input  v-model="temData.page_1.value_6" class="input-text-under-line width-320"  />
+                        <vInputSpan v-model="temData.page_1.value_6" :scale="scale" display="inline-block" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
                     <div class="text-16 letter-spacing-2 m-b-30">监理单位：
-                        <Input  v-model="temData.page_1.value_7" class="input-text-under-line width-320"  />
+                        <vInputSpan v-model="temData.page_1.value_7" :scale="scale" display="inline-block" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
                     <div class="text-16 letter-spacing-2 m-b-30">施工单位：
-                        <Input  v-model="temData.page_1.value_8" class="input-text-under-line width-320"  />
+                        <vInputSpan v-model="temData.page_1.value_8" :scale="scale" display="inline-block" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
 
                     <div class="text-14 line-height-28 text-align-center">
@@ -98,10 +98,10 @@
                 </div>
 
                 <div class="text-16 letter-spacing-2 m-t-60 m-b-30">抄报：
-                    <Input  v-model="temData.page_3.value_4" class="input-text-under-line width-340" />
+                    <vInputSpan v-model="temData.page_3.value_4" :scale="scale" display="inline-block" :width="340" :inputWidth="340"></vInputSpan>
                 </div>
                 <div class="text-16 letter-spacing-2 m-b-30">抄送：
-                    <Input  v-model="temData.page_3.value_5" class="input-text-under-line width-340"  />
+                    <vInputSpan v-model="temData.page_3.value_5" :scale="scale" display="inline-block" :width="340" :inputWidth="340"></vInputSpan>
                 </div>
 
             </div>
@@ -110,10 +110,10 @@
             <div class="page">
                 <h3 class="text-20">交通建设工程质量监督抽查意见反馈单</h3>
                 <div class="text-16 letter-spacing-2 m-t-30">编 <span class="p-l-30"></span> 号：
-                    <Input  v-model="temData.page_4.value_1"  class="input-text-under-none letter-spacing-2 width-320" />
+                    <vInputSpan v-model="temData.page_4.value_1" :scale="scale" display="inline-block" :underLine="false" :width="320" :inputWidth="320"></vInputSpan>
                 </div>
                 <div class="text-16 letter-spacing-2 m-t-30">工程名称：
-                    <Input  v-model="temData.page_4.value_2" class="input-text-under-none width-320" />
+                    <vInputSpan v-model="temData.page_4.value_2" :scale="scale" display="inline-block" :underLine="false" :width="320" :inputWidth="320"></vInputSpan>
                 </div>
                 <div class="text-14 line-height-28 m-t-30 border-1">
                     <Input v-model="temData.page_4.value_3" class="input-boder-none" type="textarea" :rows="16"/>

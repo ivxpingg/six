@@ -3,7 +3,8 @@
           :style="inputSpanStyle"
           @click="onClick_span">
         {{currentValue}}
-      <input class="input ivu-input ivu-input-default"
+      <input class="input ivu-input ivu-input-default line-height-28"
+             style="height: 28px;"
              ref="input"
              v-show="showInput"
              :autocomplete="false"
@@ -19,11 +20,16 @@
         name: 'inputSpan',
         computed:{
             inputSpanStyle() {
+
                 return {
-                    'padding-left': this.currentValue.trim() === ''? this.width * this.scale + 'px': '0',
+                    'display': this.display,
+                    'width': this.width * this.scale + 'px',
+                    'padding-left': (this.currentValue.trim() === '' && this.display === 'inline')? this.width * this.scale + 'px': '1px',
                     'border-bottom': this.underLine ? `${this.scale}px solid #000` : 'none',
                     'border-left': this.marginLeft * this.scale + 'px solid transparent' ,
                     'border-right': this.marginRight * this.scale + 'px solid transparent',
+                    'text-align': 'left',
+                    'min-height': '20px'
                 }
             },
             inputStyle() {
@@ -36,6 +42,7 @@
         props: {
             scale: {
                 type: Number,
+                required: true,
                 default: 1
             },
             value: {
@@ -47,6 +54,10 @@
                 default: ''
             },
             // 是否有下划线
+            display: {
+                type: String,
+                default: 'inline'
+            },
             underLine: {
                 type: Boolean,
                 default: true
@@ -102,13 +113,13 @@
                 // 设置光标在开始位置
                 if (this.$refs.input.setSelectionRange) {
                     setTimeout(() => {
-                        this.$refs.input.setSelectionRange(0, 0);
+                        this.$refs.input.setSelectionRange(this.$refs.input.value.length, this.$refs.input.value.length);
                         this.$refs.input.focus();
                     }, 0)
                 }
                 else if(this.$refs.input.createTextRange){
                     let rng = this.$refs.input.createTextRange();
-                    rng.move('character', 0);
+                    rng.move('character', this.$refs.input.value.length);
                     rng.select();
 
                 }
