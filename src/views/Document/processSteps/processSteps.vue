@@ -1,6 +1,6 @@
 <template>
     <div class="processSteps-container">
-        <Steps :current="current">
+        <Steps :current="current" :direction="direction">
             <Step v-for="item in dataSet" :key="item.processStepId" :title="item.name">
                 <div class="ivu-steps-content" v-show="item.list">
                     <div v-for="list in item.list" :key="`${list.insTime}`">
@@ -41,6 +41,9 @@
                 default () {
                     return {};
                 }
+            },
+            direction: {
+                type: String
             }
         },
         computed: {
@@ -81,6 +84,7 @@
 <style lang="scss" scoped>
     .processSteps-container {
         .ivu-steps-content {
+            min-height: 80px;
             .content {
                 padding-right: 10px;
 

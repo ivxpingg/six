@@ -47,16 +47,16 @@
             <!--第二页-->
             <div class="page">
                 <div class="text-14 text-align-left line-height-28   m-b-10">
-                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale"></vInputSpan>：
+                    <vInputSpan v-model="temData.page_2.value_1" :underLine="prindUnderLine" :scale="scale"></vInputSpan>：
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     根据《建设工程质量管理条例》、《建设工程安全生产管理条
                     例》、《公路水运工程安全生产监督管理办法》、《公路水运工程质量监督管理规定》和《六安市公路水运工程质量监督实施细则》等规定，我局受理
-                    <vInputSpan v-model="temData.page_2.value_2" :scale="scale"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     的质量监督，并将按下述计划由
-                    <vInputSpan v-model="temData.page_2.value_3" :scale="scale"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_3" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     等组成监督小组对该工程进行质量监督。
-                    <vInputSpan v-model="temData.page_2.value_4" :scale="scale"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_4" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                 </div>
 
                 <div :class="classNameType.mainClass_list1">
@@ -161,7 +161,7 @@
                     （一）监督范围
                 </div>
                 <div :class="classNameType.mainClass_list1">
-                    <vInputSpan v-model="temData.page_4.value_1" :scale="scale" :inputWidth="400"></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_1" :scale="scale" :underLine="prindUnderLine" :inputWidth="400"></vInputSpan>
                     <!--××路××段××级公路新建（改建）工程（除机电工程和绿化工程）。-->
                 </div>
 

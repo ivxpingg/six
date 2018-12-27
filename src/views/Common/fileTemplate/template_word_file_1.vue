@@ -56,10 +56,10 @@
                     <div class="text-22 letter-spacing-2 p-t-30">存在问题及整改意见</div>
 
                     <div :class="classNameType.mainClass">
-                        <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :width="100"></vInputSpan>：
+                        <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :underLine="prindUnderLine" :width="100"></vInputSpan>：
                     </div>
                     <div :class="classNameType.mainClass_list1">
-                        <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :width="400" :inputWidth="400"></vInputSpan>
+                        <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :underLine="prindUnderLine" :width="400" :inputWidth="400"></vInputSpan>
                         ,检查情况如下:
                     </div>
                     <div :class="classNameType.mainClass_list1">
@@ -83,7 +83,7 @@
                 <div class="page-inner-box" style="height: 70%;">
                     <div :class="classNameType.mainClass_list1">
                         针对本次督查发现的问题，各相关责任单位应逐条整改落实到位，并将整改落实情况在
-                        <vInputSpan v-model="temData.page_3.value_6" :scale="scale" ></vInputSpan>
+                        <vInputSpan v-model="temData.page_3.value_6" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                         个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
                     </div>
                     <div class="box-bottom">

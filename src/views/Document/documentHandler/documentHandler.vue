@@ -22,7 +22,7 @@
                     icon="md-add" @click="onPrint">导出</Button>
         </vIvxFilterBox>
 
-        <vPrcessSteps class="process-steps" :processStepList="processStepList" :processData="documentAuditList"></vPrcessSteps>
+        <vPrcessSteps class="process-steps" direction="vertical" :processStepList="processStepList" :processData="documentAuditList"></vPrcessSteps>
 
         <div style="text-align: center;" @click="modal_eSignature">
             <div style="display: inline-block; border: 1px solid #dcdee2; margin: 10px 0;" ref="canvas">
@@ -427,17 +427,29 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .documentHandler-container {
+        position: relative;
         .ivx-filter-box {
             position: fixed;
             top: 240px;
-            z-index: 100;
         }
 
         .process-steps {
-            margin: 0 50px 0 180px;
-            margin-bottom: 10px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 300px;
+
+            .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner {
+                border-color: #19be6b;
+            }
+            .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner span, .ivu-steps-item.ivu-steps-status-finish .ivu-steps-head-inner>.ivu-steps-icon {
+                color: #19be6b;
+            }
+            .ivu-steps-item.ivu-steps-status-finish .ivu-steps-tail>i:after {
+                background: #19be6b;
+            }
         }
 
         .set-bg-color {

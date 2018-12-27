@@ -32,6 +32,10 @@ export default {
         },
         classNamePri() {
             return this.print2x ? 'six-template-content-2x' : 'six-template-content-1x'
+        },
+        // 打印不要下划线
+        prindUnderLine() {
+            return !this.print2x;
         }
     },
     data() {

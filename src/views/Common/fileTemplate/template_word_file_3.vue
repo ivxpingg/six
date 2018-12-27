@@ -50,19 +50,19 @@
                 <h1 class="m-b-32">质量监督申请材料核查意见书</h1>
 
                 <div class="text-14 text-align-left line-height-28 m-b-10">
-                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale"></vInputSpan>：
+                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :underLine="prindUnderLine"></vInputSpan>：
                 </div>
                 <div class="text-14 text-align-left line-height-28 letter-spacing-2 text-indent-28">
                     你单位于
-                    <vInputSpan v-model="temData.page_2.value_2" :scale="scale"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     月
-                    <vInputSpan v-model="temData.page_2.value_3" :scale="scale"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_3" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     日报
-                    <vInputSpan v-model="temData.page_2.value_4" :scale="scale"></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_4" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     质量监督申请及相关资料收悉，我局已审核，根据交通部《公路工程质量监督规定》、
                     省交通运输厅《安徽省公路水运工程质量监督实施细则》及质量监督备案制相关规定，
                     请你单位尽快督促各参建单位在
-                    <vInputSpan v-model="temData.page_2.value_8" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_8" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     个工作日内补充完善下列资料，以便及时办理监督手续。
 
                 </div>

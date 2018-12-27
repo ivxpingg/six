@@ -36,25 +36,25 @@
                 </div>
                 <h1 class="text-align-center ">
                     市交通质监局关于
-                    <vInputSpan v-model="temData.page_1.value_2" :scale="scale" :width="180" :inputWidth="180"></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_2" :scale="scale" :underLine="prindUnderLine" :width="180" :inputWidth="180"></vInputSpan>
                     工程综合督查情况的通报
                 </h1>
 
 
                 <div :class="classNameType.mainClass">
-                    <vInputSpan v-model="temData.page_1.value_3" :scale="scale" :width="100"></vInputSpan>：
+                    <vInputSpan v-model="temData.page_1.value_3" :scale="scale" :underLine="prindUnderLine" :width="100"></vInputSpan>：
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     根据六安市交通质监局
-                    <vInputSpan v-model="temData.page_1.value_4" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_4" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     年度质量监督工作计划，
-                    <vInputSpan v-model="temData.page_1.value_5" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_5" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     年
-                    <vInputSpan v-model="temData.page_1.value_6" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_6" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     月
-                    <vInputSpan v-model="temData.page_1.value_7" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_7" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     日，市交通质监局对
-                    <vInputSpan v-model="temData.page_1.value_8" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_1.value_8" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     工程进行了综合督查。督查组通过听取汇报、查阅资料、查看现场、检查实体等方式对该项目各参建单位的质量安全管理行为、实体工程质量及质量保证资料等进行了检查。现将综合督查情况通报如下:
                 </div>
 
@@ -73,7 +73,7 @@
                     （二）检测结果
                 </div>
                 <div class="text-14 text-align-center line-height-28 letter-spacing-2">
-                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     工程实体检测统计表
                 </div>
 
@@ -100,11 +100,11 @@
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     详见我局
-                    <vInputSpan v-model="temData.page_4.value_1" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_1" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     月
-                    <vInputSpan v-model="temData.page_4.value_2" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_2" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     日现场下发的《安全生产
-                    <vInputSpan v-model="temData.page_4.value_3" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_3" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     》。
                 </div>
 
@@ -114,7 +114,7 @@
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     针对本次督查发现的问题，业主单位应督促相关单位及时逐条整改落实，并将整改落实情况在
-                    <vInputSpan v-model="temData.page_4.value_5" :scale="scale" ></vInputSpan>
+                    <vInputSpan v-model="temData.page_4.value_5" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
                 </div>
 
