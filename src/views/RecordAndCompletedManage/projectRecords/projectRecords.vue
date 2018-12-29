@@ -173,7 +173,7 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.dict_handleStatus = res.data;
+                        this.dict_handleStatus = res.data.filter(val => val.value !== 'noaccept');
                     }
                 })
             },
