@@ -3,7 +3,7 @@
         <vIvxFilterBox>
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
-                    <Input v-model="searchParams.projectName"
+                    <Input v-model="searchParams.searchKey"
                            style="width: 220px;"
                            placeholder="项目名称"/>
                 </FormItem>
@@ -12,6 +12,9 @@
                                 @on-change="onChage_daterange"
                                 placeholder="选择时间"
                                 style="width: 200px"></DatePicker>
+                </FormItem>
+                <FormItem>
+                    <Button icon="ios-download-outline" type="primary" :to="downloadUrl" target="_blank">导出</Button>
                 </FormItem>
             </Form>
         </vIvxFilterBox>
@@ -47,10 +50,16 @@
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
+    import Config from '../../../config';
     export default {
         name: 'handoverCountRecord',  // 交工项目综合评价台账
         components: {vIvxFilterBox},
         computed: {
+            downloadUrl() {
+                return Config[Config.env].origin
+                    + Config[Config.env].ajaxUrl + '/record/exportHandoverCountRecord'
+                    + `?searchKey=${encodeURIComponent(this.searchParams.searchKey)}&year=${this.searchParams.year}`;
+            },
             _tableColumns() {
 
                 let beforeCol = [];
@@ -107,7 +116,7 @@
         data() {
             return {
                 searchParams: {
-                    projectName: '',      // 模糊查询参数
+                    searchKey: '',      // 模糊查询参数
                     year: ''
                 },
                 tableColumns: [

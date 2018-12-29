@@ -75,22 +75,24 @@
                     }
                 },
                 tableColumns: [
-                    { title: '序号', width: 60, type: 'index', },
+                    { title: '序号', width: 60, type: 'index', align: 'center' },
                     { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
-                    { title: '标段', width: 180, align: 'center', key: 'part' },
-                    { title: '备案单位', width: 180, align: 'center', key: 'unitName' },
-                    { title: '单位类型', width: 180, align: 'center', key: 'unitTypeLabel' },
+                    { title: '标段', width: 80, align: 'center', key: 'part' },
+                    { title: '备案单位', width: 160, align: 'center', key: 'unitName' },
+                    { title: '单位类型', width: 120, align: 'center', key: 'unitTypeLabel' },
                     { title: '备案类型', width: 180, align: 'center', key: 'recordTypeLabel' },
                     // { title: '项目状态', width: 180, align: 'center', key: '' },
                     // { title: '流程状态', width: 180, align: 'center', key: '' },
-                    { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
+                    { title: '办理状态', width: 90, align: 'center', key: 'handleStatusLabel' },
                     // { title: '附件', width: 180, align: 'center', key: '' },
-                    { title: '负责人', width: 180, align: 'center', key: 'name' },
-                    { title: '联系方式', width: 180, align: 'center', key: 'phone' },
+                    { title: '负责人', width: 90, align: 'center', key: 'name' },
+                    { title: '联系方式', width: 120, align: 'center', key: 'phone' },
+                    { title: '回复内容', width: 180, align: 'center', key: 'replyContent' },
                     {
                         title: '操作',
-                        width: 200,
+                        width: 120,
                         align: 'center',
+                        fixed: 'right',
                         render: (h, params) => {
                             let list = [];
 

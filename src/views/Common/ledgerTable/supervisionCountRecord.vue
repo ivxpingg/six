@@ -15,6 +15,7 @@
                 </FormItem>
                 <FormItem>
                     <!--<Button type="primary" icon="md-download" @click="onClick_export" >导出</Button>-->
+                    <Button icon="ios-download-outline" type="primary" :to="downloadUrl" target="_blank">导出</Button>
                 </FormItem>
 
             </Form>
@@ -32,10 +33,16 @@
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
+    import Config from '../../../config';
     export default {
         name: 'supervisionCountRecord',  // 在监项目督查台账
         components: {vIvxFilterBox},
         computed: {
+            downloadUrl() {
+                return Config[Config.env].origin
+                    + Config[Config.env].ajaxUrl + '/record/exportSupervisionCount'
+                    + `?projectName=${encodeURIComponent(this.searchParams.projectName)}&beginTime=${this.searchParams.beginTime}&endTime=${this.searchParams.endTime}&county=${this.searchParams.county}`;
+            },
             _joinColumns() {
                 let defaultCol = ['项目名称', '标段', '监督负责人','监督成员','累计监督次数'];   // 默认已有字段
                 let columns = [];
@@ -103,7 +110,7 @@
             county: {
                 immediate: true,
                 handler(val) {
-                    this.searchParams.county = val;
+                    this.searchParams.county = val || '';
                 }
             },
             searchParams: {

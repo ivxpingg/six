@@ -15,6 +15,7 @@
                 </FormItem>
                 <FormItem>
                     <!--<Button type="primary" icon="md-download" @click="onClick_export" >导出</Button>-->
+                    <Button icon="ios-download-outline" type="primary" :to="downloadUrl" target="_blank">导出</Button>
                 </FormItem>
             </Form>
         </vIvxFilterBox>
@@ -25,15 +26,34 @@
                    :columns="tableColumns"
                    :data="tableData"></Table>
         </div>
+
+        <Modal v-model="modal_remark"
+               title="备注"
+               :width="400"
+               @on-ok="saveRemark">
+            <Form>
+                <FormItem :label-width="60" label="备注:">
+                    <Input v-model="formData.remark" type="textarea" placeholder="备注" />
+                </FormItem>
+            </Form>
+        </Modal>
     </div>
 </template>
 
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
+    import Config from '../../../config';
     export default {
         name: 'supervisionContentRecord',   // 监督内容登记表台账
         components: {vIvxFilterBox},
+        computed: {
+            downloadUrl() {
+                return Config[Config.env].origin
+                    + Config[Config.env].ajaxUrl + '/record/exportSupervisionContent'
+                    + `?projectName=${encodeURIComponent(this.searchParams.projectName)}&year=${this.searchParams.year}&checkType=${this.searchParams.checkType}`;
+            }
+        },
         props: {
             // 监督内容登记表台账类型
             checkType: {
@@ -84,10 +104,43 @@
                     },
                     { title: '内容', align: 'center', width: 120, key: 'content'},
                     { title: '备注', align: 'center', width: 120, key: 'remark'},
+                    {
+                        title: '操作',
+                        width: 120,
+                        align: 'center',
+                        fixed: 'right',
+                        render: (h, params) => {
+                            let list = [];
+
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-create-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.formData.supervisionRecordId = params.row.supervisionRecordId;
+                                        this.formData.remark = params.row.remark;
+                                        this.modal_remark = true;
+                                    }
+                                }
+                            }, '备注'));
+
+                            return h('div', list);
+                        }
+                    }
 
                 ],
                 tableData: [],
-                tableLoading: false
+                tableLoading: false,
+
+                // 备注
+                modal_remark: false,
+                formData: {
+                    supervisionRecordId: '',
+                    remark: ''
+                }
             };
         },
         mounted() {
@@ -122,6 +175,21 @@
                     data: JSON.stringify(this.searchParams)
                 }).then((res) => {
 
+                })
+            },
+            // 保存备注
+            saveRemark() {
+                this.$http({
+                    method: 'post',
+                    url: '/record/updateSupervisionRecord',
+                    data: JSON.stringify(this.formData)
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.$Message.success({
+                            content: '保存备注成功！'
+                        });
+                        this.getData();
+                    }
                 })
             }
         }

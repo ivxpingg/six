@@ -313,7 +313,6 @@
             '$store.state.user.userType': {
                 immediate: true,
                 handler(val) {
-                    console.dir(val);
                     if(val === 'supervisor') {
                         this.folderList.projectFiles_0[1].auth = true;
                         this.folderList.projectFiles_1[1].auth = true;

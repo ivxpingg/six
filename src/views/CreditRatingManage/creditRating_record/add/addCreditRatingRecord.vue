@@ -248,7 +248,10 @@
                     this.getFilesData(selectItems.changeNotice.changeNoticeId);
                 }
                 else {
-                    this.$Message.info('改督察检查未添加整改通知!');
+                    this.$Message.info({
+                        content: '改督察检查未添加整改通知!',
+                        duration: 5
+                    });
                 }
 
 

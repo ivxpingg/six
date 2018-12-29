@@ -232,20 +232,39 @@
             saveAccept() {
                 this.$refs.form_accept.validate(valid => {
                     if (valid) {
-                        this.$http({
-                            method: 'post',
-                            url: '/projectAudit/projectFileAccept',
-                            data: JSON.stringify({
-                                projectId: this.projectId,
-                                auditProcessId: this.acceptData.auditProcessId
-                            })
-                        }).then(res => {
-                            if (res.code === 'SUCCESS') {
-                                this.$Message.success('材料受理成功！');
-                                this.$emit('modal_callback');
-                                this.modal_accept = false;
+
+                        this.$Modal.confirm({
+                            title: '提示',
+                            render: (h) => {
+                                return h('span', [
+                                    h('span', '确定要选择'),
+                                    h('span', {
+                                        style: {
+                                            color: '#ed4014'
+                                        }
+                                    }, `《${this.acceptData.auditProcessName}》`),
+                                    h('span', '流程?')
+                                ])
+                            },
+                            onOk: () => {
+                                this.$http({
+                                    method: 'post',
+                                    url: '/projectAudit/projectFileAccept',
+                                    data: JSON.stringify({
+                                        projectId: this.projectId,
+                                        auditProcessId: this.acceptData.auditProcessId
+                                    })
+                                }).then(res => {
+                                    if (res.code === 'SUCCESS') {
+                                        this.$Message.success('材料受理成功！');
+                                        this.$emit('modal_callback');
+                                        this.modal_accept = false;
+                                    }
+                                })
                             }
-                        })
+                        });
+
+
                     }
                 })
             }

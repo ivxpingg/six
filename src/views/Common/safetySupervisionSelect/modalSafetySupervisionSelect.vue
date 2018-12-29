@@ -62,6 +62,9 @@
                 default: ''
             }
         },
+        computed: {
+
+        },
         data() {
             return {
                 searchParams: {
@@ -90,20 +93,21 @@
                         render: (h, params) => {
                             let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-eye-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.currentRow.projectId = params.row.projectId;
-                                        this.getFilesData(params.row);
+                            if (params.row.changeNotice && params.row.changeNotice.changeNoticeId) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'ios-eye-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.getFilesData(params.row);
+                                        }
                                     }
-                                }
-                            }, '查看附件'));
-
+                                }, '查看附件'));
+                            }
 
                             // 设置列宽度
                             return h('div',{

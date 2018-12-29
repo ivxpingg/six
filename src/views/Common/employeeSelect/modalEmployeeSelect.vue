@@ -2,8 +2,8 @@
     <div class="modalEmployeeSelect-container">
         <Modal v-model="modalValue"
                title="选择人员"
-               :width="1200"
-               :z-index="zIndex"
+               :width="900"
+
                footer-hide>
             <vEmployeeSelect :multiple="multiple"
                              :userSourceType="userSourceType"

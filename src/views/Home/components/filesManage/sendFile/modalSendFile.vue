@@ -6,17 +6,26 @@
             <Form ref="form"
                   :model="formData"
                   :rules="rules"
-                  :label-width="80">
-                <FormItem label="文件标题" prop="fileName">
+                  :label-width="85">
+                <FormItem label="文件标题：" prop="fileName">
                     <Input v-model="formData.fileName" />
                 </FormItem>
-                <FormItem label="内容" prop="fileContent">
+                <FormItem label="内容：" prop="fileContent">
                     <Input v-model="formData.fileContent"
                            type="textarea"
                            :rows="5" />
                 </FormItem>
-                <FormItem label="选择用户:" prop="userIds">
+                <FormItem label="项目：" v-if="userType !== 'supervisor'">
+                    <Select v-model="formData.projectId" placeholder="请选择项目">
+                        <Option v-for="item in projectList"
+                                :key="item.projectId"
+                                :value="item.projectId"
+                                :label="item.projectName"></Option>
+                    </Select>
+                </FormItem>
+                <FormItem label="选择用户：" prop="userIds">
                     <Select ref="selectUser"
+                            v-if="userType === 'supervisor'"
                             @on-open-change="auditUser_onFocus"
                             v-model="formData.userIds"
                             multiple>
@@ -25,23 +34,22 @@
                                 :value="item.userId"
                                 :label="item.name"></Option>
                     </Select>
+
+                    <Select v-if="userType !== 'supervisor'"
+                            v-model="formData.userIds"
+                            multiple>
+                        <Option v-for="item in formData.userList"
+                                :key="item.userId"
+                                :value="item.userId"
+                                :label="`${item.name} - ${item.job || ''} - ${item.phone || ''}`"></Option>
+                    </Select>
                 </FormItem>
-                <FormItem label="文件:">
-                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect"
+                <FormItem label="文件：">
+                    <div style="width: 330px;"><vFilesSelectButton @modal-callback="onSelect"
+                                                                   :projectId="formData.projectId"
                                                                    fileType="user_attach"
                                                                    multiple></vFilesSelectButton></div>
-                    <!--<Upload :action="uploadActive"-->
-                            <!--:showUploadList="uploadParams.showUploadList"-->
-                            <!--:multiple="uploadParams.multiple"-->
-                            <!--:accept="uploadParams.accept"-->
-                            <!--:maxSize="uploadParams.maxSize"-->
-                            <!--:on-remove="onRemoveFile"-->
-                            <!--:before-upload="fileBeforeUpload"-->
-                            <!--:on-exceeded-size="exceededSize"-->
-                            <!--:on-error="fileUploadError"-->
-                            <!--:on-success="fileUploadSuccess">-->
-                        <!--<Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>-->
-                    <!--</Upload>-->
+
                 </FormItem>
 
             </Form>
@@ -77,10 +85,14 @@
         computed: {
             uploadActive() {
                 return this.uploadParams.actionUrl + '/receive_send';
+            },
+            userType() {
+                return this.$store.state.user.userType;
             }
         },
         data() {
             return {
+                projectList: [],
                 uploadParams: {
                     showUploadList: true,
                     multiple: true
@@ -88,6 +100,7 @@
                 formData: {
                     fileName: '',
                     fileContent: '',
+                    projectId: '',
                     userIds: [],
                     userList: [],
                     fileIds: []
@@ -100,15 +113,45 @@
                 }
             };
         },
+        watch: {
+            'formData.projectId'() {
+                this.formData.userIds = [];
+                this.formData.userList = [];
+                this.getUserListByProjectId();
+            }
+        },
+        mounted() {
+            this.getProjectList();
+        },
         methods: {
-            // // 文件移除
-            // onRemoveFile(file, fileList) {
-            //     this.formData.fileIds = fileList.map(v => v.response.data.fileId);
-            // },
-            //
-            // fileUploadSuccess(response, file, fileList) {
-            //     this.formData.fileIds = fileList.map(v => v.response.data.fileId);
-            // },
+            // 根据项目获取相关用户列表
+            getUserListByProjectId() {
+                this.$http({
+                    method: 'get',
+                    url: '/project/projectCorrelationPersons',
+                    params: {
+                        projectId: this.formData.projectId
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.formData.userList = res.data || [];
+                    }
+                });
+            },
+
+            getProjectList() {
+                this.$http({
+                    method: 'post',
+                    url: '/archive/archiveList',
+                    data: JSON.stringify({
+                        projectName: ''
+                    })
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.projectList = res.data || [];
+                    }
+                });
+            },
             onSelect(fileList) {
                 this.formData.fileIds = fileList.map(v => v.fileId);
             },

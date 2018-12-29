@@ -2,15 +2,18 @@
     <div class="unitCreditRecord-container"><vIvxFilterBox>
         <Form inline>
             <FormItem label="搜索条件:" :label-width="65">
-                <Input v-model="searchParams.projectName"
+                <Input v-model="searchParams.searchKey"
                        style="width: 220px;"
-                       placeholder="项目名称"/>
+                       placeholder="请输入"/>
             </FormItem>
             <FormItem label="选择时间:" :label-width="65">
                 <DatePicker type="year"
                             @on-change="onChage_daterange"
                             placeholder="选择时间"
                             style="width: 200px"></DatePicker>
+            </FormItem>
+            <FormItem>
+                <Button icon="ios-download-outline" type="primary" :to="downloadUrl" target="_blank">导出</Button>
             </FormItem>
         </Form>
     </vIvxFilterBox>
@@ -47,17 +50,30 @@
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
+    import Config from '../../../config';
     export default {
         name: 'unitCreditRecord',  // 企业信用台账
         components: {vIvxFilterBox},
+        computed: {
+            downloadUrl() {
+                return Config[Config.env].origin
+                    + Config[Config.env].ajaxUrl + '/record/exportUnitCreditRecord'
+                    + `?searchKey=${encodeURIComponent(this.searchParams.searchKey)}&year=${this.searchParams.year}`;
+            }
+        },
         data() {
             return {
                 searchParams: {
-                    projectName: '',      // 模糊查询参数
+                    searchKey: '',      // 模糊查询参数
                     year: ''
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
+                    { title: '日期', align: 'center', width: 120, key: 'recordDate',
+                        render: (h, params) => {
+                            return h('div', params.row.recordDate ? MOMENT(params.row.recordDate).format('YYYY-MM-DD') : '');
+                        }
+                    },
                     { title: '企业名称', align: 'center', width: 180, key: 'unitName'},
                     { title: '注册地址', align: 'center', width: 180, key: 'registerAddress'},
                     { title: '资质类别', align: 'center', width: 120, key: 'qualificationType'},
@@ -75,11 +91,6 @@
                     { title: '企业在该合同(段)的信用评分(分)', align: 'center', width: 210, key: 'partCreditScore'},
                     // { title: '采信依据', align: 'center', width: 120, key: 'creditAccording'},
                     { title: '其他失信行为及扣分', align: 'center', width: 180, key: 'otherDeduct'},
-                    { title: '日期', align: 'center', width: 120, key: 'recordDate',
-                        render: (h, params) => {
-                            return h('div', params.row.recordDate ? MOMENT(params.row.recordDate).format('YYYY-MM-DD') : '');
-                        }
-                    },
                     {
                         title: '操作',
                         align: 'center',
