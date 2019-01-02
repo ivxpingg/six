@@ -28,10 +28,10 @@ export default {
     },
     computed: {
         scale() {
-            return this.print2x ? 2 : 1;
+            return this.print2x ? 1 : 1;
         },
         classNamePri() {
-            return this.print2x ? 'six-template-content-2x' : 'six-template-content-1x'
+            return this.print2x ? 'six-template-content-1x print-content' : 'six-template-content-1x '
         },
         // 打印不要下划线
         prindUnderLine() {

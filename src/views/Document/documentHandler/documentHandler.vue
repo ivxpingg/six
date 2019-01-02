@@ -203,7 +203,7 @@
 
             },
             exportPDF(isUpload) {
-                let scale = 1;
+                let scale = 2;
 
                 // let page_a4 = [595.28, 841.89]; // 宽 / 高
 
@@ -234,7 +234,7 @@
                                 this.imgSrc = pageData;
                                 this.print2x = false;
                                 this.$Spin.hide();
-                                return;
+                                // return;
                             }
 
 
