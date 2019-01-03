@@ -9,11 +9,12 @@
 
 // textarea 边框透明化
 .print-content {
-   .input-boder-none {
-     textarea, textarea.ivu-input {
-       border-color: #FFF;
-       border-width: 0;
-       border-style: none;
-     }
-   }
- }
+  .input-boder-none {
+    textarea, textarea.ivu-input {
+      padding: 0;
+      border-color: #FFF;
+      border-width: 0;
+      border-style: none;
+    }
+  }
+}

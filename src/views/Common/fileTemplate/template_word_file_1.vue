@@ -52,31 +52,107 @@
 
             <!--第二页-->
             <div class="page">
-                <div class="page-inner-box" style="height: 100%;">
-                    <div class="text-22 letter-spacing-2 p-t-30">存在问题及整改意见</div>
+                <div class="text-22 letter-spacing-2 p-t-30">存在问题及整改意见</div>
 
-                    <div :class="classNameType.mainClass">
-                        <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :underLine="prindUnderLine" :width="100"></vInputSpan>：
-                    </div>
-                    <div :class="classNameType.mainClass_list1">
-                        <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :underLine="prindUnderLine" :width="400" :inputWidth="400"></vInputSpan>
-                        ,检查情况如下:
-                    </div>
-                    <div :class="classNameType.mainClass_list1">
-                        一、存在问题
-                    </div>
-                    <div :class="classNameType.mainClass">
-                        <Input v-model="temData.page_2.value_3" class="input-boder-none" type="textarea" :rows="8" placeholder="请输入存在的问题"/>
-                    </div>
-                    <div :class="classNameType.mainClass_list1">
-                        二、整改意见
-                    </div>
-                    <div :class="classNameType.mainClass">
-                        <Input v-model="temData.page_2.value_4" class="input-boder-none" type="textarea"  :rows="8" placeholder="请输入整改意见"/>
-                    </div>
+                <div :class="classNameType.mainClass">
+                    <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :underLine="prindUnderLine" :width="100"></vInputSpan>：
+                </div>
+                <div :class="classNameType.mainClass_list1">
+                    <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :underLine="prindUnderLine" :width="400" :inputWidth="400"></vInputSpan>
+                    ,检查情况如下:
+                </div>
+                <div :class="classNameType.mainClass_list1">
+                    一、存在问题
+                </div>
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_3.value_3_1" class="input-boder-none" type="textarea" :rows="19" placeholder="请输入存在的问题"/>
+                </div>
 
+                <ButtonGroup class="btn-group-list top-235" v-if="!print2x" size="small" vertical>
+                    <Button icon="ios-add" type="success" title="新增页" @click="addPage_page2_value3" v-show="temData.page_2.value_3.pageIndex < 6"></Button>
+                    <Button icon="ios-close" type="error" title="删除最后一页" @click="delPage_page2_value3" v-show="temData.page_2.value_3.pageIndex > 1"></Button>
+                </ButtonGroup>
+                <!--<div :class="classNameType.mainClass_list1">-->
+                <!--二、整改意见-->
+                <!--</div>-->
+                <!--<div :class="classNameType.mainClass">-->
+                <!--<Input v-model="temData.page_2.value_4" class="input-boder-none" type="textarea"  :rows="8" placeholder="请输入整改意见"/>-->
+                <!--</div>-->
+                <!--<div class="page-inner-box" style="height: 100%;">-->
+                    <!---->
+                <!--</div>-->
+            </div>
+            <!-- 一、存在问题 -->
+            <div class="page" v-if="temData.page_2.value_3.pageIndex > 1">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_3.value_3_2" class="input-boder-none" type="textarea" :rows="26" placeholder="请输入存在的问题"/>
                 </div>
             </div>
+            <div class="page" v-if="temData.page_2.value_3.pageIndex > 2">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_3.value_3_3" class="input-boder-none" type="textarea" :rows="26" placeholder="请输入存在的问题"/>
+                </div>
+            </div>
+            <div class="page" v-if="temData.page_2.value_3.pageIndex > 3">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_3.value_3_4" class="input-boder-none" type="textarea" :rows="26" placeholder="请输入存在的问题"/>
+                </div>
+            </div>
+            <div class="page" v-if="temData.page_2.value_3.pageIndex > 4">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_3.value_3_5" class="input-boder-none" type="textarea" :rows="26" placeholder="请输入存在的问题"/>
+                </div>
+            </div>
+            <div class="page" v-if="temData.page_2.value_3.pageIndex > 5">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_3.value_3_6" class="input-boder-none" type="textarea" :rows="26" placeholder="请输入存在的问题"/>
+                </div>
+            </div>
+
+            <!-- END 一、存在问题 -->
+
+            <!--整改意见-->
+            <div class="page">
+                <div :class="classNameType.mainClass_list1">
+                    二、整改意见
+                </div>
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_4.value_4_1" class="input-boder-none" type="textarea"  :rows="25" placeholder="请输入整改意见"/>
+                </div>
+
+                <ButtonGroup class="btn-group-list top-85" v-if="!print2x" size="small" vertical>
+                    <Button icon="ios-add" type="success" title="新增页" @click="addPage_page2_value4" v-show="temData.page_2.value_4.pageIndex < 6"></Button>
+                    <Button icon="ios-close" type="error" title="删除最后一页" @click="delPage_page2_value4" v-show="temData.page_2.value_4.pageIndex > 1"></Button>
+                </ButtonGroup>
+            </div>
+
+            <div class="page" v-if="temData.page_2.value_4.pageIndex > 1">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_4.value_4_2" class="input-boder-none" type="textarea"  :rows="26" placeholder="请输入整改意见"/>
+                </div>
+            </div>
+            <div class="page" v-if="temData.page_2.value_4.pageIndex > 2">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_4.value_4_3" class="input-boder-none" type="textarea"  :rows="26" placeholder="请输入整改意见"/>
+                </div>
+            </div>
+            <div class="page" v-if="temData.page_2.value_4.pageIndex > 3">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_4.value_4_4" class="input-boder-none" type="textarea"  :rows="26" placeholder="请输入整改意见"/>
+                </div>
+            </div>
+            <div class="page" v-if="temData.page_2.value_4.pageIndex > 4">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_4.value_4_5" class="input-boder-none" type="textarea"  :rows="26" placeholder="请输入整改意见"/>
+                </div>
+            </div>
+            <div class="page" v-if="temData.page_2.value_4.pageIndex > 5">
+                <div :class="classNameType.mainClass">
+                    <Input v-model="temData.page_2.value_4.value_4_6" class="input-boder-none" type="textarea"  :rows="26" placeholder="请输入整改意见"/>
+                </div>
+            </div>
+            <!--整改意见-->
+
 
             <!--第三页-->
             <div class="page">
@@ -173,8 +249,24 @@
                     page_2: {
                         value_1: '',
                         value_2: '',
-                        value_3: '',
-                        value_4: '',
+                        value_3: {
+                            pageIndex: 1,
+                            value_3_1: '',
+                            value_3_2: '',
+                            value_3_3: '',
+                            value_3_4: '',
+                            value_3_5: '',
+                            value_3_6: ''
+                        },
+                        value_4: {
+                            pageIndex: 1,
+                            value_4_1: '',
+                            value_4_2: '',
+                            value_4_3: '',
+                            value_4_4: '',
+                            value_4_5: '',
+                            value_4_6: ''
+                        },
                     },
                     page_3: {
                         value_1: '',
@@ -211,6 +303,32 @@
                     }
                 }
                 return true;
+            },
+            // 新增页面
+            addPage_page2_value3() {
+                if (this.temData.page_2.value_3.pageIndex < 6 ) {
+                    this.temData.page_2.value_3.pageIndex++;
+                }
+            },
+            // 移除页面
+            delPage_page2_value3() {
+                if (this.temData.page_2.value_3.pageIndex > 1) {
+                    this.temData.page_2.value_3.pageIndex--;
+                }
+            },
+
+            // 新增页面
+            addPage_page2_value4() {
+                if (this.temData.page_2.value_4.pageIndex < 6 ) {
+                    this.temData.page_2.value_4.pageIndex++;
+                }
+            },
+
+            // 移除页面
+            delPage_page2_value4() {
+                if (this.temData.page_2.value_4.pageIndex > 1) {
+                    this.temData.page_2.value_4.pageIndex--;
+                }
             }
         }
     }

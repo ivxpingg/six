@@ -91,6 +91,14 @@ $color: #000;
   }
 
 
+  //
+  .btn-group-list {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    z-index: 9;
+  }
+
   // ***********  文本设置
   .main-text {
     line-height: $line-Height;
@@ -110,6 +118,9 @@ $color: #000;
     bottom: 65px * $scale;
   }
 
+  .ivu-input {
+    color: $color;
+  }
   // input输入框的样式
   .input-text-under-line {
     text-indent: 0;
@@ -277,6 +288,13 @@ $color: #000;
 .six-template-content-#{$scale}x {
   @for $i from 1 through 400 {
     .min-width-#{$i} { min-width: ($i * $scale) + px ; }
+  }
+}
+
+// top
+.six-template-content-#{$scale}x {
+  @for $i from 1 through 800 {
+    .top-#{$i} { top: $i + px ; }
   }
 }
 
