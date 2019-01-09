@@ -100,6 +100,7 @@
 <style lang="scss" scoped>
     .projectFileManage-container {
         .project-list {
+            padding-bottom: 100px;
             overflow: hidden;
             li {
                 float: left;

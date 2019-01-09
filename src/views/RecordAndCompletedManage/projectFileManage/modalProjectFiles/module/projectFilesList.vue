@@ -111,7 +111,7 @@
 <style lang="scss" scoped>
     .projectFilesList-container {
         .file-list {
-            overflow: hidden;
+            /*overflow: hidden;*/
             li {
                 float: left;
                 margin: 15px;

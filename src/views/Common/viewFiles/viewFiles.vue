@@ -97,6 +97,9 @@
                                             to: Config[Config.env].filePath + params.row.url,
                                             icon: 'ios-cloud-download-outline',
                                             target: '_blank'
+                                        },
+                                        attrs: {
+                                            download: params.row.fileName + '.' + params.row.fileFormat
                                         }
                                     }, '下载')
                                 );

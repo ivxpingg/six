@@ -114,7 +114,7 @@
                     projectId: '',
                     // changeNoticeId: '',
                     relationId: '',
-                    moduleType: 'quality',   // 模块类别字典，固定值，  质量监督： quality
+                    moduleType: 'security',   // 模块类别字典，固定值，  安全监督： security
                     beginTime: '',      // 开始整改时间
                     endTime: '',        // 最迟整改时间
                     changeTitle: '',    // 整改标题

@@ -36,7 +36,7 @@
 
             <vUnitAndPerson v-show="activeName === '3'"
                             :projectId="projectId"
-                            :isView="isView"
+                            :isView="specialEdit"
                             class="six-modal-body-inner"></vUnitAndPerson>
 
         </template>
@@ -48,8 +48,10 @@
     import vProjectBaseInfo from '../add/projectBaseInfo/projectBaseInfo';
     import vFileDetailLists from '../../../Common/fileDetailLists/fileDetailLists';
     import vUnitAndPerson from '../add/unitAndPerson/unitAndPerson';
+    import authMixin from '../../../../lib/mixin/authMixin';
     export default {
         name: 'qualitySupervision_register_edit',
+        mixins: [authMixin],
         components: {vModalBothSides, vProjectBaseInfo, vFileDetailLists, vUnitAndPerson},
         props: {
             isView: {
@@ -61,6 +63,16 @@
             projectId: {
                 type: String,
                 required: true
+            }
+        },
+        computed: {
+            specialEdit() {
+                if (this.auth_specialEdit) {
+                    return !this.auth_specialEdit;
+                }
+                else {
+                    return this.isView
+                }
             }
         },
         data() {

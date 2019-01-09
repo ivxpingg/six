@@ -16,7 +16,8 @@
 
         <div class="cover" :class="{'cover-show': hover}">
             <Icon type="ios-eye" size="20" color="#FFF" title="预览" @click.self.stop="onClick_view"/>
-            <Icon type="md-download" size="20" color="#FFF" title="下载" @click.self.stop="onClick_download" />
+            <Button :to="to" type="text" ghost :download="download" icon="md-download" size="small" replace target="_blank"  title="下载"></Button>
+            <!--<Icon type="md-download" size="20" color="#FFF" title="下载" @click.self.stop="onClick_download" />-->
         </div>
 
         <vViewFile ref="viewFile" :title="data.fileName" :src="data.url" :format="data.fileFormat"></vViewFile>
@@ -68,7 +69,13 @@
                 else {
                     return this.title;
                 }
+            },
 
+            to() {
+                return Config[Config.env].filePath + this.data.url;
+            },
+            download() {
+                return this.data.fileName + '.' + this.data.fileFormat;
             }
         },
         data() {
@@ -109,7 +116,7 @@
         position: relative;
         text-align: center;
         cursor: pointer;
-        overflow: hidden;
+        /*overflow: hidden;*/
 
         &.active {
             background-color: #cdcdce;

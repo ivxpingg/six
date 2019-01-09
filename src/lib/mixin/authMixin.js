@@ -37,6 +37,10 @@ export default {
             return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('audit') > -1);
         },
 
+        // 质量监督登记 随时可以修改参建单位和参建单位人员
+        auth_specialEdit() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('special_edit') > -1);
+        },
 
         // 质量监督受理
         // 添加监督小组成员权限

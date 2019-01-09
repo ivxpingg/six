@@ -43,7 +43,7 @@
                     <Input v-model="formData.changeContent"
                            placeholder="请输入整改内容"
                            type="textarea"
-                           rows="5"
+                           :rows="5"
                            style="width: 590px;"
                            readonly/>
                 </FormItem>

@@ -60,7 +60,7 @@
                     <vInputSpan v-model="temData.page_2.value_3" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     日报
                     <vInputSpan v-model="temData.page_2.value_4" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
-                    质量监督申请及相关资料收悉，我局已审核，根据交通部《公路工程质量监督规定》、
+                    质量监督申请及相关资料收悉，我局已审核，根据交通部《公路水运工程质量监督管理规定》、
                     省交通运输厅《安徽省公路水运工程质量监督实施细则》及质量监督备案制相关规定，
                     请你单位尽快督促各参建单位在
                     <vInputSpan v-model="temData.page_2.value_8" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
