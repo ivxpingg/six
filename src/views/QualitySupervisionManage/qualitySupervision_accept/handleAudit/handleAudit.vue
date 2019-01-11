@@ -98,7 +98,9 @@
                 this.$Spin.show();
                 return new Promise(((resolve, reject) => {
                     try {
-                        html2canvas(this.$refs.qualitySupervision.$el).then((canvas) => {
+                        html2canvas(this.$refs.qualitySupervision.$el, {
+                            scale: 2, // 添加的scale 参数
+                        }).then((canvas) => {
                             let moveHight = [841.89, 841.89, 841.89];
                             let idx = 0;
 
