@@ -1,124 +1,129 @@
 <template>
     <div class="quality_supervision-container">
-        <div class="title-unit">六安市交通建设工程质量监督局</div>
-        <div class="title-template">{{templateTitle}}</div>
-        <Row>
-            <i-col span="12">
-                <div class="item">
-                    <span class="item-label">报送单位：</span>
-                    <span> {{projectInfo.unitName}} </span>
-                </div>
-            </i-col>
-            <i-col span="12">
-                <div class="item">
-                    <span class="item-label">收件日期：</span>
-                    <span>{{projectInfo.insTime}}</span>
-                </div>
-            </i-col>
-        </Row>
-        <div class="divider-line"></div>
-        <Row>
-            <i-col span="12">
-                <div class="item">
-                    <span class="item-label">项目名称：</span>
-                    <span>{{projectInfo.projectName}}</span>
-                </div>
-            </i-col>
-            <i-col span="12">
-                <div class="item">
-                    <span class="item-label">联系人/电话：</span>
-                    <span>{{projectInfo.contacts}}-{{projectInfo.contactPhone}}</span>
-                </div>
-            </i-col>
-        </Row>
-        <div class="divider-line"></div>
+        <div class="page">
+            <div class="title-unit">六安市交通建设工程质量监督局</div>
+            <div class="title-template">{{templateTitle}}</div>
+            <Row>
+                <i-col span="17">
+                    <div class="item">
+                        <span class="item-label">报送单位：</span>
+                        <span> {{projectInfo.unitName}} </span>
+                    </div>
+                </i-col>
+                <i-col span="7">
+                    <div class="item">
+                        <span class="item-label">收件日期：</span>
+                        <span>{{projectInfo.insTime}}</span>
+                    </div>
+                </i-col>
+            </Row>
+            <div class="divider-line"></div>
+            <Row>
+                <i-col span="14">
+                    <div class="item">
+                        <span class="item-label">项目名称：</span>
+                        <span style="display: inline-block; width: 210px;">
+                            <span>{{projectInfo.projectName}}</span>
+                        </span>
+                    </div>
+                </i-col>
+                <i-col span="8">
+                    <div class="item">
+                        <span class="item-label">联系人/电话：</span>
+                        <span>{{projectInfo.contacts}}-{{projectInfo.contactPhone}}</span>
+                    </div>
+                </i-col>
+            </Row>
+            <div class="divider-line"></div>
 
-        <Row>
-            <i-col span="24">
-                <div class="item">
-                    <span class="item-label">材料明细：</span>
-                </div>
-            </i-col>
-        </Row>
-        <vFileDetailLists :projectId="projectId"
-                          isView
-                          :templateType="templateType"></vFileDetailLists>
-
-        <Row>
-            <i-col span="24">
-                <div class="item">
-                    <span class="item-label">监督科办理情况：</span>
-                </div>
+            <Row>
                 <i-col span="24">
-                    <Input v-model="textObj.textarea_0"
+                    <div class="item">
+                        <span class="item-label">材料明细：</span>
+                    </div>
+                </i-col>
+            </Row>
+            <vFileDetailLists :projectId="projectId"
+                              isView
+                              :templateType="templateType"></vFileDetailLists>
+        </div>
+
+        <div class="page">
+            <Row>
+                <i-col span="24">
+                    <div class="item">
+                        <span class="item-label">监督科办理情况：</span>
+                    </div>
+                    <i-col span="24">
+                        <Input v-model="textObj.textarea_0"
+                               type="textarea"
+                               :rows="5"
+                               :readonly="textObj.readonly_0"
+                               :autosize="{minRows:5, maxRows: 5}" />
+                    </i-col>
+                    <i-col span="24">
+                        <div class="form-item">
+                            <label>签名：</label>
+                            <div class="form-content">
+                                <Input v-model="textObj.name_0" :readonly="textObj.readonly_0" />
+                            </div>
+                        </div>
+                    </i-col>
+                </i-col>
+            </Row>
+
+            <div class="divider-line"></div>
+
+            <Row>
+                <i-col span="24">
+                    <div class="item">
+                        <span class="item-label">分管领导意见：</span>
+                    </div>
+                </i-col>
+                <i-col span="24">
+                    <Input v-model="textObj.textarea_1"
                            type="textarea"
                            :rows="5"
-                           :readonly="textObj.readonly_0"
+                           :readonly="textObj.readonly_1"
+                           :autosize="{minRows:5, maxRows: 5}"/>
+                </i-col>
+                <i-col span="24">
+                    <div class="form-item">
+                        <label>签名：</label>
+                        <div class="form-content">
+                            <Input v-model="textObj.name_1" :readonly="textObj.readonly_1"/>
+                        </div>
+                    </div>
+                </i-col>
+            </Row>
+
+            <div class="divider-line"></div>
+
+            <Row>
+                <i-col span="24">
+                    <div class="item">
+                        <span class="item-label">领导批示：</span>
+                    </div>
+                </i-col>
+                <i-col span="24">
+                    <Input v-model="textObj.textarea_2"
+                           type="textarea"
+                           :rows="5"
+                           :readonly="textObj.readonly_2"
                            :autosize="{minRows:5, maxRows: 5}" />
                 </i-col>
                 <i-col span="24">
                     <div class="form-item">
                         <label>签名：</label>
                         <div class="form-content">
-                            <Input v-model="textObj.name_0" :readonly="textObj.readonly_0" />
+                            <Input v-model="textObj.name_2" :readonly="textObj.readonly_2"/>
                         </div>
                     </div>
                 </i-col>
-            </i-col>
-        </Row>
+            </Row>
 
-        <div class="divider-line"></div>
-
-        <Row>
-            <i-col span="24">
-                <div class="item">
-                    <span class="item-label">分管领导意见：</span>
-                </div>
-            </i-col>
-            <i-col span="24">
-                <Input v-model="textObj.textarea_1"
-                       type="textarea"
-                       :rows="5"
-                       :readonly="textObj.readonly_1"
-                       :autosize="{minRows:5, maxRows: 5}"/>
-            </i-col>
-            <i-col span="24">
-                <div class="form-item">
-                    <label>签名：</label>
-                    <div class="form-content">
-                        <Input v-model="textObj.name_1" :readonly="textObj.readonly_1"/>
-                    </div>
-                </div>
-            </i-col>
-        </Row>
-
-        <div class="divider-line"></div>
-
-        <Row>
-            <i-col span="24">
-                <div class="item">
-                    <span class="item-label">领导批示：</span>
-                </div>
-            </i-col>
-            <i-col span="24">
-                <Input v-model="textObj.textarea_2"
-                       type="textarea"
-                       :rows="5"
-                       :readonly="textObj.readonly_2"
-                       :autosize="{minRows:5, maxRows: 5}" />
-            </i-col>
-            <i-col span="24">
-                <div class="form-item">
-                    <label>签名：</label>
-                    <div class="form-content">
-                        <Input v-model="textObj.name_2" :readonly="textObj.readonly_2"/>
-                    </div>
-                </div>
-            </i-col>
-        </Row>
-
-        <div class="divider-line"></div>
-
+            <div class="divider-line"></div>
+        </div>
 
         <div v-for="item in auditContent[0].eSignature"
              class="signature-box"
@@ -386,7 +391,12 @@
 
     .quality_supervision-container {
         position: relative;
-        padding: 30px;
+        width: 595.28px;
+        .page {
+            padding: 30px;
+            width: 595.28px;
+            height: 841.89px;
+        }
 
         .signature-box {
             position: absolute;

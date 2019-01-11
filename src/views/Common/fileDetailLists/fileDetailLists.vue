@@ -2,8 +2,9 @@
     <div class="fileDetailLists-container">
         <Table ref="table"
                border
+               :size="templateType === 'quality_supervision' ? 'small' : ''"
                disabled-hover
-               :class="{'custom-ivu-table': isView}"
+               :class="{'custom-ivu-table': isView, 'custom-ivu-table2': templateType !== 'quality_supervision'}"
                :data="tableData"
                :columns="tableColumns"></Table>
         <!--<div v-if="!isView" class="ivu-modal-footer">-->
@@ -124,11 +125,11 @@
             setTableColumns() {
                 if (this.isView) {
                     this.tableColumns = [
-                        { title: '序号', width: 60, align: 'center', type: 'index', },
-                        { title: '项目', width: 120, align: 'center', key: 'item'},
+                        { title: '序号', width: 35, align: 'center', type: 'index', },
+                        { title: '项目', width: 80, align: 'center', key: 'item'},
                         { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
-                        { title: '备注', width: 160, align: 'center', key: 'remark'},
-                        { title: '份数', width: 80, align: 'center', key: 'num',
+                        { title: '备注', width: 90, align: 'left', key: 'remark'},
+                        { title: '份数', width: 45, align: 'center', key: 'num',
                             render: (h, params) => {
                                 if (params.row.num && params.row.num > 0) {
                                     return h('span', {
@@ -155,7 +156,7 @@
                 }
                 else {
                     this.tableColumns = [
-                        { title: '序号', width: 60, align: 'center', type: 'index', },
+                        { title: '序号', width: 35, align: 'center', type: 'index', },
                         { title: '项目', width: 80, align: 'center', key: 'item'},
                         { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
                         { title: '份数', width: 80, align: 'center', key: 'num',
@@ -171,7 +172,7 @@
                         { title: '上传状态', width: 100, align: 'center', key: 'fileStatus', render: (h, params) =>{
                                 return h('div', params.row.fileStatus === '1' ? '已上传' : '未上传');
                             }},
-                        { title: '备注', width: 80, align: 'center', key: 'remark'},
+                        { title: '备注', width: 90, align: 'left', key: 'remark'},
                         {
                             title: '操作',
                             width: 200,
@@ -299,6 +300,20 @@
 </style>
 
 <style lang="scss">
+
+    .fileDetailLists-container {
+        .ivu-table-cell {
+            padding-left: 9px;
+            padding-right: 9px;
+        }
+        .ivu-table td {
+            height: 42px;
+        }
+        .ivu-table-small td {
+            height: 20px;
+        }
+    }
+
     $color: rgba(181,43,25,0.4);
     .custom-ivu-table {
         border-color: $color;
