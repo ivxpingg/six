@@ -4,7 +4,6 @@ export default {
     data() {
         return {
             projectShowList: [],
-
             polygonOverlays: [],
 
             format_edit: {
@@ -16,7 +15,9 @@ export default {
             },
 
             polyline_edit: null,
-            marker_edit: null
+            marker_edit: null,
+
+            modal_video: true
         }
     },
     methods: {
@@ -57,6 +58,7 @@ export default {
                 //创建右键菜单
                 let markerMenu = new BMap.ContextMenu();
                 markerMenu.addItem(new BMap.MenuItem('编辑', this.polylineEdit));
+                markerMenu.addItem(new BMap.MenuItem('查看视频', this.watchVideo));
                 polyline.addContextMenu(markerMenu);
 
                 //
@@ -119,6 +121,12 @@ export default {
 
 
             polyline.enableEditing();
+        },
+
+        // 看视频
+        watchVideo() {
+            this.modal_video = true;
+            this.initPlugin();
         },
 
         // 编辑保存

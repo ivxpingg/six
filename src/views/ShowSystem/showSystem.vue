@@ -168,18 +168,18 @@
         }
 
         .chart-card {
-            background-color: rgba(17,48,124,0.6);
+            background-color: rgba(39,58,85,0.6);
             border: 1px solid rgba(255,255,255,0);
 
             .ivu-card-head {
                 padding: 6px;
-                background-color: rgba(17,48,124,0.8);
+                background-color: rgba(39,58,85,0.8);
                 border-bottom: 1px solid rgba(255,255,255,0);
                 p {
-                    color: #01b0ff;
+                    color: #FFF;
                     font-size: 12px;
                     .ivu-icon {
-                        color: #01b0ff;
+                        color: #FFF;
                         font-size: 20px;
                     }
                 }

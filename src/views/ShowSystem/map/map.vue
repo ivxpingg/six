@@ -58,19 +58,35 @@
             </Form>
         </Modal>
 
+        <!--视频窗口-->
+        <Modal title="视频"
+               v-model="modal_video"
+               :width="800"
+               @on-cancel="destroyWnd"
+               footer-hide>
+            <vModalBothSides :height="450">
+                <div slot="left"></div>
+                <div slot="right">
+                    <div class="video-box" ref="video_div" id="video_div"></div>
+                </div>
+            </vModalBothSides>
+        </Modal>
+
     </div>
 </template>
 <script>
     import initBMap from './initBMap';
     import vCommonIcon from '@/components/commonIcon/commonIcon';
+    import vModalBothSides from '../../../components/modal-body/modal-both-sides';
     import projectSelect_mixin from './mixin/projectSelect';
     import mapDrawing_mixin from './mixin/mapDrawing';
     import projectLine_mixin from './mixin/projectLine';
+    import videoControl_mixin from './mixin/videoControl';
     import MOMENT from 'moment';
     export default {
         name: 'baiduMap',
-        mixins: [projectSelect_mixin, mapDrawing_mixin, projectLine_mixin],
-        components: {vCommonIcon},
+        mixins: [projectSelect_mixin, mapDrawing_mixin, projectLine_mixin, videoControl_mixin],
+        components: {vCommonIcon, vModalBothSides},
         data() {
             return {
                 map: null,
@@ -98,6 +114,10 @@
             });
 
             this.getProjectList_select();
+
+            // 初始化视频控件
+            this.initPlugin();
+
         },
         methods: {
             onChange_dataYear(value) {
@@ -149,7 +169,7 @@
             left: 0;
             right: 0;
             height: 70px;
-            background-color: rgba(17,48,124,0.9);
+            background-color: rgba(39,58,85,0.9);
             z-index: 111;
 
             .title-logo {
@@ -162,7 +182,7 @@
                 float: left;
                 padding-left: 20px;
                 font-size: 30px;
-                color: #01b0ff;
+                color: #fff;
                 font-weight: 700;
                 line-height: 70px;
                 letter-spacing: 8px;
@@ -177,12 +197,12 @@
                     float: left;
                     margin-left: 18px;
                     .ivu-btn {
-                        color: #01b0ff;
+                        color: #FFF;
                         font-weight: 700;
                         border: none;
                         box-shadow: none;
                         &:hover, &:active {
-                            color: #FFF;
+                            color: #BBB;
                             border: none;
                         }
                     }
@@ -192,6 +212,12 @@
         .map {
             height: 100%;
         }
+    }
+
+    .video-box {
+        width: 600px;
+        height: 400px;
+        border: 1px solid red;
     }
 </style>
 <style lang="scss">
@@ -228,12 +254,12 @@
 
     .datapicker {
         .ivu-icon {
-            color: #01b0ff;
+            color: #FFF;
         }
 
         .ivu-input {
-            color: #01b0ff;
-            border: 1px solid #01b0ff;
+            color: #fff;
+            border: 1px solid #fff;
             background-color: transparent;
         }
 
