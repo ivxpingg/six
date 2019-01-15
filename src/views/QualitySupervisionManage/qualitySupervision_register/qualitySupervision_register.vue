@@ -198,7 +198,7 @@
                                 }
                             }, '查看'));
 
-                            if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
+                            if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && params.row.projectStatus !== 'handover_apply'  && this.auth_add) {
                                 list.push(h('Button', {
                                     props: {
                                         type: 'primary',

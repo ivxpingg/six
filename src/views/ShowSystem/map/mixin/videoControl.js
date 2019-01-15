@@ -18,13 +18,15 @@ export default {
             port: '80',
             snapDir: 'd',
             layout: '2*2',
-            encryptedFields: 'secret'
+            encryptedFields: 'secret',
+
+            modal_video: false,
+            video_projectName: ''
         }
     },
     methods: {
         // 设置窗口遮挡
         setWndCover() {
-debugger
             this.oWebControl.JS_Resize(600, 400); this.oWebControl.JS_Resize(600, 400);
             var iWidth = window.innerWidth;
             var iHeight = window.innerHeight;
@@ -192,13 +194,19 @@ debugger
             return fmt;
         },
 
-        destroyWnd() {
+        destroyWnd(callback) {
             this.initCount = 0;
-            this.oWebControl.JS_RequestInterface({
-                funcName: "destroyWnd"
-            }).then(function (oData) {
-                this.showCBInfo(JSON.stringify(oData ? oData.responseMsg : ''));
-            });
+            if (this.oWebControl) {
+                this.oWebControl.JS_RequestInterface({
+                    funcName: "destroyWnd"
+                }).then(function (oData) {
+                    this.oWebControl = null;
+                    this.showCBInfo(JSON.stringify(oData ? oData.responseMsg : ''));
+                    callback();
+                }).catch(e => {
+                });
+            }
+
         }
     }
 }

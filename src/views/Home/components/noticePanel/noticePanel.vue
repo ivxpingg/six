@@ -54,13 +54,14 @@
                 <Table ref="table"
                        border
                        size="small"
-                       height="330"
+                       height="354"
                        @on-row-dblclick="onRowDbclick"
                        :data="tableData"
                        :columns="tableColumns"></Table>
                 <Page prev-text="上一页"
                       next-text="下一页"
                       show-total
+                      size="small"
                       :current="searchParams_more.current"
                       :page-size="searchParams_more.size"
                       :total="searchParams_more.total"
@@ -93,7 +94,7 @@
                 // 查看更多
                 searchParams_more: {
                     current: 1,      // 当前第几页
-                    size: 10,      // 每页几行
+                    size: 8,      // 每页几行
                     total: 0     // 总行数
                 },
                 modal_more: false,

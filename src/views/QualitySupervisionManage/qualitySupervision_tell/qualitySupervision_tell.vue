@@ -56,6 +56,38 @@
 
         <!--查看日志-->
         <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
+
+        <!--项目材料复核-->
+        <Modal v-model="modal_projectCheck"
+               class-name="modal-body-padding0"
+               title="项目材料复核"
+               :width="1200">
+            <div style="height: 650px;">
+                <vProjectCheck v-if="modal_projectCheck"
+                       :projectId="currentRow.projectId"></vProjectCheck>
+            </div>
+            <div slot="footer">
+                <Button type="primary" size="large" icon="ios-send" @click="openSendCheckFile">下发核查意见书</Button>
+            </div>
+        </Modal>
+
+        <!--下发核查意见书-->
+        <Modal title="下发核查意见书" v-model="modal_sendCheckFile">
+            <Form ref="form"
+                  :model="sendCheckFileForm"
+                  :rules="rules"
+                  :label-width="100">
+                <FormItem label="核查意见书：" prop="fileId">
+                    <div style="width: 350px;"><vFilesSelectButton @modal-callback="onSelect"
+                                                                   :projectId="currentRow.projectId"
+                                                                   :fileType="'monitor_procedure'" multiple></vFilesSelectButton></div>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="primary" size="large" @click="sendCheckFile">确定</Button>
+            </div>
+        </Modal>
+
     </div>
 </template>
 
@@ -67,6 +99,8 @@
     import vNoticeReply from './noticeReply/noticeReply.vue';
     import MOMENT from 'moment';
     import logViewMixin from '../../Common/logView/mixin';
+    import vProjectCheck from './projectCheck/projectCheck';
+    import vFilesSelectButton from '../../Common/filesSelect/filesSelectButton.vue';
     export default {
         name: 'qualitySupervision_tell',
         mixins: [logViewMixin],
@@ -75,7 +109,9 @@
             vViewFiles,
             vAddSupervisionTell,
             vNoticeModification,
-            vNoticeReply},
+            vNoticeReply,
+            vProjectCheck,
+            vFilesSelectButton},
         data() {
             return {
                 searchParams: {
@@ -140,11 +176,28 @@
                     { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
                     {
                         title: '操作',
-                        width: 340,
+                        width: 450,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
                             let list = [];
+
+                            if(params.row.chargeFlag) {  // 如果是负责人
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small',
+                                        icon: 'md-send'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.currentRow.projectId = params.row.projectId;
+                                            this.currentRow.projectName = params.row.projectName;
+                                            this.modal_projectCheck = true;
+                                        }
+                                    }
+                                }, '项目材料复核'));
+                            }
 
                             if ( params.row.chargeFlag) {
                                 if (!params.row.advanceNotice) {
@@ -211,8 +264,8 @@
                                             click: () => {
                                                 this.currentRow.projectId = params.row.projectId;
                                                 this.currentRow.projectName = params.row.projectName;
-                                                this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
-                                                this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
+                                                this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId || '';
+                                                this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus || '';
                                                 this.$refs.modal_noticeReply.modalValue = true;
                                             }
                                         }
@@ -263,7 +316,17 @@
                     }
                 },
                 // 查看附件
-                filesData: []
+                filesData: [],
+
+                // 项目材料复核
+                modal_projectCheck: false,
+                modal_sendCheckFile: false,
+                sendCheckFileForm: {
+                    fileId: ''
+                },
+                rules: {
+                    fileId: [{ required: true, message: '请上传核查意见书！', trigger: 'blur' }]
+                }
             };
         },
         watch: {
@@ -363,9 +426,70 @@
                 this.getData();
             },
             modal_noticeReply_callback() {
+                this.resetData();
                 this.$refs.modal_noticeReply.modalValue = false;
                 this.getData();
-            }
+            },
+            resetData() {
+                Object.assign(this.currentRow, {
+                    projectId: '',
+                    projectName: '',
+                    changeNotice: {   // 整改通知
+                        changeNoticeId: ''
+                    },
+                    advanceNotice: {  // 上传监督交底
+                        advanceNoticeId: '',
+                        changeStatus: ''
+                    }
+                });
+            },
+            // 打开下发核查意见书
+            openSendCheckFile() {
+                this.modal_projectCheck = false;
+                this.modal_sendCheckFile = true;
+            },
+            // 下发核查意见书
+            sendCheckFile() {
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        this.$Modal.confirm({
+                            title: '下发核查意见书',
+                            content: '确定要下发核查意见书?',
+                            onOk: () => {
+                                this.$Spin.show();
+                                this.$http({
+                                    method: 'post',
+                                    url: '/projectAudit/sendOpinion',
+                                    data: JSON.stringify({
+                                        projectId: this.currentRow.projectId,
+                                        fileId: this.sendCheckFileForm.fileId
+                                    })
+                                }).then(res => {
+                                    this.$Spin.hide();
+                                    this.modal_sendCheckFile = false;
+                                    if(res.code === 'SUCCESS') {
+                                        this.$Message.success({
+                                            content: '下发成功！'
+                                        });
+
+                                    }
+                                }).catch(e => {
+                                    this.$Spin.hide();
+                                })
+                            }
+                        })
+                    } else {
+
+                    }
+                })
+            },
+            // 获取上传文件
+            onSelect(fileList) {
+                if (fileList.length > 0) {
+                    this.sendCheckFileForm.fileId = fileList[0].fileId;
+                }
+                // this.sendCheckFileForm.fileId = fileList.map(v => v.fileId);
+            },
         }
     }
 </script>

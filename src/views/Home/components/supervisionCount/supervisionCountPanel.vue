@@ -55,6 +55,7 @@
             initEcharts() {
                 this.echarts = Echarts.init(this.$refs.echarts);
                 let options = {
+                    color: ['#2d8cf0'],
                     title: {
                         text: '近一周监督工作情况'
                     },
@@ -94,7 +95,7 @@
                             type:'line',
                             smooth: true,
                             areaStyle: {normal: {}},
-                            data:[120, 132, 101, 134, 90, 230, 210]
+                            data:[]
                         }
                     ]
                 };

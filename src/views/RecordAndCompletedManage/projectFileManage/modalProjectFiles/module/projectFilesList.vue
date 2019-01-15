@@ -21,6 +21,13 @@
         name: 'projectFilesList',   // 文件列表
         components: {vIvxFile},
         props: {
+            // 多选
+            multiple: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
+            },
             projectId: {
                 type: String,
                 default: ''

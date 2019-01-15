@@ -16,8 +16,6 @@ export default {
 
             polyline_edit: null,
             marker_edit: null,
-
-            modal_video: true
         }
     },
     methods: {
@@ -124,8 +122,9 @@ export default {
         },
 
         // 看视频
-        watchVideo() {
+        watchVideo(e, r, polyline) {
             this.modal_video = true;
+            this.video_projectName = polyline.info.projectName;
             this.initPlugin();
         },
 

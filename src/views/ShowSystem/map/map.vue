@@ -59,15 +59,24 @@
         </Modal>
 
         <!--视频窗口-->
-        <Modal title="视频"
+        <Modal :title="video_projectName"
                v-model="modal_video"
                :width="800"
                @on-cancel="destroyWnd"
                footer-hide>
-            <vModalBothSides :height="450">
-                <div slot="left"></div>
+            <vModalBothSides :height="450" style="margin: -16px;">
+                <div slot="left">
+                    <div style="width: 140px;">
+                        <Tree :data="data1"></Tree>
+                    </div>
+                </div>
                 <div slot="right">
-                    <div class="video-box" ref="video_div" id="video_div"></div>
+                    <Row>
+                        <i-col span="24">
+                            <div class="video-panel" :class="{'video-panel-max': video_max}" @dblclick="switch_max"></div>
+                        </i-col>
+                    </Row>
+                    <!--<div class="video-box" ref="video_div" id="video_div"></div>-->
                 </div>
             </vModalBothSides>
         </Modal>
@@ -100,8 +109,23 @@
                 },
 
                 // 当前状态： 编辑状态：edit; 添加状态： add; 默认状态： normal
-                status: 'normal'
+                status: 'normal',
+
+                // 测试
+                data1: [
+                    { title: '视频1' },
+                    { title: '视频2' },
+                    { title: '视频3' },
+                    { title: '视频4' },
+                    { title: '视频5' },
+                    { title: '视频6' },
+                    { title: '视频7' }
+                ],
+                video_max: false
             }
+        },
+        beforeDestroy() {
+            this.destroyWnd();
         },
         created() {
             this.searchParams.year = MOMENT().format('YYYY');
@@ -114,9 +138,6 @@
             });
 
             this.getProjectList_select();
-
-            // 初始化视频控件
-            this.initPlugin();
 
         },
         methods: {
@@ -155,6 +176,10 @@
                 this.getProjectShowList();
             },
 
+            switch_max() {
+                debugger
+                this.video_max = !this.video_max;
+            }
         }
     }
 </script>
@@ -218,6 +243,22 @@
         width: 600px;
         height: 400px;
         border: 1px solid red;
+    }
+
+    .video-panel {
+        background-color: #333;
+        border: 1px solid #666;
+        width: 600px;
+        height: 400px;
+
+        &.video-panel-max {
+            position: fixed;
+            z-index: 99999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     }
 </style>
 <style lang="scss">

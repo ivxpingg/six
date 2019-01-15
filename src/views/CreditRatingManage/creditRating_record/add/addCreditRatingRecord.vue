@@ -52,7 +52,7 @@
                     </Poptip>
                 </FormItem>
                 <FormItem  v-show="formData.projectUnitId"></FormItem>
-                <FormItem label="扣分项:" prop="content">
+                <FormItem label="扣分项:" prop="deductDetail">
                     <Poptip trigger="focus"
                             width="570"
                             word-wrap
@@ -138,7 +138,7 @@
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
                     projectUnitId: [{ required: true, message: '单位不能为空！', trigger: 'blur' }],
                     creditCodeId: [{ required: true, message: '扣分代码不能为空！', trigger: 'blur' }],
-                    deduct: [{ required: true, type:'number', message: '扣分不能为空！', trigger: 'blur' }],
+                    deduct: [{ type:'number', message: '请输入数值！', trigger: 'blur' }, { required: true, type:'number', message: '扣分不能为空！', trigger: 'blur' }],
                     deductDetail: [{ required: true, message: '扣分项不能为空！', trigger: 'blur' }],
                 },
 

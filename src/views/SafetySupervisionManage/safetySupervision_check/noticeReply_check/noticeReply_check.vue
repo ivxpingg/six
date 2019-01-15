@@ -38,10 +38,10 @@
                            placeholder="请输入整改标题" readonly/>
                 </FormItem>
                 <FormItem label="整改内容:">
-                    <Input v-model="formData.changeCont                           type="textarea"
-                    rows="5"ent"
+                    <Input v-model="formData.changeContent"
+                           type="textarea"
+                           :rows="5"
                            placeholder="请输入整改内容"
-
                            style="width: 590px;"
                            readonly/>
                 </FormItem>
@@ -65,8 +65,23 @@
 
             </Form>
             <div slot="footer">
+                <Button type="error" size="large" @click="noPass" v-show="changeStatus === 'reply'">整改不通过</Button>
                 <Button type="primary" size="large" @click="savePass" v-show="changeStatus === 'reply'">整改通过</Button>
             </div>
+
+            <Modal title="整改不通过" v-model="modal_noPass">
+                <Form ref="form"
+                      :model="noPassForm"
+                      :rules="rules"
+                      :label-width="60">
+                    <FormItem label="原因：" prop="content">
+                        <Input v-model="noPassForm.content" type="textarea" :rows="3" placeholder="请输入不通过原因" />
+                    </FormItem>
+                </Form>
+                <div slot="footer">
+                    <Button type="primary" size="large" @click="saveNoPass">确定</Button>
+                </div>
+            </Modal>
 
             <vViewFiles ref="viewFile" :data="viewFilesData"></vViewFiles>
         </Modal>
@@ -115,7 +130,15 @@
                 },
                 dict_overdueHandle: [],
 
-                viewFilesData: []
+                viewFilesData: [],
+
+                modal_noPass: false,
+                noPassForm: {
+                    content: ''
+                },
+                rules: {
+                    content: [{ required: true, message: '原因不能为空！', trigger: 'blur' }]
+                }
             }
         },
         watch: {
@@ -194,6 +217,43 @@
             onClick_viewFile_open(changeReplyId) {
                 this.getData_vViewFile(changeReplyId, 'monitor_procedure', 'viewFilesData');
                 this.$refs.viewFile.modalValue = true;
+            },
+
+            // 整改通过
+            noPass() {
+                this.modal_noPass = true;
+            },
+            saveNoPass() {
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        this.$Modal.confirm({
+                            title: '整改不通过',
+                            content: '确定要退回重新整改?',
+                            onOk: () => {
+                                this.$Spin.show();
+                                this.$http({
+                                    method: 'post',
+                                    url: '/changeNotice/changeNotPass',
+                                    data: JSON.stringify({
+                                        changeNoticeId: this.changeNoticeId,
+                                        content: this.noPassForm.content
+                                    })
+                                }).then(res => {
+                                    this.$Spin.hide();
+                                    if(res.code === 'SUCCESS') {
+                                        this.$Message.success('重新退回整改成功！');
+                                        this.modal_noPass = false;
+                                        this.$emit('modal-callback');
+                                    }
+                                }).catch(e => {
+                                    this.$Spin.hide();
+                                })
+                            }
+                        })
+                    } else {
+
+                    }
+                })
             }
         }
     }

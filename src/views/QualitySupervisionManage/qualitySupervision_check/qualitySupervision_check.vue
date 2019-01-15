@@ -293,8 +293,22 @@
             },
             // 整改通过的回调
             modal_noticeReply_check_callback() {
+                this.resetData();
                 this.$refs.modal_noticeReply_check.modalValue = false;
                 this.getData();
+            },
+            resetData() {
+                Object.assign(this.currentRow, {
+                    projectId: '',
+                    projectName: '',
+                    changeNotice: {   // 整改通知
+                        changeNoticeId: ''
+                    },
+                    advanceNotice: {  // 上传监督交底
+                        advanceNoticeId: '',
+                        changeStatus: ''
+                    }
+                });
             },
             // 查看附件
             getFilesData(row) {

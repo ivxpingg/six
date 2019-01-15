@@ -82,15 +82,16 @@
                             return h('div', params.row.recordDate ? MOMENT(params.row.recordDate).format('YYYY-MM-DD') : '');
                         }
                     },
-                    { title: '文号', align: 'center', width: 120, key: 'recordNo'},
-                    { title: '文件名称', align: 'center', width: 120, key: 'fileName'},
-                    { title: '文件类型', align: 'center', width: 120, key: 'fileType'},
-                    { title: '项目名称', align: 'center', width: 120, key: 'projectName'},
+                    { title: '文号', align: 'center', width: 180, key: 'recordNo'},
+                    { title: '文件名称', align: 'center', width: 160, key: 'fileName'},
+                    // { title: '文件类型', align: 'center', width: 120, key: 'fileType'},
+                    { title: '文件类型', align: 'center', width: 140, key: 'fileRecordTypeLabel'},
+                    { title: '项目名称', align: 'center', width: 160, key: 'projectName'},
                     { title: '标段', align: 'center', width: 100, key: 'part'},
 
-                    { title: '发出单位', align: 'center', width: 120, key: 'sendUnit'},
+                    { title: '发出单位', align: 'center', width: 160, key: 'sendUnit'},
 
-                    { title: '接收单位', align: 'center', width: 120, key: 'receiveUnit'},
+                    { title: '接收单位', align: 'center', width: 160, key: 'receiveUnit'},
 
                     // { title: '整改回复状态', align: 'center', width: 120, key: 'changeStatus'},
                     // { title: '整改回复时间', align: 'center', width: 120, key: 'changeReplyDate',

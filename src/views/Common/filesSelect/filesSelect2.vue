@@ -80,6 +80,7 @@
                                      @callback="onSelect_folderType"></vProjectFiles_0>
 
                     <vProjectFilesList v-if="openFilesList"
+                                       :multiple="multiple"
                                        :folderType="folderType"
                                        :projectId="cProjectId"
                                        @callback="callback_change" ></vProjectFilesList>
@@ -110,6 +111,13 @@
             vProjectFilesList
         },
         props: {
+            // 多选
+            multiple: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
+            },
             fileType: {
                 type: String,
                 default: 'monitor_procedure'

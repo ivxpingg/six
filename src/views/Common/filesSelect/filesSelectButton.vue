@@ -32,10 +32,11 @@
         // components: {vFilesSelect},
         components: {vFilesSelect, vFilesSelect2},
         props: {
+            // 多选
             multiple: {
                 type: Boolean,
                 default() {
-                    return false;
+                    return true;
                 }
             },
             // 上传的文件类型
