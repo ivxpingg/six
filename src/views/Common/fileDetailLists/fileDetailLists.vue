@@ -4,7 +4,11 @@
                border
                :size="templateType === 'quality_supervision' ? 'small' : ''"
                disabled-hover
-               :class="{'custom-ivu-table': isView, 'custom-ivu-table2': templateType !== 'quality_supervision'}"
+               :class="{
+               'custom-ivu-table': isView,
+               'custom-ivu-table2': templateType !== 'quality_supervision',
+               'custom-ivu-table3': tableHeight > 560
+               }"
                :data="tableData"
                :columns="tableColumns"></Table>
         <!--<div v-if="!isView" class="ivu-modal-footer">-->
@@ -118,7 +122,10 @@
                     projectFileId: '',
                     templateType: '',
                     remark: ''
-                }
+                },
+
+                // 表格高度
+                tableHeight: 560
             };
         },
         methods: {
@@ -127,8 +134,8 @@
                     this.tableColumns = [
                         { title: '序号', width: 35, align: 'center', type: 'index', },
                         { title: '项目', width: 80, align: 'center', key: 'item'},
-                        { title: '明细', minWidth: 120, align: 'left', key: 'itemDetail'},
-                        { title: '备注', width: 90, align: 'left', key: 'remark'},
+                        { title: '明细', width: 200, align: 'left', key: 'itemDetail'},
+                        { title: '备注', minWidth: 110, align: 'left', key: 'remark'},
                         { title: '份数', width: 45, align: 'center', key: 'num',
                             render: (h, params) => {
                                 if (params.row.num && params.row.num > 0) {
@@ -243,6 +250,10 @@
                     }
                 });
                 ivuTableRows[setIdx].childNodes[1].setAttribute('rowspan', rowspan);
+
+                setTimeout(() => {
+                    this.tableHeight = this.$refs.table.$el.clientHeight;
+                },0);
             },
             getData() {
                 this.$http({
@@ -303,14 +314,25 @@
 
     .fileDetailLists-container {
         .ivu-table-cell {
-            padding-left: 9px;
-            padding-right: 9px;
+            padding-left: 3px;
+            padding-right: 3px;
         }
         .ivu-table td {
-            height: 42px;
+            height: 32px;
         }
         .ivu-table-small td {
             height: 20px;
+        }
+
+        .custom-ivu-table3 {
+            .ivu-table-cell {
+                padding-left: 3px;
+                padding-right: 3px;
+                line-height: 16px;
+            }
+            .ivu-table-small td {
+                height: 18px;
+            }
         }
     }
 
