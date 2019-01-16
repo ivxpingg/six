@@ -1,4 +1,4 @@
-import { setToken, getToken, setMenuListInLocalstorage } from '@/lib/util';
+import { setToken, getToken, setMenuListInLocalstorage, setTagNavListInLocalstorage } from '@/lib/util';
 import axios from '@/lib/axios';
 import Config from '../../config';
 export default {
@@ -48,6 +48,7 @@ export default {
                     }
                 }).then((res) => {
                     commit('setToken', res.data.token);
+                    setTagNavListInLocalstorage([]);
                     resolve(res);
                 }).catch(err => {
                     reject(err)
@@ -63,6 +64,7 @@ export default {
                 }).then((res) => {
                     if (res.code === 'SUCCESS') {
                         setMenuListInLocalstorage(null);
+                        setTagNavListInLocalstorage([]);
                         commit('setToken', '');
                         resolve(res);
                     }

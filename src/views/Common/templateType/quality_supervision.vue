@@ -4,13 +4,13 @@
             <div class="title-unit">六安市交通建设工程质量监督局</div>
             <div class="title-template">{{templateTitle}}</div>
             <Row>
-                <i-col span="17">
+                <i-col span="16">
                     <div class="item">
                         <span class="item-label">报送单位：</span>
                         <span> {{projectInfo.unitName}} </span>
                     </div>
                 </i-col>
-                <i-col span="7">
+                <i-col span="8">
                     <div class="item">
                         <span class="item-label">收件日期：</span>
                         <span>{{projectInfo.insTime}}</span>
@@ -19,17 +19,17 @@
             </Row>
             <div class="divider-line"></div>
             <Row>
-                <i-col span="14">
+                <i-col span="13">
                     <div class="item">
                         <span class="item-label">项目名称：</span>
-                        <span style="display: inline-block; width: 210px;">
+                        <span style="display: inline-block; width: 195px;">
                             <span>{{projectInfo.projectName}}</span>
                         </span>
                     </div>
                 </i-col>
-                <i-col span="8">
+                <i-col span="11">
                     <div class="item">
-                        <span class="item-label">联系人/电话：</span>
+                        <span class="item-label">联系人/电话:</span>
                         <span>{{projectInfo.contacts}}-{{projectInfo.contactPhone}}</span>
                     </div>
                 </i-col>

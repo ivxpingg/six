@@ -396,6 +396,11 @@
                 })
             },
             uploadFile() {
+                if (!this.ifESignature()) {
+                    this.$Message.error('您尚未电子签名，请确认签名后通过！');
+                    return;
+                }
+
                 this.btnLoading_auditPass = true;
                 if (this.documentAudit.lastStep) {
                     this.print2x = true;
@@ -422,6 +427,17 @@
                     this.auditPass();
                 }
 
+            },
+            // 判断当前用户通过审核的时候是否已经盖章
+            ifESignature() {
+                let eSignatureList = this.$refs[this.documentHandle.fileRecordType].temData.stamp;
+
+                for (let i = 0; i < eSignatureList.length; i++) {
+                    if (eSignatureList[i].userId === this.$store.state.user.userId) {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     }
