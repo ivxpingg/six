@@ -59,12 +59,25 @@ export default {
                     this.drawingManager.close();
                     break;
                 case 'marker':
-                    if (this.marker) {
-                        this.map.removeOverlay(this.marker);
+                    if (this.status === 'edit') {
+                        if (this.marker_edit) {
+                            this.map.removeOverlay(this.marker_edit);
+                        }
+                        this.marker_edit = drawing.overlay;
+                        this.format_edit.lat = this.marker_edit.getPosition().lat;
+                        this.format_edit.lon = this.marker_edit.getPosition().lng;
+                        this.marker_edit.enableDragging();
+                        this.drawingManager.close();
+
                     }
-                    this.marker = drawing.overlay;
-                    this.marker.enableDragging();
-                    this.drawingManager.close();
+                    else {
+                        if (this.marker) {
+                            this.map.removeOverlay(this.marker);
+                        }
+                        this.marker = drawing.overlay;
+                        this.marker.enableDragging();
+                        this.drawingManager.close();
+                    }
                     break;
             }
         },

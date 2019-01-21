@@ -2,14 +2,19 @@
     <div class="unitCreditRecord-container"><vIvxFilterBox>
         <Form inline>
             <FormItem label="搜索条件:" :label-width="65">
+                <Input v-model="searchParams.projectName"
+                       style="width: 220px;"
+                       placeholder="请输入项目名称"/>
+            </FormItem>
+            <FormItem label="" :label-width="0">
                 <Input v-model="searchParams.searchKey"
                        style="width: 220px;"
-                       placeholder="请输入"/>
+                       placeholder="请输入单位"/>
             </FormItem>
             <FormItem label="选择时间:" :label-width="65">
                 <DatePicker type="year"
                             @on-change="onChage_daterange"
-                            placeholder="选择时间"
+                            placeholder="请输入单位名称"
                             style="width: 200px"></DatePicker>
             </FormItem>
             <FormItem>
@@ -64,6 +69,7 @@
         data() {
             return {
                 searchParams: {
+                    projectName: '',
                     searchKey: '',      // 模糊查询参数
                     year: ''
                 },

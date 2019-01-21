@@ -20,7 +20,7 @@
                              @click="onClick_add_modal"> 添加 </Button> </li>
 
                 <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-tianjia"
-                             v-show="status === 'add'"
+                             v-show="status === 'add' || status === 'edit'"
                              @click="onClick_addMarker_modal"> 添加打卡点 </Button> </li>
 
                 <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-wancheng"
@@ -177,7 +177,6 @@
             },
 
             switch_max() {
-                debugger
                 this.video_max = !this.video_max;
             }
         }

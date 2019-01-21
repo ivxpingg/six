@@ -105,6 +105,10 @@ export default {
         polylineEdit(e, r, polyline) {
             polyline.isEdit = true;
 
+            if (!this.drawingManager) {
+                this.initDrawingManager();
+            }
+
             this.status = 'edit';
             this.removePolygonOverlay(polyline);
             this.polyline_edit = polyline;
