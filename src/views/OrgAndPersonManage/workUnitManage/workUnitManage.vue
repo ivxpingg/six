@@ -1,6 +1,6 @@
 <template>
     <Card class="workUnitManage-container">
-        <vIvxFilterBox dashed>
+        <vIvxFilterBox dashed v-if="auth_add">
             <!--<Upload :action="uploadParams.actionUrl"-->
                     <!--:showUploadList="uploadParams.showUploadList"-->
                     <!--:multiple="uploadParams.multiple"-->
@@ -77,9 +77,11 @@
     import Config from '../../../config';
     import vUnitDetail from './unitDetail/unitDetail';
     import vAddUnit from './addUnit/addUnit';
+    import AuthMixin from '../../../lib/mixin/authMixin';
     export default {
         // 从业单位管理
         name: 'workUnitManage',
+        mixins: [AuthMixin],
         components: {vIvxFilterBox, vUnitDetail, vAddUnit},
         data() {
             return {

@@ -32,6 +32,10 @@ export default {
         auth_del() {
             return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('del') > -1);
         },
+        // 查看权限
+        auth_view() {
+            return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('view') > -1);
+        },
         // 审核权限
         auth_audit() {
             return this.auth.length === 0 ? false : (this.auth.indexOf('all') > -1 || this.auth.indexOf('audit') > -1);

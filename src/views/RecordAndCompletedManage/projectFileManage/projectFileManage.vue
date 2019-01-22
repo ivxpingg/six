@@ -1,10 +1,10 @@
 <template>
     <Card class="projectFileManage-container">
         <vIvxFilterBox>
-            <Button type="primary"
-                    icon="ios-list">移交处理清单</Button>
-            <Button type="primary"
-                    icon="ios-options">案件清单处理</Button>
+            <!--<Button type="primary"-->
+                    <!--icon="ios-list">移交处理清单</Button>-->
+            <!--<Button type="primary"-->
+                    <!--icon="ios-options">案件清单处理</Button>-->
             <!--<Button type="primary"-->
                     <!--icon="md-document"-->
                     <!--@click="modalLogView('archive')">查看日志</Button>-->

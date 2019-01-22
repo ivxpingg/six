@@ -1,6 +1,6 @@
 <template>
     <div class="vUnitAccessory-container">
-        <vIvxFilterBox v-if="editable">
+        <vIvxFilterBox v-if="editable && auth_update">
             <Upload ref="upload"
                     :action="uploadAtion"
                     :showUploadList="uploadParams.showUploadList"
@@ -27,10 +27,11 @@
 <script>
     import vIvxFilterBox from '../../../../../components/ivxFilterBox/ivxFilterBox';
     import uploadMixin from '../../../../../lib/mixin/uploadMixin';
+    import AuthMixin from '../../../../../lib/mixin/authMixin';
     import vThumb from '../../../../Common/thumb/thumb';
     export default {
         name: 'vUnitAccessory',  // 附件信息
-        mixins: [uploadMixin],
+        mixins: [uploadMixin, AuthMixin],
         components: {vIvxFilterBox, vThumb},
         props: {
             userId: {

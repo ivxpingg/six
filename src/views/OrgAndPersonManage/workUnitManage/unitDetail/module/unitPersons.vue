@@ -1,13 +1,13 @@
 <template>
     <div class="unitPersons-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox v-if="auth_update">
             <Button type="primary" @click="open_modal_addPerson">新增人员</Button>
             <!--<Button type="primary">人员变更</Button>-->
         </vIvxFilterBox>
         <div class="ivx-table-box">
             <Table border
                    height="405"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
@@ -40,8 +40,10 @@
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
     import vModalEmployeeSelect from '../../../../Common/employeeSelect/modalEmployeeSelect';
+    import AuthMixin from '../../../../../lib/mixin/authMixin';
     export default {
         name: 'unitPersons',  // 单位人员
+        mixins: [AuthMixin],
         components: {vIvxFilterBox, vModalEmployeeSelect},
         props: {
             unitId: {
@@ -74,32 +76,7 @@
                     { title: '联系电话', width: 120, align: 'center', key: 'phone' },
                     { title: '身份证号码', width: 160, align: 'center', key: 'idNumber' },
                     { title: '岗位', width: 160, align: 'center', key: 'job' },
-                    {
-                        title: '操作',
-                        width: 120,
-                        align: 'center',
-                        fixed: 'right',
-                        render: (h, params) => {
-                            let list = [
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small',
-                                        icon: 'ios-trash-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.removePerson(params.row);
-                                        }
-                                    }
-                                }, '移除')
-                            ];
 
-                            return h('div',{
-                                class: 'ivx-table-cell-handle'
-                            },list);
-                        }
-                    }
                 ],
                 tableData: [],
 
@@ -125,6 +102,34 @@
             // 已选人员userId [1,2,3]
             selectedValue() {
                 return this.tableData.map(v => v.userId);
+            },
+            _tableColumns() {
+                return this.editable && this.auth_del ? this.tableColumns.concat([{
+                    title: '操作',
+                    width: 120,
+                    align: 'center',
+                    fixed: 'right',
+                    render: (h, params) => {
+                        let list = [
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small',
+                                    icon: 'ios-trash-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.removePerson(params.row);
+                                    }
+                                }
+                            }, '移除')
+                        ];
+
+                        return h('div',{
+                            class: 'ivx-table-cell-handle'
+                        },list);
+                    }
+                }]) : this.tableColumns;
             }
         },
         mounted() {

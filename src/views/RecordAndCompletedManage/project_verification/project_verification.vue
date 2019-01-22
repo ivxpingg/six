@@ -1,6 +1,6 @@
 <template>
     <div class="project_verification-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">交工验收申请登记</Button>
@@ -35,7 +35,7 @@
             <Table border
                    :height="540"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
@@ -128,6 +128,152 @@
             vHandleAudit,
             vSendProjectFiles
         },
+        computed: {
+            _tableColumns() {
+                return this.auth_add || this.auth_update || this.auth_audit || this.auth_view ? this.tableColumns.concat([{
+                    title: '操作',
+                    width: 350,
+                    align: 'center',
+                    fixed: 'right',
+                    render: (h, params) => {
+                        let list = [];
+
+                        list.push(h('Button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small',
+                                icon: 'ios-create-outline'
+                            },
+                            on: {
+                                click: () => {
+                                    if (params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') {
+                                        this.isView = false;
+                                    }
+                                    else {
+                                        this.isView = true;
+                                    }
+                                    this.currentProject.projectId = params.row.projectId;
+                                    this.modal_edit = true;
+                                }
+                            }
+                        }, '查看'));
+
+                        if ((params.row.handleStatus === 'submitted'
+                            || params.row.handleStatus === 'replenish')
+                            && this.auth_add) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'md-checkmark-circle'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentProject.projectId = params.row.projectId;
+                                        this.$Modal.confirm({
+                                            title: '提交审核',
+                                            content: `确定要提交审核<${params.row.projectName}>项目`,
+                                            okText: '提交审核',
+                                            onOk: () => {
+                                                this.$http({
+                                                    method: 'get',
+                                                    url: '/projectAudit/handoverSubmit',
+                                                    params:{
+                                                        projectId: params.row.projectId
+                                                    }
+                                                }).then(res => {
+                                                    if (res.code === 'SUCCESS') {
+                                                        this.$Message.success('提交审核成功!');
+                                                        this.getData();
+                                                        this.currentProject.projectId = '';
+                                                        this.currentProject.auditProcessId = '';
+                                                        this.currentProject.processStepId = '';
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                }
+                            }, '提交审核'));
+                        }
+
+                        // 受理材料待审核才能审核  并且还没进流程
+                        if (params.row.handleStatus === 'handle'
+                            && !params.row.auditProcessId
+                            && this.auth_audit
+                            && params.row.projectStatus === 'handover_apply' ) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-document'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentProject.projectId = params.row.projectId;
+                                        this.modal_contentAudit = true;
+                                    }
+                                }
+                            }, '材料完整性审核'));
+                        }
+
+                        // 办理状态(handleStatus)是办理中, 并且有审核流程步骤(auditProcessId 和 processStepId)
+                        if (params.row.handleStatus === 'handle'
+                            && params.row.auditProcessId
+                            && params.row.processStepId
+                            && params.row.projectStatus === 'handover_apply'
+                            && this.auth_update) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-create-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentProject.projectId = params.row.projectId;
+                                        this.currentProject.auditProcessId = params.row.auditProcessId || '';
+                                        this.currentProject.processStepId = params.row.processStepId || '';
+                                        this.$refs.modal_handleAudit.modalValue = true;
+
+                                        // this.handleLabelCheck(params.row);
+                                    }
+                                }
+                            }, '处理标签审核'));
+                        }
+
+                        // 下发工程交工质量核验意见
+
+                        if (params.row.handleStatus === 'handle'
+                            && params.row.auditProcessId
+                            && !params.row.processStepId
+                            && params.row.projectStatus === 'handover_apply'
+                            && this.auth_update) {
+
+
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-create-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentProject.projectId = params.row.projectId;
+                                        this.$refs.modal_sendProjectFiles.modalValue = true;
+                                    }
+                                }
+                            }, '下发工程交工质量核验意见'));
+                        }
+
+                        return h('div', {
+                            class: 'ivx-table-cell-handle'
+                        }, list);
+
+                    }
+                }]) : this.tableColumns;
+            }
+        },
         data() {
             return {
                 searchParams: {
@@ -187,146 +333,7 @@
                     { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
                     { title: '监督负责人', width: 180, align: 'center', key: '' },
                     { title: '监督成员', width: 180, align: 'center', key: '' },
-                    {
-                        title: '操作',
-                        width: 350,
-                        align: 'center',
-                        fixed: 'right',
-                        render: (h, params) => {
-                            let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-create-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        if (params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') {
-                                            this.isView = false;
-                                        }
-                                        else {
-                                            this.isView = true;
-                                        }
-                                        this.currentProject.projectId = params.row.projectId;
-                                        this.modal_edit = true;
-                                    }
-                                }
-                            }, '查看'));
-
-                            if ((params.row.handleStatus === 'submitted'
-                                || params.row.handleStatus === 'replenish')
-                                && this.auth_add) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'md-checkmark-circle'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentProject.projectId = params.row.projectId;
-                                            this.$Modal.confirm({
-                                                title: '提交审核',
-                                                content: `确定要提交审核<${params.row.projectName}>项目`,
-                                                okText: '提交审核',
-                                                onOk: () => {
-                                                    this.$http({
-                                                        method: 'get',
-                                                        url: '/projectAudit/handoverSubmit',
-                                                        params:{
-                                                            projectId: params.row.projectId
-                                                        }
-                                                    }).then(res => {
-                                                        if (res.code === 'SUCCESS') {
-                                                            this.$Message.success('提交审核成功!');
-                                                            this.getData();
-                                                            this.currentProject.projectId = '';
-                                                            this.currentProject.auditProcessId = '';
-                                                            this.currentProject.processStepId = '';
-                                                        }
-                                                    })
-                                                }
-                                            })
-                                        }
-                                    }
-                                }, '提交审核'));
-                            }
-
-                            // 受理材料待审核才能审核  并且还没进流程
-                            if (params.row.handleStatus === 'handle'
-                                && !params.row.auditProcessId
-                                && this.auth_audit
-                                && params.row.projectStatus === 'handover_apply' ) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-document'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentProject.projectId = params.row.projectId;
-                                            this.modal_contentAudit = true;
-                                        }
-                                    }
-                                }, '材料完整性审核'));
-                            }
-
-                            // 办理状态(handleStatus)是办理中, 并且有审核流程步骤(auditProcessId 和 processStepId)
-                            if (params.row.handleStatus === 'handle'
-                                && params.row.auditProcessId
-                                && params.row.processStepId
-                                && params.row.projectStatus === 'handover_apply') {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-create-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentProject.projectId = params.row.projectId;
-                                            this.currentProject.auditProcessId = params.row.auditProcessId || '';
-                                            this.currentProject.processStepId = params.row.processStepId || '';
-                                            this.$refs.modal_handleAudit.modalValue = true;
-
-                                            // this.handleLabelCheck(params.row);
-                                        }
-                                    }
-                                }, '处理标签审核'));
-                            }
-
-                            // 下发工程交工质量核验意见
-
-                            if (params.row.handleStatus === 'handle'
-                                && params.row.auditProcessId
-                                && !params.row.processStepId
-                                && params.row.projectStatus === 'handover_apply') {
-
-
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-create-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentProject.projectId = params.row.projectId;
-                                            this.$refs.modal_sendProjectFiles.modalValue = true;
-                                        }
-                                    }
-                                }, '下发工程交工质量核验意见'));
-                            }
-
-                            return h('div', {
-                                class: 'ivx-table-cell-handle'
-                            }, list);
-
-                        }
-                    }
                 ],
                 tableData: [],
                 tableLoading: true,

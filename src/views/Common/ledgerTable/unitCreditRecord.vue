@@ -26,7 +26,7 @@
             <Table border
                    :height="540"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
         </div>
 
@@ -56,14 +56,41 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     import Config from '../../../config';
+    import AuthMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'unitCreditRecord',  // 企业信用台账
+        mixins: [AuthMixin],
         components: {vIvxFilterBox},
         computed: {
             downloadUrl() {
                 return Config[Config.env].origin
                     + Config[Config.env].ajaxUrl + '/record/exportUnitCreditRecord'
                     + `?searchKey=${encodeURIComponent(this.searchParams.searchKey)}&year=${this.searchParams.year}`;
+            },
+            _tableColumns() {
+                return this.auth_update ? this.tableColumns.concat([{
+                    title: '操作',
+                    align: 'center',
+                    fixed: 'right',
+                    width: 120,
+                    render: (h, params) => {
+                        return h('Button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small',
+                            },
+                            on: {
+                                click: () => {
+                                    this.formData.unitCreditRecordId = params.row.unitCreditRecordId || '';
+                                    this.formData.projectCreditScore = params.row.projectCreditScore || null;
+                                    this.formData.partCreditScore = params.row.partCreditScore || null;
+                                    this.formData.otherDeduct = params.row.otherDeduct || null;
+                                    this.modal_edit = true;
+                                }
+                            }
+                        }, '编辑');
+                    }
+                }]) : this.tableColumns;
             }
         },
         data() {
@@ -97,29 +124,7 @@
                     { title: '企业在该合同(段)的信用评分(分)', align: 'center', width: 210, key: 'partCreditScore'},
                     // { title: '采信依据', align: 'center', width: 120, key: 'creditAccording'},
                     { title: '其他失信行为及扣分', align: 'center', width: 180, key: 'otherDeduct'},
-                    {
-                        title: '操作',
-                        align: 'center',
-                        fixed: 'right',
-                        width: 120,
-                        render: (h, params) => {
-                            return h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                },
-                                on: {
-                                    click: () => {
-                                        this.formData.unitCreditRecordId = params.row.unitCreditRecordId || '';
-                                        this.formData.projectCreditScore = params.row.projectCreditScore || null;
-                                        this.formData.partCreditScore = params.row.partCreditScore || null;
-                                        this.formData.otherDeduct = params.row.otherDeduct || null;
-                                        this.modal_edit = true;
-                                    }
-                                }
-                            }, '编辑');
-                        }
-                    }
+
                 ],
                 tableData: [],
                 tableLoading: false,

@@ -1,6 +1,6 @@
 <template>
     <div class="creditRating_record-container">
-        <vIvxFilterBox dashed>
+        <vIvxFilterBox dashed v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
                     @click="modal_record_open">添加信用评价记录</Button>
@@ -98,9 +98,10 @@
     import vNoticeModification_check from './noticeModification_check/noticeModification_check';
     import vNoticeReply_check from './noticeReply_check/noticeReply_check';
     import logViewMixin from '../../Common/logView/mixin';
+    import authMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'creditRating_record',   // 信用评价记录
-        mixins: [logViewMixin],
+        mixins: [logViewMixin, authMixin],
         components: {
             vIvxFilterBox,
             vViewFiles,
@@ -154,61 +155,6 @@
                         render: (h, params) => {
                             let list = [];
 
-                            // if (!params.row.changeNotice) {
-                            //     list.push(h('Button', {
-                            //         props: {
-                            //             type: 'primary',
-                            //             size: 'small',
-                            //             icon: 'ios-notifications'
-                            //         },
-                            //         on: {
-                            //             click: () => {
-                            //
-                            //                 this.currentRow.projectId = params.row.projectId;
-                            //                 this.currentRow.projectName = params.row.projectName;
-                            //                 this.currentRow.supervisionCheckId = params.row.evaluateId;
-                            //                 this.$refs.modal_noticeModification_check.modalValue = true;
-                            //             }
-                            //         }
-                            //     }, '整改通知'));
-                            // }
-                            //
-                            // if (params.row.changeNotice) {
-                            //     list.push(h('Button', {
-                            //         props: {
-                            //             type: 'primary',
-                            //             size: 'small',
-                            //             icon: 'ios-undo'
-                            //         },
-                            //         on: {
-                            //             click: () => {
-                            //                 this.currentRow.projectId = params.row.projectId;
-                            //                 this.currentRow.projectName = params.row.projectName;
-                            //                 this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
-                            //                 this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
-                            //                 this.$refs.modal_noticeReply_check.modalValue = true;
-                            //             }
-                            //         }
-                            //     }, '查看整改回复'));
-                            //
-                            // }
-
-                            // if (params.row.changeNotice) {
-                            //     list.push(h('Button', {
-                            //         props: {
-                            //             type: 'primary',
-                            //             size: 'small',
-                            //             icon: 'ios-eye-outline'
-                            //         },
-                            //         on: {
-                            //             click: () => {
-                            //                 this.currentRow.projectId = params.row.projectId;
-                            //                 this.getFilesData(params.row);
-                            //             }
-                            //         }
-                            //     }, '查看附件'));
-                            // }
-
                             list.push(h('Button', {
                                 props: {
                                     type: 'primary',
@@ -233,7 +179,6 @@
                             },list);
                         }
                     }
-
                 ],
                 tableData: [
                     // {

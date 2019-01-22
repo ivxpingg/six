@@ -1,6 +1,6 @@
 <template>
     <div class="unitEvaluate-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox v-if="auth_update">
             <Button type="primary" @click="modal_add_open">新增评价</Button>
         </vIvxFilterBox>
 
@@ -44,9 +44,11 @@
 
 <script>
     import vIvxFilterBox from '@/components/ivxFilterBox/ivxFilterBox';
+    import AuthMixin from '../../../../../lib/mixin/authMixin';
     import MOMENT from 'moment';
     export default {
         name: 'unitEvaluate',
+        mixins: [AuthMixin],
         components: {vIvxFilterBox},
         props: {
             userId: {

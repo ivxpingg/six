@@ -11,8 +11,10 @@
 
 <script>
     import MOMENT from 'moment';
+    import AuthMixin from '../../../../../lib/mixin/authMixin';
     export default {
         name: 'userUnit',
+        mixins: [AuthMixin],
         props: {
             userId: {
                 type: String,

@@ -1,6 +1,6 @@
 <template>
     <Card class="workPersonManage-container">
-        <vIvxFilterBox dashed>
+        <vIvxFilterBox dashed v-if="auth_add">
             <!--<Upload :action="uploadParams.actionUrl"-->
                     <!--:showUploadList="uploadParams.showUploadList"-->
                     <!--:multiple="uploadParams.multiple"-->
@@ -76,9 +76,11 @@
     import vPersonDetail from './personDetail/personDetail';
     import vAddUser from './addPerson/addPerson';
     import MOMENT from 'moment';
+    import AuthMixin from '../../../lib/mixin/authMixin';
     export default {
         // 从业人员管理
         name: 'workPersonManage',
+        mixins: [AuthMixin],
         components: {vIvxFilterBox, vPersonDetail, vAddUser},
         data() {
             return {

@@ -1,6 +1,6 @@
 <template>
     <Card class="supervisorsManage-container">
-        <vIvxFilterBox dashed>
+        <vIvxFilterBox dashed v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
                     @click="modal_addSupervisor_open">新增人员</Button>
@@ -51,9 +51,11 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAddSupervisor from './addSupervisor/addSupervisor';
     import vSupervisorDetail from './supervisorDetail/supervisorDetail';
+    import AuthMixin from '../../../lib/mixin/authMixin';
     export default {
         // 监督单位人员
         name: 'supervisorsManage',
+        mixins: [AuthMixin],
         components: {vIvxFilterBox, vAddSupervisor, vSupervisorDetail},
         data() {
             return {
