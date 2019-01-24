@@ -44,6 +44,11 @@
                 default() {
                     return [];
                 }
+            },
+            // 增加选择附件功能
+            select: {
+                type: Boolean,
+                default: false
             }
         },
         data() {

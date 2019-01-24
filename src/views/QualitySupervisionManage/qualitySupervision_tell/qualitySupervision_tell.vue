@@ -5,7 +5,7 @@
                     <!--icon="md-document"-->
                     <!--@click="modalLogView('advance_notice')">查看日志</Button>-->
         <!--</vIvxFilterBox>-->
-        <vIvxFilterBox>
+        <vIvxFilterBox style="position: relative;">
             <Form inline>
                 <FormItem label="搜索条件:" :label-width="65">
                     <Input v-model="searchParams.condition.projectName"
@@ -13,14 +13,31 @@
                            placeholder="项目名称"/>
                 </FormItem>
             </Form>
+
+            <Button type="primary" style="position: absolute; top: 0; right: 10px;" @click="onClick_switch">{{historyView ? '受理及交底' : '查看记录'}}</Button>
         </vIvxFilterBox>
 
-        <div class="ivx-table-box">
+        <div class="ivx-table-box" v-if="!historyView">
             <Table border
                    :height="540"
                    :loading="tableLoading"
                    :columns="_tableColumns"
                    :data="tableData"></Table>
+            <Page prev-text="上一页"
+                  next-text="下一页"
+                  show-total
+                  :current="searchParams.current"
+                  :page-size="searchParams.size"
+                  :total="searchParams.total"
+                  @on-change="onPageChange"></Page>
+        </div>
+
+        <div class="ivx-table-box" v-if="historyView">
+            <Table border
+                   :height="540"
+                   :loading="tableLoading"
+                   :columns="_tableColumns_history"
+                   :data="tableData_history"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
                   show-total
@@ -240,10 +257,47 @@
                         },list);
                     }
                 }]) : this.tableColumns;
+            },
+            _tableColumns_history() {
+                return this.tableColumns.concat([{
+                    title: '操作',
+                    width: 150,
+                    align: 'center',
+                    fixed: 'right',
+                    render: (h, params) => {
+                        let list = [];
+                        if (params.row.advanceNotice && params.row.advanceNotice.advanceNoticeId) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-eye-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentRow.projectId = params.row.projectId;
+                                        this.getFilesData(params.row);
+                                    }
+                                }
+                            }, '查看附件'));
+                        }
+
+                        // 设置列宽度
+                        return h('div',{
+                            style: {
+
+                            },
+                            class: 'ivx-table-cell-handle'
+                        },list);
+                    }
+                }]);
             }
         },
         data() {
             return {
+                historyView: false,
+                tableData_history: [],
+
                 searchParams: {
                     current: 1,      // 当前第几页
                     size: 10,      // 每页几行
@@ -336,19 +390,25 @@
         },
         watch: {
             'searchParams.current'() {
-                this.getData();
+                this.historyView ? this.getDataHistory() : this.getData();
             },
             'searchParams.condition': {
                 deep: true,
                 handler() {
-                    this.getData();
+                    this.historyView ? this.getDataHistory() : this.getData();
                 }
             }
         },
         mounted() {
             this.getData();
+            this.getDataHistory();
         },
         methods: {
+            onClick_switch() {
+                this.searchParams.current = 1;
+                this.historyView = !this.historyView;
+                this.historyView ? this.getDataHistory() : this.getData();
+            },
             /**
              * 分页控件-切换页面
              * @param current
@@ -368,6 +428,23 @@
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
                         this.tableData = res.data.records || [];
+                        this.searchParams.total = res.data.total;
+                    }
+                }).catch(() => {
+                    this.tableLoading = false;
+                })
+            },
+
+            getDataHistory() {
+                this.tableLoading = true;
+                this.$http({
+                    method: 'post',
+                    url: '/project/list',
+                    data: JSON.stringify(this.searchParams)
+                }).then((res) => {
+                    this.tableLoading = false;
+                    if (res.code === 'SUCCESS') {
+                        this.tableData_history = res.data.records;
                         this.searchParams.total = res.data.total;
                     }
                 }).catch(() => {
