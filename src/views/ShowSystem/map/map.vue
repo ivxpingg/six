@@ -48,7 +48,7 @@
                @on-ok="onOk_add_modal">
             <Form>
                 <FormItem label="项目：" :label-width="60">
-                    <Select v-model="projectValue_select" @on-change="onChange_selectProject">
+                    <Select v-model="projectValue_select" filterable @on-change="onChange_selectProject" placeholder="请选择，可检索">
                         <Option v-for="(item, idx) in projectList_select"
                                 :key="item.projectId + idx"
                                 :label="`${item.projectName}(${item.part})`"
