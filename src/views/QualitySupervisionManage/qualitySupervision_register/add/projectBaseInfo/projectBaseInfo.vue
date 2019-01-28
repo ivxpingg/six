@@ -88,12 +88,12 @@
                     <span slot="append">km</span>
                 </Input>
             </FormItem>
-            <FormItem label="设计时速(km/h):">
+            <FormItem label="设计时速(km/h):" prop="designSpeed">
                 <Input v-model="formData.designSpeed" number :readonly="isView">
                     <span slot="append">km/h</span>
                 </Input>
             </FormItem>
-            <FormItem label="路基宽度(米):">
+            <FormItem label="路基宽度(米):" prop="subgradeWidth">
                 <Input v-model="formData.subgradeWidth" number :readonly="isView">
                      <span slot="append">米</span>
                 </Input>
@@ -212,12 +212,12 @@
                     projectType: [{ required: true, message: '项目类型不能为空！', trigger: 'blur' }],
                     technicalLevel: [{ required: true, message: '技术等级不能为空！', trigger: 'blur' }],
                     projectProperty: [{ required: true, message: '工程性质不能为空！', trigger: 'blur' }],
-                    mileage: [{ required: true, type: 'number', message: '项目里程不能为空！', trigger: 'blur' }],
-                    amount: [{ required: true, type: 'number', message: '投资额不能为空！', trigger: 'blur' }],
-                    constructAmount: [{ required: true, type: 'number', message: '施工合同金额不能为空！', trigger: 'blur' }],
+                    mileage: [{ type: 'number', message: '项目里程必须是数值！', trigger: 'blur' }, { required: true, type: 'number', message: '项目里程不能为空！', trigger: 'blur' }],
+                    amount: [{ type: 'number', message: '投资额必须是数值！', trigger: 'blur' }, { required: true, type: 'number', message: '投资额不能为空！', trigger: 'blur' }],
+                    constructAmount: [{ type: 'number', message: '施工合同金额必须是数值！', trigger: 'blur' }, { required: true, type: 'number', message: '施工合同金额不能为空！', trigger: 'blur' }],
                     // supervisorAmount: [{ required: true, type: 'number', message: '监理合同金额不能为空！', trigger: 'blur' }],
-                    // designSpeed: [{ required: true, type: 'number', message: '设计时速不能为空！', trigger: 'blur' }],
-                    // subgradeWidth: [{ required: true, type: 'number', message: '路基宽度不能为空！', trigger: 'blur' }],
+                    designSpeed: [{ type: 'number', message: '设计时速必须是数值！', trigger: 'blur' }],
+                    subgradeWidth: [{ type: 'number', message: '路基宽度必须是数值！', trigger: 'blur' }],
                     planBeginTime: [{ required: true, message: '计划开工时间不能为空！', trigger: 'blur' }],
                     planEndTime: [{ required: true, message: '计划交工时间不能为空！', trigger: 'blur' }],
                     contacts: [{ required: true, message: '联系人不能为空！', trigger: 'blur' }],

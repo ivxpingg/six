@@ -22,7 +22,7 @@ export default {
                 // })
             }).then(res => {
                 if (res.code = 'SUCCESS') {
-                    this.projectList_select = res.data.records || [];
+                    this.projectList_select = res.data || [];
                     this.projectValue_select = '';
                 }
             })
