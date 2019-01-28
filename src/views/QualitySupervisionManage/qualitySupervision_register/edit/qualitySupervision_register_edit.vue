@@ -71,7 +71,7 @@
                     return !this.auth_specialEdit;
                 }
                 else {
-                    return this.isView
+                    return this.isView;
                 }
             }
         },

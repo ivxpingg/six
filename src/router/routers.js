@@ -228,7 +228,7 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_accept/qualitySupervision_accept.vue'),
                 meta: {
                     icon: '_qualitySupervision_accept',
-                    title: '质量监督受理',
+                    title: '质量监督审核',
                     requireAuth: true
                 }
             },
@@ -238,7 +238,17 @@ const QualitySupervisionManage = [
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_tell/qualitySupervision_tell.vue'),
                 meta: {
                     icon: '_qualitySupervision_tell',
-                    title: '质量监督交底',
+                    title: '质量监督受理及交底',
+                    requireAuth: true
+                }
+            },
+            {
+                path: 'qualitySupervision_tell_record',
+                name: 'qualitySupervision_tell_record',
+                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_tell_record/qualitySupervision_tell_record.vue'),
+                meta: {
+                    icon: '_qualitySupervision_tell',
+                    title: '质量监督受理及交底记录',
                     requireAuth: true
                 }
             },

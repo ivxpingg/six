@@ -140,7 +140,7 @@
             </FormItem>
         </Form>
 
-        <div class="ivu-modal-footer" v-if="!isView">
+        <div class="ivu-modal-footer" v-if="!isView && auth_add">
             <Button type="primary"
                     size="large"
                     :loading="saveBtnLoading"
@@ -157,9 +157,11 @@
 
 <script>
     import vModalUnitSelect from '../../../../Common/unitSelect/modalUnitSelect';
+    import authMixin from '../../../../../lib/mixin/authMixin';
     import MOMENT from 'moment';
     export default {
         name: 'projectBaseInfo',
+        mixins: [authMixin],
         components: {vModalUnitSelect},
         props: {
             isView: {

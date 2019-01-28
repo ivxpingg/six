@@ -59,6 +59,15 @@
                                        :data="temData"
                                        @callback="modal_eSignature"></vTemplate_word_file_3>
 
+                <vTemplate_word_custom ref="official_letter"
+                                       class="set-bg-color"
+                                       v-if="documentHandle.fileRecordType === 'official_letter'"
+                                       :print2x="print2x"
+                                       :eSignature="eSignature"
+                                       :exportStatus="exportStatus"
+                                       :data="temData"
+                                       @callback="modal_eSignature"></vTemplate_word_custom>
+
             </div>
         </div>
 
@@ -76,6 +85,7 @@
     import vTemplate_word_file_1 from '../../Common/fileTemplate/template_word_file_1';
     import vTemplate_word_file_2 from '../../Common/fileTemplate/template_word_file_2';
     import vTemplate_word_file_3 from '../../Common/fileTemplate/template_word_file_3';
+    import vTemplate_word_custom from '../../Common/fileTemplate/template_word_custom';
     import vModalUserSignatureSelect from '../../Common/userSignatureSelect/modalUserSignatureSelect';
     import dataMixin from '../mixin/dataMixin';
     import vModalAuditProcessSelect from '../../Common/auditProcessSelect/modalAuditProcessSelect';
@@ -91,6 +101,7 @@
             vTemplate_word_file_1,
             vTemplate_word_file_2,
             vTemplate_word_file_3,
+            vTemplate_word_custom,
             vModalUserSignatureSelect,
             vModalAuditProcessSelect,
             vPrcessSteps
@@ -106,6 +117,7 @@
         },
         data() {
             return {
+                exportStatus: false, // 是否在导出PDF中, 用于当在导出的时候，处理一些导出状态
                 print2x: false,
                 eSignature: {
                     name: '',
@@ -195,6 +207,7 @@
             },
 
             onPrint() {
+                this.exportStatus = true;
                 this.print2x = true;
                 this.$Spin.show();
                 setTimeout(() => {
@@ -273,9 +286,11 @@
                             this.print2x = false;
                             this.$Spin.hide();
                             if (isUpload) {
+                                this.exportStatus = false;
                                 resolve(pdf.output('datauristring').substr(28));
                             }
                             else {
+                                this.exportStatus = false;
                                 pdf.save(`${this.documentHandle.fileName}.pdf`);
                                 resolve();
                             }

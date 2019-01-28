@@ -24,6 +24,10 @@ export default {
             default() {
                 return {};
             }
+        },
+        exportStatus: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

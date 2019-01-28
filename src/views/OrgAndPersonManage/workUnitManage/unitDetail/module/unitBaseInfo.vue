@@ -91,7 +91,7 @@
                 <Input v-model="formData.parentUnitTelephone" />
             </FormItem>
         </Form>
-        <div class="ivu-modal-footer">
+        <div class="ivu-modal-footer" v-if="auth_update">
             <Button type="primary"
                     size="large"
                     :loading="saveBtnLoading"
@@ -101,8 +101,10 @@
 </template>
 
 <script>
+    import AuthMixin from '../../../../../lib/mixin/authMixin';
     export default {
         name: 'unitBaseInfo',  // 单位基本信息
+        mixins: [AuthMixin],
         props: {
             unitId: {
                 type: String,

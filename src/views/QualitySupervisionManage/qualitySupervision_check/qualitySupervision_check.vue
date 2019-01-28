@@ -1,6 +1,6 @@
 <template>
     <div class="qualitySupervision_check-container">
-        <vIvxFilterBox dashed>
+        <vIvxFilterBox dashed v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
                     @click="modal_addSupervisionRecord_open">添加监督记录</Button>
@@ -30,7 +30,7 @@
             <Table border
                    :height="540"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
@@ -76,15 +76,88 @@
     import vNoticeModification_check from './noticeModification_check/noticeModification_check';
     import vNoticeReply_check from './noticeReply_check/noticeReply_check';
     import logViewMixin from '../../Common/logView/mixin';
+    import authMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'qualitySupervision_check',  // 质量监督检查
-        mixins: [logViewMixin],
+        mixins: [logViewMixin, authMixin],
         components: {
             vIvxFilterBox,
             vViewFiles,
             vAddSupervisionRecord,
             vNoticeModification_check,
             vNoticeReply_check
+        },
+        computed: {
+            _tableColumns() {
+                return this.auth_update ? this.tableColumns.concat([{
+                    title: '操作',
+                    width: 240,
+                    render: (h, params) => {
+                        let list = [];
+
+                        if (!params.row.changeNotice) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-notifications'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentRow.projectId = params.row.projectId;
+                                        this.currentRow.projectName = params.row.projectName;
+                                        this.currentRow.supervisionCheckId = params.row.supervisionCheckId;
+                                        this.$refs.modal_noticeModification_check.modalValue = true;
+                                    }
+                                }
+                            }, '整改通知'));
+                        }
+
+                        if (params.row.changeNotice) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-undo'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentRow.projectId = params.row.projectId;
+                                        this.currentRow.projectName = params.row.projectName;
+                                        this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
+                                        this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
+                                        this.$refs.modal_noticeReply_check.modalValue = true;
+                                    }
+                                }
+                            }, '查看整改回复'));
+                        }
+
+                        list.push(h('Button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small',
+                                icon: 'ios-eye-outline'
+                            },
+                            on: {
+                                click: () => {
+                                    this.currentRow.projectId = params.row.projectId;
+                                    this.getFilesData(params.row);
+                                }
+                            }
+                        }, '查看附件'));
+
+
+
+                        // 设置列宽度
+                        return h('div',{
+                            style: {
+
+                            },
+                            class: 'ivx-table-cell-handle'
+                        },list);
+                    }
+                }]) : this.tableColumns;
+            }
         },
         data() {
             return {
@@ -117,74 +190,7 @@
                     },
                     // { title: '整改回复时间', width: 120, align: 'center', key: '' },
                     // { title: '回复内容', width: 120, align: 'center', key: '' },
-                    {
-                        title: '操作',
-                        width: 240,
-                        render: (h, params) => {
-                            let list = [];
 
-                            if (!params.row.changeNotice) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-notifications'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.supervisionCheckId = params.row.supervisionCheckId;
-                                            this.$refs.modal_noticeModification_check.modalValue = true;
-                                        }
-                                    }
-                                }, '整改通知'));
-                            }
-
-                            if (params.row.changeNotice) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-undo'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.currentRow.projectId = params.row.projectId;
-                                            this.currentRow.projectName = params.row.projectName;
-                                            this.currentRow.changeNotice.changeNoticeId = params.row.changeNotice.changeNoticeId;
-                                            this.currentRow.changeNotice.changeStatus = params.row.changeNotice.changeStatus;
-                                            this.$refs.modal_noticeReply_check.modalValue = true;
-                                        }
-                                    }
-                                }, '查看整改回复'));
-                            }
-
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-eye-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.currentRow.projectId = params.row.projectId;
-                                        this.getFilesData(params.row);
-                                    }
-                                }
-                            }, '查看附件'));
-
-
-
-                            // 设置列宽度
-                            return h('div',{
-                                style: {
-
-                                },
-                                class: 'ivx-table-cell-handle'
-                            },list);
-                        }
-                    }
 
                 ],
                 tableData: [

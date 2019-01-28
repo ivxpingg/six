@@ -1,6 +1,6 @@
 <template>
     <div class="QA_report-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">上传报表</Button>
@@ -9,7 +9,7 @@
             <Table border
                    :height="540"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
         </div>
 
@@ -23,10 +23,57 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAddReport from './addReport/addReport';
     import viewFilesMixin from '../../Common/viewFiles/mixin';
+    import authMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'QA_report',  // 质量检测报表
-        mixins: [viewFilesMixin],
+        mixins: [viewFilesMixin, authMixin],
         components: {vIvxFilterBox, vAddReport},
+        computed: {
+            _tableColumns() {
+                return this.auth_del || this.auth_view ? this.tableColumns.concat([{
+                    title: '操作',
+                    width: 170,
+                    align: 'center',
+                    // fixed: 'right',
+                    render: (h, params) => {
+                        let list = [];
+
+                        if (this.auth_del) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small',
+                                    icon: 'ios-trash-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.del(params.row);
+                                    }
+                                }
+                            }, '删除'));
+                        }
+
+                        list.push(h('Button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small',
+                                icon: 'ios-eye'
+                            },
+                            on: {
+                                click: () => {
+                                    this.getData_vViewFile(params.row.reportRecordId, 'report', 'fileList');
+                                    this.$refs.modal_viewFiles.modalValue = true;
+                                }
+                            }
+                        }, '查看'));
+
+                        return h('div', {
+                            class: 'ivx-table-cell-handle'
+                        }, list);
+                    }
+                }]) : this.tableColumns;
+            }
+        },
         data() {
             return {
                 tableColumns: [
@@ -40,46 +87,7 @@
                     },
                     { title: '操作人', width: 180, align: 'center', key: 'userName' },
                     { title: '备注', width: 180, align: 'center', key: 'remark' },
-                    {
-                        title: '操作',
-                        width: 170,
-                        align: 'center',
-                        // fixed: 'right',
-                        render: (h, params) => {
-                            let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small',
-                                    icon: 'ios-trash-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.del(params.row);
-                                    }
-                                }
-                            }, '删除'));
-
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-eye'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.getData_vViewFile(params.row.reportRecordId, 'report', 'fileList');
-                                        this.$refs.modal_viewFiles.modalValue = true;
-                                    }
-                                }
-                            }, '查看'));
-
-                            return h('div', {
-                                class: 'ivx-table-cell-handle'
-                            }, list);
-                        }
-                    }
                 ],
                 tableData: [ ],
                 tableLoading: false,

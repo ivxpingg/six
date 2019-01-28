@@ -51,8 +51,10 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import MOMENT from 'moment';
     import Config from '../../../config';
+    import AuthMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'handoverCountRecord',  // 交工项目综合评价台账
+        mixins: [AuthMixin],
         components: {vIvxFilterBox},
         computed: {
             downloadUrl() {
@@ -67,7 +69,11 @@
                     { title: '项目建设期间信用综合评价得分', width: 180, align: 'center', key: 'compositeScore' },
                     { title: '主要失信行为代码', width: 180, align: 'center', key: 'discreditCode' },
                     { title: '备注', width: 180, align: 'center', key: 'remark' },
-                    {
+
+                ];
+
+                if (this.auth_update) {
+                    afterCols.push({
                         title: '操作',
                         align: 'center',
                         fixed: 'right',
@@ -88,8 +94,8 @@
                                 }
                             }, '编辑');
                         }
-                    }
-                ];
+                    });
+                }
 
                 let yearList = [];
                 this.tableData.forEach(val => {

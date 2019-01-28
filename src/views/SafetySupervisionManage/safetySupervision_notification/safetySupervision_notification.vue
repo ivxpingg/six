@@ -19,7 +19,7 @@
         <div class="ivx-table-box">
             <Table border
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :height="540"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
@@ -48,6 +48,71 @@
         name: 'safetySupervision_notification',  // 安全通知
         mixins: [authMixin, viewFilesMixin],
         components: {vIvxFilterBox, vAdd},
+        computed: {
+            _tableColumns() {
+                return this.auth_update || this.auth_del ? this.tableColumns.concat([{
+                    title: '操作',
+                    width: 170,
+                    align: 'center',
+                    fixed: 'right',
+                    render: (h, params) => {
+                        let list = [];
+
+                        if (params.row.safeNoticeStatus === 'wait_publish' && this.auth_update){
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'md-megaphone'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.publicNotice(params.row);
+                                    }
+                                }
+                            }, '发布'));
+                        }
+
+
+                        if (params.row.safeNoticeStatus === 'publish' && this.auth_update){
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small',
+                                    icon: 'md-remove-circle'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.cancelNotice(params.row);
+                                    }
+                                }
+                            }, '作废'));
+                        }
+
+                        if (params.row.safeNoticeStatus === 'wait_publish' && this.auth_del) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small',
+                                    icon: 'ios-trash-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.delNotice(params.row);
+                                    }
+                                }
+                            }, '删除'));
+                        }
+
+                        // 设置列宽度
+                        return h('div',{
+                            style: {},
+                            class: 'ivx-table-cell-handle'
+                        },list);
+                    }
+                }]) : this.tableColumns;
+            }
+        },
         data() {
             return {
                 searchParams: {
@@ -96,67 +161,7 @@
                             return h('div', params.row.cancelTime ? MOMENT(params.row.cancelTime).format('YYYY-MM-DD') : '');
                         }
                     },
-                    {
-                        title: '操作',
-                        width: 170,
-                        align: 'center',
-                        fixed: 'right',
-                        render: (h, params) => {
-                            let list = [];
 
-                            if (params.row.safeNoticeStatus === 'wait_publish'){
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'md-megaphone'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.publicNotice(params.row);
-                                        }
-                                    }
-                                }, '发布'));
-                            }
-
-
-                            if (params.row.safeNoticeStatus === 'publish'){
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small',
-                                        icon: 'md-remove-circle'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.cancelNotice(params.row);
-                                        }
-                                    }
-                                }, '作废'));
-                            }
-
-                            if (params.row.safeNoticeStatus === 'wait_publish') {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small',
-                                        icon: 'ios-trash-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.delNotice(params.row);
-                                        }
-                                    }
-                                }, '删除'));
-                            }
-
-                            // 设置列宽度
-                            return h('div',{
-                                style: {},
-                                class: 'ivx-table-cell-handle'
-                            },list);
-                        }
-                    }
                 ],
                 tableData: [
                     // {

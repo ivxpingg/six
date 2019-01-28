@@ -1,6 +1,6 @@
 <template>
     <div class="majorProject_check-container">
-        <vIvxFilterBox dashed>
+        <vIvxFilterBox dashed v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">添加重点项目考勤</Button>
@@ -39,8 +39,10 @@
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAddMajorProject_check from './add/addMajorProject_check';
+    import authMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'majorProject_check',
+        mixins: [authMixin],
         components: {
             vIvxFilterBox,
             vAddMajorProject_check

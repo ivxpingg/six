@@ -156,7 +156,7 @@
             </FormItem>
         </Form>
 
-        <div class="ivu-modal-footer" v-if="editable">
+        <div class="ivu-modal-footer" v-if="editable && auth_update">
             <Button type="primary"
                     size="large"
                     :loading="saveBtnLoading"
@@ -168,10 +168,11 @@
 <script>
     import uploadMixin from '../../../../lib/mixin/uploadMixin';
     import Config from '../../../../config';
+    import AuthMixin from '../../../../lib/mixin/authMixin';
     import MOMENT from 'moment';
     export default {
         name: 'supervisorDetail',
-        mixins: [uploadMixin],
+        mixins: [uploadMixin, AuthMixin],
         props: {
             userId: {
                 type: String,

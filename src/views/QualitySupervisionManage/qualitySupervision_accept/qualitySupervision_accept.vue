@@ -31,7 +31,7 @@
             <Table border
                    height="540"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
@@ -81,6 +81,56 @@
         name: 'qualitySupervision_accept',
         mixins: [authMixin, viewFilesMixin, logViewMixin],
         components: {vIvxFilterBox, vSuperviseTeamManage, vHandleAudit},
+        computed: {
+            _tableColumns() {
+                return this.auth_update ? this.tableColumns.concat([{
+                    title: '操作',
+                    width: 300,
+                    align: 'center',
+                    fixed: 'right',
+                    render: (h, params) => {
+                        let list = [];
+
+                        list.push(h('Button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small',
+                                icon: 'ios-eye-outline'
+                            },
+                            on: {
+                                click: () => {
+                                    Object.assign(this.curentRow, params.row);
+                                    this.getMonitorGroupData(params.row.projectId);
+                                }
+                            }
+                        }, '处理标签审核'));
+
+                        if (this.auth_addgroup) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-eye-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        Object.assign(this.curentRow, params.row);
+                                        this.modal_superviseTeamManage = true;
+                                    }
+                                }
+                            }, '分配监督小组'));
+                        }
+
+
+                        // 设置列宽度
+                        return h('div',{
+                            style: {},
+                            class: 'ivx-table-cell-handle'
+                        },list);
+                    }
+                }]) : this.tableColumns;
+            }
+        },
         data() {
             return {
                 searchParams: {
@@ -105,10 +155,8 @@
                             return h('div', str);
                         } },
                     { title: '项目类型', width: 180, align: 'center', key: 'projectTypeLabel' },
-                    // { title: '建设单位', width: 180, align: 'center', key: 'buildUnitStr' },
                     { title: '技术等级', width: 180, align: 'center', key: 'technicalLevelLabel' },
                     { title: '项目里程(km)', width: 180, align: 'center', key: 'mileage' },
-                    // { title: '路面类型', width: 180, align: 'center', key: '' },
                     { title: '工程性质', width: 180, align: 'center', key: 'projectPropertyLabel' },
                     { title: '投资额(万元)', width: 180, align: 'center', key: 'amount' },
                     { title: '施工合同金额(万元)', width: 180, align: 'center', key: 'constructAmount' },
@@ -123,75 +171,11 @@
                             return h('div', params.row.planEndTime ? MOMENT(params.row.planEndTime).format('YYYY-MM-DD') : '');
                         }
                     },
-                    // { title: '施工单位', width: 180, align: 'center', key: 'constructUnitStr' },
-                    // { title: '监理单位', width: 180, align: 'center', key: 'supervisorUnitStr' },
-                    // TODO 收件日期
-                    // { title: '收件日期', width: 180, align: 'center', key: '' },
                     { title: '联系人', width: 180, align: 'center', key: 'contacts' },
                     { title: '联系方式', width: 180, align: 'center', key: 'contactPhone' },
                     { title: '项目状态', width: 180, align: 'center', key: 'projectStatusLabel' },
-                    // TODO 流程状态
-                    // { title: '流程状态', width: 180, align: 'center', key: '' },
                     { title: '办理状态', width: 180, align: 'center', key: 'handleStatusLabel' },
-                    // { title: '受理通知书', width: 180, align: 'center', key: 'acceptNotice' },
-                    // { title: '整改状态', width: 180, align: 'center', key: 'changeStatusLabel' },
-                    // { title: '受理日期', width: 180, align: 'center', key: 'acceptDate',
-                    //     render(h, params) {
-                    //         return h('div', params.row.acceptDate ? MOMENT(params.row.acceptDate).format('YYYY-MM-DD') : '');
-                    //     }
-                    // },
-                    // { title: '不予受理日期', width: 180, align: 'center', key: 'noAcceptDate',
-                    //     render(h, params) {
-                    //         return h('div', params.row.noAcceptDate ? MOMENT(params.row.noAcceptDate).format('YYYY-MM-DD') : '');
-                    //     }
-                    // },
-                    // { title: '不予受理备注', width: 180, align: 'center', key: 'noAcceptRemark' },
-                    {
-                        title: '操作',
-                        width: 300,
-                        align: 'center',
-                        fixed: 'right',
-                        render: (h, params) => {
-                            let list = [];
 
-                            list.push(h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small',
-                                    icon: 'ios-eye-outline'
-                                },
-                                on: {
-                                    click: () => {
-                                        Object.assign(this.curentRow, params.row);
-                                        this.getMonitorGroupData(params.row.projectId);
-                                    }
-                                }
-                            }, '处理标签审核'));
-
-                            if (this.auth_addgroup) {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-eye-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            Object.assign(this.curentRow, params.row);
-                                            this.modal_superviseTeamManage = true;
-                                        }
-                                    }
-                                }, '分配监督小组'));
-                            }
-
-
-                            // 设置列宽度
-                            return h('div',{
-                                style: {},
-                                class: 'ivx-table-cell-handle'
-                            },list);
-                        }
-                    }
                 ],
                 tableData: [
                     // {
@@ -252,8 +236,6 @@
                 filesData: []
 
             };
-        },
-        computed: {
         },
         watch: {
             'searchParams.current'() {

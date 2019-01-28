@@ -1,7 +1,7 @@
 <template>
     <div class="QA_analyze-container">
         <vIvxFilterBox class="filter-box" v-if="showPanel === 'all'">
-            <div class="panel">
+            <div class="panel" v-if="auth_add">
                 <Button type="primary"
                         icon="md-add"
                         @click="modal_add_open">上传报表</Button>
@@ -79,8 +79,10 @@
     import vAddReportAnalyze from './add/addReportAnalyze';
     import vProjectAnalysis from './module/projectAnalysis';
     import vDetailAnalysis from './module/detailAnalysis';
+    import authMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'QA_analyze',
+        mixins: [authMixin],
         components: {
             vIvxFilterBox,
             vComAnalysis,

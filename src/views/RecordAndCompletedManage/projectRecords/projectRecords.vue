@@ -1,6 +1,6 @@
 <template>
     <div class="projectRecords-container">
-        <vIvxFilterBox>
+        <vIvxFilterBox v-if="auth_add">
             <Button type="primary"
                     icon="md-add"
                     @click="modal_add_open">添加工程备案</Button>
@@ -35,7 +35,7 @@
             <Table border
                    :height="540"
                    :loading="tableLoading"
-                   :columns="tableColumns"
+                   :columns="_tableColumns"
                    :data="tableData"></Table>
             <Page prev-text="上一页"
                   next-text="下一页"
@@ -59,10 +59,57 @@
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAddProjectRecord from './add/addProjectRecord';
     import logViewMixin from '../../Common/logView/mixin';
+    import authMixin from '../../../lib/mixin/authMixin';
     export default {
         name: 'projectRecords',  // 工程备案
-        mixins: [logViewMixin],
+        mixins: [logViewMixin, authMixin],
         components: {vIvxFilterBox, vAddProjectRecord},
+        computed: {
+            _tableColumns() {
+                return this.auth_update ? this.tableColumns.concat([{
+                    title: '操作',
+                    width: 120,
+                    align: 'center',
+                    fixed: 'right',
+                    render: (h, params) => {
+                        let list = [];
+
+                        if (params.row.handleStatus === 'submitted') {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-create-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.check(params.row);
+                                    }
+                                }
+                            }, '提交审核'));
+                        }
+
+                        // list.push(h('Button', {
+                        //     props: {
+                        //         type: 'error',
+                        //         size: 'small',
+                        //         icon: 'ios-trash-outline'
+                        //     },
+                        //     on: {
+                        //         click: () => {
+                        //             this.del(params.row);
+                        //         }
+                        //     }
+                        // }, '删除'));
+
+                        return h('div', {
+                            class: 'ivx-table-cell-handle'
+                        }, list);
+
+                    }
+                }]) : this.tableColumns;
+            }
+        },
         data() {
             return {
                 searchParams: {
@@ -76,7 +123,7 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, type: 'index', align: 'center' },
-                    { title: '项目名称', width: 180, align: 'center', key: 'projectName' },
+                    { title: '项目名称', minWidth: 180, align: 'center', key: 'projectName' },
                     { title: '标段', width: 80, align: 'center', key: 'part' },
                     { title: '备案单位', width: 160, align: 'center', key: 'unitName' },
                     { title: '单位类型', width: 120, align: 'center', key: 'unitTypeLabel' },
@@ -88,48 +135,7 @@
                     { title: '负责人', width: 90, align: 'center', key: 'name' },
                     { title: '联系方式', width: 120, align: 'center', key: 'phone' },
                     { title: '回复内容', width: 180, align: 'center', key: 'replyContent' },
-                    {
-                        title: '操作',
-                        width: 120,
-                        align: 'center',
-                        fixed: 'right',
-                        render: (h, params) => {
-                            let list = [];
 
-                            if (params.row.handleStatus === 'submitted') {
-                                list.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                        icon: 'ios-create-outline'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.check(params.row);
-                                        }
-                                    }
-                                }, '提交审核'));
-                            }
-
-                            // list.push(h('Button', {
-                            //     props: {
-                            //         type: 'error',
-                            //         size: 'small',
-                            //         icon: 'ios-trash-outline'
-                            //     },
-                            //     on: {
-                            //         click: () => {
-                            //             this.del(params.row);
-                            //         }
-                            //     }
-                            // }, '删除'));
-
-                            return h('div', {
-                                class: 'ivx-table-cell-handle'
-                            }, list);
-
-                        }
-                    }
                 ],
                 tableData: [
                     // {
