@@ -184,6 +184,17 @@
             }
         },
         mounted() { },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
+            }
+        },
         methods: {
             /**
              * 分页控件-切换页面
@@ -249,6 +260,7 @@
 
                     if (this.selectType === 'role') {
                         this.searchParams.condition.roleId = this.nodeItem.roleId;
+                        this.searchParams.current = 1;
                         this.getData();
                     }
                 }
