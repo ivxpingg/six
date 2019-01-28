@@ -11,13 +11,15 @@ export default {
         // 获取未添加地图信息的项目  受理中  交工 竣工 状态的项目才能选
         getProjectList_select() {
             this.$http({
-                method: 'post',
-                url: '/project/list',
-                data: JSON.stringify({
-                    current: 1,      // 当前第几页
-                    size: 100,
-                })
-                // url: '/projectShow/chooseProjectList'
+                method: 'get',
+                url: '/projectShow/chooseProjectList'
+
+                // method: 'post',
+                // url: '/project/list',
+                // data: JSON.stringify({
+                //     current: 1,      // 当前第几页
+                //     size: 100,
+                // })
             }).then(res => {
                 if (res.code = 'SUCCESS') {
                     this.projectList_select = res.data.records || [];
