@@ -50,8 +50,14 @@
                     <Button type="primary" size="small" icon="md-add" @click="onClick_addLaws">引用法律法规</Button>
                 </FormItem>
 
-                <FormItem label="相关材料:">
+                <FormItem label="整改通知文件:">
                     <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect"
+                                                                   fileType="monitor_procedure"
+                                                                   :projectId="projectId"
+                                                                   multiple></vFilesSelectButton></div>
+                </FormItem>
+                <FormItem label="现场违规照片:">
+                    <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect_img"
                                                                    fileType="monitor_procedure"
                                                                    :projectId="projectId"
                                                                    multiple></vFilesSelectButton></div>
@@ -122,6 +128,7 @@
                     changeContent: '',  // 整改内容
                     overdueHandle: 'notice',  // 逾期未改
                     fileIds: '',
+                    photoFileIds: '', // 现场违规图片
 
                     projectUnitUsers: [
                         // {
@@ -241,6 +248,9 @@
             // 获取上传文件
             onSelect(fileList) {
                 this.formData.fileIds = fileList.map(v => v.fileId);
+            },
+            onSelect_img(fileList) {
+                this.formData.photoFileIds = fileList.map(v => v.fileId);
             },
 
             // 引用法律法规
