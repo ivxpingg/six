@@ -69,7 +69,7 @@ export default {
 
                     let html = `<div>项目名称: ${p.info.projectName}</div>
                                     <div>建设里程: ${p.info.mileage} 公里</div>
-                                    <div>建设地点: ${p.info.address || ''}</div>
+                                    <div>建设地点: ${p.info.address}</div>
                                     <div>开工时间: ${time}</div>`;
 
 

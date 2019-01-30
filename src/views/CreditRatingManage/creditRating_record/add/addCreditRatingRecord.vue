@@ -231,7 +231,10 @@
                 this.$refs.creditCodeSelect.modalValue = true;
             },
             modal_creditCodeSelect_callback(selectValue, selectItems) {
-
+                if (selectItems.creditNo === '无') {
+                    this.formData.deduct = 0;
+                    this.formData.deductDetail = '无';
+                }
                 this.formData.creditCodeId = selectItems.creditCodeId;
                 this.formData.creditNo = selectItems.creditNo;
                 this.formData.scoreStandard = selectItems.scoreStandard;

@@ -172,7 +172,7 @@
                                             this.$refs.modal_addSupervisionTell.modalValue = true;
                                         }
                                     }
-                                }, '添加监督交底'));
+                                }, '备案核查'));
                             }
                             else {
                                 list.push(h('Button', {

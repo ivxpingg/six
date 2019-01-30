@@ -12,6 +12,7 @@
                           @on-select="onSelectFolder"></vIvxFile>
             </li>
         </ul>
+        <Spin size="large" fix v-if="loading"></Spin>
     </div>
 </template>
 
@@ -52,8 +53,11 @@
             folderType: {
                 immediate: true,
                 deep: true,
-                handler(val) {
-                    if (val.url) {
+                handler(val, oldVal) {
+                    if (!oldVal) {
+                        this.getData();
+                    }
+                    else if (oldVal && val.url !== oldVal.url) {
                         this.getData();
                     }
                 }
@@ -63,11 +67,13 @@
             return {
                 folderSize: 90,
                 fontSize: 12,
-                fileList: []
+                fileList: [],
+                loading: true
             };
         },
         methods: {
             getData() {
+                this.loading = true;
                 this.$http({
                     method: 'get',
                     url: this.folderType.url,
@@ -75,6 +81,7 @@
                         projectId: this.projectId
                     }
                 }).then(res => {
+                    this.loading = false;
                     if(res.code === 'SUCCESS') {
                         this.fileList = res.data || [];
                         // this.fileList = [
@@ -96,6 +103,8 @@
                         //
                         // ];
                     }
+                }).catch(e => {
+                    this.loading = false;
                 })
             },
             // 判断文件是否已选
@@ -117,6 +126,8 @@
 
 <style lang="scss" scoped>
     .projectFilesList-container {
+        position: relative;
+        min-height: 100%;
         .file-list {
             /*overflow: hidden;*/
             li {

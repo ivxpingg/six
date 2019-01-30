@@ -13,13 +13,6 @@ export default {
             this.$http({
                 method: 'get',
                 url: '/projectShow/chooseProjectList'
-
-                // method: 'post',
-                // url: '/project/list',
-                // data: JSON.stringify({
-                //     current: 1,      // 当前第几页
-                //     size: 100,
-                // })
             }).then(res => {
                 if (res.code = 'SUCCESS') {
                     this.projectList_select = res.data || [];
