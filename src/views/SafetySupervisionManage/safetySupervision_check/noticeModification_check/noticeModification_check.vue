@@ -127,8 +127,8 @@
                     changeTitle: '',    // 整改标题
                     changeContent: '',  // 整改内容
                     overdueHandle: 'notice',  // 逾期未改
-                    fileIds: '',
-                    photoFileIds: '', // 现场违规图片
+                    fileIds: [],
+                    photoFileIds: [], // 现场违规图片
 
                     projectUnitUsers: [
                         // {
