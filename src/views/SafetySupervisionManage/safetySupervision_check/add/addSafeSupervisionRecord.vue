@@ -37,7 +37,7 @@
                 </FormItem>
                 <FormItem label="督查类型:">
                     <Select v-model="formData.checkType">
-                        <Option v-for="item in dict_checkType"
+                        <Option v-for="item in dict_checkType_filter"
                                 :key="item.id"
                                 :value="item.value"
                                 :label="item.label"></Option>
@@ -64,6 +64,14 @@
             projectList: {
                 type: Array,
                 required: true
+            }
+        },
+        computed: {
+            dict_checkType_filter() {
+                let list = ['safe_notice', 'safe_bad_behavior'];
+                return this.dict_checkType.filter(v => {
+                    return list.indexOf(v.value) > -1;
+                });
             }
         },
         data() {

@@ -132,20 +132,21 @@
                             }, '查看整改回复'));
                         }
 
-                        list.push(h('Button', {
-                            props: {
-                                type: 'primary',
-                                size: 'small',
-                                icon: 'ios-eye-outline'
-                            },
-                            on: {
-                                click: () => {
-                                    this.currentRow.projectId = params.row.projectId;
-                                    this.getFilesData(params.row);
+                        if (params.row.changeNotice) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'ios-eye-outline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentRow.projectId = params.row.projectId;
+                                        this.getFilesData(params.row);
+                                    }
                                 }
-                            }
-                        }, '查看附件'));
-
+                            }, '查看附件'));
+                        }
 
 
                         // 设置列宽度
