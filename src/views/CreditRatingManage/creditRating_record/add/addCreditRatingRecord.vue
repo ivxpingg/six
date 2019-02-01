@@ -78,6 +78,16 @@
                                 icon="md-add"
                                 @click="modal_safetySupervision_open">添加采信依据</Button>
                     </div>
+                    <ul class="ivu-upload-list">
+                        <template v-for="(item, idx) in fileList">
+                            <li class="ivu-upload-list-file ivu-upload-list-file-finish">
+                                <span>
+                                    <i class="ivu-icon ivu-icon-ios-image"></i> {{item.fileName}}.{{item.fileFormat}}
+                                </span>
+                                <i class="ivu-icon ivu-icon-ios-close ivu-upload-list-remove" style="" @click="remove(idx)"></i>
+                            </li>
+                        </template>
+                    </ul>
                 </FormItem>
 
                 <!--<FormItem label="采信依据:" prop="content">-->
@@ -141,6 +151,8 @@
                     creditAccording: '',
                     fileIds: []
                 },
+                fileList: [],
+
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
                     recordYear: [{ required: true, type: 'number', message: '年份不能为空！', trigger: 'blur' }],
@@ -157,7 +169,8 @@
                 // 参建单位中的参建人员
                 projectUserList: [],
                 // 保存按钮状态
-                saveBtnLoading: false
+                saveBtnLoading: false,
+
             };
         },
         watch: {
@@ -179,12 +192,19 @@
                     this.projectUserList = [];
                     this.formData.projectUserId = '';
                 }
+            },
+            fileList(val) {
+                this.formData.fileIds = val.map(v => v.fileId);
             }
         },
         mounted() {
             this.getDict(['unitType']);
         },
         methods: {
+            // 移除文件
+            remove(idx) {
+                this.fileList.splice(idx, 1);
+            },
             onChage_daterange(value) {
                 this.formData.recordYear = parseInt(value) || null;
             },
@@ -256,20 +276,28 @@
             modal_safetySupervision_open() {
                 this.$refs.modal_safetySupervision.modalValue = true;
             },
-            modal_safetySupervision_callback(selectItems) {
+            modal_safetySupervision_callback(selectItems, filesList) {
+
                 if (selectItems.changeNotice && selectItems.changeNotice.changeNoticeId){
                     this.getReply(selectItems.projectId,selectItems.changeNotice.changeNoticeId);
-                    this.getFilesData(selectItems.changeNotice.changeNoticeId);
+                    // this.getFilesData(selectItems.changeNotice.changeNoticeId);
+
+                    // this.fileList = [];
+                    filesList.forEach(v => {
+                        console.dir(this.formData.fileIds);
+
+                        if (this.formData.fileIds.indexOf(v.fileId) === -1) {
+                            this.fileList.push(v);
+                        }
+                    });
                 }
                 else {
+                    this.formData.fileIds = [];
                     this.$Message.info({
                         content: '改督察检查未添加整改通知!',
                         duration: 5
                     });
                 }
-
-
-
             },
             // 获取整改的内容
             getReply(projectId, changeNoticeId) {
@@ -282,7 +310,7 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-                        this.formData.deductDetail = res.data.changeContent
+                        this.formData.deductDetail += res.data.changeContent + '\n\n';
                     }
                 })
             },

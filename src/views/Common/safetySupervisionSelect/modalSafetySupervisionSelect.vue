@@ -11,12 +11,12 @@
                         <FormItem label="搜索条件:" :label-width="65">
                             <Input v-model="searchParams.condition.searchKey"
                                    style="width: 220px;"
-                                   placeholder="项目名称"/>
+                                   placeholder="请输入"/>
                         </FormItem>
                     </Form>
                 </vIvxFilterBox>
 
-                <div class="ivx-table-box">
+                <div class="ivx-table-box" style="cursor: pointer;">
                     <Table ref="table"
                            border
                            :height="300"
@@ -35,15 +35,16 @@
                 </div>
             </div>
 
-            <div class="ivu-modal-footer six-modal-footer-padding-bottom-0">
-                <Button type="primary"
-                        size="large"
-                        @click="add">确定</Button>
-            </div>
+            <!--<div class="ivu-modal-footer six-modal-footer-padding-bottom-0">-->
+                <!--<Button type="primary"-->
+                        <!--size="large"-->
+                        <!--:disabled="selectItems.length === 0"-->
+                        <!--@click="add">确定</Button>-->
+            <!--</div>-->
         </Modal>
 
         <!--查看附件-->
-        <vViewFiles ref="modal_viewFiles" :data="filesData"></vViewFiles>
+        <vViewFiles ref="modal_viewFiles" :data="filesData" select @onSelect="onSelectFiles"></vViewFiles>
     </div>
 </template>
 
@@ -92,6 +93,8 @@
                         align: 'center',
                         render: (h, params) => {
                             let list = [];
+                            let text = (params.row['files'] && params.row['files'].length > 0)
+                                ? `选择附件(${params.row['files'].length})` : '选择附件';
 
                             if (params.row.changeNotice && params.row.changeNotice.changeNoticeId) {
                                 list.push(h('Button', {
@@ -103,10 +106,11 @@
                                     on: {
                                         click: () => {
                                             this.currentRow.projectId = params.row.projectId;
+                                            this.currentRow.supervisionCheckId = params.row.supervisionCheckId;
                                             this.getFilesData(params.row);
                                         }
                                     }
-                                }, '查看附件'));
+                                }, text));
                             }
 
                             // 设置列宽度
@@ -135,10 +139,22 @@
 
                 selectItems: [],
                 // 查看附件
-                filesData: []
+                filesData: [],
+
+                // 存放选择的附件，根据不同的督查存放,
+                filesList: []
             };
         },
         watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
+            },
             projectId: {
                 immediate: true,
                 handler(val) {
@@ -190,6 +206,30 @@
                 })
 
             },
+            onSelectFiles(items) {
+                this.filesList = items;
+                for(let i = 0; i < this.tableData.length; i++) {
+                    if (this.tableData[i].supervisionCheckId === this.currentRow.supervisionCheckId) {
+                        if (this.tableData[i]['files'] === undefined) {
+                            this.$set(this.tableData[i], 'files', items);
+                        }
+                        else {
+                            this.tableData[i]['files'] = items;
+                        }
+
+                    }
+                    else {
+                        if (this.tableData[i]['files'] === undefined) {
+
+                        }
+                        else {
+                            this.tableData[i]['files'] = [];
+                        }
+                    }
+                }
+
+            },
+
             onRowDbclick() {
                 this.add();
             },
@@ -197,7 +237,16 @@
                 this.selectItems = currentRow;
             },
             add() {
-                this.$emit('modal-callback', this.selectItems);
+                this.$emit('modal-callback', this.selectItems, this.filesList);
+                this.filesList = [];
+                for(let i = 0; i < this.tableData.length; i++) {
+                    if (this.tableData[i]['files'] === undefined) {
+
+                    }
+                    else {
+                        this.tableData[i]['files'] = [];
+                    }
+                }
                 this.modalValue = false;
             }
         }

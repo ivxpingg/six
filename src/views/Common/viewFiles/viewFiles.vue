@@ -3,14 +3,24 @@
         <Modal v-model="modalValue"
                title="查看附件"
                :width="800"
-               footer-hide>
+               :footer-hide="!select">
             <div class="ivx-table-box">
                 <Table border
                        height="400"
                        :columns="tableColumns"
-                       :data="data"></Table>
+                       :data="data"
+                       :highlight-row="!multiple"
+                       @on-current-change="onCurrentChange"
+                       @on-select="onSelect"
+                       @on-select-cancel="onSelectCancel"
+                       @on-select-all="onSelectAll"
+                       @on-selection-change="onSelectionChange"></Table>
             </div>
-
+            <div slot="footer">
+                <Button type="primary"
+                        size="large"
+                        @click="addSelect">添加</Button>
+            </div>
             <vViewFile ref="viewFile"
                        :title="viewFileProps.title"
                        :src="viewFileProps.src"
@@ -49,12 +59,16 @@
             select: {
                 type: Boolean,
                 default: false
-            }
+            },
+            multiple: {
+                type: Boolean,
+                default: true
+            },
         },
         data() {
             return {
                 tableColumns: [
-                    { title: '序号', width: 60, type: 'index', },
+                    { title: '序号', width: 60, align: 'center', type: this.multiple ? 'selection' : 'index' },
                     { title: '文件名', align: 'center', key: 'fileName' },
                     { title: '文件格式', width: 100, align: 'center', key: 'fileFormat' },
                     { title: '上传时间', width: 180, align: 'center',
@@ -122,8 +136,54 @@
                     src: '',
                     format: '',
                     target: ''
-                }
+                },
+                selectItems: [],
+                selectValue: []
             };
+        },
+        methods:{
+            onCurrentChange(currentRow, oldCurrentRow) {
+                this.selectItems = currentRow;
+                this.selectValue = currentRow.fileId;
+            },
+            /**
+             * 表格选择
+             */
+            onSelect(selection, row) {
+                this.selectItems.push(row);
+                this.selectValue.push(row.fileId);
+            },
+            onSelectCancel(selection, row) {
+                let idx = this.selectValue.indexOf(row.fileId);
+                this.selectValue.splice(idx, 1);
+                this.selectItems.splice(idx, 1);
+            },
+            onSelectAll(selection) {
+                selection.forEach((val) => {
+                    let idx = this.selectValue.indexOf(val.fileId);
+                    if (idx === -1) {
+                        this.selectValue.push(val.fileId);
+                        this.selectItems.push(val);
+                    }
+                });
+            },
+            onSelectionChange(selection) {
+                if (selection.length === 0) {
+                    this.data.forEach((val) => {
+                        let idx = this.selectValue.indexOf(val.fileId);
+                        if (idx !== -1) {
+                            this.selectValue.splice(idx, 1);
+                            this.selectItems.splice(idx, 1);
+                        }
+                    });
+                }
+            },
+            addSelect() {
+                this.$emit('onSelect', this.selectItems);
+                this.selectValue = [];
+                this.selectItems = [];
+                this.modalValue = false;
+            }
         }
     }
 </script>
