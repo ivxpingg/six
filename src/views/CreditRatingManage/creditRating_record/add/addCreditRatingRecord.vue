@@ -18,6 +18,12 @@
                                 :label="getProjectOpionLabel(item)"></Option>
                     </Select>
                 </FormItem>
+                <FormItem label="选择时间:" prop="recordYear">
+                    <DatePicker type="year"
+                                @on-change="onChage_daterange"
+                                placeholder="请输入单位名称"
+                                style="width: 200px"></DatePicker>
+                </FormItem>
                 <FormItem label="单位名称:" prop="projectUnitId">
                     <Select v-model="formData.projectUnitId" clearable>
                         <Option v-for="item in projectUnitList"
@@ -51,7 +57,7 @@
                         <div slot="content">{{formData.scoreStandard}}</div>
                     </Poptip>
                 </FormItem>
-                <FormItem  v-show="formData.projectUnitId"></FormItem>
+                <FormItem  v-show="!formData.projectUnitId"></FormItem>
                 <FormItem label="扣分项:" prop="deductDetail">
                     <Poptip trigger="focus"
                             width="570"
@@ -121,6 +127,7 @@
                 formData: {
                     projectId: '',
                     part: '',
+                    recordYear: null,
                     projectUnitId: '',
                     projectUserId: '',
                     unitName: '',
@@ -136,6 +143,7 @@
                 },
                 rules: {
                     projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
+                    recordYear: [{ required: true, type: 'number', message: '年份不能为空！', trigger: 'blur' }],
                     projectUnitId: [{ required: true, message: '单位不能为空！', trigger: 'blur' }],
                     creditCodeId: [{ required: true, message: '扣分代码不能为空！', trigger: 'blur' }],
                     deduct: [{ type:'number', message: '请输入数值！', trigger: 'blur' }, { required: true, type:'number', message: '扣分不能为空！', trigger: 'blur' }],
@@ -177,6 +185,9 @@
             this.getDict(['unitType']);
         },
         methods: {
+            onChage_daterange(value) {
+                this.formData.recordYear = parseInt(value) || null;
+            },
             getProjectOpionLabel(item) {
                 return (item.projectName + (!item.part ? '' : `(${item.part})`));
             },

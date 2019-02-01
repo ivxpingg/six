@@ -7,6 +7,15 @@
                            style="width: 220px;"
                            placeholder="项目名称"/>
                 </FormItem>
+                <FormItem label="所属单位类型:" :label-width="90">
+                    <Select v-model="searchParams.unitType" clearable
+                            placeholder="全选"
+                            style="width: 220px;">
+                        <Option v-for="item in dict_unitType"
+                                :value="item.value"
+                                :key="`unitType_${item.id}`">{{item.label}}</Option>
+                    </Select>
+                </FormItem>
                 <FormItem label="选择时间:" :label-width="65">
                     <DatePicker type="year"
                                 @on-change="onChage_daterange"
@@ -60,7 +69,7 @@
             downloadUrl() {
                 return Config[Config.env].origin
                     + Config[Config.env].ajaxUrl + '/record/exportHandoverCountRecord'
-                    + `?searchKey=${encodeURIComponent(this.searchParams.searchKey)}&year=${this.searchParams.year}`;
+                    + `?searchKey=${encodeURIComponent(this.searchParams.searchKey)}&unitType=${this.searchParams.unitType}&year=${this.searchParams.year}`;
             },
             _tableColumns() {
 
@@ -123,6 +132,7 @@
             return {
                 searchParams: {
                     searchKey: '',      // 模糊查询参数
+                    unitType: '',
                     year: ''
                 },
                 tableColumns: [
@@ -163,7 +173,10 @@
                         { type: 'number', message: '输入格式不正确, 请重新输入', trigger: 'blur'},
                         { required: true, type: 'number', message: '得分不能为空', trigger: 'blur'}
                     ]
-                }
+                },
+
+                // 字典
+                dict_unitType: []
             };
         },
         watch: {
@@ -176,11 +189,26 @@
         },
         mounted() {
             this.getData();
+            this.getDict_unitType();
         },
         methods: {
             onChage_daterange(value) {
                 this.searchParams.year = value;
             },
+            getDict_unitType() {
+                this.$http({
+                    method: 'get',
+                    url: '/dict/getListByType',
+                    params: {
+                        type: 'unitType'
+                    }
+                }).then(res => {
+                    if(res.code === 'SUCCESS') {
+                        this.dict_unitType = res.data;
+                    }
+                })
+            },
+
             // 获取表格数据
             getData() {
                 this.tableLoading = true;
