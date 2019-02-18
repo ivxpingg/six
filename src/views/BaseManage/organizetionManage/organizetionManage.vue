@@ -184,6 +184,17 @@
             }
         },
         mounted() { },
+        watch: {
+            'searchParams.current'() {
+                this.getData();
+            },
+            'searchParams.condition': {
+                deep: true,
+                handler() {
+                    this.getData();
+                }
+            }
+        },
         methods: {
             /**
              * 分页控件-切换页面
