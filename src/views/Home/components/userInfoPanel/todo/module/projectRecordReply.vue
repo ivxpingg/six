@@ -25,7 +25,7 @@
 
             <div slot="footer">
                 <Button type="error" size="large" @click="back">退回</Button>
-                <Button type="primary" size="large" @click="save">保存提交</Button>
+                <Button type="primary" size="large" @click="save">审核通过</Button>
             </div>
         </Modal>
 
@@ -108,7 +108,7 @@
                         }).then(res => {
                             if (res.code === 'SUCCESS') {
                                 this.modalValue = false;
-                                this.$Message.success('提交回复成功！');
+                                this.$Message.success('审核通过成功！');
                                 this.$emit('modal-callback');
                             }
                         })

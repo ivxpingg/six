@@ -11,7 +11,9 @@
                                  :signatureId="eSignature.signatureId"
                                  :auditProcessId="auditProcessId"
                                  :processStepId="processStepId"
-                                 :projectId="projectId" @modal-eSignature="modal_eSignature"></vQualitySupervision>
+                                 :projectId="projectId"
+                                 :handoverRecordId="projectId"
+                                 @modal-eSignature="modal_eSignature"></vQualitySupervision>
             <div slot="footer">
                 <Button type="info" size="large" @click="exportPDF(false)">打印</Button>
                 <Button type="primary" size="large" @click="onClick_selectAuditProcess_open" v-show="!auditProcessId">提交审核</Button>
@@ -95,7 +97,6 @@
             // 导出PDF
             exportPDF(isUpload) {
                 let that = this;
-                this.$Spin.show();
                 return new Promise(((resolve, reject) => {
                     try {
                         html2canvas(this.$refs.qualitySupervision.$el, {
@@ -276,21 +277,24 @@
                 }
 
                 if (this.auditContent_obj.lastStep) {
-
-                    this.exportPDF(true).then(data => {
-                        this.$http({
-                            method: 'post',
-                            url: '/file/uploadAuditFile',
-                            data: JSON.stringify({
-                                base64Content: data,
-                                fileRecordType: 'apply_handle_record',
+                    this.$Spin.show();
+                    setTimeout(() => {
+                        this.exportPDF(true).then(data => {
+                            this.$http({
+                                method: 'post',
+                                url: '/file/uploadAuditFile',
+                                data: JSON.stringify({
+                                    base64Content: data,
+                                    fileRecordType: 'apply_handle_record',
+                                })
+                            }).then(res => {
+                                if (res.code === 'SUCCESS') {
+                                    this.auditPass(res.data.fileId);
+                                }
                             })
-                        }).then(res => {
-                            if (res.code === 'SUCCESS') {
-                                this.auditPass(res.data.fileId);
-                            }
-                        })
-                    });
+                        });
+                    }, 10);
+
                 }
                 else{
                     this.auditPass();

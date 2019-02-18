@@ -43,6 +43,7 @@
             <vPersonParticipant :isView="isView"
                                 :projectUnitId="projectUnitId"
                                 :projectId="projectId"
+                                :projectStatus="projectStatus"
                                 :unitId="unitId"></vPersonParticipant>
         </Modal>
 
@@ -64,6 +65,11 @@
                 }
             },
             projectId: {
+                type: String,
+                default: ''
+            },
+            // 项目状态 // register
+            projectStatus: {
                 type: String,
                 default: ''
             }

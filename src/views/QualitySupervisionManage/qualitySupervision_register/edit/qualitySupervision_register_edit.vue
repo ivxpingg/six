@@ -37,6 +37,7 @@
             <vUnitAndPerson v-show="activeName === '3'"
                             :projectId="projectId"
                             :isView="specialEdit"
+                            :projectStatus="projectStatus"
                             class="six-modal-body-inner"></vUnitAndPerson>
 
         </template>
@@ -63,6 +64,10 @@
             projectId: {
                 type: String,
                 required: true
+            },
+            projectStatus: {
+                type: String,
+                default: ''
             }
         },
         computed: {

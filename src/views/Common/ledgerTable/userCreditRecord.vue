@@ -66,11 +66,7 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '日期', align: 'center', width: 120, key: 'recordDate',
-                        render: (h, params) => {
-                            return h('div', params.row.recordDate ? MOMENT(params.row.recordDate).format('YYYY-MM-DD') : '');
-                        }
-                    },
+                    { title: '日期', align: 'center', width: 120, key: 'recordYear'},
                     { title: '姓名', align: 'center', width: 180, key: 'name'},
                     { title: '证书编号', align: 'center', width: 180, key: 'certificateNo'},
                     { title: '资格证书', align: 'center', width: 120, key: 'certificate'},

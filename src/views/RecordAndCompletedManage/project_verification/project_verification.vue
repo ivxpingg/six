@@ -100,6 +100,7 @@
                :width="1200"
                footer-hide>
             <vContentAudit :projectId="currentProject.projectId"
+                           :handoverRecordId="currentProject.projectId"
                            @modal_callback="modal_callback_contentAudit"></vContentAudit>
         </Modal>
 
@@ -121,6 +122,7 @@
         <!--分段交工-->
         <vSubsection ref="modal_subsection"
                      :projectId="currentProject.projectId"
+                     :projectStatus="currentProject.projectStatus"
                      :projectName="currentProject.projectName"></vSubsection>
 
         <!--查看日志-->
@@ -153,7 +155,7 @@
             _tableColumns() {
                 return this.auth_add || this.auth_update || this.auth_audit || this.auth_view ? this.tableColumns.concat([{
                     title: '操作',
-                    width: 350,
+                    width: 380,
                     align: 'center',
                     fixed: 'right',
                     render: (h, params) => {
@@ -201,7 +203,8 @@
                                                     method: 'get',
                                                     url: '/projectAudit/handoverSubmit',
                                                     params:{
-                                                        projectId: params.row.projectId
+                                                        projectId: params.row.projectId,
+                                                        relationId: params.row.projectId,
                                                     }
                                                 }).then(res => {
                                                     if (res.code === 'SUCCESS') {
@@ -210,13 +213,14 @@
                                                         this.currentProject.projectId = '';
                                                         this.currentProject.auditProcessId = '';
                                                         this.currentProject.processStepId = '';
+                                                        this.getProjectList();
                                                     }
                                                 })
                                             }
                                         })
                                     }
                                 }
-                            }, '提交审核'));
+                            }, '项目整体交工'));
                         }
 
                         // 受理材料待审核才能审核  并且还没进流程
@@ -288,19 +292,22 @@
                             }, '下发工程交工质量核验意见'));
                         }
 
-                        list.push(h('Button', {
-                            props: {
-                                type: 'primary',
-                                size: 'small',
-                                icon: 'logo-buffer'
-                            },
-                            on: {
-                                click: () => {
-                                    this.currentProject.projectId = params.row.projectId;
-                                    this.$refs.modal_subsection.modalValue = true;
+                        if (params.row.handoverType === 'section') {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small',
+                                    icon: 'logo-buffer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.currentProject.projectId = params.row.projectId;
+                                        this.currentProject.projectStatus = params.row.projectStatus;
+                                        this.$refs.modal_subsection.modalValue = true;
+                                    }
                                 }
-                            }
-                        }, '分段交工'));
+                            }, '分段交工'));
+                        }
 
                         return h('div', {
                             class: 'ivx-table-cell-handle'
@@ -396,6 +403,7 @@
                 // 当前查看的项目
                 currentProject: {
                     projectId: '',
+                    projectStatus: '',
                     auditProcessId: '',
                     processStepId: ''
                 },

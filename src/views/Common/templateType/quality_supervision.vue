@@ -201,7 +201,7 @@
         watch: {
             projectId(val) {
                 if (val && this.processStepId !== '') {
-                    // this.getData();
+                    this.getData();
                     this.getAuditContent();
                 }
             },
@@ -310,8 +310,8 @@
                             insTime: res.data.insTime ? MOMENT(res.data.insTime).format('YYYY-MM-DD') : ''
                         });
                         this.auditInfo.projectId = res.data.projectId;
-                        this.auditInfo.auditProcessId = res.data.auditProcessId;
-                        this.auditInfo.processStepId = res.data.processStepId;
+                        // this.auditInfo.auditProcessId = res.data.auditProcessId;
+                        // this.auditInfo.processStepId = res.data.processStepId;
                     }
                 })
             },

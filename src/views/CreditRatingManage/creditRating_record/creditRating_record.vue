@@ -122,10 +122,7 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '记录时间', width: 120, align: 'center',
-                        render: (h, params) => {
-                            return h('div', MOMENT(params.row.insTime).format('YYYY-MM-DD'));
-                        }},
+                    { title: '记录时间', width: 120, align: 'center', key: 'recordYear'},
                     { title: '记录单号', width: 120, align: 'center', key: 'recordNo' },
                     { title: '单位', width: 140, align: 'center', key: 'unitName' },
                     { title: '单位类型', width: 120, align: 'center', key: 'unitTypeLabel' },

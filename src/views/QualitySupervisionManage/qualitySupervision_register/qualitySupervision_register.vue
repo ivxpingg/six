@@ -70,7 +70,8 @@
                 <vEdit v-if="modal_edit"
                        @modal_callback="modal_updateProject_callback"
                        :isView="isView"
-                       :projectId="modal_edit_param.projectId"></vEdit>
+                       :projectId="modal_edit_param.projectId"
+                       :projectStatus="modal_edit_param.projectStatus"></vEdit>
             </div>
         </Modal>
         <!--提交审核-->
@@ -185,6 +186,7 @@
                                 on: {
                                     click: () => {
                                         this.modal_edit_param.projectId = params.row.projectId;
+                                        this.modal_edit_param.projectStatus = params.row.projectStatus;
 
                                         if ((params.row.handleStatus === 'submitted' || params.row.handleStatus === 'replenish') && this.auth_add) {
                                             this.isView = false;

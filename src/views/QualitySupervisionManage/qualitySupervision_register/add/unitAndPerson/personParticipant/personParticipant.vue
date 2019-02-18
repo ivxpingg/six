@@ -54,6 +54,11 @@
             projectId: {
                 type: String,
                 default: ''
+            },
+            // 项目状态 // register
+            projectStatus: {
+                type: String,
+                default: ''
             }
         },
         created() {
@@ -142,10 +147,8 @@
                        render: (h, params) => {
                            let list = [];
 
-                           if (params.row.endTime) {
-
-                           }
-                           else {
+                           // 如果是登记阶段
+                           if (this.projectStatus === 'register') {
                                list.push(h('Button', {
                                    props: {
                                        type: 'error',
@@ -158,18 +161,35 @@
                                        }
                                    }
                                }, '移除'));
+                           }
+                           else {  // 特殊菜单权限的移除
                                list.push(h('Button', {
                                    props: {
                                        type: 'error',
                                        size: 'small',
-                                       icon: 'md-swap'
+                                       icon: 'ios-trash-outline'
                                    },
                                    on: {
                                        click: () => {
-                                           this.replacePerson(params.row);
+                                           this.removePersonForAdmin(params.row);
                                        }
                                    }
-                               }, '变更'));
+                               }, '移除'));
+
+                               if (!params.row.endTime) {
+                                   list.push(h('Button', {
+                                       props: {
+                                           type: 'error',
+                                           size: 'small',
+                                           icon: 'md-swap'
+                                       },
+                                       on: {
+                                           click: () => {
+                                               this.replacePerson(params.row);
+                                           }
+                                       }
+                                   }, '变更'));
+                               }
                            }
 
                            return h('div',{
@@ -232,6 +252,29 @@
                         this.$http({
                             method: 'get',
                             url: '/project/deleteProjectUser',
+                            params: {
+                                projectId: this.projectId,
+                                projectUserId: row.projectUserId
+                            }
+                        }).then(res => {
+                            if(res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '移除成功！'
+                                });
+                                this.getData();
+                            }
+                        })
+                    }
+                })
+            },
+            removePersonForAdmin(row) {
+                this.$Modal.confirm({
+                    title: '移除人员',
+                    content: `确定要移除<${row.name}>?`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/project/deleteProjectUserForAdmin',
                             params: {
                                 projectId: this.projectId,
                                 projectUserId: row.projectUserId

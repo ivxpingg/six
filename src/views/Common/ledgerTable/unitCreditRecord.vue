@@ -112,11 +112,7 @@
                 },
                 tableColumns: [
                     { title: '序号', width: 60, align: 'center', type: 'index', },
-                    { title: '日期', align: 'center', width: 120, key: 'recordDate',
-                        render: (h, params) => {
-                            return h('div', params.row.recordDate ? MOMENT(params.row.recordDate).format('YYYY-MM-DD') : '');
-                        }
-                    },
+                    { title: '日期', align: 'center', width: 120, key: 'recordYear'},
                     { title: '企业名称', align: 'center', width: 180, key: 'unitName'},
                     { title: '注册地址', align: 'center', width: 180, key: 'registerAddress'},
                     { title: '资质类别', align: 'center', width: 120, key: 'qualificationType'},

@@ -47,7 +47,7 @@
                :width="1200"
                footer-hide>
             <vContentAudit :projectId="project_verification.projectId"
-                           :handoverRecordId="project_verification.handoverRecordId"
+                           :handoverRecordId="project_verification.relationId"
                            @modal_callback="modal_common_callback"></vContentAudit>
         </Modal>
 
@@ -191,7 +191,7 @@
                 modal_contentAudit_verification: false,
                 project_verification: {
                     projectId: '',
-                    handoverRecordId: '',
+                    relationId: '',
                     projectName: '',
                     part: ''
                 },
@@ -344,10 +344,11 @@
                         });
                         break;
                     case 'handover_reply_audit':   // 交工检测核验审核
+                        debugger
                         param = eval(`[${row.param}]`);
                         Object.assign(this.project_verification, {
                             projectId: '',
-                            handoverRecordId: '',
+                            relationId: '',
                             projectName: '',
                             part: ''
                         }, param[0]);

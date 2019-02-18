@@ -168,6 +168,7 @@
                 //             url: '/projectAudit/handoverBack',
                 //             params: {
                 //                 projectId: this.projectId,
+                //                 relationId: this.handoverRecordId,
                 //                 auditProcessId: ''
                 //             }
                 //         }).then(res => {
@@ -185,10 +186,10 @@
                     if (valid) {
                         this.$http({
                             method: 'get',
-                            url: '/projectAudit/handoverStartAudit',
+                            url: ' /projectAudit/handoverBack',
                             params: {
                                 projectId: this.projectId,
-                                handoverRecordId: this.handoverRecordId,
+                                relationId: this.handoverRecordId,
                                 auditProcessId: this.backData.auditProcessId
                             }
                         }).then(res => {
@@ -262,7 +263,7 @@
                                     url: '/projectAudit/handoverStartAudit',
                                     params: {
                                         projectId: this.projectId,
-                                        handoverRecordId: this.handoverRecordId,
+                                        relationId: this.handoverRecordId,
                                         auditProcessId: this.acceptData.auditProcessId
                                     }
                                 }).then(res => {

@@ -77,6 +77,9 @@
                 type: String,
                 required: true
             },
+            projectStatus: {
+                type: String,
+            },
             projectName: {
                 type: String,
             }
@@ -133,7 +136,7 @@
                                                     url: '/projectAudit/handoverSubmit',
                                                     params:{
                                                         projectId: params.row.projectId,
-                                                        handoverRecordId: params.row.handoverRecordId
+                                                        relationId: params.row.handoverRecordId
                                                     }
                                                 }).then(res => {
                                                     if (res.code === 'SUCCESS') {
@@ -201,6 +204,7 @@
                         if (params.row.handleStatus === 'handle'
                             && params.row.auditProcessId
                             && !params.row.processStepId
+                            && this.projectStatus === 'handover_apply'
                             && this.auth_update) {
 
                             list.push(h('Button', {
@@ -212,6 +216,7 @@
                                 on: {
                                     click: () => {
                                         this.currentProject.projectId = params.row.projectId;
+                                        this.currentProject.handoverRecordId = params.row.handoverRecordId;
                                         this.$refs.modal_sendProjectFiles.modalValue = true;
                                     }
                                 }
@@ -278,6 +283,9 @@
                 this.getData();
             }
         },
+        mounted() {
+
+        },
         methods: {
             // 获取表格数据
             getData() {
@@ -327,6 +335,7 @@
                 this.currentProject.projectId = '';
                 this.currentProject.handoverRecordId = '';
                 this.getData();
+                this.$parent.getData();
             }
         }
     }
