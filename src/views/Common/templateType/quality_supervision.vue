@@ -189,12 +189,19 @@
             templateType: {
                 type: String,
                 default: 'quality_supervision'
+            },
+            // 分段Id
+            handoverRecordId: {
+                type: String,
+                default() {
+                    return '';
+                }
             }
         },
         watch: {
             projectId(val) {
-                if (val) {
-                    this.getData();
+                if (val && this.processStepId !== '') {
+                    // this.getData();
                     this.getAuditContent();
                 }
             },
@@ -216,7 +223,6 @@
                     this.auditContent[0].name_0 = this.textObj.name_0;
                     this.auditContent[0].name_1 = this.textObj.name_1;
                     this.auditContent[0].name_2 = this.textObj.name_2;
-
                     this.auditInfo.auditContent = JSON.stringify(this.auditContent);
 
                     this.$emit('modal-eSignature', this.auditInfo);
@@ -315,15 +321,18 @@
             getAuditContent() {
                 this.$http({
                     method: 'get',
-                    url: '/projectAudit/getAuditContent',
+                    url: '/projectAudit/getAuditContent?qua=su',
                     params: {
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        relationId: this.handoverRecordId,
+                        processStepId: this.processStepId
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
 
                          if (res.data.auditContent) {
                              try {
+
                                  this.auditContent = eval(res.data.auditContent);
 
                                  this.textObj.textarea_0 = this.auditContent[0].textarea_0;
@@ -339,6 +348,17 @@
                              catch (e) {
 
                              }
+                         }
+                         else {
+                             this.auditContent = [{
+                                 textarea_0: '',
+                                 textarea_1: '',
+                                 textarea_2: '',
+                                 name_0: '',
+                                 name_1: '',
+                                 name_2: '',
+                                 eSignature: []
+                             }];
                          }
                     }
                 })
@@ -379,6 +399,9 @@
                 this.auditContent[0].name_2 = this.textObj.name_2;
 
                 this.auditInfo.auditContent = JSON.stringify(this.auditContent);
+                this.auditInfo.projectId = this.projectId;
+                this.auditInfo.auditProcessId = this.auditProcessId;
+                this.auditInfo.processStepId = this.processStepId;
 
                 this.$emit('modal-eSignature', this.auditInfo);
             }

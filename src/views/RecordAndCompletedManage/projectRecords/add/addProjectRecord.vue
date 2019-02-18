@@ -172,7 +172,7 @@
             getProjectList() {
                 this.$http({
                     method: 'get',
-                    url: '/projectAudit/chooseProjectListForHandover'
+                    url: '/projectRecord/chooseProjectListForRecord'
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {

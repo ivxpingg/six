@@ -2,7 +2,7 @@
     <div class="fileDetailLists-container">
         <Table ref="table"
                border
-               :size="templateType === 'quality_supervision' ? 'small' : ''"
+               :size="templateType === 'quality_supervision' ? 'small' : 'default'"
                disabled-hover
                :class="{
                'custom-ivu-table': isView,

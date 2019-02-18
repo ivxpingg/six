@@ -119,6 +119,13 @@
             projectId: {
                 type: String,
                 required: true
+            },
+            // 分段Id
+            handoverRecordId: {
+                type: String,
+                default() {
+                    return '';
+                }
             }
         },
         data() {
@@ -181,6 +188,7 @@
                             url: '/projectAudit/handoverStartAudit',
                             params: {
                                 projectId: this.projectId,
+                                handoverRecordId: this.handoverRecordId,
                                 auditProcessId: this.backData.auditProcessId
                             }
                         }).then(res => {
@@ -254,6 +262,7 @@
                                     url: '/projectAudit/handoverStartAudit',
                                     params: {
                                         projectId: this.projectId,
+                                        handoverRecordId: this.handoverRecordId,
                                         auditProcessId: this.acceptData.auditProcessId
                                     }
                                 }).then(res => {

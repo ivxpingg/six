@@ -50,14 +50,27 @@
         <!--<vHandleProjectSelect ref="modal_handleProjectSelect" @modal-callback="modal_selectProject_callback"></vHandleProjectSelect>-->
         <Modal v-model="modal_projectSelect"
                title="选择项目"
-               :width="400">
-            <Form>
-                <FormItem label="项目：" :label-width="60">
-                    <Select v-model="currentProject.projectId" filterable>
+               :width="450">
+            <Form ref="formAdd"
+                  :model="formData_add"
+                  :rules="rules"
+                  :label-width="85">
+                <FormItem label="项 目：" prop="projectId">
+                    <Select v-model="formData_add.projectId" filterable>
                         <Option v-for="item in projectList"
                                 :value="item.projectId"
                                 :key="item.projectId" :label="getProjectOpionLabel(item)"></Option>
                     </Select>
+                </FormItem>
+                <FormItem label="交工类型：" prop="handoverType">
+                    <Select v-model="formData_add.handoverType">
+                        <Option v-for="item in dict_handoverType"
+                                :value="item.value"
+                                :key="item.id" :label="item.label"></Option>
+                    </Select>
+                </FormItem>
+                <FormItem label="交工描述：" v-if="formData_add.handoverType !== 'whole'" prop="description">
+                    <Input  v-model="formData_add.description" type="textarea" :rows="3" />
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -93,6 +106,7 @@
         <!--处理标签审核-->
         <vHandleAudit ref="modal_handleAudit"
                       :projectId="currentProject.projectId"
+                      :handoverRecordId="currentProject.projectId"
                       :auditProcessId="currentProject.auditProcessId"
                       :processStepId="currentProject.processStepId"
                       @modal-auditPass-callback="modal_auditPass_callback"></vHandleAudit>
@@ -103,6 +117,11 @@
                            @modal-callback="modal_sendProjectFiles_callback">
 
         </vSendProjectFiles>
+
+        <!--分段交工-->
+        <vSubsection ref="modal_subsection"
+                     :projectId="currentProject.projectId"
+                     :projectName="currentProject.projectName"></vSubsection>
 
         <!--查看日志-->
         <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
@@ -115,6 +134,7 @@
     import vContentAudit from './content-audit/content-audit';
     import vHandleAudit from './handleAudit/handleAudit';
     import vSendProjectFiles from './sendProjectfiles/sendProjectFiles';
+    import vSubsection from './subsection/subsection';
     import authMixin from '../../../lib/mixin/authMixin'
     import MOMENT from 'moment';
     import logViewMixin from '../../Common/logView/mixin';
@@ -126,7 +146,8 @@
             vProjectVerification_apply,
             vContentAudit,
             vHandleAudit,
-            vSendProjectFiles
+            vSendProjectFiles,
+            vSubsection
         },
         computed: {
             _tableColumns() {
@@ -160,6 +181,7 @@
 
                         if ((params.row.handleStatus === 'submitted'
                             || params.row.handleStatus === 'replenish')
+                            && !params.row.handoverNum
                             && this.auth_add) {
                             list.push(h('Button', {
                                 props: {
@@ -266,6 +288,20 @@
                             }, '下发工程交工质量核验意见'));
                         }
 
+                        list.push(h('Button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small',
+                                icon: 'logo-buffer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.currentProject.projectId = params.row.projectId;
+                                    this.$refs.modal_subsection.modalValue = true;
+                                }
+                            }
+                        }, '分段交工'));
+
                         return h('div', {
                             class: 'ivx-table-cell-handle'
                         }, list);
@@ -340,10 +376,22 @@
 
                 // 字典
                 dict_handleStatus: [],
+                dict_handoverType: [],
 
                 // 选择用于交工的项目列表
                 modal_projectSelect: false,
                 projectList: [],
+                // 添加交工项目对象
+                formData_add: {
+                    projectId: '',
+                    handoverType: '',
+                    description: ''
+                },
+                rules: {
+                    projectId: [{ required: true, message: '项目不能为空！', trigger: 'blur' }],
+                    handoverType: [{ required: true, message: '交工类型不能为空！', trigger: 'blur' }],
+                    description: [{ required: true, message: '交工描述不能为空！', trigger: 'blur' }],
+                },
 
                 // 当前查看的项目
                 currentProject: {
@@ -374,22 +422,30 @@
         mounted() {
             this.getProjectList();
             this.getData();
-            this.getDict();
+            this.getDict(['handleStatus', 'handoverType']);
         },
         methods: {
             getProjectOpionLabel(item) {
                 return (item.projectName + (!item.part ? '' : `(${item.part})`));
             },
-            getDict() {
+            getDict(list) {
                 this.$http({
                     method: 'get',
-                    url: '/dict/getListByType',
+                    url: '/dict/getListByTypes',
                     params: {
-                        type: 'handleStatus'
+                        types: list.join(',')
                     }
                 }).then(res => {
                     if (res.code === 'SUCCESS') {
-                        this.dict_handleStatus = res.data.filter(val => val.value !== 'noaccept');;
+                        list.forEach(val => {
+                            if (val === 'handleStatus') {
+                                this[`dict_${val}`] = res.data[val].filter(v => v.value !== 'noaccept');
+                            }
+                            else {
+                                this[`dict_${val}`] = res.data[val];
+                            }
+                        });
+
                     }
                 })
             },
@@ -439,19 +495,37 @@
             },
             // 登记添加项目
             onClick_add() {
-                this.$http({
-                    method: 'get',
-                    url: '/projectAudit/handoverRegister',
-                    params: {
-                        projectId: this.currentProject.projectId
+                this.$refs.formAdd.validate((valid) => {
+                    if (valid) {
+                        let parameter;
+                        if (this.formData_add.handoverType === 'whole') {
+                            parameter = {
+                                method: 'get',
+                                url: '/projectAudit/handoverRegister',
+                                params: {
+                                    projectId: this.formData_add.projectId
+                                }
+                            };
+                        }
+                        else {
+                            parameter = {
+                                method: 'post',
+                                url: '/handoverRecord/add',
+                                data: JSON.stringify(this.formData_add)
+                            };
+                        }
+                        this.$http(parameter).then((res) => {
+                            if (res.code === 'SUCCESS') {
+                                this.modal_projectSelect = false;
+                                this.currentProject.projectId = '';
+                                this.currentProject.auditProcessId = '';
+                                this.currentProject.processStepId = '';
+                                this.getData();
+                                this.getProjectList();
+                            }
+                        });
                     }
-                }).then((res) => {
-                    if (res.code === 'SUCCESS') {
-                        this.isView = false;
-                        this.modal_projectSelect = false;
-                        this.modal_edit = true;
-                        this.getData();
-                        this.getProjectList();
+                    else {
                     }
                 });
             },

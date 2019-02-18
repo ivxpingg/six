@@ -48,6 +48,13 @@
             projectId: {
                 type: String,
                 default: ''
+            },
+            // 分段Id
+            handoverRecordId: {
+                type: String,
+                default() {
+                    return '';
+                }
             }
         },
         data() {
@@ -87,6 +94,7 @@
                             url: '/projectAudit/handoverSendOpinion',
                             data: JSON.stringify({
                                 projectId: this.projectId,
+                                handoverRecordId: this.handoverRecordId,
                                 fileIds: this.formData.fileIds
                             })
                         }).then((res) => {

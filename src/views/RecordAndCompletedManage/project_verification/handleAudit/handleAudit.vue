@@ -13,7 +13,9 @@
                                  :processStepId="processStepId"
                                  templateTitle="交工验收申请处理标签"
                                  templateType="complete_check"
-                                 :projectId="projectId" @modal-eSignature="modal_eSignature"></vQualitySupervision>
+                                 :projectId="projectId"
+                                 :handoverRecordId="handoverRecordId"
+                                 @modal-eSignature="modal_eSignature"></vQualitySupervision>
             <div slot="footer">
                 <Button type="info" size="large" @click="exportPDF(false)">打印</Button>
                 <!--<Button type="primary" size="large" @click="onClick_selectAuditProcess_open" v-show="!auditProcessId">提交审核</Button>-->
@@ -56,11 +58,23 @@
             processStepId: {
                 type: String,
                 default: ''
+            },
+            // 分段Id
+            handoverRecordId: {
+                type: String,
+                default() {
+                    return '';
+                }
             }
         },
         watch: {
             projectId(val) {
-                if (val) {
+                if (val && this.processStepId !== '') {
+                    this.getAuditContent();
+                }
+            },
+            handoverRecordId(val) {
+                if (val && this.processStepId !== '') {
                     this.getAuditContent();
                 }
             }
@@ -229,21 +243,13 @@
                     method: 'get',
                     url: '/projectAudit/getAuditContent',
                     params: {
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        relationId: this.handoverRecordId,
+                        processStepId: this.processStepId
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-
                         Object.assign(this.auditContent_obj, res.data);
-                        // if (res.data.auditContent) {
-                        //     try {
-                        //         this.auditContent_obj.auditContent = eval(res.data.auditContent);
-                        //
-                        //     }
-                        //     catch (e) {
-                        //
-                        //     }
-                        // }
                     }
                 })
             },
@@ -251,6 +257,7 @@
             // 通过审核
             auditPass(fileId) {
                 this.auditInfo.fileId = fileId || '';
+                this.auditInfo.relationId = this.handoverRecordId;
                 this.auditInfo.fileRecordType = 'handover_apply_audit';
                 this.auditInfo.waitHandleType = 'handover_handle_audit';      //  待办事项类型  - 交工处理标签审核
                 this.$http({

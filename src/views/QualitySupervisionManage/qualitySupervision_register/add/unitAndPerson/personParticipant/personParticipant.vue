@@ -19,6 +19,13 @@
                          filterSelected
                          @modal-callback="handleSelect_addPerson" ></vEmployeeSelect>
 
+        <vEmployeeSelect ref="modal_userSelect_one"
+                         userSourceType="hasUnit"
+                         :unitId="unitId"
+                         :selectedValue="selectedValue"
+                         filterSelected
+                         @modal-callback="handleSelect_replacePerson" ></vEmployeeSelect>
+
     </div>
 </template>
 
@@ -79,26 +86,12 @@
                         }
                     }
                 ],
-                tableData: [
-                    // {
-                    //     age: 20,
-                    //     certificate: "二级建造师",
-                    //     certificateNo: "00247946",
-                    //     graduateSchool: "中国科学技术大学",
-                    //     idNumber: "342401196707274917",
-                    //     name: "储修华",
-                    //     nation: "汉",
-                    //     phone: "12030001400",
-                    //     profession: "计算机应用",
-                    //     sexLabel: "男",
-                    //     titleLevelLabel: "高级",
-                    //     titleNameLabel: "工程师",
-                    //     unitName: "安徽巢湖路桥建设集团有限公司",
-                    //     unitTypeLabel: "建设单位",
-                    //     userId: "30",
-                    //     userNo: "E56152",
-                    // }
-                ]
+                tableData: [],
+                currentRow: {
+                    userId: '',
+                    name: '',
+                    projectUserId: ''
+                }
             };
         },
         computed: {
@@ -143,24 +136,42 @@
                    },
                    {
                        title: '操作',
-                       width: 120,
+                       width: 170,
                        align: 'center',
                        fixed: 'right',
                        render: (h, params) => {
                            let list = [];
 
-                           list.push(h('Button', {
-                               props: {
-                                   type: 'error',
-                                   size: 'small',
-                                   icon: 'ios-trash-outline'
-                               },
-                               on: {
-                                   click: () => {
-                                       this.removePerson(params.row);
+                           if (params.row.endTime) {
+
+                           }
+                           else {
+                               list.push(h('Button', {
+                                   props: {
+                                       type: 'error',
+                                       size: 'small',
+                                       icon: 'ios-trash-outline'
+                                   },
+                                   on: {
+                                       click: () => {
+                                           this.removePerson(params.row);
+                                       }
                                    }
-                               }
-                           }, '移除'));
+                               }, '移除'));
+                               list.push(h('Button', {
+                                   props: {
+                                       type: 'error',
+                                       size: 'small',
+                                       icon: 'md-swap'
+                                   },
+                                   on: {
+                                       click: () => {
+                                           this.replacePerson(params.row);
+                                       }
+                                   }
+                               }, '变更'));
+                           }
+
                            return h('div',{
                                class: 'ivx-table-cell-handle'
                            },list);
@@ -178,7 +189,7 @@
             getData() {
                 this.$http({
                     method: 'get',
-                    url: '/project/viewProjectUser',
+                    url: '/project/viewAllProjectUser',
                     params: {
                         projectUnitId: this.projectUnitId
                     }
@@ -235,6 +246,35 @@
                         })
                     }
                 })
+            },
+
+            handleSelect_replacePerson(selectValue, selectItems) {
+                this.$Modal.confirm({
+                    title: '替换人员',
+                    content: `确定要用<${selectItems.name}>替换<${this.currentRow.name}>?`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/project/changeProjectUser',
+                            params: {
+                                userId: selectItems.userId,
+                                projectUserId: this.currentRow.projectUserId
+                            }
+                        }).then(res => {
+                            if(res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '替换成功！'
+                                });
+                                this.getData();
+                            }
+                        })
+                    }
+                })
+            },
+            // 替换人员
+            replacePerson(row) {
+                Object.assign(this.currentRow, row);
+                this.$refs.modal_userSelect_one.modalValue = true;
             }
         }
     }

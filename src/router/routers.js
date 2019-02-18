@@ -243,16 +243,6 @@ const QualitySupervisionManage = [
                 }
             },
             {
-                path: 'qualitySupervision_tell_record',
-                name: 'qualitySupervision_tell_record',
-                component: () => import('@/views/QualitySupervisionManage/qualitySupervision_tell_record/qualitySupervision_tell_record.vue'),
-                meta: {
-                    icon: '_qualitySupervision_tell',
-                    title: '质量监督受理及交底记录',
-                    requireAuth: true
-                }
-            },
-            {
                 path: 'qualitySupervision_check',
                 name: 'qualitySupervision_check',
                 component: () => import('@/views/QualitySupervisionManage/qualitySupervision_check/qualitySupervision_check.vue'),

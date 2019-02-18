@@ -53,7 +53,7 @@
         },
         watch: {
             projectId(val) {
-                if (val) {
+                if (val && this.processStepId !== '') {
                     this.getAuditContent();
                 }
             }
@@ -223,10 +223,13 @@
                     method: 'get',
                     url: '/projectAudit/getAuditContent',
                     params: {
-                        projectId: this.projectId
+                        projectId: this.projectId,
+                        relationId: this.projectId,
+                        processStepId: this.processStepId
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
+                        this.auditContent_obj.auditContent = '';
 
                         Object.assign(this.auditContent_obj, res.data);
                         // if (res.data.auditContent) {
@@ -245,6 +248,7 @@
             // 通过审核
             auditPass(fileId) {
                 this.auditInfo.fileId = fileId || '';
+                this.auditInfo.relationId = this.projectId;
                 this.auditInfo.fileRecordType = 'apply_handle_record';
                 this.auditInfo.waitHandleType = 'handle_label_audit';      //  待办事项类型  - 受理处理标签审核
                 this.$http({

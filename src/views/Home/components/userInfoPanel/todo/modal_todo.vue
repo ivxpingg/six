@@ -47,6 +47,7 @@
                :width="1200"
                footer-hide>
             <vContentAudit :projectId="project_verification.projectId"
+                           :handoverRecordId="project_verification.handoverRecordId"
                            @modal_callback="modal_common_callback"></vContentAudit>
         </Modal>
 
@@ -76,6 +77,7 @@
         <!--交工处理标签审核-->
         <vHandleAuditHandover ref="modal_handover_handle_audit"
                               :projectId="params_handover_handle_audit.projectId"
+                              :handoverRecordId="params_handover_handle_audit.relationId"
                               :auditProcessId="params_handover_handle_audit.auditProcessId"
                               :processStepId="params_handover_handle_audit.processStepId"
                               @modal-auditPass-callback="modal_common_callback"></vHandleAuditHandover>
@@ -123,10 +125,14 @@
                         }
                     },
                     { title: '事项名称', width: 160, align: 'center', key: 'waitHandleName' },
-                    { title: '项目', minWidth: 160, align: 'center',
+                    { title: '项目', minWidth: 160, tooltip: true, align: 'center',
                         render(h, params) {
                              let param = eval(`[${params.row.param}]`);
-                             return h('div', `${param[0].projectName}(${param[0].part})`);
+                             let text = `${param[0].projectName}(${param[0].part})`;
+                             if (param[0].description) {
+                                 text += `(${param[0].description})`;
+                             }
+                             return h('div', text);
                         }
                     },
                     { title: '来源', width: 160, align: 'center', key: 'source' },
@@ -185,6 +191,7 @@
                 modal_contentAudit_verification: false,
                 project_verification: {
                     projectId: '',
+                    handoverRecordId: '',
                     projectName: '',
                     part: ''
                 },
@@ -211,6 +218,7 @@
                 // 交工处理标签审核
                 params_handover_handle_audit: {
                     projectId: '',
+                    relationId: '',
                     auditProcessId: '',
                     processStepId: ''
                 }
@@ -339,6 +347,7 @@
                         param = eval(`[${row.param}]`);
                         Object.assign(this.project_verification, {
                             projectId: '',
+                            handoverRecordId: '',
                             projectName: '',
                             part: ''
                         }, param[0]);
@@ -357,6 +366,7 @@
                         param = eval(`[${row.param}]`);
                         Object.assign(this.params_handover_handle_audit, {
                             projectId: '',
+                            relationId: '',
                             auditProcessId: '',
                             processStepId: ''
                         }, param[0]);
