@@ -68,9 +68,19 @@ export default {
                     let time = that.$moment(p.info.planBeginTime).format('YYYY年MM月DD日')
 
                     let html = `<div>项目名称: ${p.info.projectName}</div>
-                                    <div>建设里程: ${p.info.mileage} 公里</div>
-                                    <div>建设地点: ${p.info.address}</div>
-                                    <div>开工时间: ${time}</div>`;
+                                <div>标段: ${p.info.part || ''}</div>
+                                <div>建设地点: ${p.info.address || ''}</div>
+                                <div>地区: ${p.info.province || ''}${p.info.city || ''}${p.info.county || ''}</div>
+                                <div>项目类型: ${p.info.projectTypeLabel || ''}</div>
+                                <div>技术等级: ${p.info.technicalLevelLabel}</div>
+                                <div>结构类型: ${p.info.structureTypeLabel || ''}</div>
+                                <div>工程性质: ${p.info.projectPropertyLabel || ''}</div>
+                                <div>建设里程: ${p.info.mileage} 公里</div>
+                                <div>设计时速: ${p.info.designSpeed}km/h</div>
+                                <div>开工时间: ${time}</div>
+                                <div>交工时间: ${that.$moment(p.info.planEndTime).format('YYYY年MM月DD日')}</div>
+                                <div>联系人: ${p.info.contacts || ''}</div>
+                                <div>联系电话: ${p.info.contactPhone || ''}</div>`;
 
 
                     let point = p.getPath()[0];
