@@ -84,7 +84,7 @@
                 myOPtion.series = [];
 
                 for(let name in data.checkTypeList) {
-
+                    
                 }
                 data.checkTypeList.forEach(name => {
                     myOPtion.series.push({
@@ -99,11 +99,10 @@
 
                 for(let key in data.list) {
                     let month = MOMENT(key).month();
-
                     data.list[key].forEach(val => {
                         let series_idx = data.checkTypeList.indexOf(val.checkType);
 
-                        myOPtion.series[series_idx].data[month -1] = val.num;
+                        myOPtion.series[series_idx].data[month] = val.num;
                     })
                 }
                 //
@@ -117,6 +116,7 @@
                 //         name: val.checkWay
                 //     });
                 // });
+                
                 this.chart.setOption(myOPtion);
             }
         }

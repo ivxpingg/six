@@ -139,6 +139,7 @@
                  :style="{
                  transform: `translate(${offsetX-50}px, ${offsetY-50}px)`}">
         </div>
+
         <div class="stamp-layer-mouse"
              v-show="stampState"
              @mousemove="onMousemove($event)" @click="onClick_stamp"></div>
