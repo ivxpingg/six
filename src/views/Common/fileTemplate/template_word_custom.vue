@@ -113,6 +113,7 @@
                         value_5: ''
                     },
                     data: [],  // [{value:'', key: '', }, {value: '', key: ''}]
+                    stamp: []
                 }
             };
         },
