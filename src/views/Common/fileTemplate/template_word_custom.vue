@@ -139,6 +139,22 @@
             }
         },
         methods: {
+            // 判断是否全部填写
+            // @return Boolean
+            validateContent() {
+                for (let key in this.temData) {
+                    if (key !== 'stamp' && key !== 'data') {
+
+                        for (let k in this.temData[key]) {
+                            if (this.temData[key][k] === '') {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
+                return true;
+            },
             exportHide(value) {
                 return this.exportStatus && value === '';
             },
