@@ -374,6 +374,10 @@
             // 选择审核流程回调
             modal_auditProcessSelect_callback(selectValue, selectItems) {
                 this.auditForm.auditProcessId = selectItems.auditProcessId;
+                if (!this.auditForm.auditProcessId) {
+                    this.$Message.error('请选择审核流程');
+                    return;
+                }
                 this.$Modal.confirm({
                     title: '提示',
                     content: `确定要提交审核？`,

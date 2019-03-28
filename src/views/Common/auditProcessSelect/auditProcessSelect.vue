@@ -34,6 +34,7 @@
         <div class="ivu-modal-footer six-modal-footer-padding-bottom-0">
             <Button type="primary"
                     size="large"
+                    :disabled="selectValue === ''"
                     @click="add">确定</Button>
         </div>
     </div>
@@ -85,8 +86,8 @@
                 ],
                 tableData: [],
                 tableLoading: false,
-                selectValue: [],
-                selectItems: []
+                selectValue: '',
+                selectItems: null
             };
         },
         mounted() {
