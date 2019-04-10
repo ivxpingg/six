@@ -29,8 +29,8 @@
                         六安市交通建设工程质量监督局
                     </div>
                 </div>
-                <div class="text-14 line-height-28 text-align-right m-t-10 m-b-28" >交工监函[
-                    <vInputSpan v-model="temData.page_1.value_1" :scale="scale" :inputWidth="80" :underLine="false">] </vInputSpan>
+                <div class="text-16 line-height-28 text-align-right m-t-10 m-b-28" >交工监函〔
+                    <vInputSpan v-model="temData.page_1.value_1" :scale="scale" :inputWidth="80" :underLine="false">〕</vInputSpan>
                     <vInputSpan v-model="temData.page_1.value_10" :scale="scale" :inputWidth="80" :underLine="false"></vInputSpan>
                     号
                 </div>
@@ -105,7 +105,7 @@
                 <div :class="classNameType.mainClass">
                     （二）检测结果
                 </div>
-                <div class="text-14 text-align-center line-height-28 letter-spacing-2">
+                <div class="text-16 text-align-center line-height-28 letter-spacing-2">
                     <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
                     工程实体检测统计表
                 </div>
@@ -183,21 +183,21 @@
                 </div>
 
                 <div class="box-bottom" v-if="temData.page_4.value_4.pageIndex === 1">
-                    <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
-                    <div class="text-16 line-height-28 text-align-right"  style="border-bottom: 1px solid #333;">
+                    <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-18 line-height-28 text-align-right"  style="border-bottom: 1px solid #333;">
                         <vInputSpan v-model="temData.page_4.value_6" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_4.value_7" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
                         <vInputSpan v-model="temData.page_4.value_8" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
                     </div>
 
-                    <div class="text-14 line-height-28 letter-spacing-2"  style="border-bottom: 1px solid #333;">抄报：
+                    <div class="text-16 line-height-28 letter-spacing-2"  style="border-bottom: 1px solid #333;">抄报：
                         <vInputSpan v-model="temData.page_4.value_9" :scale="scale" display="inline-block" :underLine="false" :width="360" :inputWidth="360"></vInputSpan>
                     </div>
-                    <div class="text-14 line-height-28 letter-spacing-2 "  style="border-bottom: 1px solid #333;">抄送：
+                    <div class="text-16 line-height-28 letter-spacing-2 "  style="border-bottom: 1px solid #333;">抄送：
                         <vInputSpan v-model="temData.page_4.value_10" :scale="scale" display="inline-block" :underLine="false" :width="360" :inputWidth="360"></vInputSpan>
                     </div>
-                    <div class="text-14 line-height-28 letter-spacing-2 m-t-10" style="border-bottom: 1px solid #333;">
+                    <div class="text-16 line-height-28 m-t-10" style="border-bottom: 1px solid #333;">
                         六安市交通建设工程质量监督局
                         <span>
                             <vInputSpan v-model="temData.page_4.value_11" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
@@ -246,21 +246,21 @@
                     个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
                 </div>
                 <div class="box-bottom">
-                    <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
-                    <div class="text-16 line-height-28 text-align-right"  style="border-bottom: 1px solid #333;">
+                    <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-18 line-height-28 text-align-right"  style="border-bottom: 1px solid #333;">
                         <vInputSpan v-model="temData.page_4.value_6" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_4.value_7" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
                         <vInputSpan v-model="temData.page_4.value_8" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
                     </div>
 
-                    <div class="text-14 line-height-28 letter-spacing-2"  style="border-bottom: 1px solid #333;">抄报：
+                    <div class="text-16 line-height-28 letter-spacing-2"  style="border-bottom: 1px solid #333;">抄报：
                         <vInputSpan v-model="temData.page_4.value_9" :scale="scale" display="inline-block" :underLine="false" :width="360" :inputWidth="360"></vInputSpan>
                     </div>
-                    <div class="text-14 line-height-28 letter-spacing-2 "  style="border-bottom: 1px solid #333;">抄送：
+                    <div class="text-16 line-height-28 letter-spacing-2 "  style="border-bottom: 1px solid #333;">抄送：
                         <vInputSpan v-model="temData.page_4.value_10" :scale="scale" display="inline-block" :underLine="false" :width="360" :inputWidth="360"></vInputSpan>
                     </div>
-                    <div class="text-14 line-height-28 letter-spacing-2 m-t-10" style="border-bottom: 1px solid #333;">
+                    <div class="text-16 line-height-28 m-t-10" style="border-bottom: 1px solid #333;">
                         六安市交通建设工程质量监督局
                         <span>
                             <vInputSpan v-model="temData.page_4.value_11" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年

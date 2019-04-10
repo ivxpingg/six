@@ -24,19 +24,19 @@
             <!--第一页-->
             <div class="page">
                 <h1>公路工程质量监督管理受理通知书</h1>
-                <div class="text-14 text-align-right line-height-28 m-t-10" >
+                <div class="text-16 text-align-right line-height-28 m-t-10" >
                     编号：
                     <vInputSpan v-model="temData.page_1.value_1" :scale="scale"></vInputSpan>
                 </div>
                 <div class="box-bottom">
-                    <div class="text-16 letter-spacing-2 m-b-30">工程名称：
+                    <div class="text-18 letter-spacing-2 m-b-30">工程名称：
                         <vInputSpan v-model="temData.page_1.value_2" display="inline-block" :scale="scale" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
-                    <div class="text-16 letter-spacing-2 m-b-30">监督单位：
+                    <div class="text-18 letter-spacing-2 m-b-30">监督单位：
                         <vInputSpan v-model="temData.page_1.value_3" display="inline-block" :scale="scale" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
 
-                    <div class="text-14 line-height-28 text-align-center">
+                    <div class="text-16 line-height-28 text-align-center">
                         <vInputSpan v-model="temData.page_1.value_4" :scale="scale" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_1.value_5" :scale="scale" :underLine="false"></vInputSpan>月
                         <vInputSpan v-model="temData.page_1.value_6" :scale="scale" :underLine="false"></vInputSpan>日
@@ -46,7 +46,7 @@
 
             <!--第二页-->
             <div class="page">
-                <div class="text-14 text-align-left line-height-28   m-b-10">
+                <div class="text-16 text-align-left line-height-28   m-b-10">
                     <vInputSpan v-model="temData.page_2.value_1" :underLine="prindUnderLine" :scale="scale"></vInputSpan>：
                 </div>
                 <div :class="classNameType.mainClass_list1">
@@ -390,9 +390,9 @@
                 </div>
 
                 <div class="box-bottom">
-                    <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
-                    <div class="text-14 line-height-28 text-align-right">
+                    <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-16 line-height-28 text-align-right">
                         <vInputSpan v-model="temData.page_8.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_8.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
                         <vInputSpan v-model="temData.page_8.value_3" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日

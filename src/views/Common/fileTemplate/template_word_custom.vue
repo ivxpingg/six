@@ -32,17 +32,17 @@
                                     :underLine="false"></vInputSpan>
                     </div>
                 </div>
-                <div class="text-14 line-height-28 text-align-right m-t-10 m-b-56" >交工监函[
-                    <vInputSpan v-model="temData.page_1.value_2" :scale="scale" :inputWidth="80" :underLine="false">] </vInputSpan>
+                <div class="text-14 line-height-28 text-align-right m-t-10 m-b-56" >交工监函〔
+                    <vInputSpan v-model="temData.page_1.value_2" :scale="scale" :inputWidth="80" :underLine="false">〕</vInputSpan>
                     <vInputSpan v-model="temData.page_1.value_3" :scale="scale" :inputWidth="80" :underLine="false"></vInputSpan>
                     号
                 </div>
 
-                <h1 class="text-align-center m-b-28">
+                <h1 class="text-align-center custom-h1 m-b-28">
                     <vInputSpan v-model="temData.page_1.value_4" :scale="scale" :underLine="false" :width="400" :inputWidth="400"></vInputSpan>
                 </h1>
 
-                <div :class="classNameType.mainClass">
+                <div class="custom-content" :class="classNameType.mainClass">
                     <Input v-model="temData.page_1.value_5"
                            class="input-boder-none"
                            type="textarea"
@@ -53,7 +53,7 @@
             </div>
             <!--第2页-->
             <div class="page" v-for="(item, idx) in temData.data" :key="item.key" v-show="!exportHide(item.value)">
-                <div :class="classNameType.mainClass">
+                <div class="custom-content" :class="classNameType.mainClass">
                     <Input v-model="item.value"
                            class="input-boder-none"
                            type="textarea"
@@ -302,5 +302,17 @@
 <style lang="scss" scoped>
     .template_word_custom-container {
         display: inline-block;
+
+        .custom-h1 {
+            font-weight: 500;
+            font-size: 22px;
+            font-family: '宋体';
+            line-height: 1.2;
+        }
+
+        .custom-content {
+            font-size: 16px;
+            font-family: 'FangSong';
+        }
     }
 </style>

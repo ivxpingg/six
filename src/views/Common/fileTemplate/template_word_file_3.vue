@@ -25,19 +25,19 @@
             <!--第一页-->
             <div class="page">
                 <h1>质量监督申请材料核查意见书</h1>
-                <div class="text-14 text-align-right line-height-28 m-t-10" >
+                <div class="text-16 text-align-right line-height-28 m-t-10" >
                     编号：
                     <vInputSpan v-model="temData.page_1.value_1" :scale="scale"></vInputSpan>
                 </div>
                 <div class="box-bottom">
-                    <div class="text-16 letter-spacing-2 m-b-30">工程名称：
+                    <div class="text-18 letter-spacing-2 m-b-30">工程名称：
                         <vInputSpan v-model="temData.page_1.value_2" :scale="scale" display="inline-block" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
-                    <div class="text-16 letter-spacing-2 m-b-30">监督单位：
+                    <div class="text-18 letter-spacing-2 m-b-30">监督单位：
                         <vInputSpan v-model="temData.page_1.value_3" :scale="scale" display="inline-block" :width="320" :inputWidth="320"></vInputSpan>
                     </div>
 
-                    <div class="text-14 line-height-28 text-align-center">
+                    <div class="text-16 line-height-28 text-align-center">
                         <vInputSpan v-model="temData.page_1.value_4" :scale="scale" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_1.value_5" :scale="scale" :underLine="false"></vInputSpan>月
                         <vInputSpan v-model="temData.page_1.value_6" :scale="scale" :underLine="false"></vInputSpan>日
@@ -50,10 +50,10 @@
             <div class="page">
                 <h1 class="m-b-32">质量监督申请材料核查意见书</h1>
 
-                <div class="text-14 text-align-left line-height-28 m-b-10">
+                <div class="text-16 text-align-left line-height-28 m-b-10">
                     <vInputSpan v-model="temData.page_2.value_1" :scale="scale" :underLine="prindUnderLine"></vInputSpan>：
                 </div>
-                <div class="text-14 text-align-left line-height-28 letter-spacing-2 text-indent-28">
+                <div class="text-16 text-align-left line-height-28 letter-spacing-2 text-indent-28">
                     你单位于
                     <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     月
@@ -72,9 +72,9 @@
                 </div>
 
                 <div class="box-bottom" v-if="temData.page_2.value_9.pageIndex === 1">
-                    <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
-                    <div class="text-14 line-height-28 text-align-right">
+                    <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-16 line-height-28 text-align-right">
                         <vInputSpan v-model="temData.page_2.value_5" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_2.value_6" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
                         <vInputSpan v-model="temData.page_2.value_7" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日
@@ -117,9 +117,9 @@
                     <Input v-model="temData.page_2.value_9.value_9_2" type="textarea" :rows="20" placeholder="请输入"/>
                 </div>
                 <div class="box-bottom">
-                    <div class="text-14 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-16 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
-                    <div class="text-14 line-height-28 text-align-right">
+                    <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-16 line-height-28 text-align-right">
                         <vInputSpan v-model="temData.page_2.value_5" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_2.value_6" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
                         <vInputSpan v-model="temData.page_2.value_7" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>日

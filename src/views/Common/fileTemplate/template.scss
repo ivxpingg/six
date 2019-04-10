@@ -3,7 +3,7 @@ $scale: 1;
 $page-width: 595.28px * $scale;  // A4 纸宽度
 $page-height: 841.89px * $scale; // A4 纸高度
 
-$font-size_default: 14px * $scale;  // 默认字体大小
+$font-size_default: 16px * $scale;  // 默认字体大小
 $line-Height: 32px * $scale;        // 默认行高
 $letter-spacing: 4px * $scale;      // 默认字体间距
 $color: #000;
@@ -18,6 +18,7 @@ $color: #000;
   background-color: #FFF;
   font-size: $font-size_default;
   line-height: 1.5;
+  font-family: 'FangSong';
 
   // 盖章图层样式
   .stamp-layer{
@@ -156,14 +157,19 @@ $color: #000;
   }
 
   h1 {
-    font-size: 26px  * $scale;
+    //font-size: 26px  * $scale;
     letter-spacing: 2px * $scale;
     text-align: center;
+    font-weight: 500;
+    font-size: 22px * $scale;
+    font-family: '宋体';
+    line-height: 1.2;
   }
   h2 {
     font-size: 24px  * $scale;
     letter-spacing: 2px * $scale;
     text-align: center;
+    font-family: '宋体';
   }
 
   // 对齐
