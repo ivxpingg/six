@@ -15,6 +15,11 @@
                                 @on-change="onChange_dataYear"></DatePicker>
                 </li>
                 <!--<li> <Button size="large" type="text" ghost custom-icon="iconfont icon-bianji"> 编辑 </Button></li>-->
+                <li> <Button :to="downUrl" ghost icon="md-arrow-round-down" download="" target="_blank">下载视频播放器插件</Button> </li>
+
+                <li> <Button size="large" type="text" ghost icon="ios-videocam"
+                             @click="onClick_video_modal"> 查看视频 </Button> </li>
+
                 <li> <Button size="large" type="text" ghost custom-icon="iconfont icon-tianjia"
                              v-show="status === 'normal'"
                              @click="onClick_add_modal"> 添加 </Button> </li>
@@ -59,43 +64,53 @@
         </Modal>
 
         <!--视频窗口-->
-        <Modal :title="video_projectName"
-               v-model="modal_video"
-               :width="800"
-               @on-cancel="destroyWnd"
-               footer-hide>
-            <vModalBothSides :height="450" style="margin: -16px;">
-                <div slot="left">
-                    <div style="width: 140px;">
-                        <Tree :data="data1"></Tree>
-                    </div>
-                </div>
-                <div slot="right">
-                    <Row>
-                        <i-col span="24">
-                            <div class="video-panel" :class="{'video-panel-max': video_max}" @dblclick="switch_max"></div>
-                        </i-col>
-                    </Row>
-                    <!--<div class="video-box" ref="video_div" id="video_div"></div>-->
-                </div>
-            </vModalBothSides>
-        </Modal>
+        <!--<Modal :title="video_projectName"-->
+               <!--v-model="modal_video"-->
+               <!--:width="800"-->
+               <!--@on-cancel="destroyWnd"-->
+               <!--footer-hide>-->
+            <!--<vModalBothSides :height="450" style="margin: -16px;">-->
+                <!--<div slot="left">-->
+                    <!--<div style="width: 140px;">-->
+                        <!--<Tree :data="data1"></Tree>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div slot="right">-->
+                    <!--<Row>-->
+                        <!--<i-col span="24">-->
+                            <!--<div class="video-panel" :class="{'video-panel-max': video_max}" @dblclick="switch_max"></div>-->
+                        <!--</i-col>-->
+                    <!--</Row>-->
+                    <!--&lt;!&ndash;<div class="video-box" ref="video_div" id="video_div"></div>&ndash;&gt;-->
+                <!--</div>-->
+            <!--</vModalBothSides>-->
+        <!--</Modal>-->
 
+        <vModalVideo ref="modal_video"></vModalVideo>
+
+        <iframe id="iframeCarmer" style="border: 0;" width=0 height=0></iframe>
     </div>
 </template>
 <script>
     import initBMap from './initBMap';
+    import Config from '../../../config';
     import vCommonIcon from '@/components/commonIcon/commonIcon';
     import vModalBothSides from '../../../components/modal-body/modal-both-sides';
     import projectSelect_mixin from './mixin/projectSelect';
     import mapDrawing_mixin from './mixin/mapDrawing';
     import projectLine_mixin from './mixin/projectLine';
     import videoControl_mixin from './mixin/videoControl';
+    import vModalVideo from './video/modalVideo';
     import MOMENT from 'moment';
     export default {
         name: 'baiduMap',
         mixins: [projectSelect_mixin, mapDrawing_mixin, projectLine_mixin, videoControl_mixin],
-        components: {vCommonIcon, vModalBothSides},
+        components: {vCommonIcon, vModalBothSides, vModalVideo},
+        computed: {
+            downUrl() {
+                return Config[Config.env].origin + '/plugIn/VideoClientSetup_20190102.exe';
+            }
+        },
         data() {
             return {
                 map: null,
@@ -121,7 +136,26 @@
                     { title: '视频6' },
                     { title: '视频7' }
                 ],
-                video_max: false
+                video_max: false,
+
+
+                iframeUrl: '',
+                urlParan: {
+                    PalyType: 'PlayReal',
+                    SvrIp: 'open8200.hikvision.com',
+                    SvrPort: '443',
+                    // SvrIp: '112.53.236.78',
+                    // SvrPort: '84',
+                    appkey: '26458282',
+                    appSecret: '',
+                    time: '',
+                    timeSecret: '',
+                    httpsflag: '1',
+                    CamList: ''
+                },
+
+                // 视频列表
+                cameraList:  []
             }
         },
         beforeDestroy() {
@@ -139,6 +173,7 @@
 
             this.getProjectList_select();
 
+            this.getCameraList();
         },
         methods: {
             onChange_dataYear(value) {
@@ -178,6 +213,76 @@
 
             switch_max() {
                 this.video_max = !this.video_max;
+            },
+
+            //
+            onClick_video_modal() {
+                // this.$refs.modal_video.modalValue = true;
+
+                this.openCamera();
+            },
+
+            getAppKey() {
+                return new Promise((resolve, reject) => {
+                    this.$http({
+                        method: 'get',
+                        url: '/hikvision/security'
+                    }).then(res => {
+                        if(res.data.code === '0') {
+                            this.urlParan.appSecret = res.data.data.appSecret;
+                            this.urlParan.time = res.data.data.time;
+                            this.urlParan.timeSecret = res.data.data.timeSecret;
+
+                            resolve();
+                        }
+                        else{
+                            reject(res);
+                        }
+                    }).catch((e) => {
+                        reject(e);
+                    })
+                })
+            },
+            getCameraList() {
+                this.$http({
+                    method: 'get',
+                    url: '/hikvision/cameraInfos'
+                }).then(res => {
+
+                    if(res.data.code === '200') {
+                        this.cameraList = res.data.data;
+                    }
+                })
+            },
+            setUrl() {
+                this.iframeUrl = 'hikvideoclient://ReqType:' + this.urlParan.PalyType + ';'
+                    + 'VersionTag:artemis' + ';'
+                    + 'SvrIp:' + this.urlParan.SvrIp + ';'
+                    + 'SvrPort:' + this.urlParan.SvrPort + ';'
+                    + 'Appkey:' + this.urlParan.appkey + ';'
+                    + 'AppSecret:' + this.urlParan.appSecret + ';'
+                    + 'time:' + this.urlParan.time + ';'
+                    + 'timesecret:' + this.urlParan.timeSecret + ';'
+                    + 'httpsflag:' + this.urlParan.httpsflag + ';'
+                    + 'WndCount:1;'
+                    + 'CamList:' + this.urlParan.CamList + ';';
+
+                document.getElementById("iframeCarmer").src = this.iframeUrl;
+            },
+            openCamera() {
+                // console.dir(item);
+
+                    let attr = this.cameraList.map((v, idx )=> { return v.indexCode + '@' + v.name;});
+
+                    this.getAppKey().then(() => {
+                        this.urlParan.CamList = attr.join(',');
+                    this.setUrl();
+                }).catch(() => {
+                        this.setUrl();
+                    });
+                // if (item[0].indexCode) {
+                //
+                // }
             }
         }
     }

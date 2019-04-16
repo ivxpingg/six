@@ -56,7 +56,7 @@ export default {
                 //创建右键菜单
                 let markerMenu = new BMap.ContextMenu();
                 markerMenu.addItem(new BMap.MenuItem('编辑', this.polylineEdit));
-                markerMenu.addItem(new BMap.MenuItem('查看视频', this.watchVideo));
+                // markerMenu.addItem(new BMap.MenuItem('查看视频', this.watchVideo));
                 polyline.addContextMenu(markerMenu);
 
                 //
@@ -65,7 +65,7 @@ export default {
                 polyline.addEventListener('click', function (e) {
                     let p = e.target;
 
-                    let time = that.$moment(p.info.planBeginTime).format('YYYY年MM月DD日')
+                    let time = that.$moment(p.info.planBeginTime).format('YYYY年MM月DD日');
 
                     let html = `<div>项目名称: ${p.info.projectName}</div>
                                 <div>标段: ${p.info.part || ''}</div>
