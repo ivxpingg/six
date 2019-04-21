@@ -64,27 +64,27 @@
         </Modal>
 
         <!--视频窗口-->
-        <!--<Modal :title="video_projectName"-->
-               <!--v-model="modal_video"-->
-               <!--:width="800"-->
-               <!--@on-cancel="destroyWnd"-->
-               <!--footer-hide>-->
-            <!--<vModalBothSides :height="450" style="margin: -16px;">-->
-                <!--<div slot="left">-->
-                    <!--<div style="width: 140px;">-->
-                        <!--<Tree :data="data1"></Tree>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div slot="right">-->
-                    <!--<Row>-->
-                        <!--<i-col span="24">-->
-                            <!--<div class="video-panel" :class="{'video-panel-max': video_max}" @dblclick="switch_max"></div>-->
-                        <!--</i-col>-->
-                    <!--</Row>-->
-                    <!--&lt;!&ndash;<div class="video-box" ref="video_div" id="video_div"></div>&ndash;&gt;-->
-                <!--</div>-->
-            <!--</vModalBothSides>-->
-        <!--</Modal>-->
+        <Modal :title="video_projectName"
+               v-model="modal_video"
+               :width="800"
+               @on-cancel="destroyWnd"
+               footer-hide>
+            <vModalBothSides :height="450" style="margin: -16px;">
+                <div slot="left">
+                    <div style="width: 140px;">
+                        <Tree :data="data1"></Tree>
+                    </div>
+                </div>
+                <div slot="right">
+                    <Row>
+                        <i-col span="24">
+                            <div class="video-panel" :class="{'video-panel-max': video_max}" @dblclick="switch_max"></div>
+                        </i-col>
+                    </Row>
+                    <!--<div class="video-box" ref="video_div" id="video_div"></div>-->
+                </div>
+            </vModalBothSides>
+        </Modal>
 
         <vModalVideo ref="modal_video"></vModalVideo>
 
@@ -143,10 +143,10 @@
                 urlParan: {
                     PalyType: 'PlayReal',
                     SvrIp: 'open8200.hikvision.com',
-                    SvrPort: '443',
+                    SvrPort: '446',
                     // SvrIp: '112.53.236.78',
                     // SvrPort: '84',
-                    appkey: '26458282',
+                    appkey: '24079203',
                     appSecret: '',
                     time: '',
                     timeSecret: '',
@@ -217,9 +217,9 @@
 
             //
             onClick_video_modal() {
-                // this.$refs.modal_video.modalValue = true;
-
-                this.openCamera();
+                this.$refs.modal_video.modalValue = true;
+                //
+                // this.openCamera();
             },
 
             getAppKey() {
@@ -272,14 +272,14 @@
             openCamera() {
                 // console.dir(item);
 
-                    let attr = this.cameraList.map((v, idx )=> { return v.indexCode + '@' + v.name;});
+                let attr = this.cameraList.map((v, idx )=> { return v.indexCode + '@' + v.name;});
 
-                    this.getAppKey().then(() => {
-                        this.urlParan.CamList = attr.join(',');
+                this.getAppKey().then(() => {
+                    this.urlParan.CamList = attr.join(',');
                     this.setUrl();
                 }).catch(() => {
-                        this.setUrl();
-                    });
+                    this.setUrl();
+                });
                 // if (item[0].indexCode) {
                 //
                 // }
@@ -292,55 +292,55 @@
         position: relative;
         height: 100%;
 
-        .map-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background-color: rgba(39,58,85,0.9);
-            z-index: 111;
+    .map-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background-color: rgba(39,58,85,0.9);
+        z-index: 111;
 
-            .title-logo {
-                float: left;
-                margin-top: 12px;
-                margin-left: 20px;
-                width: 45px;
-            }
-            .title {
-                float: left;
-                padding-left: 20px;
-                font-size: 30px;
-                color: #fff;
-                font-weight: 700;
-                line-height: 70px;
-                letter-spacing: 8px;
+    .title-logo {
+        float: left;
+        margin-top: 12px;
+        margin-left: 20px;
+        width: 45px;
+    }
+    .title {
+        float: left;
+        padding-left: 20px;
+        font-size: 30px;
+        color: #fff;
+        font-weight: 700;
+        line-height: 70px;
+        letter-spacing: 8px;
 
-            }
+    }
 
-            .map-btn {
-                float: right;
-                padding-top: 18px;
-                padding-right: 60px;
-                li {
-                    float: left;
-                    margin-left: 18px;
-                    .ivu-btn {
-                        color: #FFF;
-                        font-weight: 700;
-                        border: none;
-                        box-shadow: none;
-                        &:hover, &:active {
-                            color: #BBB;
-                            border: none;
-                        }
-                    }
-                }
-            }
-        }
-        .map {
-            height: 100%;
-        }
+    .map-btn {
+        float: right;
+        padding-top: 18px;
+        padding-right: 60px;
+    li {
+        float: left;
+        margin-left: 18px;
+    .ivu-btn {
+        color: #FFF;
+        font-weight: 700;
+        border: none;
+        box-shadow: none;
+    &:hover, &:active {
+                  color: #BBB;
+                  border: none;
+              }
+    }
+    }
+    }
+    }
+    .map {
+        height: 100%;
+    }
     }
 
     .video-box {
@@ -355,14 +355,14 @@
         width: 600px;
         height: 400px;
 
-        &.video-panel-max {
-            position: fixed;
-            z-index: 99999;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+    &.video-panel-max {
+         position: fixed;
+         z-index: 99999;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+     }
     }
 </style>
 <style lang="scss">
@@ -378,35 +378,35 @@
         min-width: 250px;
         background-color: #FFF;
         z-index: 10;
-        .ivu-form-item {
-            margin-bottom: 0;
-        }
+    .ivu-form-item {
+        margin-bottom: 0;
+    }
 
-        .ivu-modal-footer {
-            display: none;
-        }
+    .ivu-modal-footer {
+        display: none;
+    }
     }
 
     .modal-list-info {
-        .ivu-poptip-arrow {
-            left: 50%;
-            margin-left: -7px;
-            bottom: -7px;
-            border-width: 7px 7px 0;
-            border-top-color: rgba(255,255,255,1);
-        }
+    .ivu-poptip-arrow {
+        left: 50%;
+        margin-left: -7px;
+        bottom: -7px;
+        border-width: 7px 7px 0;
+        border-top-color: rgba(255,255,255,1);
+    }
     }
 
     .datapicker {
-        .ivu-icon {
-            color: #FFF;
-        }
+    .ivu-icon {
+        color: #FFF;
+    }
 
-        .ivu-input {
-            color: #fff;
-            border: 1px solid #fff;
-            background-color: transparent;
-        }
+    .ivu-input {
+        color: #fff;
+        border: 1px solid #fff;
+        background-color: transparent;
+    }
 
     }
 </style>

@@ -26,7 +26,7 @@
                             },
                             on: {
                                 click: () => {
-                                    this.openCamera();
+                                    this.openCamera(node);
                                 }
                             }
                         }, [
@@ -58,9 +58,12 @@
 
                 urlParan: {
                     PalyType: 'PlayReal',
-                    SvrIp: '112.53.236.78', //'open8200.hikvision.com',
-                    SvrPort: '84', //'443',
-                    appkey: '26458282',
+                    // SvrIp: 'open8200.hikvision.com',
+                    // SvrPort: '443',
+                    // appkey: '26458282',
+                    SvrIp: '112.53.236.78',
+                    SvrPort: '446',
+                    appkey: '24079203',
                     appSecret: '',
                     time: '',
                     timeSecret: '',
@@ -123,18 +126,22 @@
 
                 document.getElementById("iframeCarmer").src = this.iframeUrl;
             },
-            openCamera(item) {
+            openCamera(node) {
                 // console.dir(item);
 
-                let attr = this.cameraList.map(v => v.indexCode);
-
-                this.getAppKey().then(() => {
-                    this.urlParan.CamList = attr.join(',');
-                    this.setUrl();
-                });
-                // if (item[0].indexCode) {
+                // let attr = this.cameraList.map(v => v.indexCode);
                 //
-                // }
+                // this.getAppKey().then(() => {
+                //     this.urlParan.CamList = attr.join(',');
+                //     this.setUrl();
+                // });
+
+                if (node.node.indexCode) {
+                    this.getAppKey().then(() => {
+                        this.urlParan.CamList = node.node.indexCode + '@' + node.node.name || '';
+                        this.setUrl();
+                    });
+                }
             }
         }
     }
