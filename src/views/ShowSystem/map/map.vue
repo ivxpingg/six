@@ -173,7 +173,7 @@
 
             this.getProjectList_select();
 
-            this.getCameraList();
+            // this.getCameraList();
         },
         methods: {
             onChange_dataYear(value) {
