@@ -194,15 +194,6 @@
             },
             openCamera(node) {
 
-
-                // let attr = this.cameraList.map(v => v.indexCode);
-                //
-                // this.getAppKey().then(() => {
-                //     this.urlParan.CamList = attr.join(',');
-                //     this.setUrl();
-                // });
-
-
                 if (node &&  node.indexCode && node.cameraId) {
                     this.getAppKey().then(() => {
                         this.urlParan.CamList = node.indexCode;
