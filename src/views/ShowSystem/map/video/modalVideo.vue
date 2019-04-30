@@ -78,6 +78,9 @@
                     method: 'get',
                     url: '/hikvision/controlUnitPage'
                 }).then(res => {
+                    if (res.data === '') {
+                        this.$Message.error('视频数据获取异常!');
+                    }
                     if(res.data.code === '200') {
                         this.orgList = res.data.data;
                         this.orgList = this.orgList.filter(v => {
