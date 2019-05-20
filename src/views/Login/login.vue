@@ -3,7 +3,8 @@
         <header class="header">
             <div class="header-inner">
                 <img class="logo" src="./images/logo.png" alt="">
-                <img class="logo-text" src="./images/logo-text.png" alt="">
+                <!--<img class="logo-text" src="./images/logo-text.png" alt="">-->
+                <span class="logo-text">项目质量监督管理平台监控系统</span>
                 <div class="menu-panel">
 
                 </div>
@@ -106,6 +107,8 @@
                     float: left;
                 }
                 .logo-text {
+                    font-size: 26px;
+                    color: #2d8cf0;
                     height: 40px;
                     display: inline-block;
                     margin: 16px 10px auto;
