@@ -177,6 +177,17 @@
                 modal_eSignatrueSelect: false
             }
         },
+        watch: {
+          'searchParams.current' () {
+            this.getData();
+          },
+          'searchParams.condition': {
+            deep: true,
+            handler () {
+              this.getData();
+            }
+          }
+        },
         computed: {
             // 已选人员userId [1,2,3]
             selectedValue() {
@@ -249,7 +260,8 @@
 
                     if (this.selectType === 'role') {
                         this.searchParams.condition.roleId = this.nodeItem.roleId;
-                        this.getData();
+                        this.searchParams.current = 1;
+                        // this.getData();
                     }
                 }
             },
