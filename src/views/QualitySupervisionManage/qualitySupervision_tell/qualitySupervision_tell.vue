@@ -423,7 +423,7 @@
                 this.$http({
                     method: 'post',
                     url: '/projectAudit/listForDisclose',
-                    params: this.searchParams
+                    data: JSON.stringify(this.searchParams)
                 }).then((res) => {
                     this.tableLoading = false;
                     if (res.code === 'SUCCESS') {
