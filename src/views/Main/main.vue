@@ -17,7 +17,7 @@
                 <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
                 <div class="logo-con">
                     <!--<img v-show="!collapsed" :src="maxLogo" key="max-logo" />-->
-                    <span class="logo-text" v-show="!collapsed">项目质量监督管理平台监控系统</span>
+                    <span class="logo-text" v-show="!collapsed">交通工程质量监督管理系统</span>
                     <img v-show="collapsed" :src="minLogo" key="min-logo" />
                 </div>
 
@@ -176,7 +176,7 @@
                 margin: 0 auto;
             }
             .logo-text {
-
+                display: block;
                 color: #FFF;
                 padding: 10px 10px;
                 border-radius: 8px;

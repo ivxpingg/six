@@ -4,7 +4,7 @@
             <div class="header-inner">
                 <img class="logo" src="./images/logo.png" alt="">
                 <!--<img class="logo-text" src="./images/logo-text.png" alt="">-->
-                <span class="logo-text">项目质量监督管理平台监控系统</span>
+                <span class="logo-text">交通工程质量监督管理系统</span>
                 <div class="menu-panel">
 
                 </div>
@@ -31,7 +31,7 @@
         </Content>
         <Footer class="footer">
             <!--<p>管理单位：六安市交通质监局</p>-->
-            <p>技术支持：安徽国耀通信科技有限公司 </p>
+            <p>技术支持：厦门怡奇信息科技有限公司</p>
         </Footer>
     </Layout>
 </template>
