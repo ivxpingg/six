@@ -116,7 +116,8 @@
                             }, '整改通知'));
                         }
 
-                        if (params.row.changeNotice && params.row.changeNotice.changeStatus !== 'pass' && this.auth_update) {
+                        // if (params.row.changeNotice && params.row.changeNotice.changeStatus !== 'pass' && this.auth_update) {
+                        if (params.row.changeNotice  && this.auth_update) {
                             list.push(h('Button', {
                                 props: {
                                     type: 'primary',
