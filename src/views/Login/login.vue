@@ -4,7 +4,7 @@
             <div class="header-inner">
                 <img class="logo" src="./images/logo.png" alt="">
                 <!--<img class="logo-text" src="./images/logo-text.png" alt="">-->
-                <span class="logo-text">交通工程项目管理系统</span>
+                <span class="logo-text">交通建设工程管理系统</span>
                 <div class="menu-panel">
 
                 </div>
