@@ -3,7 +3,7 @@
         <div class="map-header">
 
             <img class="title-logo" src="../../../assets/images/logo.png" alt="logo">
-            <div class="title"> 综合展示系统</div>
+            <div class="title"> 全市交通工程质量综合展示系统</div>
             <ul class="map-btn">
                 <li style="padding-top: 8px;">
                     <DatePicker :value="searchParams.year"
