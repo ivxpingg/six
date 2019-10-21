@@ -3,7 +3,7 @@
         <div class="map-header">
 
             <img class="title-logo" src="../../../assets/images/logo.png" alt="logo">
-            <div class="title"> 全市交通工程质量综合展示系统</div>
+            <div class="title"> 六安市公路水运质量安全监督管理平台</div>
             <ul class="map-btn">
                 <li style="padding-top: 8px;">
                     <DatePicker :value="searchParams.year"
@@ -310,7 +310,7 @@
     .title {
         float: left;
         padding-left: 20px;
-        font-size: 30px;
+        font-size: 26px;
         color: #fff;
         font-weight: 700;
         line-height: 70px;
