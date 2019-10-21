@@ -152,6 +152,37 @@
                             }, '查看附件'));
                         }
 
+                        if (this.auth_del) {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small',
+                                    icon: 'ios-del'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.$Modal.confirm({
+                                            title: '删除',
+                                            content: '确定要删除?删除后数据不可恢复',
+                                            onOk: () => {
+                                                this.$http({
+                                                    method: 'get',
+                                                    url: '/supervisionCheck/delete',
+                                                    params: {
+                                                        supervisionCheckId: params.row.supervisionCheckId
+                                                    }
+                                                }).then((res) => {
+                                                    if (res.code === 'SUCCESS') {
+                                                        this.getData();
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                }
+                            }, '删除'));
+                        }
+
 
                         // 设置列宽度
                         return h('div',{

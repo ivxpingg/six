@@ -105,6 +105,10 @@
         </Form>
 
         <div class="ivu-modal-footer" v-if="editable && auth_update">
+            <Button type="error"
+                    v-if="$store.state.user.userType === 'super_admin'"
+                    size="large"
+                    @click="resetPwd">重置密码</Button>
             <Button type="primary"
                     size="large"
                     :loading="saveBtnLoading"
@@ -243,6 +247,7 @@
             }
         },
         mounted() {
+
             this.getDicts(['sex','titleName','titleLevel', 'education']);
         },
         methods: {
@@ -296,6 +301,27 @@
                     this.formData.headPortraitUrl = response.data.url;
                 }
                 this.$Loading.finish();
+            },
+            resetPwd() {
+                this.$Modal.confirm({
+                    title: '重置密码',
+                    content: `确定要重置《${this.formData.name}》用户密码？`,
+                    onOk: () => {
+                        this.$http({
+                            method: 'get',
+                            url: '/user/resetPassword',
+                            params: {
+                                userId: this.userId
+                            }
+                        }).then(res => {
+                            if(res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '重置成功！'
+                                });
+                            }
+                        })
+                    }
+                })
             },
             save() {
                 this.$refs.form.validate((valid) => {
