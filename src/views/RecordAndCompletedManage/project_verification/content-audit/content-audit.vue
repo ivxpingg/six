@@ -52,14 +52,14 @@
         <!--退回补充,选择流程-->
         <Modal v-model="modal_back"
                title="退回补充">
-            <h3 style="margin-bottom: 10px;">确定退回补充？退回补充后需要填写下发交工申请核查意见书。</h3>
+            <h3 style="margin-bottom: 10px;">确定退回补充？</h3>
 
             <Form :label-width="88"
                   ref="form_back"
                   :model="backData"
-                  :rules="rules_accept">
-                <FormItem label="请选择流程:" prop="auditProcessId">
-                    <Input :value="backData.auditProcessName" readonly @on-focus="modal_selectProcess_open" />
+                  :rules="rules_backData">
+                <FormItem label="退回理由:" prop="remark">
+                    <Input v-model="backData.remark" type="textarea" />
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -68,6 +68,25 @@
                         @click="saveBack">确定</Button>
             </div>
         </Modal>
+
+        <!--<Modal v-model="modal_back"-->
+               <!--title="退回补充">-->
+            <!--<h3 style="margin-bottom: 10px;">确定退回补充？退回补充后需要填写下发交工申请核查意见书。</h3>-->
+
+            <!--<Form :label-width="88"-->
+                  <!--ref="form_back"-->
+                  <!--:model="backData"-->
+                  <!--:rules="rules_accept">-->
+                <!--<FormItem label="请选择流程:" prop="auditProcessId">-->
+                    <!--<Input :value="backData.auditProcessName" readonly @on-focus="modal_selectProcess_open" />-->
+                <!--</FormItem>-->
+            <!--</Form>-->
+            <!--<div slot="footer">-->
+                <!--<Button type="primary"-->
+                        <!--size="large"-->
+                        <!--@click="saveBack">确定</Button>-->
+            <!--</div>-->
+        <!--</Modal>-->
 
         <!--材料受理,选择流程-->
         <Modal v-model="modal_accept"
@@ -135,8 +154,13 @@
                 // 退回补充
                 modal_back: false,
                 backData: {
-                    auditProcessId: '',
-                    auditProcessName: ''
+                    // auditProcessId: '',
+                    // auditProcessName: '',
+                    remark: ''
+                },
+                rules_backData: {
+                    // auditProcessId: [{ required: true, message: '流程不能为空！', trigger: 'blur' }]
+                    remark: [{ required: true, message: '退回理由不能为空！', trigger: 'blur' }]
                 },
 
                 // 材料受理
@@ -182,16 +206,17 @@
             },
             // 保存退回补充
             saveBack() {
-                this.$refs.form_accept.validate(valid => {
+
+                this.$refs.form_back.validate(valid => {
                     if (valid) {
                         this.$http({
-                            method: 'get',
-                            url: ' /projectAudit/handoverBack',
-                            params: {
+                            method: 'post',
+                            url: '/projectAudit/handoverBack',
+                            data: JSON.stringify({
                                 projectId: this.projectId,
                                 relationId: this.handoverRecordId,
-                                auditProcessId: this.backData.auditProcessId
-                            }
+                                remark: this.backData.remark
+                            })
                         }).then(res => {
                             if (res.code === 'SUCCESS') {
                                 this.$Message.success('退回补充成功！');
@@ -201,6 +226,26 @@
                         })
                     }
                 })
+
+                // this.$refs.form_back.validate(valid => {
+                //     if (valid) {
+                //         this.$http({
+                //             method: 'get',
+                //             url: ' /projectAudit/handoverBack',
+                //             params: {
+                //                 projectId: this.projectId,
+                //                 relationId: this.handoverRecordId,
+                //                 auditProcessId: this.backData.auditProcessId
+                //             }
+                //         }).then(res => {
+                //             if (res.code === 'SUCCESS') {
+                //                 this.$Message.success('退回补充成功！');
+                //                 this.$emit('modal_callback');
+                //                 this.modal_back = false;
+                //             }
+                //         })
+                //     }
+                // })
             },
 
             onClick_accept() {
