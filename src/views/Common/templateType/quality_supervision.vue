@@ -13,7 +13,7 @@
                 <i-col span="8">
                     <div class="item">
                         <span class="item-label">收件日期：</span>
-                        <span>{{projectInfo.insTime}}</span>
+                        <span>{{projectInfo.processSubmitTime}}</span>
                     </div>
                 </i-col>
             </Row>
@@ -242,7 +242,8 @@
                     contacts: '',
                     contactPhone: '',
                     auditProcessId: '',
-                    processStepId: ''
+                    processStepId: '',
+                    processSubmitTime: ''  // 提交审核日期, 从获取审核内容得到
                 },
 
                 // 盖章计算
@@ -330,7 +331,8 @@
                     }
                 }).then(res => {
                     if(res.code === 'SUCCESS') {
-
+                        // 提交审核日期
+                        this.projectInfo.processSubmitTime =  res.data.processSubmitTime ? MOMENT(res.data.processSubmitTime).format('YYYY-MM-DD') : '';
                          if (res.data.auditContent) {
                              try {
 
