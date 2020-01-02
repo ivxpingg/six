@@ -60,7 +60,7 @@
                     <vInputSpan v-model="temData.page_2.value_3" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     日报
                     <vInputSpan v-model="temData.page_2.value_4" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
-                    质量监督申请及相关资料收悉，我局已审核，根据交通部《公路水运工程质量监督管理规定》、
+                    质量监督申请及相关资料收悉，我处已审核，根据交通部《公路水运工程质量监督管理规定》、
                     省交通运输厅《安徽省公路水运工程质量监督实施细则》及质量监督备案制相关规定，
                     请你单位尽快督促各参建单位在
                     <vInputSpan v-model="temData.page_2.value_8" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
@@ -73,7 +73,7 @@
 
                 <div class="box-bottom" v-if="temData.page_2.value_9.pageIndex === 1">
                     <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督处</div>
                     <div class="text-16 line-height-28 text-align-right">
                         <vInputSpan v-model="temData.page_2.value_5" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_2.value_6" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月
@@ -118,7 +118,7 @@
                 </div>
                 <div class="box-bottom">
                     <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督处</div>
                     <div class="text-16 line-height-28 text-align-right">
                         <vInputSpan v-model="temData.page_2.value_5" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_2.value_6" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月

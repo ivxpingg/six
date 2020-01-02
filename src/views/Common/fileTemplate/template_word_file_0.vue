@@ -51,7 +51,7 @@
                 </div>
                 <div :class="classNameType.mainClass_list1">
                     根据《建设工程质量管理条例》、《建设工程安全生产管理条
-                    例》、《公路水运工程安全生产监督管理办法》、《公路水运工程质量监督管理规定》和《六安市公路水运工程质量监督实施细则》等规定，我局受理
+                    例》、《公路水运工程安全生产监督管理办法》、《公路水运工程质量监督管理规定》和《六安市公路水运工程质量监督实施细则》等规定，我处受理
                     <vInputSpan v-model="temData.page_2.value_2" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
                     的质量监督，并将按下述计划由
                     <vInputSpan v-model="temData.page_2.value_3" :scale="scale" :underLine="prindUnderLine"></vInputSpan>
@@ -362,10 +362,10 @@
                     2.建设、设计、施工、监理单位应认真贯彻落实上级交通主管部门有关项目管理的重要文件，按照要求开展相关的活动。
                 </div>
                 <div :class="classNameType.mainClass_list1">
-                    3.建设单位应督促施工、监理单位对监督检查发现的问题及时整改、并按规定期限将处理结果书面报我局备案。
+                    3.建设单位应督促施工、监理单位对监督检查发现的问题及时整改、并按规定期限将处理结果书面报我处备案。
                 </div>
                 <div :class="classNameType.mainClass_list1">
-                    4.欢迎对我局的监督工作提出意见和建议，以便促进我们进一步改进工作。
+                    4.欢迎对我处的监督工作提出意见和建议，以便促进我们进一步改进工作。
                 </div>
 
             </div>
@@ -383,7 +383,7 @@
                     通信地址：六安市梅山南路交通大厦十三楼
                 </div>
                 <div :class="classNameType.mainClass">
-                    六安市交通建设工程质量监督局
+                    六安市交通建设工程质量监督处
                 </div>
                 <div :class="classNameType.mainClass">
                     邮编：237005
@@ -391,7 +391,7 @@
 
                 <div class="box-bottom">
                     <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
-                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                    <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督处</div>
                     <div class="text-16 line-height-28 text-align-right">
                         <vInputSpan v-model="temData.page_8.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                         <vInputSpan v-model="temData.page_8.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月

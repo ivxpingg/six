@@ -29,7 +29,7 @@
             </div>
         </Content>
         <Footer class="footer">
-            <p>管理单位：六安市交通质监局</p>
+            <p>管理单位：六安市交通质监处</p>
             <p>技术支持：厦门卫星定位应用股份有限公司 </p>
         </Footer>
     </Layout>

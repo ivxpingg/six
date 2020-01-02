@@ -59,7 +59,7 @@
             return {
                 userInfo: {
                     name: '',
-                    unitName: '六安市质监局',
+                    unitName: '六安市质监处',
                     unitType: '',
                     department: '',
                     job: '',

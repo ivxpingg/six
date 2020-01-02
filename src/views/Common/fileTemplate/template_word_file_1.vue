@@ -160,11 +160,11 @@
                     <div :class="classNameType.mainClass_list1">
                         针对本次督查发现的问题，各相关责任单位应逐条整改落实到位，并将整改落实情况在
                         <vInputSpan v-model="temData.page_3.value_6" :scale="scale" :underLine="prindUnderLine" ></vInputSpan>
-                        个工作日内书面（附相关处理图片资料、记录等）反馈我局，我局将跟踪督查。
+                        个工作日内书面（附相关处理图片资料、记录等）反馈我处，我处将跟踪督查。
                     </div>
                     <div class="box-bottom">
                         <div class="text-16 line-height-28 text-align-left m-b-30">签发人：</div>
-                        <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督局</div>
+                        <div class="text-18 text-align-right letter-spacing-2 m-b-10" >六安市交通建设工程质量监督处</div>
                         <div class="text-16 line-height-28 text-align-right">
                             <vInputSpan v-model="temData.page_3.value_1" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>年
                             <vInputSpan v-model="temData.page_3.value_2" :scale="scale" :inputWidth="60" :underLine="false"></vInputSpan>月

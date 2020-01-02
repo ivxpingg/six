@@ -1,7 +1,7 @@
 <template>
     <div class="quality_supervision-container">
         <div class="page">
-            <div class="title-unit">六安市交通建设工程质量监督局</div>
+            <div class="title-unit">六安市交通建设工程质量监督处</div>
             <div class="title-template">{{templateTitle}}</div>
             <Row>
                 <i-col span="16">

@@ -104,7 +104,7 @@
                 return this.tableData.map(v => v.userId);
             },
             _tableColumns() {
-                return this.editable && this.auth_del ? this.tableColumns.concat([{
+                return this.auth_del ? this.tableColumns.concat([{
                     title: '操作',
                     width: 120,
                     align: 'center',

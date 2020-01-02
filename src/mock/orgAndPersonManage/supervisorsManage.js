@@ -10,7 +10,7 @@ const superviorList = {
             department: '科室',
             job: '职务',
             titleLevel: '职称级别',
-            unitName: '六安市交通质监局',
+            unitName: '六安市交通质监处',
             telephone: '3952581',         // 固定电话
             mobileShortNum: '25811111',   // 移动小号
             phone: '15332112141',         // 手机
@@ -46,7 +46,7 @@ const superviorList = {
             department: '科室',
             job: '职务',
             titleLevel: '职称级别',
-            unitName: '六安市交通质监局',
+            unitName: '六安市交通质监',
             telephone: '3952581',         // 固定电话
             mobileShortNum: '25811111',   // 移动小号
             phone: '15332112141',         // 手机

@@ -5,7 +5,7 @@
               :model="formData"
               :rules="rules"
               :label-width="75">
-            <FormItem label="报送单位:" prop="unitId">
+            <FormItem label="报送到:" prop="unitId">
                 <Input v-model="formData.unitName" readonly @on-focus="onClick_unitSelect_open"/>
             </FormItem>
             <!--<FormItem label="审核流程:" prop="auditProcessId">-->
