@@ -66,6 +66,28 @@
         <!--查看日志-->
         <vModalLogView ref="modalLogView" :logType="six_logType" ></vModalLogView>
 
+        <Modal v-model="modalRefuse.value"
+               title="不予受理"
+               :widht="360">
+            <Form ref="form"
+                  :model="modalRefuse.formData"
+                  :rules="modalRefuse.rules"
+                  :label-width="120">
+                <FormItem label="不予受理原因：" prop="noAcceptRemark">
+                    <Input v-model="modalRefuse.formData.noAcceptRemark"
+                           type="textarea"
+                           :rows="5" />
+                </FormItem>
+
+            </Form>
+
+            <div slot="footer">
+                <Button type="primary"
+                        size="large"
+                        @click="modalRefuseSave">确定</Button>
+            </div>
+        </Modal>
+
     </div>
 </template>
 
@@ -85,11 +107,27 @@
             _tableColumns() {
                 return this.auth_update ? this.tableColumns.concat([{
                     title: '操作',
-                    width: 300,
+                    width: 380,
                     align: 'center',
                     fixed: 'right',
                     render: (h, params) => {
                         let list = [];
+
+                        if (params.row.projectStatus === "check" && params.row.handleStatus === "handle") {
+                            list.push(h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small',
+                                    icon: 'ios-close'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.modalRefuse.value = true;
+                                        this.modalRefuse.formData.projectId = params.row.projectId;
+                                    }
+                                }
+                            }, '不予受理'));
+                        }
 
                         list.push(h('Button', {
                             props: {
@@ -233,7 +271,19 @@
                 modal_superviseTeamManage: false,
 
                 // 查看附件
-                filesData: []
+                filesData: [],
+
+                // 不予受理
+                modalRefuse: {
+                    value: false,
+                    formData: {
+                        projectId: '',
+                        noAcceptRemark: ''
+                    },
+                    rules: {
+                        noAcceptRemark: [{required: true, message: '不予受理原因不能为空！', trigger: 'blur'}],
+                    }
+                }
 
             };
         },
@@ -352,6 +402,31 @@
                     if (res.code === 'SUCCESS') {
                         this.filesData = res.data || [];
                         this.$refs.modal_viewFiles.modalValue = true;
+                    }
+                })
+
+            },
+
+            modalRefuseSave() {
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        this.$http({
+                            method: 'post',
+                            url: '/projectAudit/projectNoAccept',
+                            data: JSON.stringify(this.modalRefuse.formData)
+                        }).then(res => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success({
+                                    content: '不予受理成功！'
+                                });
+                                this.getData();
+                                this.modalRefuse.formData.projectId = '';
+                                this.modalRefuse.formData.noAcceptRemark = '';
+                                this.modalRefuse.value = false;
+                            }
+                        })
+                    } else {
+
                     }
                 })
 
