@@ -185,6 +185,13 @@
                 if (this.polyline) {
                     this.map.removeOverlay(this.polyline);
                 }
+                if (this.markerList) {
+                    this.markerList.forEach((m) => {
+                        this.map.removeOverlay(m);
+                    })
+                    this.markerList = [];
+                }
+
                 if (this.marker) {
                     this.map.removeOverlay(this.marker);
                 }

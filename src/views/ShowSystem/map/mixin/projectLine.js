@@ -11,11 +11,13 @@ export default {
                 projectShowId: '',
                 projectPosition: '',
                 lat: null,
-                lon: null
+                lon: null,
+                attendanceLocation: ""  // json
             },
 
             polyline_edit: null,
-            marker_edit: null,
+            marker_edit: null,   //修改多打卡点 弃用
+            markerList: []    // 存放多个打卡点，Marker对象
         }
     },
     methods: {
@@ -126,10 +128,36 @@ export default {
             this.format_edit.projectShowId = polyline.info.projectShowId;
             this.format_edit.lon = polyline.info.lon;
             this.format_edit.lat = polyline.info.lat;
+            this.format_edit.attendanceLocation = polyline.info.attendanceLocation;
 
-            this.marker_edit = new BMap.Marker(new BMap.Point(this.format_edit.lon, this.format_edit.lat));
-            this.map.addOverlay(this.marker_edit);
-            this.marker_edit.enableDragging();
+            // 测试数据
+            // this.format_edit.attendanceLocation = `[{lon: ${polyline.info.lon}, lat: ${polyline.info.lat}}, {lon: ${polyline.info.lon + 0.03}, lat: ${polyline.info.lat + 0.02}}]`;
+            if (this.format_edit.attendanceLocation) {
+                try {
+                    let pointList = eval(this.format_edit.attendanceLocation);
+                    pointList.forEach((val) => {
+                        let marker = new BMap.Marker(new BMap.Point(val.lon, val.lat));
+                        marker.enableDragging();
+                        //创建右键菜单
+                        let markerMenu = new BMap.ContextMenu();
+                        markerMenu.addItem(new BMap.MenuItem('移除', (e, r, mark) => {
+                            this.map.removeOverlay(mark);
+                            this.markerList.splice(this.markerList.indexOf(mark), 1)
+                            // console.dir(this.markerList);
+                        }));
+                        marker.addContextMenu(markerMenu);
+
+                        this.map.addOverlay(marker);
+                        this.markerList.push(marker);
+                    })
+                } catch (e) {
+                    console.log('打卡点转化为json解析出错')
+                }
+            }
+
+            // this.marker_edit = new BMap.Marker(new BMap.Point(this.format_edit.lon, this.format_edit.lat));
+            // this.map.addOverlay(this.marker_edit);
+            // this.marker_edit.enableDragging();
 
 
             polyline.enableEditing();
@@ -145,8 +173,20 @@ export default {
         // 编辑保存
         onClick_save() {
             this.format_edit.projectPosition = JSON.stringify(this.polyline_edit.getPath());
-            this.format_edit.lon = this.marker_edit.getPosition().lng;
-            this.format_edit.lat = this.marker_edit.getPosition().lat;
+            //this.format_edit.lon = this.marker_edit.getPosition().lng;
+            //this.format_edit.lat = this.marker_edit.getPosition().lat;
+
+            if (this.markerList) {
+                let json = [];
+                this.markerList.forEach((marker) => {
+                    json.push({
+                        lon: marker.getPosition().lng,
+                        lat: marker.getPosition().lat
+                    })
+                });
+                this.format_edit.attendanceLocation = JSON.stringify(json);
+                console.dir(this.format_edit.attendanceLocation);
+            }
 
             this.$http({
                 method: 'post',

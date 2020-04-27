@@ -24,7 +24,8 @@ export default {
                 projectId: '',
                 projectPosition: '',
                 lat: null,
-                lon: null
+                lon: null,
+                attendanceLocation: ""
             }
         }
     },
@@ -59,25 +60,38 @@ export default {
                     this.drawingManager.close();
                     break;
                 case 'marker':
-                    if (this.status === 'edit') {
-                        if (this.marker_edit) {
-                            this.map.removeOverlay(this.marker_edit);
-                        }
-                        this.marker_edit = drawing.overlay;
-                        this.format_edit.lat = this.marker_edit.getPosition().lat;
-                        this.format_edit.lon = this.marker_edit.getPosition().lng;
-                        this.marker_edit.enableDragging();
-                        this.drawingManager.close();
-
-                    }
-                    else {
-                        if (this.marker) {
-                            this.map.removeOverlay(this.marker);
-                        }
-                        this.marker = drawing.overlay;
-                        this.marker.enableDragging();
-                        this.drawingManager.close();
-                    }
+                    let marker = drawing.overlay;
+                    marker.enableDragging();
+                    //创建右键菜单
+                    let markerMenu = new BMap.ContextMenu();
+                    markerMenu.addItem(new BMap.MenuItem('移除', (e, r, mark) => {
+                        this.map.removeOverlay(mark);
+                        this.markerList.splice(this.markerList.indexOf(mark), 1)
+                        // console.dir(this.markerList);
+                    }));
+                    marker.addContextMenu(markerMenu);
+                    this.markerList.push(marker);
+                    this.drawingManager.close();
+                    //
+                    // if (this.status === 'edit') {
+                    //     if (this.marker_edit) {
+                    //         this.map.removeOverlay(this.marker_edit);
+                    //     }
+                    //     this.marker_edit = drawing.overlay;
+                    //     this.format_edit.lat = this.marker_edit.getPosition().lat;
+                    //     this.format_edit.lon = this.marker_edit.getPosition().lng;
+                    //     this.marker_edit.enableDragging();
+                    //     this.drawingManager.close();
+                    //
+                    // }
+                    // else {
+                    //     if (this.marker) {
+                    //         this.map.removeOverlay(this.marker);
+                    //     }
+                    //     this.marker = drawing.overlay;
+                    //     this.marker.enableDragging();
+                    //     this.drawingManager.close();
+                    // }
                     break;
             }
         },
@@ -92,6 +106,18 @@ export default {
             if (this.marker) {
                 this.formData_add.lat = this.marker.getPosition().lat;
                 this.formData_add.lon = this.marker.getPosition().lng;
+            }
+
+            if (this.markerList) {
+                let json = [];
+                this.markerList.forEach((marker) => {
+                    json.push({
+                        lon: marker.getPosition().lng,
+                        lat: marker.getPosition().lat
+                    })
+                });
+                this.formData_add.attendanceLocation = JSON.stringify(json);
+                console.dir(this.formData_add.attendanceLocation);
             }
 
             this.$http({

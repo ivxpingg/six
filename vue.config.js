@@ -91,18 +91,25 @@ module.exports = {
         // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/cli-service.md#configuring-proxy配置代理
         proxy:{   // string | Object
             // 本地服务器
-            '/pqs': {
-                target: 'http://110.86.21.246:8880',
-                ws: true,
-                changeOrigin: true
-            },
-
-            // 正式地址
             // '/pqs': {
-            //     target: 'http://61.190.177.60:8888',
-            //         ws: true,
-            //         changeOrigin: true
+            //     target: 'http://110.86.21.246:8880',
+            //     ws: true,
+            //     changeOrigin: true
             // },
+
+            // 测试地址
+             '/pqs': {
+                 target: 'http://61.190.177.60:8088',
+                     ws: true,
+                     changeOrigin: true
+             },
+
+           // 正式地址
+           //  '/pqs': {
+           //      target: 'http://61.190.177.60:8888',
+           //          ws: true,
+           //          changeOrigin: true
+           //  },
 
             // '/': {
             //     target: 'http://110.86.21.252:8880',
