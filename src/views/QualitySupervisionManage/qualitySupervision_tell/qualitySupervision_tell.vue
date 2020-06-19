@@ -83,8 +83,11 @@
                 <vProjectCheck v-if="modal_projectCheck"
                        :projectId="currentRow.projectId"></vProjectCheck>
             </div>
-            <div slot="footer">
-                <Button type="primary" size="large" icon="ios-send" @click="openSendCheckFile">下发核查意见书</Button>
+            <div slot="footer" v-if="currentRow.projectFileOpinion !== '1'">
+                <Button type="primary"
+                        size="large"
+                        icon="ios-send"
+                        @click="openSendCheckFile">下发核查意见书</Button>
             </div>
         </Modal>
 
@@ -151,6 +154,7 @@
                                     click: () => {
                                         this.currentRow.projectId = params.row.projectId;
                                         this.currentRow.projectName = params.row.projectName;
+                                        this.currentRow.projectFileOpinion = params.row.projectFileOpinion;
                                         this.modal_projectCheck = true;
                                     }
                                 }
@@ -366,6 +370,7 @@
                 currentRow: {
                     projectId: '',
                     projectName: '',
+                    projectFileOpinion: '',
                     changeNotice: {   // 整改通知
                         changeNoticeId: ''
                     },

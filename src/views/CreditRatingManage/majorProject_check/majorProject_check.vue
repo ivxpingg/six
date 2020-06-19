@@ -33,19 +33,24 @@
         </div>
 
         <vAddMajorProject_check ref="modal_add" @modal-callback="modal_add_callback"></vAddMajorProject_check>
-
+        <vDetailMajorProject_check
+                ref="modal_detail"
+                :name="modal_detail_props.name"
+                :project-attendance-id="modal_detail_props.projectAttendanceId"></vDetailMajorProject_check>
     </div>
 </template>
 <script>
     import vIvxFilterBox from '../../../components/ivxFilterBox/ivxFilterBox';
     import vAddMajorProject_check from './add/addMajorProject_check';
     import authMixin from '../../../lib/mixin/authMixin';
+    import vDetailMajorProject_check from './detail/detailMajorProject_check';
     export default {
         name: 'majorProject_check',
         mixins: [authMixin],
         components: {
             vIvxFilterBox,
-            vAddMajorProject_check
+            vAddMajorProject_check,
+            vDetailMajorProject_check
         },
         data() {
             return {
@@ -58,7 +63,7 @@
                     { title: '序号', width: 60, align: 'center', type: 'index', },
                     { title: '单位类型', width: 160, align: 'center', key: 'unitTypeLabel' },
                     { title: '人员名称', width: 120, align: 'center', key: 'name' },
-                    { title: '职务', width: 100, align: 'center', key: 'projectDutyLabel' },
+                    { title: '职务', width: 140, align: 'center', key: 'projectDutyLabel' },
                     { title: '联系方式', width: 120, align: 'center', key: 'phone' },
                     { title: '身份证号', width: 160, align: 'center', key: 'idNumber' },
                     { title: '初次考勤时间', width: 140, align: 'center', key: 'firstAttendanceTime',
@@ -66,10 +71,39 @@
                             return h('div', params.row.firstAttendanceTime ? this.$moment(params.row.firstAttendanceTime).format('YYYY-MM-DD HH:mm') : '');
                         }
                     },
-                    { title: '到场天数', width: 100, align: 'center', key: 'attendanceDays' },
-                    { title: '工时统计', width: 100, align: 'center', key: 'workHours' },
-                    { title: '考勤完成率', width: 100, align: 'center', key: 'completeRate' },
-                    { title: '考勤结果', minWidth: 100, align: 'center', key: '' }
+                    // { title: '到场天数', width: 100, align: 'center', key: 'attendanceDays' },
+                    // { title: '工时统计', width: 100, align: 'center', key: 'workHours' },
+                    // { title: '考勤完成率', width: 100, align: 'center', key: 'completeRate' },
+                    // { title: '考勤结果', minWidth: 100, align: 'center', key: '' },
+                    {
+                        title: '考勤结果',
+                        width: 180,
+                        align: 'center',
+                        render: (h, params) => {
+                            let list = [
+                                h('Button', {
+                                    props: {
+                                        type: 'info',
+                                        size: 'small',
+                                        icon: 'ios-eye-outline'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.modal_detail_props.projectAttendanceId = params.row.projectAttendanceId;
+                                            this.modal_detail_props.name = params.row.name;
+                                            this.$refs.modal_detail.modalValue = true;
+                                            // this.url = params.row.url;
+                                            // this.modal_supervisorDetail = true;
+                                        }
+                                    }
+                                }, '查看')
+                            ];
+
+                            return h('div',{
+                                class: 'ivx-table-cell-handle'
+                            },list);
+                        }
+                    }
                 ],
                 tableData: [
                     // {
@@ -85,6 +119,10 @@
                     // }
                 ],
                 tableLoading: false,
+                modal_detail_props: {
+                    name: '',
+                    projectAttendanceId: ''
+                }
             }
         },
         watch: {

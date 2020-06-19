@@ -136,7 +136,6 @@
         },
         watch: {
             activeName (name) {
-                debugger
                 if (this.accordion) this.openedNames = this.getOpenedNamesByActiveName(name)
                 else this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name))
             },

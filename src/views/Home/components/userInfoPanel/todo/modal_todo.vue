@@ -344,7 +344,6 @@
                         });
                         break;
                     case 'handover_reply_audit':   // 交工检测核验审核
-                        debugger
                         param = eval(`[${row.param}]`);
                         Object.assign(this.project_verification, {
                             projectId: '',

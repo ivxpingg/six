@@ -1,7 +1,7 @@
 <template>
     <div class="addSupervisionTell-container">
         <Modal v-model="modalValue"
-               title="添加监督交底"
+               title="添加备案核查"
                @on-visible-change="onVisibleChange">
             <Form ref="form"
                   class="user-form"
@@ -11,10 +11,10 @@
                 <FormItem label="项目名称:">
                     <Input v-model="projectName" readonly/>
                 </FormItem>
-                <FormItem label="交底内容:" prop="content">
+                <FormItem label="核查内容:" prop="content">
                     <Input v-model="formData.content" type="textarea" placeholder="请输入内容" style="font-size: 12px;"/>
                 </FormItem>
-                <FormItem label="交底时间:" prop="planBeginTime">
+                <FormItem label="核查时间:" prop="planBeginTime">
                     <DatePicker
                             :value="formData.advanceNoticeTime"
                             type="date"

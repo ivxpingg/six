@@ -53,14 +53,14 @@
                     <div style="width: 600px;"><vFilesSelectButton @modal-callback="onSelect" multiple></vFilesSelectButton></div>
                 </FormItem>
 
-                <template v-for="item in formData.projectUnitUsers">
+                <template v-for="(item, index) in formData.projectUnitUsers">
                     <FormItem label="通知单位:" :key="item.projectUnitId">
                         <Input v-model="item.unitName" readonly />
                         <!--接收人员: <Input v-model="item.userName" readonly  placeholder="请选择接收人员" />-->
                     </FormItem>
                     <FormItem label="接收人员:" :key="item.projectUnitId + 'user'">
                         <!--<Input v-model="item.userName" readonly placeholder="请选择接收人员" />-->
-                        <Select v-model="item.projectUserId" placeholder="请选择接收人员" clearable>
+                        <Select v-model="formData.projectUnitUsers[index].projectUserId" placeholder="请选择接收人员" clearable>
                             <Option v-for="(userItem, idx) in item.userList"
                                     :key="userItem.projectUserId + 'user' + idx"
                                     :value="userItem.projectUserId"
@@ -97,6 +97,11 @@
             supervisionCheckId: {
                 type: String,
                 default: ''
+            }
+        },
+        computed: {
+            isSelectedUser() {
+                return !!this.formData.projectUnitUsers[0].projectUserId || !!this.formData.projectUnitUsers[1].projectUserId || !!this.formData.projectUnitUsers[2].projectUserId;
             }
         },
         data() {
@@ -243,17 +248,36 @@
 
             // 保存整改通知
             save() {
-                this.$http({
-                    method: 'post',
-                    url: '/changeNotice/addChangeNotice',
-                    data: JSON.stringify(this.formData)
-                }).then((res) => {
-                    if (res.code === 'SUCCESS') {
-                        this.$Message.success('添加整改通知成功!');
-                        this.modalValue = false;
-                        this.$emit('modal-callback');
+                this.$refs.form.validate((valid) => {
+                    if (!this.isSelectedUser) {
+                        this.$Message.error('请选择接收人员！')
+                        return
+                    }
+                    if (this.formData.projectUnitUsers[0].projectUserId === undefined) {
+                        this.formData.projectUnitUsers[0].projectUserId = ''
+                    }
+                    if (this.formData.projectUnitUsers[1].projectUserId === undefined) {
+                        this.formData.projectUnitUsers[1].projectUserId = ''
+                    }
+                    if (this.formData.projectUnitUsers[2].projectUserId === undefined) {
+                        this.formData.projectUnitUsers[3].projectUserId = ''
+                    }
+
+                    if (valid) {
+                        this.$http({
+                            method: 'post',
+                            url: '/changeNotice/addChangeNotice',
+                            data: JSON.stringify(this.formData)
+                        }).then((res) => {
+                            if (res.code === 'SUCCESS') {
+                                this.$Message.success('添加整改通知成功!');
+                                this.modalValue = false;
+                                this.$emit('modal-callback');
+                            }
+                        })
                     }
                 })
+
             }
         }
     }
