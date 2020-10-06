@@ -13,7 +13,7 @@ module.exports = {
     baseUrl: '/',
 
     // 将构建好的文件输出到哪里
-    outputDir: 'dist',
+    outputDir: 'six',
 
     // 是否在保存的时候使用 `eslint-loader` 进行检查。
     // 有效的值：`ture` | `false` | `"error"`
@@ -28,7 +28,8 @@ module.exports = {
     // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/webpack.md
     chainWebpack: (config) => {
         config.resolve.alias
-            .set('@', resolve('src'));
+            .set('@', resolve('src'))
+            .set('_c', resolve('src/components'));
     },
     // configureWebpack: () => {},
     configureWebpack: config => {
@@ -84,18 +85,29 @@ module.exports = {
     devServer: {
         open: true, //process.platform === 'darwin',
         host: '0.0.0.0',
-        port: 8080,
+        port: 8666,
         https: false,
         hotOnly: false,
         // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/cli-service.md#configuring-proxy配置代理
         proxy:{   // string | Object
 
-            '/oceanobservation': {
-                target: 'http://xmsoc.com:20500',
-
+            '/pqs': {
+                target: 'http://110.86.21.246:8880',
                 ws: true,
                 changeOrigin: true
-            }
+            },
+
+            // '/': {
+            //     target: 'http://110.86.21.252:8880',
+            //     ws: true,
+            //     changeOrigin: true
+            // }
+            //
+            // '/': {
+            //     target: 'http://192.168.0.106:8080',
+            //     ws: true,
+            //     changeOrigin: true
+            // }
         },
         before: app => {}
     },

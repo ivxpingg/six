@@ -1,0 +1,139 @@
+<template>
+    <div class="projectFilesList-container">
+        <ul class="file-list">
+            <li v-for="(item, idx) in fileList" :key="idx">
+                <vIvxFile :title="item.fileName"
+                          :active="isAcitve(item)"
+                          :size="folderSize"
+                          :fontSize="fontSize"
+                          type="success"
+                          :data="item"
+                          :rows="3"
+                          @on-select="onSelectFolder"></vIvxFile>
+            </li>
+        </ul>
+        <Spin size="large" fix v-if="loading"></Spin>
+    </div>
+</template>
+
+<script>
+    import vIvxFile from '../../../../../components/folder/file';
+    export default {
+        name: 'projectFilesList',   // 文件列表
+        components: {vIvxFile},
+        props: {
+            // 多选
+            multiple: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
+            },
+            projectId: {
+                type: String,
+                default: ''
+            },
+            /*
+            * folderType: {
+                    parentId: '',
+                    index: 0,
+                    folderName: '',
+                    url: '',
+                    selectedFileList: []
+                }
+            * */
+            folderType: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            }
+        },
+        watch: {
+            folderType: {
+                immediate: true,
+                deep: true,
+                handler(val, oldVal) {
+                    if (!oldVal) {
+                        this.getData();
+                    }
+                    else if (oldVal && val.url !== oldVal.url) {
+                        this.getData();
+                    }
+                }
+            }
+        },
+        data() {
+            return {
+                folderSize: 90,
+                fontSize: 12,
+                fileList: [],
+                loading: true
+            };
+        },
+        methods: {
+            getData() {
+                this.loading = true;
+                this.$http({
+                    method: 'get',
+                    url: this.folderType.url,
+                    params: {
+                        projectId: this.projectId
+                    }
+                }).then(res => {
+                    this.loading = false;
+                    if(res.code === 'SUCCESS') {
+                        this.fileList = res.data || [];
+                        // this.fileList = [
+                        //     {
+                        //         fileId: '001',
+                        //         fileName: '文件1'
+                        //     },{
+                        //         fileId: '002',
+                        //         fileName: '文件2'
+                        //     },
+                        //     {
+                        //         fileId: '003',
+                        //         fileName: '文件3'
+                        //     },
+                        //     {
+                        //         fileId: '004',
+                        //         fileName: '文件4'
+                        //     }
+                        //
+                        // ];
+                    }
+                }).catch(e => {
+                    this.loading = false;
+                })
+            },
+            // 判断文件是否已选
+            isAcitve(item) {
+                // return this.folderType.selectedFileList.indexOf(item) > -1;
+                for(let i = 0; i < this.folderType.selectedFileList.length; i++) {
+                    if (this.folderType.selectedFileList[i].fileId === item.fileId) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            onSelectFolder(data, active){
+                this.$emit('callback', data, active);
+            }
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+    .projectFilesList-container {
+        position: relative;
+        min-height: 100%;
+        .file-list {
+            /*overflow: hidden;*/
+            li {
+                float: left;
+                margin: 15px;
+            }
+        }
+    }
+</style>

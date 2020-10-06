@@ -1,0 +1,72 @@
+/**
+* 表格
+* 每个表格分页的
+ */
+.ivx-table-box {
+  padding: 10px 0;
+
+  .ivu-page {
+    padding-top: 20px;
+    text-align: center;
+  }
+
+  .ivx-table-cell-handle {
+      .ivu-btn {
+        margin-right: 10px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+  }
+}
+
+/**
+* 权限 隐藏和显示
+ */
+
+.six-auth-hide{
+  display: none;
+  visibility: hidden;
+}
+
+.six-auth-show{
+
+}
+
+
+/**
+*  弹出框
+*  弹出框默认 ivu-modal-footer 隐藏 并且自定义 footer
+*  放在弹出框 ivu-modal-body 的子元素
+ */
+
+.six-modal-body-inner {
+  padding-bottom: 45px;
+  .ivu-modal-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #FFF;
+    border-radius: 0 0 6px 6px;
+  }
+}
+
+/**
+
+ */
+.modal-body-padding0 {
+  .ivu-modal-body {
+    padding: 0 0 6px;
+  }
+}
+.six-modal-body-padding0 {
+  padding: 0;
+}
+
+// 弹出框内
+// <div class="ivu-modal-footer six-modal-footer-padding-bottom-0"></div>
+.six-modal-footer-padding-bottom-0 {
+  padding-bottom: 0;
+}
+
