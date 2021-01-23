@@ -98,18 +98,18 @@ module.exports = {
             // },
 
             // 测试地址
-             '/pqs': {
-                 target: 'http://61.190.177.60:8088',
-                     ws: true,
-                     changeOrigin: true
-             },
+            //  '/pqs': {
+            //      target: 'http://61.190.177.60:8088',
+            //          ws: true,
+            //          changeOrigin: true
+            //  },
 
            // 正式地址
-           //  '/pqs': {
-           //      target: 'http://61.190.177.60:8888',
-           //          ws: true,
-           //          changeOrigin: true
-           //  },
+            '/pqs': {
+                target: 'http://61.190.177.60:8888',
+                    ws: true,
+                    changeOrigin: true
+            },
 
             // '/': {
             //     target: 'http://110.86.21.252:8880',

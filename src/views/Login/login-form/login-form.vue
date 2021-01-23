@@ -20,6 +20,8 @@
   </Form>
 </template>
 <script>
+  import MD5 from 'md5';
+  import Config from '../../../config/index';
 export default {
   name: 'LoginForm',
   props: {
@@ -43,7 +45,7 @@ export default {
   data () {
     return {
       form: {
-        userName: 'admin',
+        userName: '',
         password: ''
       }
     }
@@ -60,9 +62,11 @@ export default {
     handleSubmit () {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
+          let pwd = MD5(Config.passwordKey + this.form.password);
+          // console.log(pwd);
           this.$emit('on-success-valid', {
             loginName: this.form.userName,
-            password: this.form.password
+            password: pwd // this.form.password
           })
         }
       })

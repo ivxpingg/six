@@ -38,7 +38,8 @@ export default {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'post',
-                    url: '/ajaxLogin',
+                    // url: '/ajaxLogin',
+                    url: '/webLogin',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                     },

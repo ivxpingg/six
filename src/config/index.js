@@ -7,6 +7,7 @@ export default {
      * @description token在Cookie中存储的天数，默认1天
      */
     cookieExpires: 1,
+    passwordKey: '65f9a7e8f08d4578b68f6373416fc483',
     development: {
         origin: window.location.origin,
         ajaxUrl: PROJECT_NAME,

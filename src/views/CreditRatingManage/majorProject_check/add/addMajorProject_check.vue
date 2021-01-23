@@ -185,7 +185,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                     // 建设单位
                     case 'construction_unit':
@@ -196,7 +197,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                     // 监理单位
                     case 'supervisor_unit':
@@ -207,7 +209,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                     // 设计单位
                     case 'design_unit':
@@ -218,7 +221,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                     // 施工单位
                     case 'work_unit':
@@ -229,7 +233,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                     // 试验检测单位
                     case 'test_unit':
@@ -240,7 +245,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                     // 其他单位
                     case 'other_units':
@@ -251,7 +257,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                     // 行政执法单位
                     case 'law_enforcement_unit':
@@ -262,7 +269,8 @@
                             { projectUserId: '', userId: '', projectDuty: 'construction_director', projectDutyLabel: '工地实验室主任' },
                             { projectUserId: '', userId: '', projectDuty: 'manager', projectDutyLabel: '总监' },
                             { projectUserId: '', userId: '', projectDuty: 'headman', projectDutyLabel: '总监组长' },
-                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' }];
+                            { projectUserId: '', userId: '', projectDuty: 'safety_supervision', projectDutyLabel: '安全专业监理' },
+                            { projectUserId: '', userId: '', projectDuty: 'technical_manager', projectDutyLabel: '技术负责人' }];
                         break;
                 }
 
