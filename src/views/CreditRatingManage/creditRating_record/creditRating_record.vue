@@ -146,7 +146,7 @@
                     // { title: '整改情况', width: 120, align: 'center', key: '' },
                     {
                         title: '操作',
-                        width: 120,
+                        width: 220,
                         align: 'center',
                         fixed: 'right',
                         render: (h, params) => {
@@ -166,6 +166,36 @@
                                 }
                             }, '查看附件'));
 
+                            if (this.auth_del) {
+                                list.push(h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small',
+                                        icon: 'ios-del'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$Modal.confirm({
+                                                title: '删除',
+                                                content: '确定要删除? 删除后数据不可恢复',
+                                                onOk: () => {
+                                                    this.$http({
+                                                        method: 'get',
+                                                        url: '/creditEvaluate/delete',
+                                                        params: {
+                                                            evaluateId: params.row.evaluateId
+                                                        }
+                                                    }).then((res) => {
+                                                        if (res.code === 'SUCCESS') {
+                                                            this.getData();
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        }
+                                    }
+                                }, '删除'));
+                            }
 
                             // 设置列宽度
                             return h('div',{

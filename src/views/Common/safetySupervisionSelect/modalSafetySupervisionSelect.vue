@@ -227,7 +227,8 @@
                         }
                     }
                 }
-
+                // 添加完附件直接提交
+                this.add();
             },
 
             onRowDbclick() {
