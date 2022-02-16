@@ -239,7 +239,7 @@
                 });
             },
             getFileUrl(url) {
-                if (url.length > 0 && url.indexOf('http://') === -1) {
+                if (url.length > 0 && (url.indexOf('http://') === -1 && this.src.indexOf('https://') === -1)) {
                     return Config[Config.env].filePath + url;
                 }
                 else {

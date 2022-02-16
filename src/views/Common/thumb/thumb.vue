@@ -37,7 +37,7 @@
         },
         computed: {
             _src() {
-                if (this.src.length > 0 && this.src.indexOf('http://') === -1) {
+                if (this.src.length > 0 && (this.src.indexOf('http://') === -1 && this.src.indexOf('https://') === -1)) {
                     return Config[Config.env].filePath + this.src;
                 }
                 else {

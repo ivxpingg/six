@@ -30,7 +30,7 @@
 
             <vFileDetailLists v-show="activeName === '2'"
                               :projectId="projectId"
-                              :isView="isView"
+                              :isView="specialEdit"
                               templateType="quality_supervision"
                               class="six-modal-body-inner"></vFileDetailLists>
 

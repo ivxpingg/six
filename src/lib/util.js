@@ -185,7 +185,7 @@ export const transformMenu = menuList => {
             obj.meta.hideInMenu = true;
         }
 
-        if (val.url.indexOf('http://') > -1) {
+        if (val.url.indexOf('http://') > -1 || val.url.indexOf('https://') > -1) {
             obj.meta.href = val.url;
         }
 
@@ -204,7 +204,7 @@ export const setMenuAuth = (menuList, authList) => {
         if (hasChild(val) && val.children[0].url) {
             setMenuAuth(val.children, authList);
         }
-        else if (hasChild(val) && val.url.indexOf('http://') === -1) {
+        else if (hasChild(val) && (val.url.indexOf('http://') === -1 && val.url.indexOf('https://') === -1)) {
 
             val.children.forEach(v => {
                 if (v.permission) {

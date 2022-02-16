@@ -106,7 +106,7 @@ module.exports = {
 
            // 正式地址
             '/pqs': {
-                target: 'http://61.190.177.60:8888',
+                target: 'https://61.190.177.60:8888',
                     ws: true,
                     changeOrigin: true
             },
